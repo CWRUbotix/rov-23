@@ -65,11 +65,19 @@ def generate_launch_description():
         ]
     )
 
+    rviz = Node(
+        package="rviz2",
+        exec_name="rviz2",
+        #arguments=['-d' + os.path.join(get_package_share_directory('rov_gazebo'), 'config', 'rov.rviz')],
+
+    )
+
     return LaunchDescription([
         gazeboLaunch,
         robot_state_publisher_node,
-        joint_state_publisher_node,
+        #joint_state_publisher_node,
         spawn_entity_node,
+        rviz,
     ]
 
     )
