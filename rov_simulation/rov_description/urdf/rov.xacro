@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="test_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+
+    <link name="base_link">
+        <inertial>
+        <mass value="1"/>
+        <inertia ixx="1e-3" ixy="0" ixz="0" iyy="1e-3" iyz="0" izz="1e-3" />
+        <origin/>
+        </inertial>
+
+     <visual>
+        <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
+        <geometry>
+          <mesh filename="file://$(find rov_description)/meshes/rov.stl"/>
+        </geometry>
+        <material name="blue" >
+        <color rgba="0 0 1 1" />
+      </material>
+      </visual>
+
+
+        <collision>
+      <origin/>
+      <geometry>
+      <!-- Rough dimensions of rov-->
+        <box size="0.6604 0.3048 0.6604" />
+      </geometry>
+      <contact_coefficients mu="0" kp="1000.0" kd="1.0"/>
+    </collision>
+
+    </link>
+
+    <!--
+    <joint name="camera_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="camera_link"/>
+        <origin xyz="0.305 0 0.08" rpy="0 0 0"/>
+    </joint>
+
+    <link name="camera_link">
+    <visual>
+        <geometry>
+            <box size="0.010 0.03 0.03"/>
+        </geometry>
+       
+    </visual>
+    </link>
+
+    <joint name="camera_optical_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+        <parent link="camera_link" />
+        <child link="camera_link_optical" />
+    </joint>
+
+    <link name="camera_link_optical"></link>
+
+    <sensor name="camera" type="camera">
+    <pose> 0 0 0 0 0 0 </pose>
+    <visualize>true</visualize>
+    <update_rate>10</update_rate>
+    <camera>
+    <horizontal_fov>1.089</horizontal_fov>
+    <image>
+        <format>R8G8B8</format>
+        <width>640</width>
+        <height>480</height>
+    </image>
+    <clip>
+        <near>0.05</near>
+        <far>8.0</far>
+    </clip>
+</camera>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+    <frame_name>camera_link_optical</frame_name>
+</plugin>
+</sensor>
+
+<gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/</robotNamespace>
+    </plugin>
+</gazebo>
+-->
+
+</robot>
