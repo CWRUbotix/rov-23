@@ -117,7 +117,7 @@
       <water_density>1000</water_density>
       <!-- Added mass: -->
       <xDotU>0</xDotU>
-      <yDotV>0</yDotV>
+      <yDotV>0</yDotV>`
       <zDotW>0</zDotW>
       <kDotP>0</kDotP>
       <mDotQ>0</mDotQ>
