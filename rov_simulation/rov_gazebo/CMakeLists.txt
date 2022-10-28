@@ -7,21 +7,12 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(cv_bridge REQUIRED)
-find_package(image_transport REQUIRED)
-find_package(camera_info_manager REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(sensor_msgs REQUIRED)
-find_package(std_msgs REQUIRED)
 
-include_directories(include ${catkin_INCLUDE_DIRS})
-
-# for launch files
-install(DIRECTORY launch DESTINATION share/${PROJECT_NAME}/)
-
-# for config files
-install(DIRECTORY config DESTINATION share/${PROJECT_NAME}/)
-
+#copies folders into share
+install(DIRECTORY 
+  launch
+  config
+  DESTINATION share/${PROJECT_NAME}/)
 
 install(TARGETS
   DESTINATION lib/${PROJECT_NAME}

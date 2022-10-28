@@ -16,11 +16,12 @@ find_package(std_msgs REQUIRED)
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-# for urdf files
-install(DIRECTORY urdf DESTINATION share/${PROJECT_NAME}/)
-# for mesh files
-install(DIRECTORY meshes DESTINATION share/${PROJECT_NAME}/)
-
+#copies folders into share
+install(DIRECTORY 
+  urdf
+  meshes
+  config
+  DESTINATION share/${PROJECT_NAME}/)
 
 install(TARGETS
   DESTINATION lib/${PROJECT_NAME}

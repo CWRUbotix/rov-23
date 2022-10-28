@@ -1,0 +1,20 @@
+
+# NOTE THESE WILL BE IN ROS STANDARDS OF UNITS(HOPE YOU LIKE METERS)
+/rov_description_ns:
+
+  # Width is measured in the direction from handle to handle
+  width:
+  length:
+  height:
+
+  /motors_top:
+
+    width_from_center: 8in
+    length_from_center: 8.5in
+    height_from_center: -3in
+
+  /motors_bottom:
+  
+    width_from_center: 9in
+    length_from_center: 5in
+    height_from_center: -2in
