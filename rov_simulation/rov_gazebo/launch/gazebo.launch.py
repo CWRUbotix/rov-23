@@ -1,38 +1,45 @@
 from ast import arg, arguments
 import os
+from symbol import parameters
 from ament_index_python.packages import get_package_share_directory
 from ament_index_python.packages import get_package_share_path
 
 from launch_ros.actions import Node
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch.substitutions import Command
 from launch_ros.descriptions import ParameterValue
 def generate_launch_description():
     
+
+    world_path = os.path.join(
+                get_package_share_directory('gazebo_ros'),'worlds','underwater.world'
+            )
+
     # Launches Gazebo
     gazeboLaunch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(
                 get_package_share_directory('gazebo_ros'),'launch','gazebo.launch.py'
             )
-        ])
+        ]),
+        launch_arguments={'world' : world_path}.items()
     )
 
-    filename = "rov.xacro"
+    filenameURDF = "rov.xacro"
+    filenameYaml = "rov_description_params.yaml"
 
     # Path to Xacro file of robot
-    path_to_urdf= os.path.join(get_package_share_directory('rov_description'),'urdf',filename)
+    path_to_urdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameURDF)
+    path_to_param = os.path.join(get_package_share_directory('rov_description'),'config',filenameYaml)
 
-
-    with open(path_to_urdf, 'r') as infp:
-        robot_desc = infp.read()
-
+    #with open(path_to_urdf, 'r') as infp:
+     # //  robot_desc = infp.read()
 
     robot_desc = ParameterValue(
-            Command(['xacro ', str(path_to_urdf)]), value_type=str
+            Command(['xacro ',path_to_urdf, ' params_path:=',path_to_param]), value_type=str
         )
 
     params = {
@@ -47,6 +54,8 @@ def generate_launch_description():
         arguments=[path_to_urdf] 
     )
 
+
+
     joint_state_publisher_node = Node(
         package='joint_state_publisher',
         executable='joint_state_publisher',
@@ -59,9 +68,10 @@ def generate_launch_description():
         arguments=[
             '-entity','rov',
             '-topic','/robot_description',
-            '-x', '1',
-            '-y', '1',
-            '-z', '1',
+            '-x', '0',
+            '-y', '2',
+            '-z', '0',
+           # 'output', 'screen',
         ]
     )
 
