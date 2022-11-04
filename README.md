@@ -8,7 +8,7 @@ Access WSL by opening VSCode, pressing `ctrl`+`` ` `` (below the `esc` key), cli
 
 Run
 ```
-mkdir rov_23_ws/src
+mkdir -p rov_23_ws/src
 ```
 
 ```
