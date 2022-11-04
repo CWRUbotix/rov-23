@@ -18,3 +18,9 @@ cd rov_23_ws/src
 ```
 git clone https://github.com/cwruRobotics/rov-23.git .
 ```
+(the period is important)
+
+## Directory Structure
+All packages to be installed on the surface computer live in the `surface` directory.
+All packages to be installed on the pi compute module live in the `pi` directory.
+Single commits should not modify both of these directories.
