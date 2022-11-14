@@ -1,0 +1,5 @@
+bool morning
+---
+string message
+---
+string feedback_message

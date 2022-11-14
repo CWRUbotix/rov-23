@@ -1,0 +1,41 @@
+import rclpy
+from rclpy.node import Node
+from rclpy.action import ActionServer
+from task_selector_interfaces.action import Example
+
+class TaskController(Node):
+    
+    def __init__(self):
+        super().__init__('task_controller')
+        self._action_server = ActionServer(
+            self,
+            Example,
+            'cool_example',
+            self.execute_callback
+        )
+        
+    def execute_callback(self, goal_handle):
+        self.get_logger().info('Executing goal...')
+        
+        is_morning = goal_handle.request.morning
+        
+        if(is_morning):
+            message = "Good morning!"
+        else:
+            message = "Good not morning!"
+        
+        goal_handle.succeed()
+        
+        result = Example.Result()
+        result.message = message
+        return result
+    
+def main(args=None):
+    rclpy.init(args=args)
+    
+    task_controller = TaskController()
+    
+    rclpy.spin(task_controller)
+    
+if __name__ == '__main__':
+    main()
