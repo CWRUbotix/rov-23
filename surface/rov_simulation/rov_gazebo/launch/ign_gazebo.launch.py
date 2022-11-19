@@ -1,13 +1,10 @@
-from ast import arg, arguments
 import os
-import rclpy
-from symbol import parameters
 from ament_index_python.packages import get_package_share_directory
 from ament_index_python.packages import get_package_share_path
 
 from launch_ros.actions import Node
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
+from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch.substitutions import Command
@@ -15,9 +12,9 @@ from launch_ros.descriptions import ParameterValue
 def generate_launch_description():
     
 
-    #world_path = os.path.join(
-      #          get_package_share_directory('gazebo_ros'),'worlds','underwater.world'
-     #       )
+    world_path = os.path.join(
+        get_package_share_directory('rov_gazebo'),'worlds','underwater.world'
+    )
 
     # Launches Gazebo
     gazeboLaunch = IncludeLaunchDescription(
@@ -26,20 +23,24 @@ def generate_launch_description():
                 get_package_share_directory('ros_ign_gazebo'),'launch','ign_gazebo.launch.py'
             )
         ]),
-        #launch_arguments={'world' : world_path}.items()
+        launch_arguments={world_path}
     )
 
     filenameURDF = "rov.xacro"
     filenameYaml = "rov_description_params.yaml"
+    """
     filenameSDF = "rov.sdf"
     filenameTest ="bluerov.sdf"
+    """
 
     # Path to Xacro file of robot
     path_to_urdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameURDF)
+    """
     path_to_param = os.path.join(get_package_share_directory('rov_description'),'config',filenameYaml)
     path_to_sdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameSDF)
     path_to_test_sdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameTest)
-   
+    """
+
     #with open(path_to_urdf, 'r') as infp:
      # //  robot_desc = infp.read()
 
@@ -62,12 +63,12 @@ def generate_launch_description():
     )
 
 
-
+    """
     joint_state_publisher_node: Node = Node(
         package='joint_state_publisher',
         executable='joint_state_publisher',
         arguments=[path_to_urdf]
-    )
+    )"""
 
     topicName:str = "robot_description"
 
@@ -79,7 +80,7 @@ def generate_launch_description():
            # 'output', 'screen',
         ]
     )
-
+    """
     spawn_entity_node: Node = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
@@ -92,14 +93,16 @@ def generate_launch_description():
            # 'output', 'screen',
         ]
     )
-
+    """
+    """
     rviz = Node(
         package="rviz2",
         executable="rviz2",
         arguments=['-d' + os.path.join(get_package_share_directory('rov_gazebo'), 'config', 'rov.rviz')],
 
     )
-
+    """
+    
     return LaunchDescription([
         gazeboLaunch,
         robot_state_publisher_node,
