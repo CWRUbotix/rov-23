@@ -10,30 +10,32 @@ from launch.substitutions import Command
 from launch_ros.descriptions import ParameterValue
 def generate_launch_description():
     
-
-    world_path = os.path.join(
-        get_package_share_directory('rov_gazebo'),'worlds','underwater.world'
+    rov_gazebo_path: str = get_package_share_directory('rov_gazebo')
+    ros_ign_gazebo_path: str = get_package_share_directory('ros_ign_gazebo')
+    rov_description_path: str = get_package_share_directory('rov_description')
+    world_path: str = os.path.join(
+        rov_gazebo_path, 'worlds', 'underwater.world'
     )
 
     # Launches Gazebo
     gazeboLaunch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(
-                get_package_share_directory('ros_ign_gazebo'),'launch','ign_gazebo.launch.py'
+                ros_ign_gazebo_path, 'launch', 'ign_gazebo.launch.py'
             )
         ]),
         launch_arguments={world_path}
     )
 
-    filenameURDF = "rov.xacro"
-    filenameYaml = "rov_description_params.yaml"
+    filenameURDF :str = "rov.xacro"
+    filenameYaml :str= "rov_description_params.yaml"
     """
     filenameSDF = "rov.sdf"
     filenameTest ="bluerov.sdf"
     """
 
     # Path to Xacro file of robot
-    path_to_urdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameURDF)
+    path_to_urdf = os.path.join(rov_description_path, 'urdf', filenameURDF)
     """
     path_to_param = os.path.join(get_package_share_directory('rov_description'),'config',filenameYaml)
     path_to_sdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameSDF)
@@ -44,7 +46,7 @@ def generate_launch_description():
     # //  robot_desc = infp.read()
 
     robot_desc: ParameterValue = ParameterValue(
-            Command(['xacro ',path_to_urdf, ' params_path:=',filenameYaml]), value_type=str
+            Command(['xacro ', path_to_urdf, ' params_path:=', filenameYaml]), value_type=str
             #Command("xacro rov.xacro params_path:=rov_description_params.yaml")
         )
 
