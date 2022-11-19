@@ -23,5 +23,5 @@ git clone https://github.com/cwruRobotics/rov-23.git .
 ## Directory Structure
 All packages to be installed on the surface computer live in the `surface` directory.
 All packages to be installed on the pi compute module live in the `pi` directory.
-All packages to be installed on the float live in the 'float' directory.
+All packages to be installed on the float live in the `float` directory.
 Single commits should not modify more than one of these directories.
