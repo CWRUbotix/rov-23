@@ -3,9 +3,9 @@
 <package format="3">
   <name>manipulators</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="tzupfer@gmail.com">taz</maintainer>
-  <license>TODO: License declaration</license>
+  <description>A generic package for showing how to do manipulators.</description>
+  <maintainer email="case@case.edu">CWRUBotics 2022-2023</maintainer>
+  <license>Apache, Version 2</license>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
