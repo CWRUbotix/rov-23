@@ -9,7 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 
 #copies folders into share
-install(DIRECTORY 
+install(DIRECTORY
   launch
   config
   worlds
