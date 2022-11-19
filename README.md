@@ -1,4 +1,7 @@
 # MATE ROV 2022-23
+
+<a href="https://github.com/cwruRobotics/rov-23/actions"><img src="https://github.com/cwruRobotics/rov-23/workflows/Continuous Integration/badge.svg" alt="Build Status"></a>
+
 ## Setup
 [Follow this environment setup guide!](https://github.com/cwruRobotics/rov-23/wiki/Environment-Setup)
 
