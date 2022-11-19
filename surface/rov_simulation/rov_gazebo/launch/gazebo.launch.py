@@ -47,14 +47,12 @@
 #     filenameYaml = "rov_description_params.yaml"
 
 #     # Path to Xacro file of robot
-#     path_to_urdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameURDF)
-#     path_to_param = os.path.join(get_package_share_directory('rov_description'),'config',filenameYaml)
-
+#     path_to_urdf = os.path.join(get_
 #     #with open(path_to_urdf, 'r') as infp:
 #      # //  robot_desc = infp.read()
 
 #     robot_desc = ParameterValue(
-#             Command(['xacro ',path_to_urdf, ' params_path:=',path_to_param]), value_type=str
+#             Command(['xacro ',pate_type=str
 #         )
 
 #     params = {
@@ -93,7 +91,7 @@
 #     rviz = Node(
 #         package="rviz2",
 #         executable="rviz2",
-#         arguments=['-d' + os.path.join(get_package_share_directory('rov_gazebo'), 'config', 'rov.rviz')],
+#         arguments=['-d' + os.pazebo'), 'config', 'rov.rviz')],
 
 #     )
 

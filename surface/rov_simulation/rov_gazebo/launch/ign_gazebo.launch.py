@@ -50,17 +50,15 @@ def generate_launch_description():
 
     # Path to Xacro file of robot
     path_to_urdf: str = os.path.join(rov_description_path, 'urdf', filenameURDF)
-    
 
-    # path_to_param = os.path.join(get_package_share_directory('rov_description'),'config',filenameYaml)
-    # path_to_sdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameSDF)
-    # path_to_test_sdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameTest)
+    # path_to_param = os.path.join(rov_description_path,'config',filenameYaml)
+    # path_to_sdf = os.path.join(rov_description_path,'urdf',filenameSDF)
+    # path_to_test_sdf = os.path.join(rov_description_path,'urdf',filenameTest)
     
-
     robot_desc: ParameterValue = ParameterValue(
-            Command(['xacro ', path_to_urdf, ' params_path:=', filenameYaml]), value_type=str
-            #Command("xacro rov.xacro params_path:=rov_description_params.yaml")
-        )
+        Command(['xacro ', path_to_urdf, ' params_path:=', filenameYaml]), value_type=str
+        # Command("xacro rov.xacro params_path:=rov_description_params.yaml")
+    )
 
     params = {
             'robot_description': robot_desc
@@ -71,7 +69,7 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         parameters=[params],
-        #arguments=[path_to_urdf] 
+        # arguments=[path_to_urdf]
     )
 
     # joint_state_publisher_node: Node = Node(
@@ -80,7 +78,7 @@ def generate_launch_description():
     #     arguments=[path_to_urdf]
     # )
 
-    topicName:str = "robot_description"
+    topicName: str = "robot_description"
 
     create_robot_node: Node = Node(
         package='ros_ign_gazebo',
@@ -107,7 +105,7 @@ def generate_launch_description():
     # rviz = Node(
     #     package="rviz2",
     #     executable="rviz2",
-    #     arguments=['-d' + os.path.join(get_package_share_directory('rov_gazebo'), 'config', 'rov.rviz')],
+    #     arguments=['-d' + os.path.join(rov_gazebo_path, 'config', 'rov.rviz')],
 
     # )
 
@@ -115,7 +113,8 @@ def generate_launch_description():
         gazeboLaunch,
         robot_state_publisher_node,
         create_robot_node,
-        #joint_state_publisher_node,
-        #spawn_entity_node,
-        #rviz,
+        # joint_state_publisher_node,
+        # spawn_entity_node,
+        # rviz,
     ])
+    
