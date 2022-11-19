@@ -17,7 +17,7 @@ find_package(std_msgs REQUIRED)
 include_directories(include ${catkin_INCLUDE_DIRS})
 
 #copies folders into share
-install(DIRECTORY 
+install(DIRECTORY
   urdf
   meshes
   config

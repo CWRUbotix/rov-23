@@ -1,6 +1,5 @@
 import os
 from ament_index_python.packages import get_package_share_directory
-from ament_index_python.packages import get_package_share_path
 
 from launch_ros.actions import Node
 from launch import LaunchDescription
@@ -42,7 +41,7 @@ def generate_launch_description():
     """
 
     #with open(path_to_urdf, 'r') as infp:
-     # //  robot_desc = infp.read()
+    # //  robot_desc = infp.read()
 
     robot_desc: ParameterValue = ParameterValue(
             Command(['xacro ',path_to_urdf, ' params_path:=',filenameYaml]), value_type=str
@@ -77,7 +76,7 @@ def generate_launch_description():
         executable='create',
         arguments=[
             '-topic', topicName,
-           # 'output', 'screen',
+            # 'output', 'screen',
         ]
     )
     """
@@ -102,7 +101,7 @@ def generate_launch_description():
 
     )
     """
-    
+
     return LaunchDescription([
         gazeboLaunch,
         robot_state_publisher_node,
