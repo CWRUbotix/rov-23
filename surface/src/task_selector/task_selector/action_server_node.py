@@ -1,6 +1,9 @@
+import time
+
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionServer
+
 from task_selector_interfaces.action import Example
 
 class TaskController(Node):
@@ -16,6 +19,12 @@ class TaskController(Node):
         
     def execute_callback(self, goal_handle):
         self.get_logger().info('Executing goal...')
+        
+        feedback_msg = Example.Feedback()
+        feedback_msg.feedback_message = "I am thinking about what to say to you"
+        
+        self.get_logger().info('Feedback:' + feedback_msg.feedback_message)
+        goal_handle.publish_feedback(feedback_msg)
         
         is_morning = goal_handle.request.morning
         
