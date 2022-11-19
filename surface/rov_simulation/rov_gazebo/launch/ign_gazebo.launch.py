@@ -22,8 +22,10 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch.substitutions import Command
 from launch_ros.descriptions import ParameterValue
+
+
 def generate_launch_description():
-    
+
     rov_gazebo_path: str = get_package_share_directory('rov_gazebo')
     ros_ign_gazebo_path: str = get_package_share_directory('ros_ign_gazebo')
     rov_description_path: str = get_package_share_directory('rov_description')
@@ -41,23 +43,19 @@ def generate_launch_description():
         launch_arguments={world_path}
     )
 
-    filenameURDF :str = "rov.xacro"
-    filenameYaml :str= "rov_description_params.yaml"
-    """
-    filenameSDF = "rov.sdf"
-    filenameTest ="bluerov.sdf"
-    """
+    filenameURDF: str = "rov.xacro"
+    filenameYaml: str = "rov_description_params.yaml"
+    # filenameSDF = "rov.sdf"
+    # filenameTest ="bluerov.sdf"
 
     # Path to Xacro file of robot
-    path_to_urdf = os.path.join(rov_description_path, 'urdf', filenameURDF)
-    """
-    path_to_param = os.path.join(get_package_share_directory('rov_description'),'config',filenameYaml)
-    path_to_sdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameSDF)
-    path_to_test_sdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameTest)
-    """
+    path_to_urdf: str = os.path.join(rov_description_path, 'urdf', filenameURDF)
+    
 
-    #with open(path_to_urdf, 'r') as infp:
-    # //  robot_desc = infp.read()
+    # path_to_param = os.path.join(get_package_share_directory('rov_description'),'config',filenameYaml)
+    # path_to_sdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameSDF)
+    # path_to_test_sdf = os.path.join(get_package_share_directory('rov_description'),'urdf',filenameTest)
+    
 
     robot_desc: ParameterValue = ParameterValue(
             Command(['xacro ', path_to_urdf, ' params_path:=', filenameYaml]), value_type=str
@@ -68,7 +66,6 @@ def generate_launch_description():
             'robot_description': robot_desc
     }
     
-
     # Publishes the state of the robot
     robot_state_publisher_node: Node = Node(
         package='robot_state_publisher',
@@ -77,13 +74,11 @@ def generate_launch_description():
         #arguments=[path_to_urdf] 
     )
 
-
-    """
-    joint_state_publisher_node: Node = Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        arguments=[path_to_urdf]
-    )"""
+    # joint_state_publisher_node: Node = Node(
+    #     package='joint_state_publisher',
+    #     executable='joint_state_publisher',
+    #     arguments=[path_to_urdf]
+    # )
 
     topicName:str = "robot_description"
 
@@ -95,28 +90,26 @@ def generate_launch_description():
             # 'output', 'screen',
         ]
     )
-    """
-    spawn_entity_node: Node = Node(
-        package='gazebo_ros',
-        executable='spawn_entity.py',
-        arguments=[
-            '-entity','rov',
-            '-topic','/robot_description',
-            '-x', '0',
-            '-y', '2',
-            '-z', '0',
-           # 'output', 'screen',
-        ]
-    )
-    """
-    """
-    rviz = Node(
-        package="rviz2",
-        executable="rviz2",
-        arguments=['-d' + os.path.join(get_package_share_directory('rov_gazebo'), 'config', 'rov.rviz')],
+    
+    # spawn_entity_node: Node = Node(
+    #     package='gazebo_ros',
+    #     executable='spawn_entity.py',
+    #     arguments=[
+    #         '-entity','rov',
+    #         '-topic','/robot_description',
+    #         '-x', '0',
+    #         '-y', '2',
+    #         '-z', '0',
+    #        # 'output', 'screen',
+    #     ]
+    # )
+  
+    # rviz = Node(
+    #     package="rviz2",
+    #     executable="rviz2",
+    #     arguments=['-d' + os.path.join(get_package_share_directory('rov_gazebo'), 'config', 'rov.rviz')],
 
-    )
-    """
+    # )
 
     return LaunchDescription([
         gazeboLaunch,
