@@ -27,7 +27,6 @@
 # from launch.substitutions import Command
 # from launch_ros.descriptions import ParameterValue
 # def generate_launch_description():
-    
 
 #     world_path = os.path.join(
 #                 get_package_share_directory('gazebo_ros'),'worlds','underwater.world'
@@ -64,13 +63,11 @@
 #         package='robot_state_publisher',
 #         executable='robot_state_publisher',
 #         parameters=[params],
-#         arguments=[path_to_urdf] 
+#         arguments=[path_to_urdf]
 #     )
 
-
-
 #     joint_state_publisher_node = Node(
-#         package='joint_state_publisher',
+#     package='joint_state_publisher',
 #         executable='joint_state_publisher',
 #         arguments=[path_to_urdf]
 #     )

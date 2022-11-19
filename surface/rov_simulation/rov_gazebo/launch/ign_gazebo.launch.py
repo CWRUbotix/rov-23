@@ -54,7 +54,7 @@ def generate_launch_description():
     # path_to_param = os.path.join(rov_description_path,'config',filenameYaml)
     # path_to_sdf = os.path.join(rov_description_path,'urdf',filenameSDF)
     # path_to_test_sdf = os.path.join(rov_description_path,'urdf',filenameTest)
-    
+
     robot_desc: ParameterValue = ParameterValue(
         Command(['xacro ', path_to_urdf, ' params_path:=', filenameYaml]), value_type=str
         # Command("xacro rov.xacro params_path:=rov_description_params.yaml")
@@ -63,7 +63,7 @@ def generate_launch_description():
     params = {
             'robot_description': robot_desc
     }
-    
+
     # Publishes the state of the robot
     robot_state_publisher_node: Node = Node(
         package='robot_state_publisher',
@@ -88,7 +88,7 @@ def generate_launch_description():
             # 'output', 'screen',
         ]
     )
-    
+
     # spawn_entity_node: Node = Node(
     #     package='gazebo_ros',
     #     executable='spawn_entity.py',
@@ -101,7 +101,7 @@ def generate_launch_description():
     #        # 'output', 'screen',
     #     ]
     # )
-  
+
     # rviz = Node(
     #     package="rviz2",
     #     executable="rviz2",
@@ -117,4 +117,3 @@ def generate_launch_description():
         # spawn_entity_node,
         # rviz,
     ])
-    
