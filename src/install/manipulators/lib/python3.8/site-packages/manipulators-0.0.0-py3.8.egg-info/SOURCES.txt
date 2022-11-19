@@ -1,0 +1,16 @@
+package.xml
+setup.cfg
+setup.py
+../build/manipulators/manipulators.egg-info/PKG-INFO
+../build/manipulators/manipulators.egg-info/SOURCES.txt
+../build/manipulators/manipulators.egg-info/dependency_links.txt
+../build/manipulators/manipulators.egg-info/entry_points.txt
+../build/manipulators/manipulators.egg-info/requires.txt
+../build/manipulators/manipulators.egg-info/top_level.txt
+../build/manipulators/manipulators.egg-info/zip-safe
+manipulators/__init__.py
+manipulators/manipGeneral.py
+resource/manipulators
+test/test_copyright.py
+test/test_flake8.py
+test/test_pep257.py

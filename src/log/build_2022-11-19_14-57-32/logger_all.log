@@ -1,0 +1,115 @@
+[0.382s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.382s] DEBUG:colcon:Parsed command line arguments: Namespace(allow_overriding=[], ament_cmake_args=None, base_paths=['.'], build_base='build', catkin_cmake_args=None, catkin_skip_building_tests=False, cmake_args=None, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, cmake_target=None, cmake_target_skip_unavailable=False, continue_on_error=False, event_handlers=None, executor='parallel', ignore_user_meta=False, install_base='install', log_base=None, log_level=None, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f812221bdf0>>, merge_install=False, metas=['./colcon.meta'], packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_end=None, packages_ignore=None, packages_ignore_regex=None, packages_select=None, packages_select_build_failed=False, packages_select_by_dep=None, packages_select_regex=None, packages_select_test_failures=False, packages_skip=None, packages_skip_build_finished=False, packages_skip_by_dep=None, packages_skip_regex=None, packages_skip_test_passed=False, packages_skip_up_to=None, packages_start=None, packages_up_to=None, packages_up_to_regex=None, parallel_workers=8, paths=None, symlink_install=False, test_result_base=None, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f812221bdf0>, verb_name='build', verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f81222253a0>)
+[0.404s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.405s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.405s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.405s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.405s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.405s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.405s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/taz/cwrubotics22-23/rov-23/src'
+[0.406s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.406s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.406s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.406s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.406s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.406s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.406s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.406s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.406s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.417s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.418s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.418s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.418s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.418s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.418s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.418s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.418s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.419s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.419s] Level 1:colcon.colcon_core.package_identification:_identify(manipulators) by extensions ['ignore', 'ignore_ament_install']
+[0.419s] Level 1:colcon.colcon_core.package_identification:_identify(manipulators) by extension 'ignore'
+[0.419s] Level 1:colcon.colcon_core.package_identification:_identify(manipulators) by extension 'ignore_ament_install'
+[0.419s] Level 1:colcon.colcon_core.package_identification:_identify(manipulators) by extensions ['colcon_pkg']
+[0.419s] Level 1:colcon.colcon_core.package_identification:_identify(manipulators) by extension 'colcon_pkg'
+[0.419s] Level 1:colcon.colcon_core.package_identification:_identify(manipulators) by extensions ['colcon_meta']
+[0.419s] Level 1:colcon.colcon_core.package_identification:_identify(manipulators) by extension 'colcon_meta'
+[0.419s] Level 1:colcon.colcon_core.package_identification:_identify(manipulators) by extensions ['ros']
+[0.419s] Level 1:colcon.colcon_core.package_identification:_identify(manipulators) by extension 'ros'
+[0.435s] DEBUG:colcon.colcon_core.package_identification:Package 'manipulators' with type 'ros.ament_python' and name 'manipulators'
+[0.435s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.436s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.436s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.436s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.436s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.459s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.459s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.462s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 0 installed packages in /home/taz/cwrubotics22-23/rov-23/src/install
+[0.463s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 268 installed packages in /opt/ros/galactic
+[0.466s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.554s] Level 5:colcon.colcon_core.verb:set package 'manipulators' build argument 'cmake_args' from command line to 'None'
+[0.554s] Level 5:colcon.colcon_core.verb:set package 'manipulators' build argument 'cmake_target' from command line to 'None'
+[0.555s] Level 5:colcon.colcon_core.verb:set package 'manipulators' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.555s] Level 5:colcon.colcon_core.verb:set package 'manipulators' build argument 'cmake_clean_cache' from command line to 'False'
+[0.555s] Level 5:colcon.colcon_core.verb:set package 'manipulators' build argument 'cmake_clean_first' from command line to 'False'
+[0.555s] Level 5:colcon.colcon_core.verb:set package 'manipulators' build argument 'cmake_force_configure' from command line to 'False'
+[0.555s] Level 5:colcon.colcon_core.verb:set package 'manipulators' build argument 'ament_cmake_args' from command line to 'None'
+[0.555s] Level 5:colcon.colcon_core.verb:set package 'manipulators' build argument 'catkin_cmake_args' from command line to 'None'
+[0.555s] Level 5:colcon.colcon_core.verb:set package 'manipulators' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.555s] DEBUG:colcon.colcon_core.verb:Building package 'manipulators' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/taz/cwrubotics22-23/rov-23/src/build/manipulators', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators', 'merge_install': False, 'path': '/home/taz/cwrubotics22-23/rov-23/src/manipulators', 'symlink_install': False, 'test_result_base': None}
+[0.556s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.560s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.560s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/taz/cwrubotics22-23/rov-23/src/manipulators' with build type 'ament_python'
+[0.560s] Level 1:colcon.colcon_core.shell:create_environment_hook('manipulators', 'ament_prefix_path')
+[0.568s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.568s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/manipulators/hook/ament_prefix_path.ps1'
+[0.570s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/manipulators/hook/ament_prefix_path.dsv'
+[0.570s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/manipulators/hook/ament_prefix_path.sh'
+[0.573s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.573s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.836s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/taz/cwrubotics22-23/rov-23/src/manipulators'
+[0.838s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.838s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.261s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/taz/cwrubotics22-23/rov-23/src/manipulators': PYTHONPATH=/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../build/manipulators build --build-base /home/taz/cwrubotics22-23/rov-23/src/build/manipulators/build install --prefix /home/taz/cwrubotics22-23/rov-23/src/install/manipulators --record /home/taz/cwrubotics22-23/rov-23/src/build/manipulators/install.log --single-version-externally-managed
+[1.576s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/taz/cwrubotics22-23/rov-23/src/manipulators' returned '0': PYTHONPATH=/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../build/manipulators build --build-base /home/taz/cwrubotics22-23/rov-23/src/build/manipulators/build install --prefix /home/taz/cwrubotics22-23/rov-23/src/install/manipulators --record /home/taz/cwrubotics22-23/rov-23/src/build/manipulators/install.log --single-version-externally-managed
+[1.581s] Level 1:colcon.colcon_core.environment:checking '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators' for CMake module files
+[1.581s] Level 1:colcon.colcon_core.environment:checking '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators' for CMake config files
+[1.582s] Level 1:colcon.colcon_core.environment:checking '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/lib'
+[1.582s] Level 1:colcon.colcon_core.environment:checking '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/bin'
+[1.582s] Level 1:colcon.colcon_core.environment:checking '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/lib/pkgconfig/manipulators.pc'
+[1.583s] Level 1:colcon.colcon_core.environment:checking '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/lib/python3.8/site-packages'
+[1.583s] Level 1:colcon.colcon_core.shell:create_environment_hook('manipulators', 'pythonpath')
+[1.584s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/manipulators/hook/pythonpath.ps1'
+[1.585s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/manipulators/hook/pythonpath.dsv'
+[1.585s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/manipulators/hook/pythonpath.sh'
+[1.586s] Level 1:colcon.colcon_core.environment:checking '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/bin'
+[1.586s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(manipulators)
+[1.587s] INFO:colcon.colcon_core.shell:Creating package script '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/manipulators/package.ps1'
+[1.588s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/manipulators/package.dsv'
+[1.589s] INFO:colcon.colcon_core.shell:Creating package script '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/manipulators/package.sh'
+[1.590s] INFO:colcon.colcon_core.shell:Creating package script '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/manipulators/package.bash'
+[1.590s] INFO:colcon.colcon_core.shell:Creating package script '/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/manipulators/package.zsh'
+[1.592s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/colcon-core/packages/manipulators)
+[1.593s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[1.593s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[1.593s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[1.593s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[1.725s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[1.726s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[1.726s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[1.726s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[1.732s] DEBUG:colcon.colcon_notification.desktop_notification.notify2:Failed to initialize notify2: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Notifications was not provided by any .service files
+[1.732s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[1.734s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/taz/cwrubotics22-23/rov-23/src/install/local_setup.ps1'
+[1.735s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/taz/cwrubotics22-23/rov-23/src/install/_local_setup_util_ps1.py'
+[1.737s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/taz/cwrubotics22-23/rov-23/src/install/setup.ps1'
+[1.739s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/taz/cwrubotics22-23/rov-23/src/install/local_setup.sh'
+[1.739s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/taz/cwrubotics22-23/rov-23/src/install/_local_setup_util_sh.py'
+[1.740s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/taz/cwrubotics22-23/rov-23/src/install/setup.sh'
+[1.741s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/taz/cwrubotics22-23/rov-23/src/install/local_setup.bash'
+[1.742s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/taz/cwrubotics22-23/rov-23/src/install/setup.bash'
+[1.743s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/taz/cwrubotics22-23/rov-23/src/install/local_setup.zsh'
+[1.743s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/taz/cwrubotics22-23/rov-23/src/install/setup.zsh'

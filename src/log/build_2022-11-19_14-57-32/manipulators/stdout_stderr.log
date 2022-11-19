@@ -1,0 +1,35 @@
+running egg_info
+creating ../build/manipulators/manipulators.egg-info
+writing ../build/manipulators/manipulators.egg-info/PKG-INFO
+writing dependency_links to ../build/manipulators/manipulators.egg-info/dependency_links.txt
+writing entry points to ../build/manipulators/manipulators.egg-info/entry_points.txt
+writing requirements to ../build/manipulators/manipulators.egg-info/requires.txt
+writing top-level names to ../build/manipulators/manipulators.egg-info/top_level.txt
+writing manifest file '../build/manipulators/manipulators.egg-info/SOURCES.txt'
+reading manifest file '../build/manipulators/manipulators.egg-info/SOURCES.txt'
+writing manifest file '../build/manipulators/manipulators.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/taz/cwrubotics22-23/rov-23/src/build/manipulators/build
+creating /home/taz/cwrubotics22-23/rov-23/src/build/manipulators/build/lib
+creating /home/taz/cwrubotics22-23/rov-23/src/build/manipulators/build/lib/manipulators
+copying manipulators/manipGeneral.py -> /home/taz/cwrubotics22-23/rov-23/src/build/manipulators/build/lib/manipulators
+copying manipulators/__init__.py -> /home/taz/cwrubotics22-23/rov-23/src/build/manipulators/build/lib/manipulators
+running install
+running install_lib
+creating /home/taz/cwrubotics22-23/rov-23/src/install/manipulators/lib/python3.8/site-packages/manipulators
+copying /home/taz/cwrubotics22-23/rov-23/src/build/manipulators/build/lib/manipulators/manipGeneral.py -> /home/taz/cwrubotics22-23/rov-23/src/install/manipulators/lib/python3.8/site-packages/manipulators
+copying /home/taz/cwrubotics22-23/rov-23/src/build/manipulators/build/lib/manipulators/__init__.py -> /home/taz/cwrubotics22-23/rov-23/src/install/manipulators/lib/python3.8/site-packages/manipulators
+byte-compiling /home/taz/cwrubotics22-23/rov-23/src/install/manipulators/lib/python3.8/site-packages/manipulators/manipGeneral.py to manipGeneral.cpython-38.pyc
+byte-compiling /home/taz/cwrubotics22-23/rov-23/src/install/manipulators/lib/python3.8/site-packages/manipulators/__init__.py to __init__.cpython-38.pyc
+running install_data
+creating /home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/ament_index
+creating /home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/ament_index/resource_index
+creating /home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/ament_index/resource_index/packages
+copying resource/manipulators -> /home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/ament_index/resource_index/packages
+copying package.xml -> /home/taz/cwrubotics22-23/rov-23/src/install/manipulators/share/manipulators
+running install_egg_info
+Copying ../build/manipulators/manipulators.egg-info to /home/taz/cwrubotics22-23/rov-23/src/install/manipulators/lib/python3.8/site-packages/manipulators-0.0.0-py3.8.egg-info
+running install_scripts
+Installing manipGeneral script to /home/taz/cwrubotics22-23/rov-23/src/install/manipulators/lib/manipulators
+writing list of installed files to '/home/taz/cwrubotics22-23/rov-23/src/build/manipulators/install.log'
