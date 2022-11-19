@@ -1,5 +1,6 @@
 from ast import arg, arguments
 import os
+import rclpy
 from symbol import parameters
 from ament_index_python.packages import get_package_share_directory
 from ament_index_python.packages import get_package_share_path
@@ -42,40 +43,44 @@ def generate_launch_description():
     #with open(path_to_urdf, 'r') as infp:
      # //  robot_desc = infp.read()
 
-    robot_desc = ParameterValue(
-            Command(['xacro ',path_to_urdf, ' params_path:=',path_to_param]), value_type=str
+    robot_desc: ParameterValue = ParameterValue(
+            Command(['xacro ',path_to_urdf, ' params_path:=',filenameYaml]), value_type=str
+            #Command("xacro rov.xacro params_path:=rov_description_params.yaml")
         )
 
     params = {
             'robot_description': robot_desc
     }
+    
 
     # Publishes the state of the robot
-    robot_state_publisher_node = Node(
+    robot_state_publisher_node: Node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         parameters=[params],
-        arguments=[path_to_urdf] 
+        #arguments=[path_to_urdf] 
     )
 
 
 
-    joint_state_publisher_node = Node(
+    joint_state_publisher_node: Node = Node(
         package='joint_state_publisher',
         executable='joint_state_publisher',
         arguments=[path_to_urdf]
     )
 
-    create_robot_node = Node(
+    topicName:str = "robot_description"
+
+    create_robot_node: Node = Node(
         package='ros_ign_gazebo',
         executable='create',
         arguments=[
-            '-file',path_to_test_sdf,
+            '-topic', topicName,
            # 'output', 'screen',
         ]
     )
 
-    spawn_entity_node = Node(
+    spawn_entity_node: Node = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
         arguments=[
@@ -97,11 +102,9 @@ def generate_launch_description():
 
     return LaunchDescription([
         gazeboLaunch,
-        #robot_state_publisher_node,
+        robot_state_publisher_node,
         create_robot_node,
         #joint_state_publisher_node,
         #spawn_entity_node,
         #rviz,
-    ]
-
-    )
+    ])

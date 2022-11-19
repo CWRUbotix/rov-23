@@ -66,8 +66,8 @@
 
     <!-- Hydrodynamics plugin -->
     <plugin
-        filename="gz-sim-hydrodynamics-system"
-        name="gz::sim::systems::Hydrodynamics">
+        filename="ignition-gazebo-hydrodynamics-system"
+        name="ignition::gazebo::systems::Hydrodynamics">
       <link_name>base_link</link_name>
       <water_density>1000</water_density>
       <!-- Added mass: -->
@@ -364,7 +364,7 @@
     </joint>
 
     <plugin
-        filename="gz-sim-thruster-system"
+        filename="ignition-gazebo-thruster-system"
         name="ignition::gazebo::systems::Thruster">
       <namespace>bluerov2</namespace>
       <joint_name>thruster1_joint</joint_name>
@@ -376,7 +376,7 @@
     </plugin>
 
     <plugin
-        filename="gz-sim-thruster-system"
+        filename="ignition-gazebo-thruster-system"
         name="ignition::gazebo::systems::Thruster">
       <namespace>bluerov2</namespace>
       <joint_name>thruster2_joint</joint_name>
@@ -388,7 +388,7 @@
     </plugin>
 
     <plugin
-        filename="gz-sim-thruster-system"
+        filename="ignition-gazebo-thruster-system"
         name="ignition::gazebo::systems::Thruster">
       <namespace>bluerov2</namespace>
       <joint_name>thruster3_joint</joint_name>
@@ -401,7 +401,7 @@
     </plugin>
 
     <plugin
-        filename="gz-sim-thruster-system"
+        filename="ignition-gazebo-thruster-system"
         name="ignition::gazebo::systems::Thruster">
       <namespace>bluerov2</namespace>
       <joint_name>thruster4_joint</joint_name>
@@ -414,7 +414,7 @@
     </plugin>
 
     <plugin
-        filename="gz-sim-thruster-system"
+        filename="ignition-gazebo-thruster-system"
         name="ignition::gazebo::systems::Thruster">
       <namespace>bluerov2</namespace>
       <joint_name>thruster5_joint</joint_name>
@@ -426,7 +426,7 @@
     </plugin>
 
     <plugin
-        filename="gz-sim-thruster-system"
+        filename="ignition-gazebo-thruster-system"
         name="ignition::gazebo::systems::Thruster">
       <namespace>bluerov2</namespace>
       <joint_name>thruster6_joint</joint_name>

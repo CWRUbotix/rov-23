@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
- <sdf version="1.6" xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <model name="rov">
-   
-    <!-- soontm https://github.com/clydemcqueen/bluerov2_ignition/-->
+ <robot name="rov" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+    <!-- soontm https://github.com/clydemcqueen/bluerov2_ignition/ -->
 
       <xacro:arg name="params_path" default=""/> 
       <!-- Need argument to get from launch file -->
@@ -86,7 +85,7 @@
         </inertial>
       </link>
 
-      <!-- camera -->
+      <!-- camera 
       <gazebo reference="camera_link">
         <sensor type="camera" name="front">
           <update_rate>30.0</update_rate>
@@ -103,9 +102,9 @@
             </clip>
             <noise>
               <type>gaussian</type>
-              <!-- Noise is sampled independently per pixel on each frame.
+               Noise is sampled independently per pixel on each frame.
                   That pixel's noise value is added to each of its color
-                  channels, which at that point lie in the range [0,1]. -->
+                  channels, which at that point lie in the range [0,1]. 
               <mean>0.0</mean>
               <stddev>0.007</stddev>
             </noise>
@@ -126,11 +125,12 @@
           </plugin>
         </sensor>
       </gazebo>
+      -->
 
-      <!-- From BlueROV2 example-->
+      <!-- From BlueROV2 example -->
       <!-- Hydrodynamics plugin -->
-        <plugin filename="gz-sim-hydrodynamics-system"name="gz::sim::systems::Hydrodynamics">
-          <link_name>base_link</link_name>
+        <plugin filename="ignition-gazebo-hydrodynamics-system"
+        name="ignition::gazebo::systems::Hydrodynamics"><link_name>base_link</link_name>
           <water_density>1000</water_density>
           <!-- Added mass: -->
           <xDotU>0</xDotU>
@@ -195,7 +195,8 @@
             </inertial>
           </link>
 
-          <plugin filename="gz-sim-thruster-system" name="gz::sim::systems::Thruster">
+          <plugin filename="ignition-gazebo-thruster-system"
+        name="ignition::gazebo::systems::Thruster">>
             <namespace>rov</namespace>
             <joint_name>"${thruster_name}_joint"</joint_name>
             <thrust_coefficient>0.02</thrust_coefficient>
@@ -256,8 +257,6 @@
           <xacro:thruster_control channel="6" jointName="bottom_back_left"/>
           <xacro:thruster_control channel="7" jointName="bottom_back_right"/> 
         </plugin>
-
-    
    
-  </model>
-</sdf>
+</robot>
+
