@@ -29,10 +29,9 @@ def generate_launch_description():
     rov_gazebo_path: str = get_package_share_directory('rov_gazebo')
     ros_ign_gazebo_path: str = get_package_share_directory('ros_ign_gazebo')
     rov_description_path: str = get_package_share_directory('rov_description')
-    world_path: str = os.path.join(
-        rov_gazebo_path, 'worlds', 'underwater.world'
-    )
 
+    world_path: str = os.path.join(rov_gazebo_path, 'worlds', 'rov_underwater.sdf')
+    print(world_path)
     # Launches Gazebo
     gazeboLaunch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -40,7 +39,7 @@ def generate_launch_description():
                 ros_ign_gazebo_path, 'launch', 'ign_gazebo.launch.py'
             )
         ]),
-        launch_arguments={world_path}
+        launch_arguments={'ign_args': world_path}.items()
     )
 
     filenameURDF: str = "rov.xacro"
@@ -85,7 +84,9 @@ def generate_launch_description():
         executable='create',
         arguments=[
             '-topic', topicName,
-            # 'output', 'screen',
+            # '-x', '0',
+            # '-y', '2',
+            # '-z', '0',
         ]
     )
 

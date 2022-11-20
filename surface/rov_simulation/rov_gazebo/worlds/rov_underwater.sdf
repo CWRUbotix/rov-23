@@ -1,8 +1,9 @@
 <?xml version="1.0" ?>
-  <sdf version="1.6">
-    <world name="underwater">
 
-    <!-- Base Ignition Gazebo plugins -->
+<sdf version="1.6">
+  <world name="underwater">
+
+    <!-- Base Gazebo plugins -->
     <plugin
         filename="ignition-gazebo-physics-system"
         name="ignition::gazebo::systems::Physics">
