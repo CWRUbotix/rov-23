@@ -34,7 +34,7 @@ class TaskRequestor(Node):
         result = future.result().result
         self.get_logger().info('Result: {0}'.format(result.message))
         rclpy.shutdown()
-        
+
     def feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
         self.get_logger().info('Received feedback: {0}'.format(feedback.feedback_message))

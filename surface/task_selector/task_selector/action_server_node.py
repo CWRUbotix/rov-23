@@ -27,6 +27,7 @@ class TaskController(Node):
         goal_handle.publish_feedback(feedback_msg)
         
         is_morning = goal_handle.request.morning
+        is_cheery = goal_handle.request.cheery
         
         if(is_morning):
             message = "Good morning!"
