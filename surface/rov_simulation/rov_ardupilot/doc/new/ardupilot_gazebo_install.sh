@@ -21,7 +21,10 @@ export IGN_RENDERING_RESOURCE_PATH=/usr/share/ignition/ignition-rendering5
 
 export IGN_GAZEBO_RESOURCE_PATH=\
 $HOME/ardupilot_gazebo/models:\
-$HOME/ardupilot_gazebo/worlds
+$HOME/ardupilot_gazebo/worlds:\
+$HOME/rov_23_ws/src/surface/rov_simulation/rov_gazebo/worlds:\
+$HOME/rov_23_ws/src/surface/rov_simulation/rov_gazebo/models:\
+
 
 export IGN_GAZEBO_SYSTEM_PLUGIN_PATH=\
 /usr/lib/x86_64-linux-gnu/ign-gazebo-5/plugins:\
