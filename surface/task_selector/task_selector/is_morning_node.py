@@ -6,14 +6,14 @@ from rclpy.action import ActionServer
 
 from task_selector_interfaces.action import Example
 
-class TaskController(Node):
+class IsMorning(Node):
     
     def __init__(self):
-        super().__init__('task_controller')
+        super().__init__('good_morning_sayer')
         self._action_server = ActionServer(
             self,
             Example,
-            'cool_example',
+            'say_good_morning',
             self.execute_callback
         )
         
@@ -29,10 +29,15 @@ class TaskController(Node):
         is_morning = goal_handle.request.morning
         is_cheery = goal_handle.request.cheery
         
-        if(is_morning):
-            message = "Good morning!"
+        if(is_cheery):
+            message = "Good"
         else:
-            message = "Good not morning!"
+            message = "Not good"
+        
+        if(is_morning):
+            message += " morning!"
+        else:
+            message += " not morning!"
         
         goal_handle.succeed()
         
@@ -43,7 +48,7 @@ class TaskController(Node):
 def main(args=None):
     rclpy.init(args=args)
     
-    task_controller = TaskController()
+    task_controller = IsMorning()
     
     rclpy.spin(task_controller)
     
