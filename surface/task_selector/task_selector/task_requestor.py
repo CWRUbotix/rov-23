@@ -48,19 +48,21 @@ class TaskRequestor(Node):
             return
 
         self.get_logger().info('Goal accepted')
-
+        
         self._get_result_future = goal_handle.get_result_async()
         self._get_result_future.add_done_callback(self.get_result_callback)
         
     def basic_response_callback(self, future):
-        self.goal_handle = future.result()
-        if not self.goal_handle.accepted:
+        goal_handle = future.result()
+        if not goal_handle.accepted:
             self.get_logger().info('Goal rejected')
             return
 
         self.get_logger().info('Goal accepted')
-
-        self._get_result_future = self.goal_handle.get_result_async()
+        
+        self._goal_handle = goal_handle
+        
+        self._get_result_future = goal_handle.get_result_async()
         self._get_result_future.add_done_callback(self.basic_result_callback)
 
     def basic_result_callback(self, future):
@@ -79,10 +81,11 @@ class TaskRequestor(Node):
         feedback = feedback_msg.feedback
         self.get_logger().info('Received feedback: {0}'.format(feedback.feedback_message))
         
+    # Only works if server runs on a multithreaded executor
     def cancel_goal(self):
         self.get_logger().info('Canceling goal')
         # Cancel the goal
-        future = self.goal_handle.cancel_goal_async()
+        future = self._goal_handle.cancel_goal_async()
         future.add_done_callback(self.cancel_done)
     
     # Logs if goal was canceled
@@ -93,6 +96,9 @@ class TaskRequestor(Node):
         else:
             self.get_logger().info('Goal failed to cancel')
         #rclpy.shutdown()
+        
+    def timer_callback(self):
+        self.cancel_goal()
 
 
     
@@ -101,7 +107,7 @@ def main(args=None):
     
     action_client = TaskRequestor()
     
-    future = action_client.send_basic_goal(action_client.basic_task_client)
+    action_client.send_basic_goal(action_client.basic_task_client)
     cancelled = False
     timer = 0
     while True:
@@ -111,7 +117,7 @@ def main(args=None):
             print("cancellation time")
             cancelled = True
             action_client.cancel_goal()
-            #future = action_client.send_morning_goal(True, True)
+            action_client.send_morning_goal(True, True)
         else: 
             timer += 1
             print(timer)

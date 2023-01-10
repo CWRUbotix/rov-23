@@ -4,6 +4,7 @@ import random
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionServer, CancelResponse
+from rclpy.executors import MultiThreadedExecutor
 
 from task_selector_interfaces.action import BasicTask
 
@@ -16,11 +17,10 @@ class BasicTaskTimedNode(Node):
             BasicTask,
             'timed_task',
             self.execute_callback,
-            cancel_callback = self.cancel_callback
+            cancel_callback=self.cancel_callback
         )
         
     def execute_callback(self, goal_handle):
-        self.canceled = False
         self.get_logger().info('Executing goal...')
         
         feedback_msg = BasicTask.Feedback()
@@ -50,7 +50,9 @@ def main(args=None):
     
     task_controller = BasicTaskTimedNode()
     
-    rclpy.spin(task_controller)
+    executor = MultiThreadedExecutor()
+    
+    rclpy.spin(task_controller, executor=executor)
     
 if __name__ == '__main__':
     main()

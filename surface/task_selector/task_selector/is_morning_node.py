@@ -2,7 +2,8 @@ import time
 
 import rclpy
 from rclpy.node import Node
-from rclpy.action import ActionServer
+from rclpy.action import ActionServer, CancelResponse
+from rclpy.executors import MultiThreadedExecutor
 
 from task_selector_interfaces.action import Example
 
@@ -20,37 +21,44 @@ class IsMorning(Node):
     def execute_callback(self, goal_handle):
         self.get_logger().info('Executing goal...')
         
-        feedback_msg = Example.Feedback()
-        feedback_msg.feedback_message = "I am thinking about what to say to you"
-        
-        self.get_logger().info('Feedback:' + feedback_msg.feedback_message)
-        goal_handle.publish_feedback(feedback_msg)
-        
-        is_morning = goal_handle.request.morning
-        is_cheery = goal_handle.request.cheery
-        
-        if(is_cheery):
-            message = "Good"
-        else:
-            message = "Not good"
-        
-        if(is_morning):
-            message += " morning!"
-        else:
-            message += " not morning!"
-        
-        goal_handle.succeed()
-        
-        result = Example.Result()
-        result.message = message
-        return result
+        if goal_handle.is_cancel_requested:
+                goal_handle.canceled()
+                self.get_logger().info('Goal canceled')
+                return Example.Result()
+        else: 
+            feedback_msg = Example.Feedback()
+            feedback_msg.feedback_message = "I am thinking about what to say to you"
+            
+            self.get_logger().info('Feedback:' + feedback_msg.feedback_message)
+            goal_handle.publish_feedback(feedback_msg)
+            
+            is_morning = goal_handle.request.morning
+            is_cheery = goal_handle.request.cheery
+            
+            if(is_cheery):
+                message = "Good"
+            else:
+                message = "Not good"
+            
+            if(is_morning):
+                message += " morning!"
+            else:
+                message += " not morning!"
+            
+            goal_handle.succeed()
+            
+            result = Example.Result()
+            result.message = message
+            return result
     
 def main(args=None):
     rclpy.init(args=args)
     
     task_controller = IsMorning()
     
-    rclpy.spin(task_controller)
+    executor = MultiThreadedExecutor()
+    
+    rclpy.spin(task_controller, executor=executor)
     
 if __name__ == '__main__':
     main()
