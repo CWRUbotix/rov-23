@@ -3,7 +3,7 @@
 <package format="3">
   <name>task_selector_interfaces</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Interfaces for task scheduler</description>
   <maintainer email="ericy@todo.todo">ericy</maintainer>
   <license>TODO: License declaration</license>
 

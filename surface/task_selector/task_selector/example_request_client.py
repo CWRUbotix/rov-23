@@ -1,0 +1,49 @@
+import time
+
+import rclpy
+from rclpy.node import Node
+from task_selector_interfaces.srv import TaskRequest
+
+class ExampleRequestClient(Node):
+
+    def __init__(self):
+        super().__init__('example_request_client')
+        self.cli = self.create_client(TaskRequest, 'task_request')
+        while not self.cli.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('service not available, waiting again...')
+        self.req = TaskRequest.Request()
+
+    def send_request(self, task_name):
+        self.req.name = task_name
+        self.future = self.cli.call_async(self.req)
+        rclpy.spin_until_future_complete(self, self.future)
+        return self.future.result()
+
+
+def main():
+    rclpy.init()
+
+    example_client = ExampleRequestClient()
+    
+    example_client.get_logger().info("Sending timer request")
+    response = example_client.send_request("timed_task")
+    example_client.get_logger().info(response.response)
+    
+    time.sleep(5)
+    
+    example_client.get_logger().info("Sending morning request")
+    response = example_client.send_request("say_good_morning")
+    example_client.get_logger().info(response.response)
+    
+    time.sleep(2)
+    
+    example_client.get_logger().info("Sending basic request")
+    response = example_client.send_request("basic_task")
+    example_client.get_logger().info(response.response)
+
+    example_client.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()

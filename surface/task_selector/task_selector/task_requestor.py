@@ -1,8 +1,8 @@
-import time
-
 import rclpy
 from rclpy.action import ActionClient
 from rclpy.node import Node
+
+from task_selector_interfaces.srv import TaskRequest
 
 from task_selector_interfaces.action import Example
 from task_selector_interfaces.action import BasicTask
@@ -14,11 +14,35 @@ class TaskRequestor(Node):
         super().__init__('task_requestor')
         
         # create service to handle requests for task switching
+        self.request_server = self.create_service(TaskRequest, 'task_request', self.request_task_callback)
         
         # instantiates new action clients with inputs of node, action type, action name
         self.morning_action_client = ActionClient(self, Example, 'say_good_morning')
         self.timed_task_client = ActionClient(self, BasicTask, 'timed_task')
-        self.basic_task_client = ActionClient(self, BasicTask, 'basic_task')
+        self.basic_task_client = ActionClient(self, BasicTask, 'example_task')
+        
+        self.active = False
+        
+        
+    def request_task_callback(self, request, response):
+        response.response = "Acknowledged"
+        if self.active:
+            self.cancel_goal()
+        
+        self.active = True
+        
+        if request.name == "say_good_morning":
+            self.send_morning_goal(True, True)
+        elif request.name == "timed_task":
+            self.send_basic_goal(self.timed_task_client)
+        elif request.name == "basic_task":
+            self.send_basic_goal(self.basic_task_client)
+        elif request.name == "cancel":
+            response.response = "Canceled"
+        else:
+            response.response = "Invalid task id"
+            
+        return response
         
         
     # Basic task client takes no input variables and only recieves feedback, no result data
@@ -76,11 +100,13 @@ class TaskRequestor(Node):
     # Notify us that task is finished
     def basic_result_callback(self, future):
         self.get_logger().info("Task finished")
+        self.active = False
 
     # Logs greeting that the morning server sends
     def morning_result_callback(self, future):
         result = future.result().result
         self.get_logger().info('Result: {0}'.format(result.message))
+        self.active = False
         
 
     # Logs feedback from action server
@@ -101,6 +127,7 @@ class TaskRequestor(Node):
         cancel_response = future.result()
         if len(cancel_response.goals_canceling) > 0:
             self.get_logger().info('Goal successfully canceled')
+            self.active = False
         else:
             self.get_logger().info('Goal failed to cancel')
 
@@ -111,33 +138,7 @@ def main(args=None):
     
     action_client = TaskRequestor()
     
-    action_client.send_basic_goal(action_client.timed_task_client)
-    cancelled = False
-    timer = 0
-    while True:
-        rclpy.spin_once(action_client)
-        
-        if timer > 8 and not cancelled:
-            print("cancellation time")
-            cancelled = True
-            action_client.cancel_goal()
-            action_client.send_morning_goal(True, True)
-        else: 
-            timer += 1
-            print(timer)
-        
-        
-    
-    # create other action clients
-
-    # Get the global executor
-    # rclpy.spin() uses this under the hood & rclpy.shutdown() will shut this executor down
-    
-    # global_executor = rclpy.get_global_executor()
-    # global_executor.add_node(action_client)
-    # global_executor.spin()
-
-    # different rclpy spins
+    rclpy.spin(action_client)
         
 if __name__ == '__main__':
     main()
