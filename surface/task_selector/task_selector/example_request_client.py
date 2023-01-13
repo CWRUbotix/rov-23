@@ -3,6 +3,7 @@ import time
 import rclpy
 from rclpy.node import Node
 from task_selector_interfaces.srv import TaskRequest
+from tasks import Tasks
 
 class ExampleRequestClient(Node):
 
@@ -13,8 +14,9 @@ class ExampleRequestClient(Node):
             self.get_logger().info('service not available, waiting again...')
         self.req = TaskRequest.Request()
 
-    def send_request(self, task_name):
-        self.req.name = task_name
+    def send_request(self, task_id):
+        enum_id = task_id.value
+        self.req.id = enum_id
         self.future = self.cli.call_async(self.req)
         rclpy.spin_until_future_complete(self, self.future)
         return self.future.result()
@@ -26,19 +28,19 @@ def main():
     example_client = ExampleRequestClient()
     
     example_client.get_logger().info("Sending timer request")
-    response = example_client.send_request("timed_task")
+    response = example_client.send_request(Tasks.EX_TIMED)
     example_client.get_logger().info(response.response)
     
     time.sleep(5)
     
     example_client.get_logger().info("Sending morning request")
-    response = example_client.send_request("say_good_morning")
+    response = example_client.send_request(Tasks.EX_GOOD_MORNING)
     example_client.get_logger().info(response.response)
     
     time.sleep(2)
     
     example_client.get_logger().info("Sending basic request")
-    response = example_client.send_request("basic_task")
+    response = example_client.send_request(Tasks.EX_BASIC)
     example_client.get_logger().info(response.response)
 
     example_client.destroy_node()

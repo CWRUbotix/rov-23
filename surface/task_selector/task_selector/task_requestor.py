@@ -7,6 +7,8 @@ from task_selector_interfaces.srv import TaskRequest
 from task_selector_interfaces.action import Example
 from task_selector_interfaces.action import BasicTask
 
+from tasks import Tasks
+
 class TaskRequestor(Node):
     
     def __init__(self):
@@ -31,13 +33,13 @@ class TaskRequestor(Node):
         
         self.active = True
         
-        if request.name == "say_good_morning":
+        if request.id == Tasks.EX_GOOD_MORNING.value:
             self.send_morning_goal(True, True)
-        elif request.name == "timed_task":
+        elif request.id == Tasks.EX_TIMED.value:
             self.send_basic_goal(self.timed_task_client)
-        elif request.name == "basic_task":
+        elif request.id == Tasks.EX_BASIC.value:
             self.send_basic_goal(self.basic_task_client)
-        elif request.name == "cancel":
+        elif request.id == Tasks.CANCEL.value:
             response.response = "Canceled"
         else:
             response.response = "Invalid task id"
