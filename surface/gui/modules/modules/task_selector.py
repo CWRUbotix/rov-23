@@ -5,7 +5,7 @@ import threading
 
 from event_nodes.client import GUIEventClient
 from event_nodes.server import GUIEventServer
-from interfaces.srv import SelectTask
+from interfaces.srv import TaskRequest
 
 
 class TaskSelector(QWidget):
@@ -34,9 +34,10 @@ class TaskSelector(QWidget):
 
         rclpy.init()
 
-        # self.taskChangedClient = GUIEventClient(SelectTask, 'task_changed_by_gui')
+        self.taskChangedClient = GUIEventClient(
+            TaskRequest, 'task_changed_by_gui')
         self.taskChangedServer = GUIEventServer(
-            SelectTask, 'task_changed_by_manager', self.managerChangedTask)
+            TaskRequest, 'task_changed_by_manager', self.managerChangedTask)
 
         executor = rclpy.executors.MultiThreadedExecutor()
         executor.add_node(self.taskChangedServer)
@@ -44,15 +45,15 @@ class TaskSelector(QWidget):
         executor_thread = threading.Thread(target=executor.spin, daemon=True)
         executor_thread.start()
 
-        rclpy.shutdown()
-
     def guiChangedTask(self, i: int):
         print(
             f'Task changed to: {self.comboBox.currentText()} at {self.comboBox.currentIndex()}')
-        # response = self.taskChangedClient.send_request({'task': 'Manual Control'})
+        response = self.taskChangedClient.send_request(
+            {'task_id': i})
+        print(response)
 
     def managerChangedTask(self, request, response):
         print('manager changed callback')
-        self.comboBox.setCurrentText(request.task)
-        response.accepted = True
+        self.comboBox.setCurrentIndex(request.task_id)
+        response.response = 'Accepted'
         return response
