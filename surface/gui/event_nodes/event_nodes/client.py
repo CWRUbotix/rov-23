@@ -3,6 +3,7 @@ from typing import Dict, Any
 
 import rclpy
 from rclpy.node import Node
+import re
 
 
 # Set to None for no timeout limits on service requests
@@ -13,7 +14,9 @@ TIMEOUT_SEC: float = None
 class GUIEventClient(Node):
 
     def __init__(self, interface: type, topic: str):
-        super().__init__(f'gui_event_client_{topic}')
+        # Name this node with a sanitized version of the topic
+        super().__init__(
+            f'gui_event_client_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}')
         self.cli = self.create_client(interface, topic)
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info(

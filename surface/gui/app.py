@@ -4,6 +4,7 @@ import rclpy
 
 from modules.task_selector import TaskSelector
 from modules.video import VideoArea
+from modules.log import Logger
 
 
 class App(QWidget):
@@ -15,13 +16,14 @@ class App(QWidget):
 
         layout: QGridLayout = QGridLayout()
 
-        taskSelector: TaskSelector = TaskSelector()
-
-        layout.addWidget(taskSelector)
-
         video_area = VideoArea(4)
+        layout.addWidget(video_area, 0, 0)
 
-        layout.addWidget(video_area)
+        task_selector: TaskSelector = TaskSelector()
+        layout.addWidget(task_selector, 0, 1)
+
+        logger: Logger = Logger()
+        layout.addWidget(logger, 1, 0)
 
         self.setLayout(layout)
 

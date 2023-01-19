@@ -45,7 +45,7 @@ class TaskSelector(QWidget):
         self.task_changed_server: GUIEventServer = GUIEventServer(
             TaskRequest, 'task_changed_by_scheduler', self.scheduler_changed_task)
 
-        executor = rclpy.executors.MultiThreadedExecutor()
+        executor = rclpy.executors.SingleThreadedExecutor()
         executor.add_node(self.task_changed_server)
 
         executor_thread: Thread = Thread(target=executor.spin, daemon=True)
