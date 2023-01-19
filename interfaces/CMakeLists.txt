@@ -25,7 +25,7 @@ endif()
 find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-  "srv/SelectTask.srv"
+  "srv/TaskRequest.srv"
 )
 
 ament_package()

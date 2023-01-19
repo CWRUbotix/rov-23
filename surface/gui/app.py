@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QWidget, QGridLayout
 import rclpy
 
 from modules.task_selector import TaskSelector
+from modules.video import VideoArea
 
 
 class App(QWidget):
@@ -17,6 +18,10 @@ class App(QWidget):
         taskSelector: TaskSelector = TaskSelector()
 
         layout.addWidget(taskSelector)
+
+        video_area = VideoArea(4)
+
+        layout.addWidget(video_area)
 
         self.setLayout(layout)
 
