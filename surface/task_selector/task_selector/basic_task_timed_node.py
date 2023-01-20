@@ -6,7 +6,7 @@ from rclpy.node import Node
 from rclpy.action import ActionServer, CancelResponse
 from rclpy.executors import MultiThreadedExecutor
 
-from task_selector_interfaces.action import BasicTask
+from interfaces.action import BasicTask
 
 class BasicTaskTimedNode(Node):
     

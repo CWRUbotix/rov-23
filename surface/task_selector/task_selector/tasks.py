@@ -1,5 +1,6 @@
 from enum import Enum, auto
 
+
 class Tasks(Enum):
     CANCEL = auto()
     EX_BASIC = auto()
