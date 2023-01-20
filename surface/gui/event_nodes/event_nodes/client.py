@@ -1,11 +1,9 @@
-
 from typing import Dict, Any
-
-import rclpy
-from rclpy.node import Node
 import re
 from threading import Thread
 
+import rclpy
+from rclpy.node import Node
 
 # Set to None for no timeout limits on service requests
 # else set to float number of seconds to limit request spinning
@@ -31,7 +29,8 @@ class GUIEventClient(Node):
     def __connect_to_service(self):
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info(
-                f'Service for GUI event client node on topic {self.topic} unavailable, waiting again...')
+                'Service for GUI event client node on topic' +
+                f' {self.topic} unavailable, waiting again...')
         self.connected = True
         self.req = self.interface.Request()
 

@@ -1,8 +1,8 @@
+import re
+from threading import Thread
 
 import rclpy
 from rclpy.node import Node
-import re
-from threading import Thread
 
 
 class GUIEventServer(Node):

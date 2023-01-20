@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QWidget, QComboBox, QHBoxLayout, QLabel
-
 import rclpy
+
+from PyQt5.QtWidgets import QWidget, QComboBox, QHBoxLayout, QLabel
 
 from event_nodes.client import GUIEventClient
 from event_nodes.server import GUIEventServer
@@ -8,7 +8,7 @@ from interfaces.srv import TaskRequest
 
 
 class TaskSelector(QWidget):
-    """Module widget that handles task selection with a dropdown"""
+    """Module widget that handles task selection with a dropdown."""
 
     def __init__(self):
         super().__init__()
@@ -17,12 +17,12 @@ class TaskSelector(QWidget):
         layout: QHBoxLayout = QHBoxLayout()
         self.setLayout(layout)
 
-        ## Add 'Task: ' label ##
+        # Add 'Task: ' label #
         label: QLabel = QLabel()
         label.setText('Task: ')
         layout.addWidget(label)
 
-        ## Add dropdown ##
+        # Add dropdown #
         # Create PyQt element
         self.combo_box: QComboBox = QComboBox()
         self.combo_box.addItem('Manual Control')
@@ -33,7 +33,7 @@ class TaskSelector(QWidget):
         # Connect signals
         self.combo_box.currentIndexChanged.connect(self.gui_changed_task)
 
-        ## Creat ROS nodes ##
+        # Creat ROS nodes #
         # Create client (in seperate thread to let GUI load before it connects)
         self.task_changed_client: GUIEventClient = GUIEventClient(
             TaskRequest, 'task_changed_by_gui')
@@ -45,8 +45,7 @@ class TaskSelector(QWidget):
         self.task_changed_server.spin_async()
 
     def gui_changed_task(self, i: int):
-        """Tell the back about the user selecting task with ID i"""
-
+        """Tell the back about the user selecting task with ID i."""
         # Cancel change if task changer hasn't connected yet
         if not self.task_changed_client.connected:
             self.combo_box.setCurrentIndex(0)
@@ -55,11 +54,11 @@ class TaskSelector(QWidget):
         print(
             f'Task changed to: {self.combo_box.currentText()} at {self.combo_box.currentIndex()}')
 
-        response = self.task_changed_client.send_request_async(
+        self.task_changed_client.send_request_async(
             {'task_id': i}, self.handle_scheduler_response)
 
     def scheduler_changed_task(self, request, response):
-        """Callback for when the task manager changed the task"""
+        """Responds when task scheduler changes the task."""
         print('manager changed callback')
         self.combo_box.setCurrentIndex(request.task_id)
         response.response = 'Accepted'

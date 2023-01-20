@@ -1,14 +1,14 @@
 from math import floor
 from typing import List
-from threading import Thread
-
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QCheckBox, QPlainTextEdit, QTextEdit
-from PyQt5.QtGui import QFont, QTextCursor, QColor
-from event_nodes.subscriber import GUIEventSubscriber
 
 from rcl_interfaces.msg import Log
-import rclpy
 
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QCheckBox, QTextEdit
+from PyQt5.QtGui import QFont, QTextCursor, QColor
+
+from event_nodes.subscriber import GUIEventSubscriber
+
+# Names and log text colors for each message severity
 SEVERITY_LEVELS = [
     {
         'name': 'Unset',
@@ -44,20 +44,21 @@ class Logger(QWidget):
         layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(layout)
 
+        # Layout for severity checkboxes
         settings_layout: QHBoxLayout = QHBoxLayout()
         layout.addLayout(settings_layout)
 
         self.checkboxes: List[QCheckBox] = []
         for severity in SEVERITY_LEVELS:
             box: QCheckBox = QCheckBox(severity['name'])
+            box.setChecked(True)
             self.checkboxes.append(box)
             settings_layout.addWidget(box)
-            box.setChecked(True)
 
         self.textbox: QTextEdit = QTextEdit()
-        layout.addWidget(self.textbox)
         self.textbox.setReadOnly(True)
         self.textbox.setLineWrapMode(QTextEdit.NoWrap)
+        layout.addWidget(self.textbox)
 
         self.font: QFont = self.textbox.font()
         self.font.setFamily("Courier")
@@ -67,10 +68,13 @@ class Logger(QWidget):
             Log, '/rosout', self.print_log)
         self.subscriber.spin_async()
 
-    def print_log(self, message):
+    def print_log(self, message) -> None:
+        """Print the given message to the log widget if the user has chosen to view this message type"""
+
+        # Message severities are 0, 10, 20, etc.; we divide by 10 to get index for SEVERITY_LEVELS
         severity_index = floor(message.level / 10)
         if severity_index < 0 or severity_index > 5:
-            severity_index = 5  # Unset severity
+            severity_index = 0  # Unset severity
 
         # Make sure we've chosen to view this message type
         if not self.checkboxes[severity_index].isChecked():

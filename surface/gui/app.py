@@ -1,10 +1,10 @@
-from PyQt5.QtWidgets import QWidget, QGridLayout
-
 import rclpy
 
+from PyQt5.QtWidgets import QWidget, QGridLayout
+
 from modules.task_selector import TaskSelector
-from modules.video import VideoArea
-from modules.log import Logger
+from modules.video_area import VideoArea
+from modules.logger import Logger
 
 
 class App(QWidget):
@@ -15,6 +15,7 @@ class App(QWidget):
         self.resize(1850, 720)
 
         layout: QGridLayout = QGridLayout()
+        self.setLayout(layout)
 
         video_area = VideoArea(4)
         layout.addWidget(video_area, 0, 0)
@@ -24,8 +25,6 @@ class App(QWidget):
 
         logger: Logger = Logger()
         layout.addWidget(logger, 1, 0)
-
-        self.setLayout(layout)
 
     def closeEvent(self, event):
         # This shutdown should kill all nodes the GUI makes

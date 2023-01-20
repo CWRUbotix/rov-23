@@ -1,8 +1,8 @@
+import rclpy
+
 from interfaces.srv import TaskRequest
 from event_nodes.client import GUIEventClient
 from event_nodes.server import GUIEventServer
-
-import rclpy
 
 
 def client():

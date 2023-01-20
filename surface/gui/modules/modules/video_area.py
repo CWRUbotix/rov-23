@@ -1,5 +1,4 @@
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget
+from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 
@@ -20,17 +19,17 @@ class VideoWidget(QLabel):
         #     self.frameGeometry().height(),
         #     Qt.KeepAspectRatio))
 
-        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
-                           QtWidgets.QSizePolicy.Expanding)
+        self.setSizePolicy(QSizePolicy.Expanding,
+                           QSizePolicy.Expanding)
 
     def mousePressEvent(self, event):
-        """Swap this video with the big video on click"""
+        """Swap this video with the big video on click."""
         if self.row != -1:
             self.update_big_video_signal.emit(self)
 
 
 class VideoArea(QWidget):
-    """Container widget handling all video streams"""
+    """Container widget handling all video streams."""
 
     def __init__(self, num_video_widgets):
         super().__init__()
@@ -54,8 +53,7 @@ class VideoArea(QWidget):
 
     @pyqtSlot(QWidget)
     def set_as_big_video(self, target_widget: VideoWidget):
-        """Swap target VideoWidget with big VideoWidget"""
-
+        """Swaps target VideoWidget with big VideoWidget."""
         big_widget: QWidget = self.grid_layout.itemAtPosition(
             0, 0).widget()
 

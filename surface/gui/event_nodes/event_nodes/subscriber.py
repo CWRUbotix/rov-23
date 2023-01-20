@@ -1,7 +1,8 @@
-from rclpy.node import Node
-import rclpy
 import re
 from threading import Thread
+
+import rclpy
+from rclpy.node import Node
 
 
 class GUIEventSubscriber(Node):
