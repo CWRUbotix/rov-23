@@ -1,5 +1,7 @@
 from rclpy.node import Node
+import rclpy
 import re
+from threading import Thread
 
 
 class GUIEventSubscriber(Node):
@@ -11,3 +13,10 @@ class GUIEventSubscriber(Node):
         self.subscription = self.create_subscription(
             interface, topic, callback, 10)
         self.subscription  # prevent unused variable warning
+
+    def spin_async(self):
+        executor = rclpy.executors.SingleThreadedExecutor()
+        executor.add_node(self)
+        subscriber_thread: Thread = Thread(
+            target=executor.spin, daemon=True)
+        subscriber_thread.start()

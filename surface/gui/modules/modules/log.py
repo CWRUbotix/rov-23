@@ -65,15 +65,7 @@ class Logger(QWidget):
 
         self.subscriber: GUIEventSubscriber = GUIEventSubscriber(
             Log, '/rosout', self.print_log)
-
-        subscriber_thread: Thread = Thread(
-            target=self.spin_subscriber, daemon=True)
-        subscriber_thread.start()
-
-    def spin_subscriber(self):
-        executor = rclpy.executors.SingleThreadedExecutor()
-        executor.add_node(self.subscriber)
-        executor.spin()
+        self.subscriber.spin_async()
 
     def print_log(self, message):
         severity_index = floor(message.level / 10)
