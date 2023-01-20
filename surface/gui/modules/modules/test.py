@@ -1,17 +1,17 @@
 import rclpy
 
 from interfaces.srv import TaskRequest
-from event_nodes.client import GUIEventClient
+from interfaces.msg import TaskFeedback
+from event_nodes.publisher import GUIEventPublisher
 from event_nodes.server import GUIEventServer
 
 
-def client():
+def publisher():
     rclpy.init()
-    client = GUIEventClient(TaskRequest, 'task_changed_by_scheduler', None)
-    response = client.send_request({'task_id': 2})
-    client.get_logger().info(f'Result of service: {response.response}')
+    pub = GUIEventPublisher(TaskFeedback, 'task_feedback')
+    pub.publish({'task_id': 2})
 
-    client.destroy_node()
+    pub.destroy_node()
     rclpy.shutdown()
 
 
@@ -19,7 +19,7 @@ def server():
     rclpy.init()
 
     service = GUIEventServer(
-        TaskRequest, 'task_changed_by_gui', serverCallback)
+        TaskRequest, 'task_request', serverCallback)
 
     rclpy.spin(service)
 

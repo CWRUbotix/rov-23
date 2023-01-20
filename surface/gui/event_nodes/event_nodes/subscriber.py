@@ -14,7 +14,7 @@ class GUIEventSubscriber(Node):
         super().__init__(
             f'gui_event_subscriber_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}')
         self.subscription = self.create_subscription(
-            interface, topic, lambda msg: signal.emit(msg), 10)
+            interface, topic, signal.emit, 10)
         self.subscription  # prevent unused variable warning
 
     def spin_async(self):

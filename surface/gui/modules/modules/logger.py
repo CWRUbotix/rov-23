@@ -74,9 +74,9 @@ class Logger(QWidget):
 
     @pyqtSlot(Log)
     def print_log(self, message: Log) -> None:
-        """Print the given message to the log widget if the
-            user has chosen to view this message type."""
-        # Message severities are 0, 10, 20, etc.; we divide by 10 to get index for SEVERITY_LEVELS
+        """Print message to log widget if user is viewing message's type."""
+        # Message severities are 0, 10, 20, etc.
+        # We divide by 10 to get index for SEVERITY_LEVELS
         severity_index = floor(message.level / 10)
         if severity_index < 0 or severity_index > 5:
             severity_index = 0  # Unset severity

@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'client = modules.test:client',
+            'publisher = modules.test:publisher',
             'server = modules.test:server'
         ],
     },
