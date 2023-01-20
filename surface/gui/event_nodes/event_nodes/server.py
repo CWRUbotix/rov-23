@@ -17,5 +17,4 @@ class GUIEventServer(Node):
         # Create new executor to avoid spinning global executor multiple times
         executor = rclpy.executors.SingleThreadedExecutor()
         executor.add_node(self)
-        executor_thread: Thread = Thread(target=executor.spin, daemon=True)
-        executor_thread.start()
+        Thread(target=executor.spin, daemon=True).start()

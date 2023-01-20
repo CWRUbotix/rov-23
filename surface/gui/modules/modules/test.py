@@ -7,7 +7,7 @@ from event_nodes.server import GUIEventServer
 
 def client():
     rclpy.init()
-    client = GUIEventClient(TaskRequest, 'task_changed_by_scheduler')
+    client = GUIEventClient(TaskRequest, 'task_changed_by_scheduler', None)
     response = client.send_request({'task_id': 2})
     client.get_logger().info(f'Result of service: {response.response}')
 

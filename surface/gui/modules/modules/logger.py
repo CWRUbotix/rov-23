@@ -5,6 +5,7 @@ from rcl_interfaces.msg import Log
 
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QCheckBox, QTextEdit
 from PyQt5.QtGui import QFont, QTextCursor, QColor
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 from event_nodes.subscriber import GUIEventSubscriber
 
@@ -38,6 +39,8 @@ SEVERITY_LEVELS = [
 
 
 class Logger(QWidget):
+    print_log_signal: pyqtSignal = pyqtSignal(Log)
+
     def __init__(self):
         super().__init__()
 
@@ -64,13 +67,15 @@ class Logger(QWidget):
         self.font.setFamily("Courier")
         self.font.setPointSize(11)
 
+        self.print_log_signal.connect(self.print_log)
         self.subscriber: GUIEventSubscriber = GUIEventSubscriber(
-            Log, '/rosout', self.print_log)
+            Log, '/rosout', self.print_log_signal)
         self.subscriber.spin_async()
 
-    def print_log(self, message) -> None:
-        """Print the given message to the log widget if the user has chosen to view this message type"""
-
+    @pyqtSlot(Log)
+    def print_log(self, message: Log) -> None:
+        """Print the given message to the log widget if the
+            user has chosen to view this message type."""
         # Message severities are 0, 10, 20, etc.; we divide by 10 to get index for SEVERITY_LEVELS
         severity_index = floor(message.level / 10)
         if severity_index < 0 or severity_index > 5:
