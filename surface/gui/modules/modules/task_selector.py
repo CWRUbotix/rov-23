@@ -11,6 +11,7 @@ from interfaces.msg import TaskFeedback
 
 class TaskSelector(QWidget):
     """Module widget that handles task selection with a dropdown."""
+
     # Declare signals with "object" params b/c we don't have access to
     # the ROS service object TaskRequest_Response
     handle_scheduler_response_signal: pyqtSignal = pyqtSignal(object)
@@ -60,16 +61,21 @@ class TaskSelector(QWidget):
             self.combo_box.setCurrentIndex(0)
             return
 
-        print(
-            f'Task changed to: {self.combo_box.currentText()} at {self.combo_box.currentIndex()}')
+        self.task_changed_client.get_logger().info(
+            f'GUI changed task to: {self.combo_box.currentText()}' +
+            f' at {self.combo_box.currentIndex()}')
 
         self.task_changed_client.send_request_async({'task_id': i})
 
-    @pyqtSlot(object)
-    def update_task_dropdown(self, message):
-        print('update dropdown')
-        self.combo_box.setCurrentIndex(message.task_id)
-
-    @pyqtSlot(object)
+    @ pyqtSlot(object)
     def handle_scheduler_response(self, response):
+        """Handle scheduler response to request sent from gui_changed_task."""
         print(response)
+
+    @ pyqtSlot(object)
+    def update_task_dropdown(self, message):
+        """Update the task selector dropdown when task changed by scheduler."""
+        self.combo_box.setCurrentIndex(message.task_id)
+        self.task_changed_server.get_logger().info(
+            f'GUI recieved task changed to: {self.combo_box.currentText()}' +
+            f' at {self.combo_box.currentIndex()}')

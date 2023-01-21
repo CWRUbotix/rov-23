@@ -3,6 +3,8 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 
 class VideoWidget(QLabel):
+    """A single video stream widget."""
+
     update_big_video_signal = pyqtSignal(QWidget)
 
     def __init__(self, row: int):
@@ -53,7 +55,7 @@ class VideoArea(QWidget):
 
     @pyqtSlot(QWidget)
     def set_as_big_video(self, target_widget: VideoWidget):
-        """Swaps target VideoWidget with big VideoWidget."""
+        """Swap target VideoWidget with big VideoWidget."""
         big_widget: QWidget = self.grid_layout.itemAtPosition(
             0, 0).widget()
 

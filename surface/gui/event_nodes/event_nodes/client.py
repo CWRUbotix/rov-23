@@ -13,6 +13,7 @@ TIMEOUT_SEC: float = 1.0
 
 
 class GUIEventClient(Node):
+    """Multithreaded client for sending service requests from the GUI."""
 
     def __init__(self, interface: type, topic: str, signal: pyqtSignal):
         # Name this node with a sanitized version of the topic
@@ -28,6 +29,7 @@ class GUIEventClient(Node):
         Thread(target=self.__connect_to_service, daemon=True).start()
 
     def __connect_to_service(self):
+        """Connect this client to a server in a seperate thread; set self.connected when done."""
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info(
                 'Service for GUI event client node on topic' +
@@ -36,10 +38,12 @@ class GUIEventClient(Node):
         self.req = self.interface.Request()
 
     def send_request_async(self, params: Dict[str, Any]):
+        """Send request to server in seperate thread."""
         Thread(target=self.send_request_with_signal, kwargs={
                'params': params}, daemon=True).start()
 
     def send_request_with_signal(self, params: Dict[str, Any]):
+        """Send synchronous request to server and emit signal."""
         for key, value in params.items():
             setattr(self.req, key, value)
 
@@ -50,6 +54,7 @@ class GUIEventClient(Node):
         self.signal.emit(future.result())
 
     def send_request(self, params: Dict[str, Any]):
+        """Send synchronous request to server and return result."""
         for key, value in params.items():
             setattr(self.req, key, value)
 

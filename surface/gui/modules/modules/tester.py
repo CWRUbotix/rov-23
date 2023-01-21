@@ -5,6 +5,8 @@ from interfaces.msg import TaskFeedback
 from event_nodes.publisher import GUIEventPublisher
 from event_nodes.server import GUIEventServer
 
+"""This file is for testing the GUI; it should be removed once the task scheduler is set up."""
+
 
 def publisher():
     rclpy.init()

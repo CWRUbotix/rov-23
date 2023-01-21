@@ -8,6 +8,8 @@ from modules.logger import Logger
 
 
 class App(QWidget):
+    """Main app window."""
+
     def __init__(self):
         super().__init__()
 
@@ -27,6 +29,7 @@ class App(QWidget):
         layout.addWidget(logger, 1, 0)
 
     def closeEvent(self, event):
+        """Piggyback the PyQt window close to kill rclpy."""
         # This shutdown should kill all nodes the GUI makes
         # rclpy.init() still needs to be called in each file that constructs a node
         rclpy.shutdown()
