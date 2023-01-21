@@ -26,8 +26,7 @@ class IsMorning(Node):
             return Example.Result()
         else:
             feedback_msg = Example.Feedback()
-            feedback_msg.feedback_message = """I am thinking about what to say 
-            to you"""
+            feedback_msg.feedback_message = """I am thinking about what to say to you"""
 
             self.get_logger().info('Feedback:' + feedback_msg.feedback_message)
             goal_handle.publish_feedback(feedback_msg)
@@ -36,14 +35,14 @@ class IsMorning(Node):
             is_cheery = goal_handle.request.cheery
 
             if is_cheery:
-                message = "Good"
+                message = 'Good'
             else:
-                message = "Not good"
+                message = 'Not good'
 
             if is_morning:
-                message += " morning!"
+                message += ' morning!'
             else:
-                message += " not morning!"
+                message += ' not morning!'
 
             goal_handle.succeed()
 
