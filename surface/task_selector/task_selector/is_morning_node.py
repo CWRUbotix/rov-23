@@ -9,8 +9,6 @@ from interfaces.action import Example
 class IsMorning(Node):
 
     def __init__(self):
-        """oqiwndoinqwodinqwoidiqoudnoqiuwdniouweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"""
-
         super().__init__('good_morning_sayer')
         self._action_server = ActionServer(
             self,
@@ -28,8 +26,7 @@ class IsMorning(Node):
             return Example.Result()
         else:
             feedback_msg = Example.Feedback()
-            feedback_msg.feedback_message = """I am thinking about what to say 
-            to you"""
+            feedback_msg.feedback_message = """I am thinking about what to say to you"""
 
             self.get_logger().info('Feedback:' + feedback_msg.feedback_message)
             goal_handle.publish_feedback(feedback_msg)
