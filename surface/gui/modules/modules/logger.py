@@ -40,6 +40,7 @@ SEVERITY_LEVELS = [
 
 class Logger(QWidget):
     """Logging widget for displaying ROS logs."""
+
     print_log_signal: pyqtSignal = pyqtSignal(Log)
 
     def __init__(self):
