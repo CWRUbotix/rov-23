@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'manipGeneral = manipulators.manipGeneral:main'
+            'manip_publisher = manipulators.manip_publisher:main',
+            'manip_subscriber = manipulators.manip_subscriber:main'
         ],
     },
 )
