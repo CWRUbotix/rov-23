@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'event_nodes'
+package_name = 'gui'
 
 setup(
     name=package_name,
@@ -20,6 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'publisher = modules.tester:publisher',
+            'server = modules.tester:server'
         ],
     },
 )
