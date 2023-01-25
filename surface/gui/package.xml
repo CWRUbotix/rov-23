@@ -3,9 +3,9 @@
 <package format="3">
   <name>gui</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="bwp18@case.edu">ubuntu0</maintainer>
-  <license>TODO: License declaration</license>
+  <description>MATE ROV GUI and related ROS nodes</description>
+  <maintainer email="bwp18@case.edu">Benjamin Poulin</maintainer>
+  <license>Apache License 2.0</license>
 
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>

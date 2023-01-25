@@ -13,10 +13,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='ubuntu0',
+    maintainer='Benjamin Poulin',
     maintainer_email='bwp18@case.edu',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='MATE ROV GUI and related ROS nodes',
+    license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
