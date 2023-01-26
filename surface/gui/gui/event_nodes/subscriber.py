@@ -1,10 +1,8 @@
-from pathlib import Path
 import re
 from threading import Thread
 from event_nodes.event_node import GUIEventNode
 
 import rclpy
-from rclpy.node import Node
 
 from PyQt5.QtCore import pyqtSignal
 

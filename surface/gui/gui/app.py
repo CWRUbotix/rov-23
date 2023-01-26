@@ -30,7 +30,6 @@ class App(QWidget):
 
     def closeEvent(self, event):
         """Piggyback the PyQt window close to kill rclpy."""
-
         # Kill all executors
         self.task_selector.kill_all_executors()
         self.logger.kill_all_executors()

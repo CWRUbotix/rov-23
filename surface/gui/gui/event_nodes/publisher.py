@@ -3,8 +3,6 @@ from typing import Dict, Any
 
 from event_nodes.event_node import GUIEventNode
 
-from rclpy.node import Node
-
 
 class GUIEventPublisher(GUIEventNode):
     """Publisher for sending messages from the GUI."""
