@@ -4,6 +4,7 @@ from rclpy.node import Node
 class GUIEventNode(Node):
     """
     Superclass for all event nodes.
+    
     Requires all event nodes that create executors to implement an executor killer.
     """
 

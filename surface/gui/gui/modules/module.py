@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QWidget
 class Module(QWidget):
     """
     Superclass for all modules.
+    
     Requires that modules which create spinning nodes implement an executor killer.
     """
 
