@@ -19,19 +19,23 @@ class App(QWidget):
         layout: QGridLayout = QGridLayout()
         self.setLayout(layout)
 
-        video_area = VideoArea(4)
-        layout.addWidget(video_area, 0, 0)
+        self.video_area = VideoArea(4)
+        layout.addWidget(self.video_area, 0, 0)
 
-        task_selector: TaskSelector = TaskSelector()
-        layout.addWidget(task_selector, 0, 1)
+        self.task_selector: TaskSelector = TaskSelector()
+        layout.addWidget(self.task_selector, 0, 1)
 
-        logger: Logger = Logger()
-        layout.addWidget(logger, 1, 0)
+        self.logger: Logger = Logger()
+        layout.addWidget(self.logger, 1, 0)
 
     def closeEvent(self, event):
         """Piggyback the PyQt window close to kill rclpy."""
-        # This shutdown should kill all nodes the GUI makes
-        # rclpy.init() still needs to be called in each file that constructs a node
+
+        # Kill all executors
+        self.task_selector.kill_all_executors()
+        self.logger.kill_all_executors()
+
+        # Shutdown rclpy
         rclpy.shutdown()
 
         event.accept()

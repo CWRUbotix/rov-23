@@ -17,6 +17,6 @@ def generate_launch_description():
     #       from running in a launch file that includes this launch file
     #   Cannot use an official multiprocessing.Process b/c those require
     #       importing run_gui.py which makes the whole path thing even jankier
-    os.system('python ' + run_gui_path + ' &')
+    os.system('python3 ' + run_gui_path + ' &')
 
     return launch.LaunchDescription([])

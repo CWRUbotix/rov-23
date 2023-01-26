@@ -1,15 +1,14 @@
-import rclpy
-
-from PyQt5.QtWidgets import QWidget, QComboBox, QHBoxLayout, QLabel
+from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 from event_nodes.client import GUIEventClient
 from event_nodes.subscriber import GUIEventSubscriber
 from interfaces.srv import TaskRequest
 from interfaces.msg import TaskFeedback
+from modules.module import Module
 
 
-class TaskSelector(QWidget):
+class TaskSelector(Module):
     """Module widget that handles task selection with a dropdown."""
 
     # Declare signals with "object" params b/c we don't have access to
@@ -19,7 +18,6 @@ class TaskSelector(QWidget):
 
     def __init__(self):
         super().__init__()
-        rclpy.init()  # We'll need to create ROS nodes
 
         layout: QHBoxLayout = QHBoxLayout()
         self.setLayout(layout)
@@ -79,3 +77,6 @@ class TaskSelector(QWidget):
         self.task_changed_server.get_logger().info(
             f'GUI recieved task changed to: {self.combo_box.currentText()}' +
             f' at {self.combo_box.currentIndex()}')
+
+    def kill_all_executors(self):
+        self.task_changed_server.kill_executor()

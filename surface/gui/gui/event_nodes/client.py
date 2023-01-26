@@ -1,9 +1,9 @@
 from typing import Dict, Any
 import re
 from threading import Thread
+from event_nodes.event_node import GUIEventNode
 
 import rclpy
-from rclpy.node import Node
 
 from PyQt5.QtCore import pyqtSignal
 
@@ -12,7 +12,7 @@ from PyQt5.QtCore import pyqtSignal
 TIMEOUT_SEC: float = 1.0
 
 
-class GUIEventClient(Node):
+class GUIEventClient(GUIEventNode):
     """Multithreaded client for sending service requests from the GUI."""
 
     def __init__(self, interface: type, topic: str, signal: pyqtSignal):
@@ -26,7 +26,8 @@ class GUIEventClient(Node):
         self.signal: pyqtSignal = signal
 
         self.cli = self.create_client(interface, topic)
-        Thread(target=self.__connect_to_service, daemon=True).start()
+        Thread(target=self.__connect_to_service, daemon=True,
+               name=f'{self.node_name}_connect_to_service').start()
 
     def __connect_to_service(self):
         """Connect this client to a server in a seperate thread; set self.connected when done."""
@@ -39,8 +40,8 @@ class GUIEventClient(Node):
 
     def send_request_async(self, params: Dict[str, Any]):
         """Send request to server in seperate thread."""
-        Thread(target=self.send_request_with_signal, kwargs={
-               'params': params}, daemon=True).start()
+        Thread(target=self.send_request_with_signal, kwargs={'params': params},
+               daemon=True, name=f'{self.node_name}_send_request').start()
 
     def send_request_with_signal(self, params: Dict[str, Any]):
         """Send synchronous request to server and emit signal."""

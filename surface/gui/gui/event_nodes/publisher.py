@@ -1,10 +1,12 @@
 import re
 from typing import Dict, Any
 
+from event_nodes.event_node import GUIEventNode
+
 from rclpy.node import Node
 
 
-class GUIEventPublisher(Node):
+class GUIEventPublisher(GUIEventNode):
     """Publisher for sending messages from the GUI."""
 
     def __init__(self, interface: type, topic: str):

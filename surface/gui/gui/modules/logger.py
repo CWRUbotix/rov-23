@@ -93,3 +93,6 @@ class Logger(QWidget):
 
         self.textbox.insertPlainText(
             f'[{SEVERITY_LEVELS[severity_index]["name"]}]\t{message.msg}\n')
+
+    def kill_all_executors(self):
+        self.subscriber.kill_executor()
