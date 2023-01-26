@@ -5,7 +5,6 @@ from pathlib import Path
 
 def generate_launch_description():
     """Asynchronously ROS launch the GUI."""
-
     # This nonsense gets the relative path from this launch file (in the share
     # dir) to run_gui.py (in the src dir).
     run_gui_path = os.path.join(Path(__file__).parent.resolve(), '..', '..', '..',
