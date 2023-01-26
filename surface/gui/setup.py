@@ -13,7 +13,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         # Include all launch files.
-        (os.path.join('share', package_name),
+        (os.path.join('share', package_name, 'launch'),
          glob('launch/*launch.[pxy][yma]*'))
     ],
     install_requires=['setuptools'],

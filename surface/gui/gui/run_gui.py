@@ -14,6 +14,5 @@ def run_gui():
     sys.exit(app.exec_())
 
 
-# Only for 'python run_gui.py', not used by ROS launch files
 if __name__ == '__main__':
     run_gui()
