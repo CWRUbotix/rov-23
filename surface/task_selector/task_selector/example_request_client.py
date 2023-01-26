@@ -3,7 +3,7 @@ import time
 import rclpy
 from rclpy.node import Node
 from interfaces.srv import TaskRequest
-from tasks import Tasks
+from task_selector.tasks import Tasks
 
 
 class ExampleRequestClient(Node):
@@ -17,7 +17,7 @@ class ExampleRequestClient(Node):
 
     def send_request(self, task_id):
         enum_id = task_id.value
-        self.req.id = enum_id
+        self.req.task_id = enum_id
         self.future = self.cli.call_async(self.req)
         rclpy.spin_until_future_complete(self, self.future)
         return self.future.result()

@@ -8,7 +8,7 @@ from interfaces.msg import TaskFeedback
 from interfaces.action import Example
 from interfaces.action import BasicTask
 
-from tasks import Tasks
+from task_selector.tasks import Tasks
 
 
 class TaskRequestor(Node):

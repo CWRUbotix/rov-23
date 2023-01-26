@@ -28,6 +28,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/TaskRequest.srv"
   "action/Example.action"
   "action/BasicTask.action"
+  "msg/TaskFeedback.msg"
 )
 
 ament_package()

@@ -2,13 +2,15 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>task_selector</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <version>0.0.3</version>
+  <description>Mate ROV task scheduler and task nodes</description>
   <maintainer email="ery12@case.edu">ericy</maintainer>
-  <license>TODO: License declaration</license>
+  <license>Apache License 2.0</license>
 
   <depend>rclpy</depend>
   <exec_depend>interfaces</exec_depend>
+
+  <exec_depend>ros2launch</exec_depend>
 
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
