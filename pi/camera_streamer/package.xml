@@ -9,7 +9,7 @@
 
   <depend>rclpy</depend>
   <depend>image_transport</depend>
-  <depend>cv_bridge</depend>
+  <depend>v4l2_camera</depend>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
 
