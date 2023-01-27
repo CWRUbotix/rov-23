@@ -1,6 +1,15 @@
 from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
+from PyQt5 import QtGui
+from PyQt5.QtCore import Qt
+import cv2
+
+from event_nodes.subscriber import GUIEventSubscriber
+
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+
 
 class VideoWidget(QLabel):
     """A single video stream widget."""
@@ -33,6 +42,8 @@ class VideoWidget(QLabel):
 class VideoArea(QWidget):
     """Container widget handling all video streams."""
 
+    handle_front_frame_signal = pyqtSignal(Image)
+
     def __init__(self, num_video_widgets):
         super().__init__()
 
@@ -41,6 +52,12 @@ class VideoArea(QWidget):
         self.grid_layout.setRowStretch(0, 3)
 
         self.video_widgets = []
+
+        self.cv_bridge = CvBridge()
+        self.handle_front_frame_signal.connect(self.handle_front_frame)
+        camera_subscriber: GUIEventSubscriber = GUIEventSubscriber(
+            Image, '/front_cam/image_raw', self.handle_front_frame_signal)
+        camera_subscriber.spin_async()
 
         # MAGIC VALUE WARNING: -1 represents the big video
         for i in range(-1, num_video_widgets - 1):
@@ -67,3 +84,37 @@ class VideoArea(QWidget):
 
         self.grid_layout.addWidget(target_widget, 0, 0, 1, 3)
         self.grid_layout.addWidget(big_widget, 1, big_widget.row, 1, 1)
+
+    @pyqtSlot(Image)
+    def handle_front_frame(self, frame: Image):
+        cv_image = self.cv_bridge.imgmsg_to_cv2(frame, desired_encoding='passthrough')
+        qt_image = convert_cv_qt(cv_image)
+
+        self.video_widgets[0].setPixmap(qt_image.scaled(
+            self.frameGeometry().width(),
+            self.frameGeometry().height(),
+            Qt.KeepAspectRatio))
+
+
+def convert_cv_qt(cv_img, width=None, height=None):
+    """Convert from an opencv image to QPixmap"""
+
+    if len(cv_img.shape) == 3:
+        cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+        h, w, ch = cv_img.shape
+        bytes_per_line = ch * w
+
+        img_format = QtGui.QImage.Format_RGB888
+
+    elif len(cv_img.shape) == 2:
+        h, w = cv_img.shape
+        bytes_per_line = w
+
+        img_format = QtGui.QImage.Format_Grayscale8
+
+    convert_to_Qt_format = QtGui.QImage(cv_img.data, w, h, bytes_per_line, img_format)
+
+    if width is not None:
+        convert_to_Qt_format = convert_to_Qt_format.scaled(width, height, Qt.KeepAspectRatio)
+
+    return QtGui.QPixmap.fromImage(convert_to_Qt_format)
