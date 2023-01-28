@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
+import rclpy
 
 from event_nodes.client import GUIEventClient
 from event_nodes.subscriber import GUIEventSubscriber
@@ -18,6 +19,7 @@ class TaskSelector(Module):
 
     def __init__(self):
         super().__init__()
+        rclpy.init()  # We'll need to create ROS nodes
 
         layout: QHBoxLayout = QHBoxLayout()
         self.setLayout(layout)

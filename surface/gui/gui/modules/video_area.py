@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
+import rclpy
 
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
@@ -9,6 +10,7 @@ from event_nodes.subscriber import GUIEventSubscriber
 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
+from modules.module import Module
 
 
 class VideoWidget(QLabel):
@@ -39,13 +41,14 @@ class VideoWidget(QLabel):
             self.update_big_video_signal.emit(self)
 
 
-class VideoArea(QWidget):
+class VideoArea(Module):
     """Container widget handling all video streams."""
 
     handle_front_frame_signal = pyqtSignal(Image)
 
     def __init__(self, num_video_widgets):
         super().__init__()
+        rclpy.init()  # We'll need to create ROS nodes
 
         self.grid_layout = QGridLayout(self)
         self.setLayout(self.grid_layout)

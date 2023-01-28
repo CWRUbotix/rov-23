@@ -12,7 +12,7 @@ class Module(QWidget):
 
     def __init__(self):
         super().__init__()
-        rclpy.init()  # We'll need to create ROS nodes
+        
 
     def kill_all_executors(self):
         """Kill all executors create by this module."""
