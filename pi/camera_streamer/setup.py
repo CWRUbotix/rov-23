@@ -18,10 +18,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='rov',
-    maintainer_email='rov@todo.todo',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer='Noah Mollerstuen',
+    maintainer_email='noah@mollerstuen.com',
+    description='contains camera information aswell as camera launch files',
+    license='Apaches License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [

@@ -5,7 +5,7 @@
   <version>0.0.0</version>
   <description>Capture video from usb and pi cameras and send it as MJPEG streams on ROS topics</description>
   <maintainer email="noah@mollerstuen.com">Noah Mollerstuen</maintainer>
-  <license>TODO: License declaration</license>
+  <license>Apches License 2.0</license>
 
   <depend>rclpy</depend>
   <depend>image_transport</depend>
