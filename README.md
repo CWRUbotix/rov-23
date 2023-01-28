@@ -20,7 +20,7 @@ cd rov_23_ws/src
 ```
 
 ```
-git clone https://github.com/cwruRobotics/rov-23.git .
+git clone git@github.com:cwruRobotics/rov-23.git .
 ```
 (the period is important)
 
