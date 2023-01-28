@@ -12,6 +12,7 @@ class App(QWidget):
 
     def __init__(self):
         super().__init__()
+        rclpy.init()
 
         self.setWindowTitle('ROV 2023')
         self.resize(1850, 720)
@@ -23,8 +24,8 @@ class App(QWidget):
         layout.addWidget(self.video_area, 0, 0)
 
         # TODO: add back in after dealing with rclpy.init()
-        # self.task_selector: TaskSelector = TaskSelector()
-        # layout.addWidget(self.task_selector, 0, 1)
+        self.task_selector: TaskSelector = TaskSelector()
+        layout.addWidget(self.task_selector, 0, 1)
 
         self.logger: Logger = Logger()
         layout.addWidget(self.logger, 1, 0)
@@ -33,7 +34,8 @@ class App(QWidget):
         """Piggyback the PyQt window close to kill rclpy."""
         # Kill all executors
         # TODO: add back in after dealing with rclpy.init()
-        # self.task_selector.kill_all_executors()
+        self.video_area.kill_all_executors()
+        self.task_selector.kill_all_executors()
         self.logger.kill_all_executors()
 
         # Shutdown rclpy

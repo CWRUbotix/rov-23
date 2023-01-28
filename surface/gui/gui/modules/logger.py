@@ -3,10 +3,11 @@ from typing import List
 
 from rcl_interfaces.msg import Log
 
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QCheckBox, QTextEdit
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QCheckBox, QTextEdit
 from PyQt5.QtGui import QFont, QTextCursor, QColor
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
+from modules.module import Module
 from event_nodes.subscriber import GUIEventSubscriber
 
 # Names and log text colors for each message severity
@@ -38,7 +39,7 @@ SEVERITY_LEVELS = [
 ]
 
 
-class Logger(QWidget):
+class Logger(Module):
     """Logging widget for displaying ROS logs."""
 
     print_log_signal: pyqtSignal = pyqtSignal(Log)

@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-import rclpy
 
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
@@ -48,7 +47,6 @@ class VideoArea(Module):
 
     def __init__(self, num_video_widgets):
         super().__init__()
-        rclpy.init()  # We'll need to create ROS nodes
 
         self.grid_layout = QGridLayout(self)
         self.setLayout(self.grid_layout)
@@ -58,9 +56,9 @@ class VideoArea(Module):
 
         self.cv_bridge = CvBridge()
         self.handle_front_frame_signal.connect(self.handle_front_frame)
-        camera_subscriber: GUIEventSubscriber = GUIEventSubscriber(
+        self.camera_subscriber: GUIEventSubscriber = GUIEventSubscriber(
             Image, '/front_cam/image_raw', self.handle_front_frame_signal)
-        camera_subscriber.spin_async()
+        self.camera_subscriber.spin_async()
 
         # MAGIC VALUE WARNING: -1 represents the big video
         for i in range(-1, num_video_widgets - 1):
@@ -101,6 +99,9 @@ class VideoArea(Module):
         #     self.frameGeometry().width(),
         #     self.frameGeometry().height(),
         #     Qt.KeepAspectRatio))
+
+    def kill_all_executors(self):
+        self.camera_subscriber.kill_executor()
 
 
 def convert_cv_qt(cv_img, width=None, height=None):

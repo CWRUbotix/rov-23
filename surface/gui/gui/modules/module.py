@@ -1,5 +1,3 @@
-
-import rclpy
 from PyQt5.QtWidgets import QWidget
 
 
@@ -10,10 +8,10 @@ class Module(QWidget):
     Requires that modules which create spinning nodes implement an executor killer.
     """
 
-    def __init__(self):
-        super().__init__()
-        # TODO: deal with rclpy.init()
-        # rclpy.init()
+    # TODO make sure this is safe to be gone
+    # def __init__(self):
+    #     super().__init__()
+    # rclpy.init()
 
     def kill_all_executors(self):
         """Kill all executors create by this module."""
