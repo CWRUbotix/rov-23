@@ -15,8 +15,17 @@ class ManipulatorSubscriber(Node):
             10)
         self.subscription  # prevent unused variable warning
 
+        self.declare_parameters(
+            namespace="",
+            parameters=[
+                ("claw0", rclpy.Parameter.Type.INTEGER),
+                ("claw1", rclpy.Parameter.Type.INTEGER),
+                ("claw2", rclpy.Parameter.Type.INTEGER),
+                ("claw3", rclpy.Parameter.Type.INTEGER),
+            ])
+
     def listener_callback(self, msg):
-        self.get_logger().info('I heard: "%s"' % msg.data)
+        self.get_logger().info(msg.data)
 
 
 def main(args=None):

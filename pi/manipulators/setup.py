@@ -1,3 +1,5 @@
+import os
+from glob import glob
 from setuptools import setup
 
 package_name = 'manipulators'
@@ -10,6 +12,11 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        # Include all launch files.
+        (os.path.join('share', package_name, 'launch'),
+         glob('launch/*launch.[pxy][yma]*')),
+        (os.path.join('share', package_name, 'config'),
+         glob('config/*'))
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -20,7 +27,6 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'manip_publisher = manipulators.manip_publisher:main',
             'manip_subscriber = manipulators.manip_subscriber:main'
         ],
     },
