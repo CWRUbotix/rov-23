@@ -8,12 +8,14 @@ class ManipulatorSubscriber(Node):
 
     def __init__(self):
         super().__init__('manipulator_subscriber')
-        self.subscription = self.create_subscription(
-            String,
-            'topic',
-            self.listener_callback,
-            10)
-        self.subscription  # prevent unused variable warning
+        # self.subscription = self.create_subscription(
+        #     String,
+        #     'topic',
+        #     self.listener_callback,
+        #     10)
+        # self.subscription  # prevent unused variable warning
+
+        # self.service = self.create_service(AddTwoInts, 'add_two_ints', self.listener_callback)
 
         self.declare_parameters(
             namespace="",
@@ -23,8 +25,16 @@ class ManipulatorSubscriber(Node):
                 ("claw2", rclpy.Parameter.Type.INTEGER),
                 ("claw3", rclpy.Parameter.Type.INTEGER),
             ])
+        
+    def add_two_ints_callback(self, request, response):
+        response.sum = request.a + request.b
+        self.get_logger().info('Incoming request\na: %d b: %d' % (request.a, request.b))
+
+        return response
 
     def listener_callback(self, msg):
+        
+
         self.get_logger().info(msg.data)
 
 
