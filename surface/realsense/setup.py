@@ -1,3 +1,4 @@
+import glob
 from setuptools import setup
 import os
 
