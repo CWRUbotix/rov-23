@@ -105,8 +105,7 @@ class VideoArea(Module):
 
 
 def convert_cv_qt(cv_img, width=None, height=None):
-    """Convert from an opencv image to QPixmap"""
-
+    """Convert from an opencv image to QPixmap."""
     if len(cv_img.shape) == 3:
         cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
         h, w, ch = cv_img.shape
