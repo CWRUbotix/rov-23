@@ -12,7 +12,8 @@ class Module(QWidget):
 
     def __init__(self):
         super().__init__()
-        
+        # TODO: deal with rclpy.init()
+        # rclpy.init()
 
     def kill_all_executors(self):
         """Kill all executors create by this module."""

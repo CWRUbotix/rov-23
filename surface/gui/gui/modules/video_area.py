@@ -91,12 +91,16 @@ class VideoArea(Module):
     @pyqtSlot(Image)
     def handle_front_frame(self, frame: Image):
         cv_image = self.cv_bridge.imgmsg_to_cv2(frame, desired_encoding='passthrough')
-        qt_image = convert_cv_qt(cv_image)
 
-        self.video_widgets[0].setPixmap(qt_image.scaled(
-            self.frameGeometry().width(),
-            self.frameGeometry().height(),
-            Qt.KeepAspectRatio))
+        # TODO: dynamic image scaling based on Qt element size
+        qt_image = convert_cv_qt(cv_image, 500, 500)
+
+        self.video_widgets[0].setPixmap(qt_image)
+
+        # self.video_widgets[0].setPixmap(qt_image.scaled(
+        #     self.frameGeometry().width(),
+        #     self.frameGeometry().height(),
+        #     Qt.KeepAspectRatio))
 
 
 def convert_cv_qt(cv_img, width=None, height=None):

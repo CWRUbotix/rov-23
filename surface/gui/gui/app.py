@@ -22,6 +22,7 @@ class App(QWidget):
         self.video_area = VideoArea(4)
         layout.addWidget(self.video_area, 0, 0)
 
+        # TODO: add back in after dealing with rclpy.init()
         # self.task_selector: TaskSelector = TaskSelector()
         # layout.addWidget(self.task_selector, 0, 1)
 
@@ -31,6 +32,7 @@ class App(QWidget):
     def closeEvent(self, event):
         """Piggyback the PyQt window close to kill rclpy."""
         # Kill all executors
+        # TODO: add back in after dealing with rclpy.init()
         # self.task_selector.kill_all_executors()
         self.logger.kill_all_executors()
 
