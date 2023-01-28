@@ -10,11 +10,20 @@
 
 #include <SPI.h>
 #include <RH_RF69.h>
-//#include "RTClib.h"
+#include "RTClib.h"
 
-//RTC_PCF8523 rtc;
+RTC_PCF8523 rtc;
 
 #define TEAM_NUM 42
+
+// Digital output pin where the syringe will be connected.
+// High = submerge, Low = float
+// You might change pin number
+#define SyringeOutput   9
+
+// True = submerge, False = float
+bool SyringeCtrl = false;
+
 /************ Radio Setup ***************/
 
 //If you ever forget the key, just remember that it's EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
@@ -102,28 +111,28 @@ void setup()
   Serial.println("Float Transmitter");
   Serial.println();
 
-  //  if (! rtc.begin()) {
-  //    Serial.println("Couldn't find RTC");
-  //    Serial.flush();
-  //    while (1) delay(10);
-  //  }
+  if (! rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    Serial.flush();
+    while (1) delay(10);
+  }
 
-  //  if (! rtc.initialized() || rtc.lostPower()) {
-  //    Serial.println("RTC is NOT initialized, let's set the time!");
-  //    // When time needs to be set on a new device, or after a power loss, the
-  //    // following line sets the RTC to the date & time this sketch was compiled
-  //    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-  //    // This line sets the RTC with an explicit date & time, for example to set
-  //    // January 21, 2014 at 3am you would call:
-  //    // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
-  //    //
-  //    // Note: allow 2 seconds after inserting battery or applying external power
-  //    // without battery before calling adjust(). This gives the PCF8523's
-  //    // crystal oscillator time to stabilize. If you call adjust() very quickly
-  //    // after the RTC is powered, lostPower() may still return true.
-  //  }
+  if (! rtc.initialized() || rtc.lostPower()) {
+    Serial.println("RTC is NOT initialized, let's set the time!");
+    // When time needs to be set on a new device, or after a power loss, the
+    // following line sets the RTC to the date & time this sketch was compiled
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    // This line sets the RTC with an explicit date & time, for example to set
+    // January 21, 2014 at 3am you would call:
+    // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+    //
+    // Note: allow 2 seconds after inserting battery or applying external power
+    // without battery before calling adjust(). This gives the PCF8523's
+    // crystal oscillator time to stabilize. If you call adjust() very quickly
+    // after the RTC is powered, lostPower() may still return true.
+  }
 
-  //  rtc.start();
+  rtc.start();
 
   pinMode(LED, OUTPUT);
   pinMode(RFM69_RST, OUTPUT);
@@ -158,55 +167,93 @@ void setup()
   rf69.setEncryptionKey(key);
 
   pinMode(LED, OUTPUT);
+  pinMode(SyringeOutput, OUTPUT);
 
   Serial.print("RFM69 radio @");  Serial.print((int)RF69_FREQ);  Serial.println(" MHz");
 }
 
-//DateTime prevTime = new DateTime((uint32_t)0);
+
+DateTime prevTime((uint32_t)0);
+
 
 void loop() {
-  //  DateTime now = rtc.now();
+  sendData();
+  receiveSubmergeSignal();
+}
 
-  //  if(now.second() != prevTime.second()){
-  char radiopacket[20] = "";
+void sendData() {
+  DateTime now = rtc.now();
 
-  char namepacket[10] = "Team ";
-  itoa(TEAM_NUM, namepacket + 5, 10);
+  if (now.second() != prevTime.second()) {
+    char radiopacket[20] = "";
+
+    char namepacket[10] = "Team ";
+    itoa(TEAM_NUM, namepacket + 5, 10);
 
 
-  strcpy(radiopacket, namepacket);
-  strcat(radiopacket, "  Time: ");
+    strcpy(radiopacket, namepacket);
+    strcat(radiopacket, "  Time: ");
 
-  char timepacket[10] = "";
+    char timepacket[10] = "";
 
-  //    sprintf (timepacket, "%u:%u:%u", now.hour(), now.minute(), now.second());
-  strcat(radiopacket, timepacket);
+    sprintf (timepacket, "%u:%u:%u", now.hour(), now.minute(), now.second());
+    strcat(radiopacket, timepacket);
 
-  Serial.print("Sending: "); Serial.println(radiopacket);
+    Serial.print("Sending: "); Serial.println(radiopacket);
 
-  // Send a message!
-  rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
-  rf69.waitPacketSent();
+    // Send a message!
+    rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
+    rf69.waitPacketSent();
 
-  // Now wait for a reply
-  uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
-  uint8_t len = sizeof(buf);
+    // Now wait for a reply
+    uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
+    uint8_t len = sizeof(buf);
 
-  /*if (rf69.waitAvailableTimeout(500))  {
-    // Should be a reply message for us now
+    /*if (rf69.waitAvailableTimeout(500))  {
+      // Should be a reply message for us now
+      if (rf69.recv(buf, &len)) {
+        Serial.print("Got a reply: ");
+        Serial.println((char*)buf);
+        Blink(LED, 50, 3); //blink LED 3 times, 50ms between blinks
+      } else {
+        Serial.println("Receive failed");
+      }
+      } else {
+      Serial.println("No reply.");
+      }*/
+
+    prevTime = now;
+  }
+}
+
+void receiveSubmergeSignal() {
+  if (rf69.available()) {
+    // Should be a message for us now
+    uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
+    uint8_t len = sizeof(buf);
     if (rf69.recv(buf, &len)) {
-      Serial.print("Got a reply: ");
+      if (!len) return;
+      buf[len] = 0;
+      Serial.print("Received [");
+      Serial.print(len);
+      Serial.print("]: ");
       Serial.println((char*)buf);
-      Blink(LED, 50, 3); //blink LED 3 times, 50ms between blinks
+      Serial.print("RSSI: ");
+      Serial.println(rf69.lastRssi(), DEC);
+
+      if ((char*)buf == "submerge"){
+        submerge();
+      }
     } else {
       Serial.println("Receive failed");
     }
-    } else {
-    Serial.println("No reply.");
-    }*/
+  }
+}
 
-  //    prevTime = now;
-  //  }
+void submerge() {
+  digitalWrite(SyringeOutput, HIGH);
+  delay(1000);
+  digitalWrite(SyringeOutput, LOW);
 }
 
 void Blink(byte PIN, byte DELAY_MS, byte loops) {

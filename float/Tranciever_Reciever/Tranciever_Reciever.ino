@@ -11,6 +11,14 @@
 #include <SPI.h>
 #include <RH_RF69.h>
 
+// Digital input pin where the input source(physical switch or GUI) will be coonnected.
+// High = submerge, Low = float
+// You might change pin number
+#define SyringeInput   9
+
+// True = submerge, False = float
+bool SyringeCtrl = false;
+
 /************ Radio Setup ***************/
 
 //yes, the key is EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE. best key ever.
@@ -129,12 +137,23 @@ void setup()
   rf69.setEncryptionKey(key);
 
   pinMode(LED, OUTPUT);
+  pinMode(SyringeInput, INPUT);
 
   Serial.print("RFM69 radio @");  Serial.print((int)RF69_FREQ);  Serial.println(" MHz");
 }
 
 
 void loop() {
+  receiveData();
+
+  // Check if the button has been pressed
+  if (digitalRead(SyringeInput) == HIGH) {
+    // Send the submerge signal
+    sendSubmergeSignal();
+  }
+}
+
+void receiveData() {
   if (rf69.available()) {
     // Should be a message for us now
     uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
@@ -152,6 +171,17 @@ void loop() {
       Serial.println("Receive failed");
     }
   }
+}
+
+void sendSubmergeSignal() {
+  // Send a message to the base station
+  Serial.println("Submerge");
+
+  // Send a message to rf69_server
+  uint8_t data[] = "Submerge";
+  rf69.send(data, sizeof(data));
+  rf69.waitPacketSent();
+  Serial.println("Submerge signal sent.");
 }
 
 
