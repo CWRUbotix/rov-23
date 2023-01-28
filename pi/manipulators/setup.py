@@ -27,7 +27,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'manip_subscriber = manipulators.manip_subscriber:main'
+            'manipulator = manipulators.manipulators:main'
         ],
     },
 )

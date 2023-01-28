@@ -14,7 +14,7 @@ def generate_launch_description():
 
     manip_node = Node(
         package="manipulators",
-        executable="manip_subscriber",
+        executable="manipulator",
         parameters=[config]
     )
 

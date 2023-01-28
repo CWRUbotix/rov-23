@@ -26,6 +26,7 @@ find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/TaskRequest.srv"
+  "srv/ManipService.srv"
   "action/Example.action"
   "action/BasicTask.action"
   "msg/TaskFeedback.msg"
