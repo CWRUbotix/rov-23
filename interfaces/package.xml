@@ -3,9 +3,10 @@
 <package format="3">
   <name>interfaces</name>
   <version>0.0.0</version>
-  <description>MATE ROV custom interfaces</description>
+  <description>MATE ROV Custom ROS Interfaces</description>
+  <maintainer email="bwp18@case.edu">Benjamin Poulin</maintainer>
   <maintainer email="ery12@case.edu">ericy</maintainer>
-  <license>TODO: License declaration</license>
+  <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
