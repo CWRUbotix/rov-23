@@ -1,7 +1,7 @@
 from typing import Dict, Any
 import re
 from threading import Thread
-from event_nodes.event_node import GUIEventNode
+from gui.event_nodes.event_node import GUIEventNode
 
 import rclpy
 

@@ -1,11 +1,12 @@
 from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
-from event_nodes.client import GUIEventClient
-from event_nodes.subscriber import GUIEventSubscriber
+from gui.event_nodes.client import GUIEventClient
+from gui.event_nodes.subscriber import GUIEventSubscriber
+
 from interfaces.srv import TaskRequest
 from interfaces.msg import TaskFeedback
-from modules.module import Module
+from gui.modules.module import Module
 
 
 class TaskSelector(Module):

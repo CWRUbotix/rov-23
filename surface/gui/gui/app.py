@@ -2,9 +2,9 @@ import rclpy
 
 from PyQt5.QtWidgets import QWidget, QGridLayout
 
-from modules.task_selector import TaskSelector
-from modules.video_area import VideoArea
-from modules.logger import Logger
+from gui.modules.task_selector import TaskSelector
+from gui.modules.video_area import VideoArea
+from gui.modules.logger import Logger
 
 
 class App(QWidget):
