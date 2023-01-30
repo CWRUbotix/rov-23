@@ -2,7 +2,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
-from app import App
+from gui.app import App
 
 
 def run_gui():

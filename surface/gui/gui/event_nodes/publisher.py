@@ -1,7 +1,7 @@
 import re
 from typing import Dict, Any
 
-from event_nodes.event_node import GUIEventNode
+from gui.event_nodes.event_node import GUIEventNode
 
 
 class GUIEventPublisher(GUIEventNode):
