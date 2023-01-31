@@ -24,7 +24,7 @@ git clone git@github.com:cwruRobotics/rov-23.git .
 ```
 (the period is important)
 
-If you've never contributed to a git repository before, you might recieve an error message saying you don't have access. In that case visit [this tutorial](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh) to set up SSH for local GitHub access.
+If you've never contributed to a git repository before, you might receive an error message saying you don't have access. In that case visit [this tutorial](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh) to set up SSH for local GitHub access.
 
 ## Directory Structure
 All packages to be installed on the surface computer live in the `surface` directory.
