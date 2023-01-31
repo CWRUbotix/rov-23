@@ -8,4 +8,4 @@ List of <a href="../task_selector/tasks.py">tasks</a>:
 * CANCEL: Cancel current task
 * EX_BASIC: Example- do nothing and return successful
 * EX_TIMED: Example- run a 10 second timer
-* EX_GOOD_MORNING: Exaple- return a greeting depending on the time of day and level of cheeriness
+* EX_GOOD_MORNING: Example- return a greeting depending on the time of day and level of cheeriness

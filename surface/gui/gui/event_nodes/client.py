@@ -30,7 +30,7 @@ class GUIEventClient(GUIEventNode):
                name=f'{self.node_name}_connect_to_service').start()
 
     def __connect_to_service(self):
-        """Connect this client to a server in a seperate thread; set self.connected when done."""
+        """Connect this client to a server in a separate thread; set self.connected when done."""
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info(
                 'Service for GUI event client node on topic' +
@@ -39,7 +39,7 @@ class GUIEventClient(GUIEventNode):
         self.req = self.interface.Request()
 
     def send_request_async(self, params: Dict[str, Any]):
-        """Send request to server in seperate thread."""
+        """Send request to server in separate thread."""
         Thread(target=self.send_request_with_signal, kwargs={'params': params},
                daemon=True, name=f'{self.node_name}_send_request').start()
 
