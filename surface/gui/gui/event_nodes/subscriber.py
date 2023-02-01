@@ -1,6 +1,6 @@
 import re
 from threading import Thread
-from event_nodes.event_node import GUIEventNode
+from gui.event_nodes.event_node import GUIEventNode
 
 import rclpy
 
@@ -22,7 +22,7 @@ class GUIEventSubscriber(GUIEventNode):
         self.subscription  # prevent unused variable warning
 
     def spin_async(self):
-        """Wait for message in a different thread, emit signal with message when recieved."""
+        """Wait for message in a different thread, emit signal with message when received."""
         executor = rclpy.executors.SingleThreadedExecutor()
         executor.add_node(self)
         Thread(target=executor.spin, daemon=True,

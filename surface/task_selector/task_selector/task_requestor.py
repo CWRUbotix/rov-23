@@ -58,7 +58,7 @@ class TaskRequestor(Node):
 
         return response
 
-    # Basic task client takes no input variables and only recieves feedback,
+    # Basic task client takes no input variables and only receives feedback,
     # no result data
     #
     # send_basic_goal() takes a basic client and requests for the server it's

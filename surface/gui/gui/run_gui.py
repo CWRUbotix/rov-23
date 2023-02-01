@@ -2,7 +2,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
-from app import App
+from gui.app import App
 
 
 def run_gui():
@@ -12,7 +12,3 @@ def run_gui():
     window.show()
 
     sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    run_gui()

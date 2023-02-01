@@ -1,11 +1,12 @@
 from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
-from event_nodes.client import GUIEventClient
-from event_nodes.subscriber import GUIEventSubscriber
+from gui.event_nodes.client import GUIEventClient
+from gui.event_nodes.subscriber import GUIEventSubscriber
+
 from interfaces.srv import TaskRequest
 from interfaces.msg import TaskFeedback
-from modules.module import Module
+from gui.modules.module import Module
 
 
 class TaskSelector(Module):
@@ -38,8 +39,8 @@ class TaskSelector(Module):
         # Connect signals
         self.combo_box.currentIndexChanged.connect(self.gui_changed_task)
 
-        # Creat ROS nodes #
-        # Create client (in seperate thread to let GUI load before it connects)
+        # Create ROS nodes #
+        # Create client (in separate thread to let GUI load before it connects)
         self.handle_scheduler_response_signal.connect(
             self.handle_scheduler_response)
         self.task_changed_client: GUIEventClient = GUIEventClient(
@@ -75,7 +76,7 @@ class TaskSelector(Module):
         """Update the task selector dropdown when task changed by scheduler."""
         self.combo_box.setCurrentIndex(message.task_id)
         self.task_changed_server.get_logger().info(
-            f'GUI recieved task changed to: {self.combo_box.currentText()}' +
+            f'GUI received task changed to: {self.combo_box.currentText()}' +
             f' at {self.combo_box.currentIndex()}')
 
     def kill_all_executors(self):

@@ -7,7 +7,8 @@ package_name = 'gui'
 setup(
     name=package_name,
     version='0.0.0',
-    packages=[package_name],
+    packages=[package_name, os.path.join(package_name, 'modules'),
+              os.path.join(package_name, 'event_nodes')],
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -16,7 +17,7 @@ setup(
         (os.path.join('share', package_name, 'launch'),
          glob('launch/*launch.[pxy][yma]*'))
     ],
-    install_requires=['setuptools'],
+    install_requires=['setuptools', 'pyqt5'],
     zip_safe=True,
     maintainer='Benjamin Poulin',
     maintainer_email='bwp18@case.edu',
@@ -24,6 +25,6 @@ setup(
     license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': [],
+        'console_scripts': ['run_gui = gui.run_gui:run_gui'],
     },
 )
