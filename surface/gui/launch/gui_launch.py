@@ -6,7 +6,7 @@ def generate_launch_description():
     """Asynchronously launches gui node."""
     gui_node: Node = Node(
         package='gui',
-        executable='gui'
+        executable='run_gui'
     )
 
     return launch.LaunchDescription([gui_node])
