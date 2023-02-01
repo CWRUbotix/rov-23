@@ -1,9 +1,12 @@
 import launch
-from gui.run_gui import run_gui
-from multiprocessing import Process
+from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    """Asynchronously ROS launch the GUI."""
-    Process(target=run_gui).start()
-    return launch.LaunchDescription([])
+    """Asynchronously launches gui node."""
+    gui_node: Node = Node(
+        package='gui',
+        executable='run_gui'
+    )
+
+    return launch.LaunchDescription([gui_node])
