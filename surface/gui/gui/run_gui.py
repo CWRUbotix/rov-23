@@ -1,14 +1,23 @@
 import sys
-
 from PyQt5.QtWidgets import QApplication
-
 from gui.app import App
+from rclpy.node import Node
+import rclpy
 
 
-def run_gui():
-    app = QApplication(sys.argv)
+class GUI(Node):
+    def __init__(self):
+        super().__init__('gui')
 
-    window = App()
-    window.show()
+    def run_gui(self):
+        app = QApplication(sys.argv)
 
-    sys.exit(app.exec_())
+        window = App()
+        window.show()
+
+        sys.exit(app.exec_())
+
+
+def main():
+    rclpy.init()
+    GUI().run_gui()
