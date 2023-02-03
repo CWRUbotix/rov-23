@@ -9,21 +9,22 @@ from sensor_msgs.msg import Joy
 
 
 class ControlNode(Node):
+    # Maybe should be ENUMS?
 
     # joy_msg: Joy
     passing: bool = False
     # Button meanings for PS5 Control might be different for others
-    XBUTTON = 0
-    OBUTTON = 1
-    TRIBUTTON = 2
-    SQUAREBUTTON = 3
+    X_BUTTON = 0
+    O_BUTTON = 1
+    TRI_BUTTON = 2
+    SQUARE_BUTTON = 3
     L1 = 4
     R1 = 5
     L2 = 6
     R2 = 7
-    PAIRINGBUTTON = 8
+    PAIRING_BUTTON = 8
     MENU = 9
-    PSBUTTON = 10
+    PS_BUTTON = 10
     LJOYPRESS = 11
     RJOYPRESS = 12
 
@@ -32,10 +33,10 @@ class ControlNode(Node):
     # L2 and R2 1 is not pressed and -1 is pressed
     LJOYY = 0
     LJOYX = 1
-    L2PRESSPERCENT = 2
+    L2PRESS_PERCENT = 2
     RJOYY = 3
     RJOYX = 4
-    R2PRESSPERCENT = 5
+    R2PRESS_PERCENT = 5
     DPADHOR = 6
     DPADVERT = 7
 
@@ -80,8 +81,8 @@ class ControlNode(Node):
             # Trust me on this math
             # Not sure if it spins correct way around z
             rov_msg.yaw = self.joystick_profiles(
-                (axes[self.L2PRESSPERCENT] - buttons[self.R2]) -
-                axes[self.R2PRESSPERCENT] - buttons[self.L2])
+                (axes[self.L2PRESS_PERCENT] - buttons[self.R2]) -
+                axes[self.R2PRESS_PERCENT] - buttons[self.L2])
             rov_msg.pitch = float(-buttons[self.L1] + buttons[self.R1])
             rov_msg.roll = axes[self.DPADVERT]
             self.pixhawk_publisher.publish(rov_msg)
@@ -90,6 +91,7 @@ class ControlNode(Node):
     def joystick_profiles(self, val: float):
         return val * abs(val)
 
+    #TODO what is a goal_handle????
     def execute_callback(self, goal_handle):
         self.get_logger().info('Starting Manual Control')
 
@@ -116,8 +118,7 @@ class ControlNode(Node):
 def main():
     rclpy.init()
 
-    task_controller = ControlNode()
-
+    manual_control = ControlNode()
     executor = MultiThreadedExecutor()
 
-    rclpy.spin(task_controller, executor=executor)
+    rclpy.spin(manual_control, executor=executor)
