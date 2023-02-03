@@ -40,18 +40,23 @@ class ControlNode(Node):
     DPADVERT = 7
 
     def __init__(self):
-        super().__init__('control_node')
+        super().__init__(
+            'control_node',
+            parameter_overrides=[]
+            )
+
         self._action_server = ActionServer(
             self,
             BasicTask,
             'manual_control',
             self.execute_callback
         )
-        self.publisher = self.create_publisher(
+        self.pixhawk_publisher = self.create_publisher(
             ROVControl,
             'PIXHawk_Direction_Values',
             10
         )
+        # TODO add manipulators
         self.subscription = self.create_subscription(
             Joy,
             'joy',
@@ -79,7 +84,7 @@ class ControlNode(Node):
                 axes[self.R2PRESSPERCENT] - buttons[self.L2])
             rov_msg.pitch = float(-buttons[self.L1] + buttons[self.R1])
             rov_msg.roll = axes[self.DPADVERT]
-            self.publisher.publish(rov_msg)
+            self.pixhawk_publisher.publish(rov_msg)
 
     # Used to create smoother adjustments
     def joystick_profiles(self, val: float):
