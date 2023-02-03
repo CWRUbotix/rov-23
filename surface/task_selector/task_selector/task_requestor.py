@@ -36,6 +36,9 @@ class TaskRequestor(Node):
                                               BasicTask,
                                               'example_task')
 
+        self.manual_control_client = ActionClient(self,
+                                                  BasicTask,
+                                                  'manual_control')
         self.active = False
 
     def request_task_callback(self, request, response):
@@ -45,7 +48,9 @@ class TaskRequestor(Node):
 
         self.active = True
 
-        if request.task_id == Tasks.EX_GOOD_MORNING.value:
+        if request.task_id == Tasks.MANUAL_CONTROL.value:
+            self.send_basic_goal(self.manual_control_client)
+        elif request.task_id == Tasks.EX_GOOD_MORNING.value:
             self.send_morning_goal(True, True)
         elif request.task_id == Tasks.EX_TIMED.value:
             self.send_basic_goal(self.timed_task_client)

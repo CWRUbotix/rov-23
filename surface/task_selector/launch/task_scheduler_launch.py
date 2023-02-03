@@ -10,6 +10,12 @@ def generate_launch_description():
         executable='requestor'
     )
 
+    # JoyToHawk
+    control_node: Node = Node(
+        package='task_selector',
+        executable='control_node'
+    )
+
     # example of node requesting tasks
     ex_request_client_node: Node = Node(
         package='task_selector',
@@ -36,8 +42,9 @@ def generate_launch_description():
 
     return LaunchDescription([
         requestor_node,
-        ex_request_client_node,
-        ex_timed_task_node,
-        ex_basic_task_node,
-        ex_morning_task_node
+        control_node,
+        # ex_request_client_node,
+        # ex_timed_task_node,
+        # ex_basic_task_node,
+        # ex_morning_task_node
     ])
