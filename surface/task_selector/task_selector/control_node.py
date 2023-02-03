@@ -91,7 +91,7 @@ class ControlNode(Node):
     def joystick_profiles(self, val: float):
         return val * abs(val)
 
-    #TODO what is a goal_handle????
+    # TODO what is a goal_handle????
     def execute_callback(self, goal_handle):
         self.get_logger().info('Starting Manual Control')
 
