@@ -16,29 +16,29 @@ def generate_launch_description():
         executable='control_node'
     )
 
-    # example of node requesting tasks
-    ex_request_client_node: Node = Node(
-        package='task_selector',
-        executable='ex_request_client'
-    )
+    # # example of node requesting tasks
+    # ex_request_client_node: Node = Node(
+    #     package='task_selector',
+    #     executable='ex_request_client'
+    # )
 
-    # example task- run a 10 second timer
-    ex_timed_task_node: Node = Node(
-        package='task_selector',
-        executable='ex_timed_task'
-    )
+    # # example task- run a 10 second timer
+    # ex_timed_task_node: Node = Node(
+    #     package='task_selector',
+    #     executable='ex_timed_task'
+    # )
 
-    # example task- say the task is finished
-    ex_basic_task_node: Node = Node(
-        package='task_selector',
-        executable='ex_basic_task'
-    )
+    # # example task- say the task is finished
+    # ex_basic_task_node: Node = Node(
+    #     package='task_selector',
+    #     executable='ex_basic_task'
+    # )
 
-    # example task- say good morning
-    ex_morning_task_node: Node = Node(
-        package='task_selector',
-        executable='ex_morning_task'
-    )
+    # # example task- say good morning
+    # ex_morning_task_node: Node = Node(
+    #     package='task_selector',
+    #     executable='ex_morning_task'
+    # )
 
     return LaunchDescription([
         requestor_node,

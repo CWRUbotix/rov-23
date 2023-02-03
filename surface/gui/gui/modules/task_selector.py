@@ -18,6 +18,7 @@ class TaskSelector(Module):
     handle_scheduler_response_signal: pyqtSignal = pyqtSignal(object)
     update_task_dropdown_signal: pyqtSignal = pyqtSignal(object)
     enum = Tasks.MANUAL_CONTROL.value
+
     def __init__(self):
         super().__init__()
 
