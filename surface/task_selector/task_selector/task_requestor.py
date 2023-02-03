@@ -15,7 +15,8 @@ class TaskRequestor(Node):
 
     def __init__(self):
         # creation of a Node with its name as input
-        super().__init__('task_requestor')
+        super().__init__('task_requestor',
+                         parameter_overrides=[])
 
         # create service to handle requests for task switching
         self.request_server = self.create_service(
@@ -41,7 +42,7 @@ class TaskRequestor(Node):
                                                   'manual_control')
         self.active = False
 
-    def request_task_callback(self, request, response):
+    def request_task_callback(self, request: TaskRequest.Request, response: TaskRequest.Response):
         response.response = "Acknowledged"
         if self.active:
             self.cancel_goal()
