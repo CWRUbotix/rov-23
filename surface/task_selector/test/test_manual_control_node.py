@@ -1,7 +1,7 @@
 from task_selector.manual_control_node import ManualControlNode
 
 
-def manual_control_buttons():
+def test_manual_control_l2_b2():
     node = ManualControlNode()
     # When unpressed should do nothing
     assert 0 == node.l2_r2_math(1, 1)
