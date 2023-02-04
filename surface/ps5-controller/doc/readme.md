@@ -1,1 +1,2 @@
-Boilerplate which calls the standard Joy package
+Boilerplate which calls the standard joy joy_node
+Publishes std_msgs/Joy on /joy topic
