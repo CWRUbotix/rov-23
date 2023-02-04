@@ -5,8 +5,9 @@ from PyQt5.QtCore import Qt
 
 import cv2
 
-from modules.module import Module
-from event_nodes.subscriber import GUIEventSubscriber
+from gui.modules.module import Module
+from gui.event_nodes.subscriber import GUIEventSubscriber
+
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 

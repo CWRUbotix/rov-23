@@ -7,8 +7,8 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QCheckBox, QTextEdit
 from PyQt5.QtGui import QFont, QTextCursor, QColor
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
-from modules.module import Module
-from event_nodes.subscriber import GUIEventSubscriber
+from gui.modules.module import Module
+from gui.event_nodes.subscriber import GUIEventSubscriber
 
 # Names and log text colors for each message severity
 SEVERITY_LEVELS = [
