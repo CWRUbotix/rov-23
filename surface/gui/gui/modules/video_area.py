@@ -57,9 +57,9 @@ class VideoWidget(QLabel):
         #     self.frameGeometry().height(),
         #     Qt.KeepAspectRatio))
 
-        self.setPixmap(qt_image)
+        self.setPixmap(QPixmap.fromImage(qt_image))
 
-    def convert_cv_qt(cv_img, width=None, height=None) -> QPixmap:
+    def convert_cv_qt(self, cv_img, width=None, height=None) -> QImage:
         """Convert from an opencv image to QPixmap."""
 
         # Color image
@@ -81,15 +81,17 @@ class VideoWidget(QLabel):
 
         if width is not None:
             qt_image = qt_image.scaled(width, height, Qt.KeepAspectRatio)
+        
+        self.qt_image = qt_image
 
-        return QPixmap.fromImage(qt_image)
+        return qt_image
 
 
 class VideoArea(Module):
     """Container widget handling all video streams."""
 
     # First entry here will start as the big video
-    CAMERA_TOPICS = ['/front_cam/image_raw', '/bottom_cam/image_raw']
+    CAMERA_TOPICS = ['/bottom_cam/image_raw', '/front_cam/image_raw']
 
     def __init__(self):
         super().__init__()
@@ -126,5 +128,15 @@ class VideoArea(Module):
         big_widget.index = target_widget.index
         target_widget.index = 0  # 0 still represents the big video
 
+        small_frame_geometry = target_widget.frameGeometry()
+
         self.grid_layout.addWidget(target_widget, 0, 0, 1, 3)
         self.grid_layout.addWidget(big_widget, 1, big_widget.index - 1, 1, 1)
+
+        target_widget.setPixmap(QPixmap.fromImage(target_widget.qt_image.scaled(
+            big_widget.frameGeometry().width(),
+            big_widget.frameGeometry().height())))
+        
+        big_widget.setPixmap(QPixmap.fromImage(big_widget.qt_image.scaled(
+            small_frame_geometry.width(),
+            small_frame_geometry.height())))
