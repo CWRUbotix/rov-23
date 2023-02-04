@@ -1,0 +1,3 @@
+[submodule "pi/TCA9555"]
+	path = pi/TCA9555
+	url = https://github.com/leloup314/TCA9555
