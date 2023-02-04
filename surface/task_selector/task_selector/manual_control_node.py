@@ -8,7 +8,7 @@ from interfaces.msg import ROVControl
 from sensor_msgs.msg import Joy
 
 
-class ControlNode(Node):
+class ManualControlNode(Node):
     # Maybe should be ENUMS?
 
     # joy_msg: Joy
@@ -119,7 +119,7 @@ class ControlNode(Node):
 def main():
     rclpy.init()
 
-    manual_control = ControlNode()
+    manual_control = ManualControlNode()
     executor = MultiThreadedExecutor()
 
     rclpy.spin(manual_control, executor=executor)
