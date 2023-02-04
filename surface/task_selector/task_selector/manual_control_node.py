@@ -74,8 +74,8 @@ class ManualControlNode(Node):
             # Right Joystick Z
             rov_msg.z = self.joystick_profiles(axes[self.RJOYX])
             # Not sure if it spins correct way around z
-            rov_msg.yaw = self.joystick_profiles(l2_r2_math(axes[self.L2PRESS_PERCENT],
-                                                            axes[self.R2PRESS_PERCENT]))
+            rov_msg.yaw = self.joystick_profiles((axes[self.L2PRESS_PERCENT] -
+                                                  axes[self.R2PRESS_PERCENT])/2)
             rov_msg.pitch = float(-buttons[self.L1] + buttons[self.R1])
             rov_msg.roll = axes[self.DPADVERT]
             self.pixhawk_publisher.publish(rov_msg)
@@ -106,10 +106,6 @@ class ManualControlNode(Node):
     def cancel_callback(self, goal_handle):
         self.get_logger().info('Received cancel request')
         return CancelResponse.ACCEPT
-
-
-def l2_r2_math(l2: float, r2: float):
-    return (l2 - r2)/2
 
 
 def main():
