@@ -161,7 +161,3 @@ def main(args=None):
     action_client = TaskRequestor()
 
     rclpy.spin(action_client)
-
-
-if __name__ == '__main__':
-    main()

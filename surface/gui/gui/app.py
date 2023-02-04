@@ -1,17 +1,20 @@
+from rclpy.node import Node
 import rclpy
 
-from PyQt5.QtWidgets import QWidget, QGridLayout
+from PyQt5.QtWidgets import QWidget, QGridLayout, QApplication
+import sys
 
 from gui.modules.task_selector import TaskSelector
 from gui.modules.video_area import VideoArea
 from gui.modules.logger import Logger
 
 
-class App(QWidget):
+class App(Node, QWidget):
     """Main app window."""
 
     def __init__(self):
-        super().__init__()
+        super().__init__(node_name='app_node', parameter_overrides=[])
+        super(QWidget, self).__init__()
 
         self.setWindowTitle('ROV 2023')
         self.resize(1850, 720)
@@ -38,3 +41,13 @@ class App(QWidget):
         rclpy.shutdown()
 
         event.accept()
+
+
+def run_app():
+    rclpy.init()
+    app = QApplication(sys.argv)
+
+    window = App()
+    window.show()
+
+    sys.exit(app.exec_())
