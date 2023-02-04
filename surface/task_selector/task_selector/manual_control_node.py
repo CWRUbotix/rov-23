@@ -14,19 +14,19 @@ class ManualControlNode(Node):
     # joy_msg: Joy
     passing: bool = False
     # Button meanings for PS5 Control might be different for others
-    X_BUTTON:       int = 0
-    O_BUTTON:       int = 1
-    TRI_BUTTON:     int = 2
-    SQUARE_BUTTON:  int = 3
-    L1:             int = 4
-    R1:             int = 5
-    L2:             int = 6
-    R2:             int = 7
-    PAIRING_BUTTON: int = 8
-    MENU:           int = 9
-    PS_BUTTON:      int = 10
-    LJOYPRESS:      int = 11
-    RJOYPRESS:      int = 12
+    X_BUTTON:        int = 0
+    O_BUTTON:        int = 1
+    TRI_BUTTON:      int = 2
+    SQUARE_BUTTON:   int = 3
+    L1:              int = 4
+    R1:              int = 5
+    L2:              int = 6
+    R2:              int = 7
+    PAIRING_BUTTON:  int = 8
+    MENU:            int = 9
+    PS_BUTTON:       int = 10
+    LJOYPRESS:       int = 11
+    RJOYPRESS:       int = 12
 
     # Joystick Directions 1 is up/left -1 is down/right
     # X is forward/backward Y is left/right
