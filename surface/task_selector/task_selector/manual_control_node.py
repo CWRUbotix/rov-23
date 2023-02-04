@@ -113,7 +113,7 @@ class ManualControlNode(Node):
 
 
 def l2_r2_math(l2: float, r2: float):
-    return l2 - r2
+    return (l2 - r2)/2
 
 
 def main():
