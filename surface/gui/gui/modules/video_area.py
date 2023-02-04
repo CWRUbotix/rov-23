@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QTimer
 from PyQt5.QtGui import QPixmap, QImage
 
 import cv2
@@ -81,7 +81,7 @@ class VideoWidget(QLabel):
 
         if width is not None:
             qt_image = qt_image.scaled(width, height, Qt.KeepAspectRatio)
-        
+
         self.qt_image = qt_image
 
         return qt_image
@@ -105,7 +105,12 @@ class VideoArea(Module):
         for i, topic in enumerate(self.CAMERA_TOPICS):
             video: VideoWidget = VideoWidget(i, topic)
             self.video_widgets.append(video)
-            video.update_big_video_signal.connect(self.set_as_big_video)
+
+            debounce = QTimer()
+            debounce.setInterval(500)
+            debounce.setSingleShot(True)
+            debounce.timeout.connect(lambda: self.set_as_big_video(video))
+            video.update_big_video_signal.connect(debounce)
 
             if i == 0:
                 self.grid_layout.addWidget(video, 0, 0, 1, 3)
@@ -136,7 +141,7 @@ class VideoArea(Module):
         target_widget.setPixmap(QPixmap.fromImage(target_widget.qt_image.scaled(
             big_widget.frameGeometry().width(),
             big_widget.frameGeometry().height())))
-        
+
         big_widget.setPixmap(QPixmap.fromImage(big_widget.qt_image.scaled(
             small_frame_geometry.width(),
             small_frame_geometry.height())))
