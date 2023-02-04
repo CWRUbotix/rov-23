@@ -1,3 +1,6 @@
 [submodule "pi/TCA9555"]
 	path = pi/TCA9555
 	url = https://github.com/leloup314/TCA9555
+[submodule "pi/raspi-config"]
+	path = pi/raspi-config
+	url = https://github.com/RPi-Distro/raspi-config.git
