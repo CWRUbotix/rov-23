@@ -9,9 +9,10 @@ class GUIEventNode(Node):
     """
 
     def __init__(self, node_name: str):
-        super().__init__(node_name)
+        super().__init__(node_name, namespace='/gui')
         self.node_name = node_name
 
     def kill_executor(self):
         """Kill this node's executor."""
-        return
+        raise NotImplementedError('You called kill_executor on an event node' +
+                                  'that doesn\'t have executors to kill')

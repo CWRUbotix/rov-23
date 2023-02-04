@@ -75,6 +75,9 @@ class Logger(Module):
             Log, '/rosout', self.print_log_signal)
         self.subscriber.spin_async()
 
+    def kill_module(self):
+        self.subscriber.kill_executor()
+
     @pyqtSlot(Log)
     def print_log(self, message: Log) -> None:
         """Print message to log widget if user is viewing message's type."""
@@ -94,6 +97,3 @@ class Logger(Module):
 
         self.textbox.insertPlainText(
             f'[{SEVERITY_LEVELS[severity_index]["name"]}]\t{message.msg}\n')
-
-    def kill_all_executors(self):
-        self.subscriber.kill_executor()

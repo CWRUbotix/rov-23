@@ -6,8 +6,6 @@ import rclpy
 
 from PyQt5.QtCore import pyqtSignal
 
-# import event_nodes.global_executor
-
 
 class GUIEventSubscriber(GUIEventNode):
     """Multithreaded subscriber for receiving messages to the GUI."""

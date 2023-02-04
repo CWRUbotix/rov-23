@@ -8,11 +8,13 @@ class Module(QWidget):
     Requires that modules which create spinning nodes implement an executor killer.
     """
 
-    # TODO make sure this is safe to be gone
-    # def __init__(self):
-    #     super().__init__()
-    # rclpy.init()
+    def __init__(self):
+        super().__init__()
 
-    def kill_all_executors(self):
-        """Kill all executors create by this module."""
+    def kill_module(self):
+        """
+        Kill all executors create by this module & run any other death routines.
+
+        Called when app's closeEvent occurs.
+        """
         return
