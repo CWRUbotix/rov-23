@@ -1,7 +1,6 @@
 from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5 import QtGui
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
+from PyQt5.QtGui import QPixmap, QImage
 
 import cv2
 
@@ -21,10 +20,12 @@ class VideoWidget(QLabel):
     def __init__(self, index: int, topic: str):
         super().__init__()
 
-        self.index = index
+        self.index: int = index
 
         # For debugging, display row number in each VideoWidget
         self.setText(str(index))
+
+        self.cv_bridge: CvBridge = CvBridge()
 
         self.setSizePolicy(QSizePolicy.Expanding,
                            QSizePolicy.Expanding)
@@ -45,7 +46,11 @@ class VideoWidget(QLabel):
             frame, desired_encoding='passthrough')
 
         # TODO: dynamic image scaling based on Qt element size
-        qt_image = self.convert_cv_qt(cv_image, 500, 500)
+        qt_image: QImage = self.convert_cv_qt(
+            cv_image,
+            self.frameGeometry().width(),
+            self.frameGeometry().height()
+        )
 
         # self.setPixmap(qt_image.scaled(
         #     self.frameGeometry().width(),
@@ -54,30 +59,30 @@ class VideoWidget(QLabel):
 
         self.setPixmap(qt_image)
 
-    # TODO: Put this in a separate node that publishes cv imgs on another set of topics so autonomy tasks don't need to do this
-    def convert_cv_qt(cv_img, width=None, height=None):
+    def convert_cv_qt(cv_img, width=None, height=None) -> QPixmap:
         """Convert from an opencv image to QPixmap."""
+
+        # Color image
         if len(cv_img.shape) == 3:
             # cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
             h, w, ch = cv_img.shape
             bytes_per_line = ch * w
 
-            img_format = QtGui.QImage.Format_RGB888
+            img_format = QImage.Format_RGB888
 
+        # Grayscale image
         elif len(cv_img.shape) == 2:
             h, w = cv_img.shape
             bytes_per_line = w
 
-            img_format = QtGui.QImage.Format_Grayscale8
+            img_format = QImage.Format_Grayscale8
 
-        convert_to_Qt_format = QtGui.QImage(
-            cv_img.data, w, h, bytes_per_line, img_format)
+        qt_image = QImage(cv_img.data, w, h, bytes_per_line, img_format)
 
         if width is not None:
-            convert_to_Qt_format = convert_to_Qt_format.scaled(
-                width, height, Qt.KeepAspectRatio)
+            qt_image = qt_image.scaled(width, height, Qt.KeepAspectRatio)
 
-        return QtGui.QPixmap.fromImage(convert_to_Qt_format)
+        return QPixmap.fromImage(qt_image)
 
 
 class VideoArea(Module):
@@ -92,8 +97,6 @@ class VideoArea(Module):
         self.grid_layout = QGridLayout(self)
         self.setLayout(self.grid_layout)
         self.grid_layout.setRowStretch(0, 3)
-
-        self.cv_bridge = CvBridge()
 
         # MAGIC VALUE WARNING: i=0 represents the big video
         self.video_widgets: list[VideoWidget] = []
