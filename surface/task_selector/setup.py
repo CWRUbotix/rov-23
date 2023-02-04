@@ -26,7 +26,7 @@ setup(
     entry_points={
         'console_scripts': [
             'requestor = task_selector.task_requestor:main',
-            'control_node = task_selector.control_node:main',
+            'manual_control_node = task_selector.manual_control_node:main',
             'ex_request_client = task_selector.example_request_client:main',
             'ex_timed_task = task_selector.basic_task_timed_node:main',
             'ex_basic_task = task_selector.basic_task_node:main',

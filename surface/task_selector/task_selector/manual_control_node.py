@@ -7,6 +7,8 @@ from interfaces.action import BasicTask
 from interfaces.msg import ROVControl
 from sensor_msgs.msg import Joy
 
+import array
+
 
 class ControlNode(Node):
     # Maybe should be ENUMS?
@@ -14,37 +16,36 @@ class ControlNode(Node):
     # joy_msg: Joy
     passing: bool = False
     # Button meanings for PS5 Control might be different for others
-    X_BUTTON = 0
-    O_BUTTON = 1
-    TRI_BUTTON = 2
-    SQUARE_BUTTON = 3
-    L1 = 4
-    R1 = 5
-    L2 = 6
-    R2 = 7
-    PAIRING_BUTTON = 8
-    MENU = 9
-    PS_BUTTON = 10
-    LJOYPRESS = 11
-    RJOYPRESS = 12
+    X_BUTTON: int = 0
+    O_BUTTON: int = 1
+    TRI_BUTTON: int = 2
+    SQUARE_BUTTON: int = 3
+    L1: int = 4
+    R1: int = 5
+    L2: int = 6
+    R2: int = 7
+    PAIRING_BUTTON: int = 8
+    MENU: int = 9
+    PS_BUTTON: int = 10
+    LJOYPRESS: int = 11
+    RJOYPRESS: int = 12
 
     # Joystick Directions 1 is up/left -1 is down/right
     # X is forward/backward Y is left/right
     # L2 and R2 1 is not pressed and -1 is pressed
-    LJOYY = 0
-    LJOYX = 1
-    L2PRESS_PERCENT = 2
-    RJOYY = 3
-    RJOYX = 4
-    R2PRESS_PERCENT = 5
-    DPADHOR = 6
-    DPADVERT = 7
+    LJOYY: int = 0
+    LJOYX: int = 1
+    L2PRESS_PERCENT: int = 2
+    RJOYY: int = 3
+    RJOYX: int = 4
+    R2PRESS_PERCENT: int = 5
+    DPADHOR: int = 6
+    DPADVERT: int = 7
 
     def __init__(self):
-        super().__init__(
-            'control_node',
-            parameter_overrides=[]
-            )
+        super().__init__('manual_control_node',
+                         parameter_overrides=[]
+                         )
 
         self._action_server = ActionServer(
             self,
@@ -54,7 +55,7 @@ class ControlNode(Node):
         )
         self.pixhawk_publisher = self.create_publisher(
             ROVControl,
-            'PIXHawk_Direction_Values',
+            'pixhawk_direction_values',
             10
         )
         # TODO add manipulators

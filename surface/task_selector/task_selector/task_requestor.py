@@ -42,6 +42,8 @@ class TaskRequestor(Node):
                                                   'manual_control')
         self.active = False
 
+        self.send_basic_goal(self.manual_control_client)
+
     def request_task_callback(self, request: TaskRequest.Request, response: TaskRequest.Response):
         response.response = "Acknowledged"
         if self.active:

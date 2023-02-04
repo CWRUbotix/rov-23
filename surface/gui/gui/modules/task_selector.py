@@ -17,7 +17,6 @@ class TaskSelector(Module):
     # the ROS service object TaskRequest_Response
     handle_scheduler_response_signal: pyqtSignal = pyqtSignal(object)
     update_task_dropdown_signal: pyqtSignal = pyqtSignal(object)
-    enum = Tasks.MANUAL_CONTROL.value
 
     def __init__(self):
         super().__init__()
@@ -66,9 +65,10 @@ class TaskSelector(Module):
             f'GUI changed task to: {self.combo_box.currentText()}' +
             f' at {self.combo_box.currentIndex()}')
 
-        if (i == 0):
-            self.enum = Tasks.MANUAL_CONTROL.value
-        # TODO Should activate default state
+        if (i == Tasks.MANUAL_CONTROL.value):
+            # self.enum = Tasks.MANUAL_CONTROL.value
+            self.task_changed_client.send_request_async({'task_id': i})
+
         self.task_changed_client.send_request_async({'task_id': self.enum})
 
     @ pyqtSlot(object)
