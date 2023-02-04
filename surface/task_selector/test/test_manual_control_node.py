@@ -1,7 +1,9 @@
 from task_selector.manual_control_node import ManualControlNode
+import rclpy
 
 
-def test_manual_control_l2_b2():
+def test_manual_control_l2_r2_math():
+    rclpy.init()
     node = ManualControlNode()
     # When unpressed should do nothing
     assert 0 == node.l2_r2_math(1, 1)
