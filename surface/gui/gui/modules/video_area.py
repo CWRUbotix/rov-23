@@ -96,8 +96,9 @@ class VideoArea(Module):
         self.cv_bridge = CvBridge()
 
         # MAGIC VALUE WARNING: i=0 represents the big video
+        self.video_widgets: list[VideoWidget] = []
         for i, topic in enumerate(self.CAMERA_TOPICS):
-            video = VideoWidget(i, topic)
+            video: VideoWidget = VideoWidget(i, topic)
             self.video_widgets.append(video)
             video.update_big_video_signal.connect(self.set_as_big_video)
 
@@ -107,7 +108,8 @@ class VideoArea(Module):
                 self.grid_layout.addWidget(video, 1, i - 1, 1, 1)
 
     def kill_module(self):
-        self.camera_subscriber.kill_executor()
+        for video_widget in self.video_widgets:
+            video_widget.camera_subscriber.kill_executor()
 
     @pyqtSlot(QWidget)
     def set_as_big_video(self, target_widget: VideoWidget):
