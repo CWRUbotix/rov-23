@@ -74,10 +74,12 @@ class TaskRequestor(Node):
     def send_basic_goal(self, client):
         goal_msg = BasicTask.Goal()
 
-        self.get_logger().info('Waiting for action server...')
+        if (not (self.active)):
+            self.get_logger().info('Waiting for action server...')
         client.wait_for_server()
 
-        self.get_logger().info('Sending goal request...')
+        if (not (self.active)):
+            self.get_logger().info('Sending goal request...')
         self._send_goal_future = client.send_goal_async(
             goal_msg, feedback_callback=self.feedback_callback)
         self._send_goal_future.add_done_callback(self.basic_response_callback)
