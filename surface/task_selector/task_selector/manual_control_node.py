@@ -9,9 +9,6 @@ from sensor_msgs.msg import Joy
 
 
 class ManualControlNode(Node):
-    # Maybe should be ENUMS?
-
-    # joy_msg: Joy
     passing: bool = False
     # Button meanings for PS5 Control might be different for others
     X_BUTTON:        int = 0
@@ -76,7 +73,6 @@ class ManualControlNode(Node):
             rov_msg.y = self.joystick_profiles(axes[self.LJOYY])
             # Right Joystick Z
             rov_msg.z = self.joystick_profiles(axes[self.RJOYX])
-            # TODO math wrong
             # Not sure if it spins correct way around z
             rov_msg.yaw = self.joystick_profiles(l2_r2_math(axes[self.L2PRESS_PERCENT],
                                                             axes[self.R2PRESS_PERCENT]))
