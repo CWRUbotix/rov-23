@@ -14,36 +14,35 @@ class ManualControlNode(Node):
     # joy_msg: Joy
     passing: bool = False
     # Button meanings for PS5 Control might be different for others
-    X_BUTTON: int = 0
-    O_BUTTON: int = 1
-    TRI_BUTTON: int = 2
-    SQUARE_BUTTON: int = 3
-    L1: int = 4
-    R1: int = 5
-    L2: int = 6
-    R2: int = 7
+    X_BUTTON:       int = 0
+    O_BUTTON:       int = 1
+    TRI_BUTTON:     int = 2
+    SQUARE_BUTTON:  int = 3
+    L1:             int = 4
+    R1:             int = 5
+    L2:             int = 6
+    R2:             int = 7
     PAIRING_BUTTON: int = 8
-    MENU: int = 9
-    PS_BUTTON: int = 10
-    LJOYPRESS: int = 11
-    RJOYPRESS: int = 12
+    MENU:           int = 9
+    PS_BUTTON:      int = 10
+    LJOYPRESS:      int = 11
+    RJOYPRESS:      int = 12
 
     # Joystick Directions 1 is up/left -1 is down/right
     # X is forward/backward Y is left/right
     # L2 and R2 1 is not pressed and -1 is pressed
-    LJOYY: int = 0
-    LJOYX: int = 1
+    LJOYY:           int = 0
+    LJOYX:           int = 1
     L2PRESS_PERCENT: int = 2
-    RJOYY: int = 3
-    RJOYX: int = 4
+    RJOYY:           int = 3
+    RJOYX:           int = 4
     R2PRESS_PERCENT: int = 5
-    DPADHOR: int = 6
-    DPADVERT: int = 7
+    DPADHOR:         int = 6
+    DPADVERT:        int = 7
 
     def __init__(self):
         super().__init__('manual_control_node',
-                         parameter_overrides=[]
-                         )
+                         parameter_overrides=[])
 
         self._action_server = ActionServer(
             self,
