@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
-from interfaces.srv import ManipService
+from interfaces.srv import ManipService, TaskRequest
+
 
 class Manipulator(Node):
 
@@ -18,12 +19,13 @@ class Manipulator(Node):
                 ("claw3", rclpy.Parameter.Type.INTEGER),
             ])
         
-    def listener_callback(self, request, response):
+    def listener_callback(self, request: ManipService.Request, response: ManipService.Response):
         manip_id = request.manip_id
         activated = request.activated
 
-        # self.get_logger().info(f"{manip_id=} {activated=}")
         self.get_logger().info("manip_id="+str(manip_id)+" activated="+str(activated))
+
+        return response
 
 def main(args=None):
     rclpy.init(args=args)
