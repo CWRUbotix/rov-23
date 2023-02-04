@@ -15,7 +15,8 @@ class TaskRequestor(Node):
 
     def __init__(self):
         # creation of a Node with its name as input
-        super().__init__('task_requestor')
+        super().__init__('task_requestor',
+                         parameter_overrides=[])
 
         # create service to handle requests for task switching
         self.request_server = self.create_service(
@@ -36,16 +37,23 @@ class TaskRequestor(Node):
                                               BasicTask,
                                               'example_task')
 
+        self.manual_control_client = ActionClient(self,
+                                                  BasicTask,
+                                                  'manual_control')
         self.active = False
 
-    def request_task_callback(self, request, response):
+        self.send_basic_goal(self.manual_control_client)
+
+    def request_task_callback(self, request: TaskRequest.Request, response: TaskRequest.Response):
         response.response = "Acknowledged"
         if self.active:
             self.cancel_goal()
 
         self.active = True
 
-        if request.task_id == Tasks.EX_GOOD_MORNING.value:
+        if request.task_id == Tasks.MANUAL_CONTROL.value:
+            self.send_basic_goal(self.manual_control_client)
+        elif request.task_id == Tasks.EX_GOOD_MORNING.value:
             self.send_morning_goal(True, True)
         elif request.task_id == Tasks.EX_TIMED.value:
             self.send_basic_goal(self.timed_task_client)
@@ -66,10 +74,12 @@ class TaskRequestor(Node):
     def send_basic_goal(self, client):
         goal_msg = BasicTask.Goal()
 
-        self.get_logger().info('Waiting for action server...')
+        if not self.active:
+            self.get_logger().info('Waiting for action server...')
         client.wait_for_server()
 
-        self.get_logger().info('Sending goal request...')
+        if not self.active:
+            self.get_logger().info('Sending goal request...')
         self._send_goal_future = client.send_goal_async(
             goal_msg, feedback_callback=self.feedback_callback)
         self._send_goal_future.add_done_callback(self.basic_response_callback)
