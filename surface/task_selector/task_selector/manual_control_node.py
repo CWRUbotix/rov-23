@@ -79,12 +79,14 @@ class ControlNode(Node):
             rov_msg.z = self.joystick_profiles(axes[self.RJOYX])
             # TODO math wrong
             # Not sure if it spins correct way around z
-            rov_msg.yaw = self.joystick_profiles(
-                (axes[self.L2PRESS_PERCENT] - buttons[self.R2]) -
-                axes[self.R2PRESS_PERCENT] - buttons[self.L2])
+            rov_msg.yaw = self.joystick_profiles(self.l2_r2_math(axes[self.L2PRESS_PERCENT],
+                                                                 axes[self.R2PRESS_PERCENT]))
             rov_msg.pitch = float(-buttons[self.L1] + buttons[self.R1])
             rov_msg.roll = axes[self.DPADVERT]
             self.pixhawk_publisher.publish(rov_msg)
+
+    def l2_r2_math(self, l2: float, r2: float):
+        return l2 - r2
 
     # Used to create smoother adjustments
     def joystick_profiles(self, val: float):
