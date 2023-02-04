@@ -7,8 +7,6 @@ from interfaces.action import BasicTask
 from interfaces.msg import ROVControl
 from sensor_msgs.msg import Joy
 
-import array
-
 
 class ControlNode(Node):
     # Maybe should be ENUMS?
