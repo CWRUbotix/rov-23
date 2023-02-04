@@ -55,7 +55,3 @@ def main(args=None):
     executor = MultiThreadedExecutor()
 
     rclpy.spin(task_controller, executor=executor)
-
-
-if __name__ == '__main__':
-    main()
