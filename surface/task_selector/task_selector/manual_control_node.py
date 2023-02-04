@@ -76,8 +76,8 @@ class ManualControlNode(Node):
             # Not sure if it spins correct way around z
             rov_msg.yaw = self.joystick_profiles((axes[self.L2PRESS_PERCENT] -
                                                   axes[self.R2PRESS_PERCENT])/2)
-            rov_msg.pitch = float(-buttons[self.L1] + buttons[self.R1])
-            rov_msg.roll = axes[self.DPADVERT]
+            rov_msg.pitch = axes[self.DPADVERT]
+            rov_msg.roll = float(-buttons[self.L1] + buttons[self.R1])
             self.pixhawk_publisher.publish(rov_msg)
 
     # Used to create smoother adjustments
