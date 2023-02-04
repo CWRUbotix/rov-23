@@ -1,0 +1,15 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from interfaces/srv/TaskRequest.srv
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module srv {
+    struct TaskRequest_Request {
+      int64 task_id;
+    };
+    struct TaskRequest_Response {
+      string response;
+    };
+  };
+};

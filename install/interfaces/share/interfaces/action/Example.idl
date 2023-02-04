@@ -1,0 +1,20 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from interfaces/action/Example.action
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module action {
+    struct Example_Goal {
+      boolean morning;
+
+      boolean cheery;
+    };
+    struct Example_Result {
+      string message;
+    };
+    struct Example_Feedback {
+      string feedback_message;
+    };
+  };
+};
