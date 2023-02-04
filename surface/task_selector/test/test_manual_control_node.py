@@ -13,3 +13,4 @@ def test_manual_control_l2_r2_math():
     assert -1 == node.l2_r2_math(-1, 1)
     # When both pressed should do nothing
     assert 0 == node.l2_r2_math(-1, -1)
+    rclpy.shutdown()
