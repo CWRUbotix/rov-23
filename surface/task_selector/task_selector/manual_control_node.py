@@ -6,12 +6,14 @@ from rclpy.executors import MultiThreadedExecutor
 from interfaces.action import BasicTask
 from interfaces.msg import ROVControl
 from sensor_msgs.msg import Joy
+from typing import Final
 
 
 class ManualControlNode(Node):
     passing: bool = False
     # Button meanings for PS5 Control might be different for others
-    X_BUTTON:        int = 0
+    X_BUTTON:        Final[int] = 0
+    X_BUTTON = 3
     O_BUTTON:        int = 1
     TRI_BUTTON:      int = 2
     SQUARE_BUTTON:   int = 3
