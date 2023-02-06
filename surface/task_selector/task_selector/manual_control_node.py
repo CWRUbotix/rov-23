@@ -1,19 +1,18 @@
 import rclpy
-from rclpy.node import Node
+from rclpy.node import Node, Subscription, Publisher
 from rclpy.action import ActionServer, CancelResponse
+from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
 
 from interfaces.action import BasicTask
 from interfaces.msg import ROVControl
 from sensor_msgs.msg import Joy
-from typing import Final
 
 
 class ManualControlNode(Node):
     passing: bool = False
     # Button meanings for PS5 Control might be different for others
-    X_BUTTON:        Final[int] = 0
-    X_BUTTON = 3
+    X_BUTTON:        int = 0
     O_BUTTON:        int = 1
     TRI_BUTTON:      int = 2
     SQUARE_BUTTON:   int = 3
@@ -43,19 +42,19 @@ class ManualControlNode(Node):
         super().__init__('manual_control_node',
                          parameter_overrides=[])
 
-        self._action_server = ActionServer(
+        self._action_server: ActionServer = ActionServer(
             self,
             BasicTask,
             'manual_control',
             self.execute_callback
         )
-        self.pixhawk_publisher = self.create_publisher(
+        self.pixhawk_publisher: Publisher = self.create_publisher(
             ROVControl,
             'pixhawk_direction_values',
             10
         )
         # TODO add manipulators
-        self.subscription = self.create_subscription(
+        self.subscription: Subscription = self.create_subscription(
             Joy,
             'joy',
             self.controller_callback,
@@ -63,7 +62,7 @@ class ManualControlNode(Node):
         )
 
     def controller_callback(self, msg: Joy):
-        if (self.passing):
+        if self.passing:
             axes = msg.axes
             buttons = msg.buttons
             # TODO someone else should check to make sure these are correct
@@ -86,8 +85,7 @@ class ManualControlNode(Node):
     def joystick_profiles(self, val: float):
         return val * abs(val)
 
-    # TODO what is a goal_handle????
-    def execute_callback(self, goal_handle):
+    def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
         self.get_logger().info('Starting Manual Control')
 
         if goal_handle.is_cancel_requested:
@@ -105,15 +103,13 @@ class ManualControlNode(Node):
             goal_handle.succeed()
             return BasicTask.Result()
 
-    def cancel_callback(self, goal_handle):
+    def cancel_callback(self, goal_handle: ServerGoalHandle):
         self.get_logger().info('Received cancel request')
         return CancelResponse.ACCEPT
 
 
 def main():
     rclpy.init()
-
     manual_control = ManualControlNode()
     executor = MultiThreadedExecutor()
-
     rclpy.spin(manual_control, executor=executor)

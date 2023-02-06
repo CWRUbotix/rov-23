@@ -3,6 +3,7 @@ import time
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionServer, CancelResponse
+from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
 
 from interfaces.action import BasicTask
@@ -11,7 +12,8 @@ from interfaces.action import BasicTask
 class BasicTaskTimedNode(Node):
 
     def __init__(self):
-        super().__init__('basic_task_timed')
+        super().__init__('basic_task_timed',
+                         parameter_overrides=[])
         self._action_server = ActionServer(
             self,
             BasicTask,
@@ -20,7 +22,7 @@ class BasicTaskTimedNode(Node):
             cancel_callback=self.cancel_callback
         )
 
-    def execute_callback(self, goal_handle):
+    def execute_callback(self, goal_handle: ServerGoalHandle):
         self.get_logger().info('Executing goal...')
 
         feedback_msg = BasicTask.Feedback()
@@ -42,7 +44,7 @@ class BasicTaskTimedNode(Node):
         result = BasicTask.Result()
         return result
 
-    def cancel_callback(self, goal_handle):
+    def cancel_callback(self, goal_handle: ServerGoalHandle):
         self.get_logger().info('Received cancel request')
         return CancelResponse.ACCEPT
 
@@ -51,7 +53,5 @@ def main(args=None):
     rclpy.init(args=args)
 
     task_controller = BasicTaskTimedNode()
-
     executor = MultiThreadedExecutor()
-
     rclpy.spin(task_controller, executor=executor)
