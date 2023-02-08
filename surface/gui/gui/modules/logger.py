@@ -10,32 +10,14 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
 # Names and log text colors for each message severity
-SEVERITY_LEVELS = [
-    {
-        'name': 'Unset',
-        'color': QColor(0, 0, 0)
-    },
-    {
-        'name': 'Debug',
-        'color': QColor(50, 50, 50)
-    },
-    {
-        'name': 'Info',
-        'color': QColor(150, 150, 150)
-    },
-    {
-        'name': 'Warn',
-        'color': QColor(150, 150, 0)
-    },
-    {
-        'name': 'Error',
-        'color': QColor(255, 0, 0)
-    },
-    {
-        'name': 'Fatal',
-        'color': QColor(168, 0, 0)
-    }
-]
+SEVERITY_LEVELS_NAMES = ['Unset', 'Debug', 'Info', 'Warn', 'Error', 'Fatal']
+SEVERITY_LEVELS_QCOLORS = [QColor(0, 0, 0),
+                           QColor(50, 50, 50),
+                           QColor(150, 150, 150),
+                           QColor(150, 150, 0),
+                           QColor(255, 0, 0),
+                           QColor(168, 0, 0)
+                           ]
 
 
 class Logger(QWidget):
@@ -54,8 +36,8 @@ class Logger(QWidget):
         layout.addLayout(settings_layout)
 
         self.checkboxes: List[QCheckBox] = []
-        for severity in SEVERITY_LEVELS:
-            box: QCheckBox = QCheckBox(severity['name'])
+        for severity_name in SEVERITY_LEVELS_NAMES:
+            box: QCheckBox = QCheckBox(severity_name)
             box.setChecked(True)
             self.checkboxes.append(box)
             settings_layout.addWidget(box)
@@ -88,10 +70,10 @@ class Logger(QWidget):
 
         self.textbox.moveCursor(QTextCursor.End)
         self.textbox.setCurrentFont(self.font)
-        self.textbox.setTextColor(SEVERITY_LEVELS[severity_index]['color'])
+        self.textbox.setTextColor(SEVERITY_LEVELS_QCOLORS[severity_index])
 
         self.textbox.insertPlainText(
-            f'[{SEVERITY_LEVELS[severity_index]["name"]}]\t{message.msg}\n')
+            f'[{SEVERITY_LEVELS_NAMES[severity_index]}]\t{message.msg}\n')
 
     def kill_all_executors(self):
         self.subscriber.kill_executor()
