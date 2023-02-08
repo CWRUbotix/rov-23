@@ -64,12 +64,12 @@ class TaskSelector(Module):
 
         self.task_changed_client.send_request_async({'task_id': i})
 
-    @ pyqtSlot(object)
+    @ pyqtSlot(TaskRequest)
     def handle_scheduler_response(self, response: TaskRequest.Response):
         """Handle scheduler response to request sent from gui_changed_task."""
         print(response)
 
-    @ pyqtSlot(object)
+    @ pyqtSlot(TaskFeedback)
     def update_task_dropdown(self, message: TaskFeedback):
         """Update the task selector dropdown when task changed by scheduler."""
         self.combo_box.setCurrentIndex(message.task_id)
