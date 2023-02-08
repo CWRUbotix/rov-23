@@ -3,7 +3,6 @@ import rclpy
 
 from PyQt5.QtWidgets import QWidget, QGridLayout, QApplication
 from PyQt5.QtGui import QCloseEvent
-from PyQt5.QtCore import QTimer
 import sys
 import signal
 
