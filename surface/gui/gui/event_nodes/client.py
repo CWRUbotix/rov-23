@@ -36,7 +36,7 @@ class GUIEventClient(GUIEventNode):
                 'Service for GUI event client node on topic' +
                 f' {self.topic} unavailable, waiting again...')
         self.connected = True
-        self.req = self.interface.Request()
+        self.req: type = self.interface.Request()
 
     def send_request_async(self, params: Dict[str, Any]):
         """Send request to server in separate thread."""
