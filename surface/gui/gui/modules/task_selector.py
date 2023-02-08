@@ -12,8 +12,10 @@ from gui.modules.module import Module
 class TaskSelector(Module):
     """Module widget that handles task selection with a dropdown."""
 
+    # Declare signals with "object" params b/c we don't have access to
+    # the ROS service object TaskRequest_Response
     handle_scheduler_response_signal: pyqtSignal = pyqtSignal(object)
-    update_task_dropdown_signal: pyqtSignal = pyqtSignal(TaskFeedback)
+    update_task_dropdown_signal: pyqtSignal = pyqtSignal(object)
 
     def __init__(self):
         super().__init__()
