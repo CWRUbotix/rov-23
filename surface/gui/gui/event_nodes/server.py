@@ -8,7 +8,7 @@ from rclpy.executors import SingleThreadedExecutor
 class GUIEventServer(GUIEventNode):
     """Multithreaded server for processing service requests to update GUI."""
 
-    def __init__(self, interface: type, topic: str,  callback: callable):
+    def __init__(self, interface: type, topic: str, callback: callable):
         """
         Initialize this server with a CALLBACK for processing requests.
 
@@ -19,17 +19,10 @@ class GUIEventServer(GUIEventNode):
 
         self.srv = self.create_service(interface, topic, callback)
 
-        # Setter
-        self.executor = SingleThreadedExecutor()
-        self.thread_helper()
-
-    def thread_helper(self):
-        # Type Guarding
-        if self.executor is not None:
-            Thread(target=self.executor.spin(), daemon=True,
-                   name=f'{self.node_name}_spin').start()
-        else:
-            self.get_logger().error("Error Thread Not Started")
+        executor = SingleThreadedExecutor()
+        executor.add_node(self)
+        Thread(target=executor.spin, daemon=True,
+               name=f'{self.node_name}_spin').start()
 
     def kill_executor(self):
         if self.executor is not None:
