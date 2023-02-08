@@ -14,8 +14,8 @@ class TaskSelector(Module):
 
     # Declare signals with "object" params b/c we don't have access to
     # the ROS service object TaskRequest_Response
-    handle_scheduler_response_signal: pyqtSignal = pyqtSignal(object)
-    update_task_dropdown_signal: pyqtSignal = pyqtSignal(object)
+    handle_scheduler_response_signal: pyqtSignal = pyqtSignal(TaskRequest)
+    update_task_dropdown_signal: pyqtSignal = pyqtSignal(TaskFeedback)
 
     def __init__(self):
         super().__init__()

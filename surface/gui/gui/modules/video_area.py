@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-
+from PyQt5.QtGui import QMouseEvent
 
 class VideoWidget(QLabel):
     """A single video stream widget."""
@@ -24,7 +24,7 @@ class VideoWidget(QLabel):
         self.setSizePolicy(QSizePolicy.Expanding,
                            QSizePolicy.Expanding)
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, ev: QMouseEvent):
         """Swap this video with the big video on click."""
         if self.row != -1:
             self.update_big_video_signal.emit(self)
@@ -33,7 +33,7 @@ class VideoWidget(QLabel):
 class VideoArea(QWidget):
     """Container widget handling all video streams."""
 
-    def __init__(self, num_video_widgets):
+    def __init__(self, num_video_widgets: int):
         super().__init__()
 
         self.grid_layout = QGridLayout(self)
