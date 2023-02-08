@@ -47,9 +47,9 @@ class Logger(QWidget):
         self.textbox.setLineWrapMode(QTextEdit.NoWrap)
         layout.addWidget(self.textbox)
 
-        self.font: QFont = self.textbox.font()
-        self.font.setFamily("Courier")
-        self.font.setPointSize(11)
+        self.terminal_font: QFont = self.textbox.font()
+        self.terminal_font.setFamily("Courier")
+        self.terminal_font.setPointSize(11)
 
         self.print_log_signal.connect(self.print_log)
         self.subscriber: GUIEventSubscriber = GUIEventSubscriber(
@@ -69,7 +69,7 @@ class Logger(QWidget):
             return
 
         self.textbox.moveCursor(QTextCursor.End)
-        self.textbox.setCurrentFont(self.font)
+        self.textbox.setCurrentFont(self.terminal_font)
         self.textbox.setTextColor(SEVERITY_LEVELS_QCOLORS[severity_index])
 
         self.textbox.insertPlainText(
