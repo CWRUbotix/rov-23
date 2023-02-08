@@ -12,7 +12,7 @@ from gui.modules.module import Module
 class TaskSelector(Module):
     """Module widget that handles task selection with a dropdown."""
 
-    handle_scheduler_response_signal: pyqtSignal = pyqtSignal(TaskRequest)
+    handle_scheduler_response_signal: pyqtSignal = pyqtSignal(object)
     update_task_dropdown_signal: pyqtSignal = pyqtSignal(TaskFeedback)
 
     def __init__(self):
@@ -62,8 +62,8 @@ class TaskSelector(Module):
 
         self.task_changed_client.send_request_async({'task_id': i})
 
-    @ pyqtSlot(TaskRequest)
-    def handle_scheduler_response(self, response: TaskRequest.Response):
+    @ pyqtSlot(object)
+    def handle_scheduler_response(self, response: object):
         """Handle scheduler response to request sent from gui_changed_task."""
         print(response)
 
