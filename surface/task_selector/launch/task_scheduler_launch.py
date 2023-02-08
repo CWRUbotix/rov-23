@@ -43,7 +43,7 @@ def generate_launch_description():
     return LaunchDescription([
         requestor_node,
         manual_control_node,
-        # ex_request_client_node,
+        ex_request_client_node,
         # ex_timed_task_node,
         # ex_basic_task_node,
         ex_morning_task_node
