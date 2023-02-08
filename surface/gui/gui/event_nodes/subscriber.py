@@ -2,7 +2,7 @@ import re
 from threading import Thread
 from gui.event_nodes.event_node import GUIEventNode
 
-from rclpy.executors import SingleThreadedExecutor
+from rclpy.executors import SingleThreadedExecutor, Executor
 
 from PyQt5.QtCore import pyqtBoundSignal
 
@@ -18,11 +18,10 @@ class GUIEventSubscriber(GUIEventNode):
         self.subscription = self.create_subscription(
             interface, topic, signal.emit, 10)
 
-        executor = SingleThreadedExecutor()
-        executor.add_node(self)
-        Thread(target=executor.spin, daemon=True,
+        self.custom_executor = SingleThreadedExecutor()
+        self.custom_executor.add_node(self)
+        Thread(target=self.custom_executor.spin, daemon=True,
                name=f'{self.node_name}_spin').start()
 
     def kill_executor(self):
-        if self.executor is not None:
-            self.executor.shutdown()
+        self.custom_executor.shutdown()

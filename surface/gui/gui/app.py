@@ -3,7 +3,9 @@ import rclpy
 
 from PyQt5.QtWidgets import QWidget, QGridLayout, QApplication
 from PyQt5.QtGui import QCloseEvent
+from PyQt5.QtCore import QTimer
 import sys
+import signal
 
 from gui.modules.task_selector import TaskSelector
 from gui.modules.video_area import VideoArea
@@ -40,13 +42,17 @@ class App(Node, QWidget):
 
         # Shutdown rclpy
         rclpy.shutdown()
-
         a0.accept()
 
 
 def run_app():
     rclpy.init()
+
+    # Kills with Control + C
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = QApplication(sys.argv)
+
     window = App()
     window.show()
+
     sys.exit(app.exec_())

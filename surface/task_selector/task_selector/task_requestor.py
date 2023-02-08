@@ -50,23 +50,18 @@ class TaskRequestor(Node):
             self.cancel_goal()
 
         self.active = True
-        task_id = request.task_id
-        if isinstance(task_id, int):
-            if task_id == Tasks.MANUAL_CONTROL.value:
-                self.send_basic_goal(self.manual_control_client)
-            elif task_id == Tasks.EX_GOOD_MORNING.value:
-                self.send_morning_goal(True, True)
-            elif task_id == Tasks.EX_TIMED.value:
-                self.send_basic_goal(self.timed_task_client)
-            elif task_id == Tasks.EX_BASIC.value:
-                self.send_basic_goal(self.basic_task_client)
-            elif task_id == Tasks.CANCEL.value:
-                response.response = "Canceled"
-            else:
-                response.response = "Invalid task id"
+        if request.task_id == Tasks.MANUAL_CONTROL.value:
+            self.send_basic_goal(self.manual_control_client)
+        elif request.task_id == Tasks.EX_GOOD_MORNING.value:
+            self.send_morning_goal(True, True)
+        elif request.task_id == Tasks.EX_TIMED.value:
+            self.send_basic_goal(self.timed_task_client)
+        elif request.task_id == Tasks.EX_BASIC.value:
+            self.send_basic_goal(self.basic_task_client)
+        elif request.task_id == Tasks.CANCEL.value:
+            response.response = "Canceled"
         else:
-            self.get_logger().fatal("task_id is not int!")
-
+            response.response = "Invalid task id"
         return response
 
     # Basic task client takes no input variables and only receives feedback,

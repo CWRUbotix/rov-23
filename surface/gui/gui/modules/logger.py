@@ -16,8 +16,7 @@ SEVERITY_LEVELS_QCOLORS = [QColor(0, 0, 0),
                            QColor(150, 150, 150),
                            QColor(150, 150, 0),
                            QColor(255, 0, 0),
-                           QColor(168, 0, 0)
-                           ]
+                           QColor(168, 0, 0)]
 
 
 class Logger(QWidget):
