@@ -2,7 +2,7 @@ import re
 from threading import Thread
 from gui.event_nodes.event_node import GUIEventNode
 
-from rclpy.executors import SingleThreadedExecutor, Executor
+from rclpy.executors import SingleThreadedExecutor
 
 from PyQt5.QtCore import pyqtBoundSignal
 
