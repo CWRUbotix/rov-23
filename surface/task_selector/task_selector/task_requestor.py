@@ -159,8 +159,8 @@ class TaskRequestor(Node):
             self.get_logger().info('Goal failed to cancel')
 
 
-def main(args=None):
-    rclpy.init(args=args)
+def main():
+    rclpy.init()
 
     action_client = TaskRequestor()
 
