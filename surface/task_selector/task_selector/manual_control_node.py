@@ -8,35 +8,35 @@ from interfaces.action import BasicTask
 from interfaces.msg import ROVControl
 from sensor_msgs.msg import Joy
 
+# Button meanings for PS5 Control might be different for others
+X_BUTTON:        int = 0
+O_BUTTON:        int = 1
+TRI_BUTTON:      int = 2
+SQUARE_BUTTON:   int = 3
+L1:              int = 4
+R1:              int = 5
+L2:              int = 6
+R2:              int = 7
+PAIRING_BUTTON:  int = 8
+MENU:            int = 9
+PS_BUTTON:       int = 10
+LJOYPRESS:       int = 11
+RJOYPRESS:       int = 12
+# Joystick Directions 1 is up/left -1 is down/right
+# X is forward/backward Y is left/right
+# L2 and R2 1 is not pressed and -1 is pressed
+LJOYY:           int = 0
+LJOYX:           int = 1
+L2PRESS_PERCENT: int = 2
+RJOYY:           int = 3
+RJOYX:           int = 4
+R2PRESS_PERCENT: int = 5
+DPADHOR:         int = 6
+DPADVERT:        int = 7
+
 
 class ManualControlNode(Node):
     passing: bool = False
-    # Button meanings for PS5 Control might be different for others
-    X_BUTTON:        int = 0
-    O_BUTTON:        int = 1
-    TRI_BUTTON:      int = 2
-    SQUARE_BUTTON:   int = 3
-    L1:              int = 4
-    R1:              int = 5
-    L2:              int = 6
-    R2:              int = 7
-    PAIRING_BUTTON:  int = 8
-    MENU:            int = 9
-    PS_BUTTON:       int = 10
-    LJOYPRESS:       int = 11
-    RJOYPRESS:       int = 12
-
-    # Joystick Directions 1 is up/left -1 is down/right
-    # X is forward/backward Y is left/right
-    # L2 and R2 1 is not pressed and -1 is pressed
-    LJOYY:           int = 0
-    LJOYX:           int = 1
-    L2PRESS_PERCENT: int = 2
-    RJOYY:           int = 3
-    RJOYX:           int = 4
-    R2PRESS_PERCENT: int = 5
-    DPADHOR:         int = 6
-    DPADVERT:        int = 7
 
     def __init__(self):
         super().__init__('manual_control_node',
@@ -70,15 +70,15 @@ class ManualControlNode(Node):
             rov_msg = ROVControl()
             rov_msg.header = msg.header
             # Left Joystick XY
-            rov_msg.x = self.joystick_profiles(axes[self.LJOYX])
-            rov_msg.y = self.joystick_profiles(axes[self.LJOYY])
+            rov_msg.x = self.joystick_profiles(axes[LJOYX])
+            rov_msg.y = self.joystick_profiles(axes[LJOYY])
             # Right Joystick Z
-            rov_msg.z = self.joystick_profiles(axes[self.RJOYX])
+            rov_msg.z = self.joystick_profiles(axes[RJOYX])
             # Not sure if it spins correct way around z
-            rov_msg.yaw = self.joystick_profiles((axes[self.L2PRESS_PERCENT] -
-                                                  axes[self.R2PRESS_PERCENT])/2)
-            rov_msg.pitch = axes[self.DPADVERT]
-            rov_msg.roll = float(-buttons[self.L1] + buttons[self.R1])
+            rov_msg.yaw = self.joystick_profiles((axes[L2PRESS_PERCENT] -
+                                                  axes[R2PRESS_PERCENT])/2)
+            rov_msg.pitch = axes[DPADVERT]
+            rov_msg.roll = float(-buttons[L1] + buttons[R1])
             self.pixhawk_publisher.publish(rov_msg)
 
     # Used to create smoother adjustments
