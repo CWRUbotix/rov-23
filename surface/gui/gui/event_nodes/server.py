@@ -19,6 +19,7 @@ class GUIEventServer(GUIEventNode):
 
         self.srv = self.create_service(interface, topic, callback)
 
+        # TODO would be nice to use self.executor setter
         executor = SingleThreadedExecutor()
         executor.add_node(self)
         Thread(target=executor.spin, daemon=True,

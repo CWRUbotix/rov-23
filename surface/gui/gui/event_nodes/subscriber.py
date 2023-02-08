@@ -18,6 +18,7 @@ class GUIEventSubscriber(GUIEventNode):
         self.subscription = self.create_subscription(
             interface, topic, signal.emit, 10)
 
+        # TODO would be nice to use self.executor setter
         executor = SingleThreadedExecutor()
         executor.add_node(self)
         Thread(target=executor.spin, daemon=True,
