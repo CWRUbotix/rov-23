@@ -33,8 +33,6 @@ All packages to be installed on the pi compute module live in the `pi` directory
 
 All packages to be installed on the float live in the `float` directory.
 
-Single commits should not modify more than one of these directories.
-
 ## Documentation Structure
 Documentation will take place at 3 levels:
 - High Level - Overarching Design Document outlining our general structure and what goes where.
