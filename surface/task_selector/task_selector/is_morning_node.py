@@ -57,6 +57,5 @@ def main():
     rclpy.init()
 
     task_controller = IsMorning()
-
     executor = MultiThreadedExecutor()
     rclpy.spin(task_controller, executor=executor)

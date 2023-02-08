@@ -49,8 +49,8 @@ class BasicTaskTimedNode(Node):
         return CancelResponse.ACCEPT
 
 
-def main(args=None):
-    rclpy.init(args=args)
+def main():
+    rclpy.init()
 
     task_controller = BasicTaskTimedNode()
     executor = MultiThreadedExecutor()

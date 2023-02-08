@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QMouseEvent
 
+
 class VideoWidget(QLabel):
     """A single video stream widget."""
 
@@ -40,7 +41,7 @@ class VideoArea(QWidget):
         self.setLayout(self.grid_layout)
         self.grid_layout.setRowStretch(0, 3)
 
-        self.video_widgets = []
+        self.video_widgets: list[VideoWidget] = []
 
         # MAGIC VALUE WARNING: -1 represents the big video
         for i in range(-1, num_video_widgets - 1):
