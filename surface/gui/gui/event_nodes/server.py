@@ -2,13 +2,13 @@ import re
 from threading import Thread
 from event_nodes.event_node import GUIEventNode
 
-import rclpy
+from rclpy.executors import SingleThreadedExecutor
 
 
 class GUIEventServer(GUIEventNode):
     """Multithreaded server for processing service requests to update GUI."""
 
-    def __init__(self, interface: type, topic: str, callback: callable):
+    def __init__(self, interface: type, topic: str,  callback: callable):
         """
         Initialize this server with a CALLBACK for processing requests.
 
@@ -19,15 +19,18 @@ class GUIEventServer(GUIEventNode):
 
         self.srv = self.create_service(interface, topic, callback)
 
-    def spin_async(self):
-        """Spin the server in a new thread."""
-        # Create new executor to avoid spinning global executor multiple times
-        executor = rclpy.executors.SingleThreadedExecutor()
-        executor.add_node(self)
-        Thread(target=self.executor.spin, daemon=True,
-               name=f'{self.node_name}_spin').start()
+        # Setter
+        self.executor = SingleThreadedExecutor()
+        self.thread_helper()
 
-        self.executor = executor
+    def thread_helper(self):
+        # Type Guarding
+        if self.executor is not None:
+            Thread(target=self.executor.spin(), daemon=True,
+                   name=f'{self.node_name}_spin').start()
+        else:
+            self.get_logger().error("Error Thread Not Started")
 
     def kill_executor(self):
-        self.executor.shutdown()
+        if self.executor is not None:
+            self.executor.shutdown()

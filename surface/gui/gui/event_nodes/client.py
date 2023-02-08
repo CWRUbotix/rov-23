@@ -5,7 +5,7 @@ from gui.event_nodes.event_node import GUIEventNode
 
 import rclpy
 
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtBoundSignal
 
 # Set to None for no timeout limits on service requests
 # else set to float number of seconds to limit request spinning
@@ -15,15 +15,15 @@ TIMEOUT_SEC: float = 1.0
 class GUIEventClient(GUIEventNode):
     """Multithreaded client for sending service requests from the GUI."""
 
-    def __init__(self, interface: type, topic: str, signal: pyqtSignal):
+    def __init__(self, interface: type, topic: str, signal: pyqtBoundSignal):
         # Name this node with a sanitized version of the topic
         super().__init__(
             f'gui_event_client_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}')
 
-        self.interface: type = interface
+        self.interface = interface
         self.topic: str = topic
         self.connected: bool = False
-        self.signal: pyqtSignal = signal
+        self.signal: pyqtBoundSignal = signal
 
         self.cli = self.create_client(interface, topic)
         Thread(target=self.__connect_to_service, daemon=True,

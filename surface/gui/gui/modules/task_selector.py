@@ -51,8 +51,6 @@ class TaskSelector(Module):
         self.task_changed_server: GUIEventSubscriber = GUIEventSubscriber(
             TaskFeedback, 'task_feedback', self.update_task_dropdown_signal)
 
-        self.task_changed_server.spin_async()
-
     def gui_changed_task(self, i: int):
         """Tell the back about the user selecting task with ID i."""
         # Cancel change if task changer hasn't connected yet

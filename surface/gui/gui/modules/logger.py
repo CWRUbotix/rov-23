@@ -72,7 +72,6 @@ class Logger(QWidget):
         self.print_log_signal.connect(self.print_log)
         self.subscriber: GUIEventSubscriber = GUIEventSubscriber(
             Log, '/rosout', self.print_log_signal)
-        self.subscriber.spin_async()
 
     @pyqtSlot(Log)
     def print_log(self, message: Log) -> None:

@@ -2,6 +2,7 @@ from rclpy.node import Node
 import rclpy
 
 from PyQt5.QtWidgets import QWidget, QGridLayout, QApplication
+from PyQt5.QtGui import QCloseEvent
 import sys
 
 from gui.modules.task_selector import TaskSelector
@@ -31,7 +32,7 @@ class App(Node, QWidget):
         self.logger: Logger = Logger()
         layout.addWidget(self.logger, 1, 0)
 
-    def closeEvent(self, event):
+    def closeEvent(self, a0: QCloseEvent):
         """Piggyback the PyQt window close to kill rclpy."""
         # Kill all executors
         self.task_selector.kill_all_executors()
@@ -40,14 +41,12 @@ class App(Node, QWidget):
         # Shutdown rclpy
         rclpy.shutdown()
 
-        event.accept()
+        a0.accept()
 
 
 def run_app():
     rclpy.init()
     app = QApplication(sys.argv)
-
     window = App()
     window.show()
-
     sys.exit(app.exec_())
