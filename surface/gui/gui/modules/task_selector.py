@@ -8,6 +8,8 @@ from interfaces.srv import TaskRequest
 from interfaces.msg import TaskFeedback
 from gui.modules.module import Module
 
+from rclpy.impl.rcutils_logger import RcutilsLogger
+
 
 class TaskSelector(Module):
     """Module widget that handles task selection with a dropdown."""
@@ -67,7 +69,7 @@ class TaskSelector(Module):
     @ pyqtSlot(object)
     def handle_scheduler_response(self, response: object):
         """Handle scheduler response to request sent from gui_changed_task."""
-        print(response)
+        RcutilsLogger("task_selector.py").info(response)
 
     @ pyqtSlot(TaskFeedback)
     def update_task_dropdown(self, message: TaskFeedback):

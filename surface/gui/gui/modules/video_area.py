@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QMouseEvent
 
+from rclpy.impl.rcutils_logger import RcutilsLogger
 
 class VideoWidget(QLabel):
     """A single video stream widget."""
@@ -70,5 +71,4 @@ class VideoArea(QWidget):
             self.grid_layout.addWidget(target_widget, 0, 0, 1, 3)
             self.grid_layout.addWidget(big_widget, 1, big_widget.row, 1, 1)
         else:
-            # Fancy red warning text
-            print("\033[1;31;40m ERROR big_widget is not a VideoWidget  \n")
+            RcutilsLogger("video_area.py").fatal("big_widget is not a VideoWidget")
