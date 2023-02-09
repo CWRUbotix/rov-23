@@ -23,11 +23,11 @@ $ ros2 launch rov_gazebo ign_gazebo.launch.py
 
 ## 4. Play simulation
 
-press button or space bar at gazebo window
+press play button or space bar at gazebo window
 
 ## 5. Start thruster
 
-Directory doesn't matter here. 120 means the power of the thruster.
+Directory doesn't matter here. 12 means the power of the thruster.
 
 ```
 $ ign topic -t "/model/rov/joint/thruster_body_blade_joint/cmd_force" -m ignition.msgs.Double  -p "data: 12"

@@ -14,10 +14,11 @@ path_to_world: str = os.path.join(rov_gazebo_path, "worlds", filenameWorld)
 path_to_xacro: str = os.path.join(rov_gazebo_path, "worlds", filenameXacro)
 path_to_urdf: str = os.path.join(rov_gazebo_path, "worlds", filenameURDF)
 path_to_sdf: str = os.path.join(rov_gazebo_path, "worlds", filenameSDF)
+path_to_yaml: str = os.path.join(rov_gazebo_path, "worlds", filenameYaml)
 path_to_rov_in_world: str = os.path.join(rov_gazebo_path, "worlds", filenameRovInWorld)
 
 with open(path_to_urdf, "w") as f:
-    urdf = os.popen("xacro " + path_to_xacro).read()
+    urdf = os.popen("xacro " + path_to_xacro + " params_path:=" + path_to_yaml).read()
     f.writelines(urdf)
 
 with open(path_to_sdf, "w") as f:
