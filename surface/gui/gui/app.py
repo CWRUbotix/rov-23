@@ -56,7 +56,7 @@ def run_app():
         window.setStyleSheet(qdarkstyle.load_stylesheet())
     elif window.get_parameter('theme').get_parameter_value().string_value == "watermelon":
         # UGLY But WORKS
-        window.setStyleSheet("QWidget{ background-color: green; color: red}")
+        window.setStyleSheet("QWidget{ background-color: green; color: pink}")
 
     window.show()
 
