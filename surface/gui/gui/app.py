@@ -1,7 +1,7 @@
 from rclpy.node import Node
 import rclpy
 
-from PyQt5.QtWidgets import QWidget, QGridLayout, QApplication, QStyle
+from PyQt5.QtWidgets import QWidget, QGridLayout, QApplication
 import qdarkstyle
 import sys
 
@@ -18,8 +18,7 @@ class App(Node, QWidget):
         super().__init__(node_name='app_node', parameter_overrides=[])
         super(QWidget, self).__init__()
 
-        # https://doc.qt.io/qt-5/qwidget.html#setStyle
-        self.setStyleSheet(qdarkstyle.load_stylesheet())
+        self.declare_parameter('theme', '')
 
         self.setWindowTitle('ROV 2023')
         self.resize(1850, 720)
@@ -50,9 +49,13 @@ class App(Node, QWidget):
 
 def run_app():
     rclpy.init()
-    app = QApplication(sys.argv)
 
+    app = QApplication(sys.argv)
     window = App()
+    if window.get_parameter('theme').get_parameter_value().string_value == "dark":
+        # https://doc.qt.io/qt-5/qwidget.html#setStyle
+        window.setStyleSheet(qdarkstyle.load_stylesheet())
+
     window.show()
 
     sys.exit(app.exec_())
