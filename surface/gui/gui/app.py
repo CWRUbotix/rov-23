@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import QWidget, QGridLayout, QApplication
 import qdarkstyle
 import sys
 
-
 from gui.modules.task_selector import TaskSelector
 from gui.modules.video_area import VideoArea
 from gui.modules.logger import Logger
@@ -55,6 +54,9 @@ def run_app():
     if window.get_parameter('theme').get_parameter_value().string_value == "dark":
         # https://doc.qt.io/qt-5/qwidget.html#setStyle
         window.setStyleSheet(qdarkstyle.load_stylesheet())
+    elif window.get_parameter('theme').get_parameter_value().string_value == "watermelon":
+        # UGLY But WORKS
+        window.setStyleSheet("QWidget{ background-color: green; color: red}")
 
     window.show()
 

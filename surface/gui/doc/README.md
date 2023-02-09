@@ -23,3 +23,7 @@ To run dark mode
 ```
 ros2 launch gui gui_launch.py theme:=dark
 ```
+To run watermelon mode (don't)
+```
+ros2 launch gui gui_launch.py theme:=watermelon
+```
