@@ -4,6 +4,7 @@ from PyQt5.QtGui import QMouseEvent
 
 from rclpy.impl.rcutils_logger import RcutilsLogger
 
+
 class VideoWidget(QLabel):
     """A single video stream widget."""
 
