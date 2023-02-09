@@ -1,7 +1,7 @@
-from math import floor
 from typing import List
 
 from rcl_interfaces.msg import Log
+from rclpy.logging import LoggingSeverity
 
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QCheckBox, QTextEdit
 from PyQt5.QtGui import QFont, QTextCursor, QColor
@@ -10,13 +10,12 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
 # Names and log text colors for each message severity
-SEVERITY_LEVELS_NAMES = ['Unset', 'Debug', 'Info', 'Warn', 'Error', 'Fatal']
-SEVERITY_LEVELS_QCOLORS = [QColor(0, 0, 0),
-                           QColor(50, 50, 50),
-                           QColor(150, 150, 150),
-                           QColor(150, 150, 0),
-                           QColor(255, 0, 0),
-                           QColor(168, 0, 0)]
+SEVERITY_LEVELS_DICT = {LoggingSeverity.UNSET: QColor(0, 0, 0),
+                        LoggingSeverity.DEBUG: QColor(50, 50, 50),
+                        LoggingSeverity.INFO: QColor(150, 150, 150),
+                        LoggingSeverity.WARN: QColor(150, 150, 0),
+                        LoggingSeverity.ERROR: QColor(255, 0, 0),
+                        LoggingSeverity.FATAL: QColor(168, 0, 0)}
 
 
 class Logger(QWidget):
@@ -35,8 +34,8 @@ class Logger(QWidget):
         layout.addLayout(settings_layout)
 
         self.checkboxes: List[QCheckBox] = []
-        for severity_name in SEVERITY_LEVELS_NAMES:
-            box: QCheckBox = QCheckBox(severity_name)
+        for severity_key in SEVERITY_LEVELS_DICT:
+            box: QCheckBox = QCheckBox(severity_key.name)
             box.setChecked(True)
             self.checkboxes.append(box)
             settings_layout.addWidget(box)
@@ -58,21 +57,18 @@ class Logger(QWidget):
     def print_log(self, message: Log) -> None:
         """Print message to log widget if user is viewing message's type."""
         # Message severities are 0, 10, 20, etc.
-        # We divide by 10 to get index for SEVERITY_LEVELS
-        severity_index = floor(message.level / 10)
-        if severity_index < 0 or severity_index > 5:
-            severity_index = 0  # Unset severity
-
+        # We divide by 10 to get index for checkboxes
+        severity_key = LoggingSeverity(message.level)
+        index = int(message.level / 10)
+        # TODO maybe could do some dict for LoggingSeverity and checkboxes to save division
         # Make sure we've chosen to view this message type
-        if not self.checkboxes[severity_index].isChecked():
+        if not self.checkboxes[index].isChecked():
             return
 
         self.textbox.moveCursor(QTextCursor.End)
         self.textbox.setCurrentFont(self.terminal_font)
-        self.textbox.setTextColor(SEVERITY_LEVELS_QCOLORS[severity_index])
-
-        self.textbox.insertPlainText(
-            f'[{SEVERITY_LEVELS_NAMES[severity_index]}]\t{message.msg}\n')
+        self.textbox.setTextColor(SEVERITY_LEVELS_DICT[severity_key])
+        self.textbox.insertPlainText(f'[{severity_key.name}]\t{message.msg}\n')
 
     def kill_all_executors(self):
         self.subscriber.kill_executor()
