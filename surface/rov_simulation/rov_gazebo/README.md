@@ -30,5 +30,5 @@ press button or space bar at gazebo window
 Directory doesn't matter here. 120 means the power of the thruster.
 
 ```
-$ ign topic -t "/model/rov/joint/thruster_body_blade_joint/cmd_force" -m ignition.msgs.Double  -p "data: 120"
+$ ign topic -t "/model/rov/joint/thruster_body_blade_joint/cmd_force" -m ignition.msgs.Double  -p "data: 12"
 ```
