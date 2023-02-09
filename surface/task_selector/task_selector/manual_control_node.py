@@ -36,7 +36,7 @@ DPADVERT:        int = 7
 
 
 class ManualControlNode(Node):
-    passing: bool = False
+    _passing: bool = False
 
     def __init__(self):
         super().__init__('manual_control_node',
@@ -62,7 +62,7 @@ class ManualControlNode(Node):
         )
 
     def controller_callback(self, msg: Joy):
-        if self.passing:
+        if self._passing:
             axes = msg.axes
             buttons = msg.buttons
             # TODO someone else should check to make sure these are correct
@@ -78,7 +78,7 @@ class ManualControlNode(Node):
             rov_msg.yaw = self.joystick_profiles((axes[L2PRESS_PERCENT] -
                                                   axes[R2PRESS_PERCENT])/2)
             rov_msg.pitch = axes[DPADVERT]
-            rov_msg.roll = float(-buttons[L1] + buttons[R1])
+            rov_msg.roll = -buttons[L1] + buttons[R1]
             self.pixhawk_publisher.publish(rov_msg)
 
     # Used to create smoother adjustments
@@ -89,13 +89,13 @@ class ManualControlNode(Node):
         self.get_logger().info('Starting Manual Control')
 
         if goal_handle.is_cancel_requested:
-            self.passing = False
+            self._passing = False
 
             goal_handle.canceled()
             self.get_logger().info('Ending Manual Control')
             return BasicTask.Result()
         else:
-            self.passing = True
+            self._passing = True
 
             feedback_msg = BasicTask.Feedback()
             feedback_msg.feedback_message = "Task is executing"
@@ -105,7 +105,7 @@ class ManualControlNode(Node):
 
     def cancel_callback(self, goal_handle: ServerGoalHandle):
         self.get_logger().info('Received cancel request')
-        self.passing = False
+        self._passing = False
         return CancelResponse.ACCEPT
 
 
