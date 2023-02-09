@@ -12,7 +12,6 @@ class VideoWidget(QLabel):
         super().__init__()
 
         self.row = row
-
         # For debugging, display row number in each VideoWidget
         self.setText(str(row))
 
@@ -60,11 +59,16 @@ class VideoArea(QWidget):
         big_widget: QWidget = self.grid_layout.itemAtPosition(
             0, 0).widget()
 
-        self.grid_layout.removeWidget(target_widget)
-        self.grid_layout.removeWidget(big_widget)
+        # TODO check this works with real camera stream
+        if isinstance(big_widget, VideoWidget):
+            self.grid_layout.removeWidget(target_widget)
+            self.grid_layout.removeWidget(big_widget)
 
-        big_widget.row = target_widget.row
-        target_widget.row = -1  # -1 still represents the big video
+            big_widget.row = target_widget.row
+            target_widget.row = -1  # -1 still represents the big video
 
-        self.grid_layout.addWidget(target_widget, 0, 0, 1, 3)
-        self.grid_layout.addWidget(big_widget, 1, big_widget.row, 1, 1)
+            self.grid_layout.addWidget(target_widget, 0, 0, 1, 3)
+            self.grid_layout.addWidget(big_widget, 1, big_widget.row, 1, 1)
+        else:
+            # Fancy red warning text
+            print("\033[1;31;40m ERROR big_widget is not a VideoWidget  \n")

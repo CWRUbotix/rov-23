@@ -49,9 +49,8 @@ def run_app():
 
     # Kills with Control + C
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    app = QApplication(sys.argv)
 
+    app = QApplication(sys.argv)
     window = App()
     window.show()
-
     sys.exit(app.exec_())

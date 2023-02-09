@@ -41,7 +41,7 @@ class ManualControlNode(Node):
     def __init__(self):
         super().__init__('manual_control_node',
                          parameter_overrides=[])
-
+        # TODO would Service make more sense then Actions?
         self._action_server: ActionServer = ActionServer(
             self,
             BasicTask,
@@ -105,6 +105,7 @@ class ManualControlNode(Node):
 
     def cancel_callback(self, goal_handle: ServerGoalHandle):
         self.get_logger().info('Received cancel request')
+        self.passing = False
         return CancelResponse.ACCEPT
 
 
