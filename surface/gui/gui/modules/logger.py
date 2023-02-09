@@ -9,7 +9,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
-# Names and log text colors for each message severity
+# Dictionary linking LoggingSeverity to a QColor
 SEVERITY_LEVELS_DICT = {LoggingSeverity.UNSET: QColor(0, 0, 0),
                         LoggingSeverity.DEBUG: QColor(50, 50, 50),
                         LoggingSeverity.INFO: QColor(150, 150, 150),
