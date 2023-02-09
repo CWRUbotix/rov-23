@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="thruster">
+
+  <xacro:include filename="inertial_macros.xacro"/>
+
+  <xacro:macro name="thruster">
+  
+    <origin rpy="3.141592 0 0" xyz="0 0 0"/>
+
+    <joint name="body_thruster_joint" type="fixed">
+      <parent link="body"/>
+      <child link="thruster_body"/>
+      <origin rpy="0 0 0" xyz="0 0 0.5"/>
+    </joint>
+
+    <link name='thruster_body'>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <xacro:inertial_cylinder mass="0.5" length="0.05" radius="0.01">
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+      </xacro:inertial_cylinder>
+
+      <visual>
+        <geometry>
+          <cylinder length="0.05" radius="0.01"/>
+        </geometry>
+      </visual>
+
+      <collision>
+        <geometry>
+          <cylinder length="0.05" radius="0.01"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name='thruster_blade'>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertial>
+        <mass value="1.5"/>
+        <inertia ixx="0.4" ixy="0" ixz="0" iyy="0.4" iyz="0" izz="0.8"/>
+      </inertial>
+
+      <visual>
+        <origin rpy="-0.7853981633974483 0 0" xyz="0.3 0 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="-0.7853981633974483 0 0" xyz="0.3 0 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin rpy="-0.7853981633974483 0 1.5707963267948966" xyz="0 0.3 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="-0.7853981633974483 0 1.5707963267948966" xyz="0 0.3 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin rpy="0.7853981633974483 0 0" xyz="-0.3 0 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="0.7853981633974483 0 0" xyz="-0.3 0 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin rpy="0.7853981633974483 0 1.5707963267948966" xyz="0 -0.3 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="0.7853981633974483 0 1.5707963267948966" xyz="0 -0.3 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name='thruster_body_blade_joint' type='revolute'>
+      <parent link="thruster_body"/>
+      <child link="thruster_blade"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-1e+12" upper="1e+12" effort="-1" velocity="-1"/>
+    </joint>
+
+    <gazebo>
+      <plugin
+        filename="ignition-gazebo-lift-drag-system"
+        name="ignition::gazebo::systems::LiftDrag">
+        <air_density>1000</air_density>
+        <cla>1.2535816618911175</cla>
+        <cla_stall>-1.4326647564469914</cla_stall>
+        <cda>0</cda>
+        <cda_stall>1.4326647564469914</cda_stall>
+        <alpha_stall>1.396</alpha_stall>
+        <a0>0</a0>
+        <area>0.27637</area>
+        <upward>0 -0.707106781186547 -0.707106781186547</upward>
+        <forward>0 -0.707106781186547 0.707106781186547</forward>
+        <link_name>thruster_blade</link_name>
+        <cp>0.35 0 0</cp>
+      </plugin>
+
+      <plugin
+        filename="ignition-gazebo-lift-drag-system"
+        name="ignition::gazebo::systems::LiftDrag">
+        <air_density>1000</air_density>
+        <cla>1.2535816618911175</cla>
+        <cla_stall>-1.4326647564469914</cla_stall>
+        <cda>0</cda>
+        <cda_stall>1.4326647564469914</cda_stall>
+        <alpha_stall>1.396</alpha_stall>
+        <a0>0</a0>
+        <area>0.27637</area>
+        <upward>-0.707106781186547 0 -0.707106781186547</upward>
+        <forward>-0.707106781186547 0 0.707106781186547</forward>
+        <link_name>thruster_blade</link_name>
+        <cp>0 -0.35 0</cp>
+      </plugin>
+
+      <plugin
+        filename="ignition-gazebo-lift-drag-system"
+        name="ignition::gazebo::systems::LiftDrag">
+
+        <air_density>1000</air_density>
+        <cla>1.2535816618911175</cla>
+        <cla_stall>-1.4326647564469914</cla_stall>
+        <cda>0</cda>
+        <cda_stall>1.4326647564469914</cda_stall>
+        <alpha_stall>1.396</alpha_stall>
+        <a0>0</a0>
+        <area>0.27637</area>
+        <upward>0 0.707106781186547 -0.707106781186547</upward>
+        <forward>0 -0.707106781186547 -0.707106781186547</forward>
+        <link_name>thruster_blade</link_name>
+        <cp>-0.35 0 0</cp>
+      </plugin>
+
+      <plugin
+        filename="ignition-gazebo-lift-drag-system"
+        name="ignition::gazebo::systems::LiftDrag">
+
+        <air_density>1000</air_density>
+        <cla>1.2535816618911175</cla>
+        <cla_stall>-1.4326647564469914</cla_stall>
+        <cda>0</cda>
+        <cda_stall>1.4326647564469914</cda_stall>
+        <alpha_stall>1.396</alpha_stall>
+        <a0>0</a0>
+        <area>0.27637</area>
+        <upward>0.707106781186547 0 -0.707106781186547</upward>
+        <forward>0.707106781186547 0 0.707106781186547</forward>
+        <link_name>thruster_blade</link_name>
+        <cp>0 0.35 0</cp>
+      </plugin>
+
+      <plugin
+        filename="ignition-gazebo-apply-joint-force-system"
+        name="ignition::gazebo::systems::ApplyJointForce">
+        <joint_name>thruster_body_blade_joint</joint_name>
+      </plugin>
+    </gazebo>
+    
+  </xacro:macro>  
+
+  <xacro:thruster/>
+
+</robot>
