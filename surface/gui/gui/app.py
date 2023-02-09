@@ -1,8 +1,10 @@
 from rclpy.node import Node
 import rclpy
 
-from PyQt5.QtWidgets import QWidget, QGridLayout, QApplication
+from PyQt5.QtWidgets import QWidget, QGridLayout, QApplication, QStyle
+import qdarkstyle
 import sys
+
 
 from gui.modules.task_selector import TaskSelector
 from gui.modules.video_area import VideoArea
@@ -15,6 +17,9 @@ class App(Node, QWidget):
     def __init__(self):
         super().__init__(node_name='app_node', parameter_overrides=[])
         super(QWidget, self).__init__()
+
+        # https://doc.qt.io/qt-5/qwidget.html#setStyle
+        self.setStyleSheet(qdarkstyle.load_stylesheet())
 
         self.setWindowTitle('ROV 2023')
         self.resize(1850, 720)
