@@ -1,3 +1,9 @@
+# Installation
+
+## 1. Ardupilot lib
+
+https://github.com/srmainwaring/ardupilot_gazebo/wiki
+
 # Instruction
 
 ## 1. Build
