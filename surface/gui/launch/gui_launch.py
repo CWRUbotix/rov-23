@@ -1,4 +1,3 @@
-from launch.actions import DeclareLaunchArgument
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.substitutions import LaunchConfiguration
@@ -10,12 +9,7 @@ def generate_launch_description():
         package='gui',
         executable='run_app',
         parameters=[
-                {'theme': LaunchConfiguration('theme', default='')}
-            ]
+                {'theme': LaunchConfiguration('theme', default='')}]
     )
 
-    theme_args = DeclareLaunchArgument('theme',
-                                       default_value='')
-
-    return LaunchDescription([gui_node,
-                              theme_args])
+    return LaunchDescription([gui_node])
