@@ -31,6 +31,14 @@ path_to_sdf: str = os.path.join(rov_gazebo_path, "worlds", filenameSDF)
 path_to_yaml: str = os.path.join(rov_gazebo_path, "worlds", filenameYaml)
 path_to_rov_in_world: str = os.path.join(rov_gazebo_path, "worlds", filenameRovInWorld)
 
+imu_sdf = """
+      <sensor name="imu_sensor" type="imu">
+        <pose>0 0 0 3.141592653589793 0 0</pose>
+        <always_on>1</always_on>
+        <update_rate>1000.0</update_rate>
+      </sensor>
+      """
+
 with open(path_to_urdf, "w") as f:
     urdf = os.popen("xacro " + path_to_xacro + " params_path:=" + path_to_yaml).read()
     f.writelines(urdf)
@@ -38,6 +46,7 @@ with open(path_to_urdf, "w") as f:
 with open(path_to_sdf, "w") as f:
     sdf = os.popen("gz sdf -p " + path_to_urdf).read().splitlines(True)
     f.writelines(sdf)
+    sdf[3:3] = imu_sdf
 
 with open(path_to_world, "r") as f:
     contents = f.readlines()
