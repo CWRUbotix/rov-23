@@ -33,7 +33,7 @@ class App(Node, QWidget):
         self.logger: Logger = Logger()
         layout.addWidget(self.logger, 1, 0)
 
-    # Variable name a0 because its overloading parent closeEvent method
+    # Variable name a0 because it's overloading parent closeEvent method
     def closeEvent(self, a0: QCloseEvent):
         """Piggyback the PyQt window close to kill rclpy."""
         # Kill all executors
