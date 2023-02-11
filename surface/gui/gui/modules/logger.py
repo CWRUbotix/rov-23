@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict
 
 from rcl_interfaces.msg import Log
 from rclpy.logging import LoggingSeverity
@@ -22,6 +22,7 @@ class Logger(QWidget):
     """Logging widget for displaying ROS logs."""
 
     print_log_signal: pyqtSignal = pyqtSignal(Log)
+    
 
     def __init__(self):
         super().__init__()
@@ -33,11 +34,11 @@ class Logger(QWidget):
         settings_layout: QHBoxLayout = QHBoxLayout()
         layout.addLayout(settings_layout)
 
-        self.checkboxes: List[QCheckBox] = []
+        self.checkboxes: Dict[LoggingSeverity, QCheckBox] = {}
         for severity_key in SEVERITY_LEVELS_DICT:
             box: QCheckBox = QCheckBox(severity_key.name)
             box.setChecked(True)
-            self.checkboxes.append(box)
+            self.checkboxes[severity_key] = box
             settings_layout.addWidget(box)
 
         self.textbox: QTextEdit = QTextEdit()
@@ -59,10 +60,8 @@ class Logger(QWidget):
         # Message severities are 0, 10, 20, etc.
         # We divide by 10 to get index for checkboxes
         severity_key = LoggingSeverity(message.level)
-        index = int(message.level / 10)
-        # TODO maybe could do some dict for LoggingSeverity and checkboxes to save division
         # Make sure we've chosen to view this message type
-        if not self.checkboxes[index].isChecked():
+        if not self.checkboxes[severity_key].isChecked():
             return
 
         self.textbox.moveCursor(QTextCursor.End)
