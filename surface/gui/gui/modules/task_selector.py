@@ -33,6 +33,7 @@ class TaskSelector(Module):
         # Add dropdown #
         # Create PyQt element
         self.combo_box: QComboBox = QComboBox()
+        self.combo_box.setMinimumWidth(150)
         self.combo_box.addItem('Manual Control')
         self.combo_box.addItem('Auto Docking')
         self.combo_box.addItem('Coral Modeling')

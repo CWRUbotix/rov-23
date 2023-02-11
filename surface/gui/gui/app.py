@@ -58,10 +58,10 @@ def run_app():
     window = App()
     if window.get_parameter('theme').get_parameter_value().string_value == "dark":
         # https://doc.qt.io/qt-5/qwidget.html#setStyle
-        window.setStyleSheet(qdarkstyle.load_stylesheet())
+        app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     elif window.get_parameter('theme').get_parameter_value().string_value == "watermelon":
         # UGLY But WORKS
-        window.setStyleSheet("QWidget { background-color: green; color: pink; }")
+        app.setStyleSheet("QWidget { background-color: green; color: pink; }")
 
     window.show()
     sys.exit(app.exec_())
