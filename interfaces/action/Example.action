@@ -1,0 +1,6 @@
+bool morning
+bool cheery
+---
+string message
+---
+string feedback_message

@@ -119,9 +119,32 @@ void setup()
 
   if (! rtc.initialized() || rtc.lostPower()) {
     Serial.println("RTC is NOT initialized, let's set the time!");
-    // When time needs to be set on a new device, or after a power loss, the
-    // following line sets the RTC to the date & time this sketch was compiled
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+
+    Serial.println("Assume year is 2023");
+    Serial.println("Enter month [number format]");
+    while (Serial.available() == 0){}
+    int month = Serial.parseInt();
+    Serial.println(month);
+    Serial.println("Enter day");
+    while (Serial.available() == 0){}
+    int day = Serial.parseInt();
+    Serial.println(day);
+    Serial.println("Enter hour");
+    while (Serial.available() == 0){}
+    int hour = Serial.parseInt();
+    Serial.println(hour);
+    Serial.println("Enter minute [make sure you have enough time to enter seconds!]");
+    while (Serial.available() == 0){}
+    int minute = Serial.parseInt();
+    Serial.println(minute);
+    Serial.println("Enter second");
+    while (Serial.available() == 0){}
+    int second = Serial.parseInt();
+    Serial.println(second);
+
+    rtc.adjust(DateTime(2023, month, day, hour, minute, second));
+    
+    //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     // This line sets the RTC with an explicit date & time, for example to set
     // January 21, 2014 at 3am you would call:
     // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
