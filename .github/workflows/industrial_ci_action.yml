@@ -1,5 +1,4 @@
 # https://github.com/ros-industrial/industrial_ci/blob/master/README.rst#id7
-# Automated Unit Testing Hopefully
 name: Continuous Integration
 
 on: [push, pull_request]

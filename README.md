@@ -26,14 +26,25 @@ git clone git@github.com:cwruRobotics/rov-23.git .
 
 If you've never contributed to a git repository before, you might receive an error message saying you don't have access. In that case visit [this tutorial](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh) to set up SSH for local GitHub access.
 
+Return to ws directory
+```
+cd ../
+```
+Install dependecies
+```
+rosdep install --from-paths src --ignore-src -r -y
+```
+Build
+```
+colcon build
+```
+
 ## Directory Structure
 All packages to be installed on the surface computer live in the `surface` directory.
 
 All packages to be installed on the pi compute module live in the `pi` directory.
 
 All packages to be installed on the float live in the `float` directory.
-
-Single commits should not modify more than one of these directories.
 
 ## Documentation Structure
 Documentation will take place at 3 levels:
