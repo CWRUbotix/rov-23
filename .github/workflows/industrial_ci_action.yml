@@ -1,7 +1,7 @@
 # https://github.com/ros-industrial/industrial_ci/blob/master/README.rst#id7
 name: Continuous Integration
 
-on: [push, pull_request]
+on: push
 
 jobs:
   industrial_ci:
