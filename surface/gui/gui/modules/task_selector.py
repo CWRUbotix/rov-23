@@ -16,8 +16,8 @@ class TaskSelector(Module):
 
     # Declare signals with "object" params b/c we don't have access to
     # the ROS service object TaskRequest_Response
-    handle_scheduler_response_signal: pyqtSignal = pyqtSignal(object)
-    update_task_dropdown_signal: pyqtSignal = pyqtSignal(object)
+    handle_scheduler_response_signal: pyqtSignal = pyqtSignal(TaskRequest.Response)
+    update_task_dropdown_signal: pyqtSignal = pyqtSignal(TaskFeedback)
 
     def __init__(self):
         super().__init__()
@@ -33,6 +33,7 @@ class TaskSelector(Module):
         # Add dropdown #
         # Create PyQt element
         self.combo_box: QComboBox = QComboBox()
+        self.combo_box.setMinimumWidth(150)
         self.combo_box.addItem('Manual Control')
         self.combo_box.addItem('Auto Docking')
         self.combo_box.addItem('Coral Modeling')
@@ -66,10 +67,10 @@ class TaskSelector(Module):
 
         self.task_changed_client.send_request_async({'task_id': i})
 
-    @ pyqtSlot(object)
-    def handle_scheduler_response(self, response: object):
+    @ pyqtSlot(TaskRequest.Response)
+    def handle_scheduler_response(self, response: TaskRequest.Response):
         """Handle scheduler response to request sent from gui_changed_task."""
-        RcutilsLogger("task_selector.py").info(response)
+        RcutilsLogger("task_selector.py").info(response.response)
 
     @ pyqtSlot(TaskFeedback)
     def update_task_dropdown(self, message: TaskFeedback):
