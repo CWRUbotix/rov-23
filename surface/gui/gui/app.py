@@ -3,7 +3,9 @@ import rclpy
 
 from PyQt5.QtWidgets import QWidget, QGridLayout, QApplication
 import qdarkstyle
+from PyQt5.QtGui import QCloseEvent
 import sys
+import signal
 
 from gui.modules.task_selector import TaskSelector
 from gui.modules.video_area import VideoArea
@@ -34,7 +36,8 @@ class App(Node, QWidget):
         self.logger: Logger = Logger()
         layout.addWidget(self.logger, 1, 0)
 
-    def closeEvent(self, event):
+    # Variable name a0 because it's overloading parent closeEvent method
+    def closeEvent(self, a0: QCloseEvent):
         """Piggyback the PyQt window close to kill rclpy."""
         # Kill all executors
         self.task_selector.kill_all_executors()
@@ -42,12 +45,14 @@ class App(Node, QWidget):
 
         # Shutdown rclpy
         rclpy.shutdown()
-
-        event.accept()
+        a0.accept()
 
 
 def run_app():
     rclpy.init()
+
+    # Kills with Control + C
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     app = QApplication(sys.argv)
     window = App()
@@ -59,5 +64,4 @@ def run_app():
         window.setStyleSheet("QWidget { background-color: green; color: pink; }")
 
     window.show()
-
     sys.exit(app.exec_())

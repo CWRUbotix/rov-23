@@ -8,6 +8,8 @@ from interfaces.srv import TaskRequest
 from interfaces.msg import TaskFeedback
 from gui.modules.module import Module
 
+from rclpy.impl.rcutils_logger import RcutilsLogger
+
 
 class TaskSelector(Module):
     """Module widget that handles task selection with a dropdown."""
@@ -51,8 +53,6 @@ class TaskSelector(Module):
         self.task_changed_server: GUIEventSubscriber = GUIEventSubscriber(
             TaskFeedback, 'task_feedback', self.update_task_dropdown_signal)
 
-        self.task_changed_server.spin_async()
-
     def gui_changed_task(self, i: int):
         """Tell the back about the user selecting task with ID i."""
         # Cancel change if task changer hasn't connected yet
@@ -67,12 +67,12 @@ class TaskSelector(Module):
         self.task_changed_client.send_request_async({'task_id': i})
 
     @ pyqtSlot(object)
-    def handle_scheduler_response(self, response):
+    def handle_scheduler_response(self, response: object):
         """Handle scheduler response to request sent from gui_changed_task."""
-        print(response)
+        RcutilsLogger("task_selector.py").info(response)
 
-    @ pyqtSlot(object)
-    def update_task_dropdown(self, message):
+    @ pyqtSlot(TaskFeedback)
+    def update_task_dropdown(self, message: TaskFeedback):
         """Update the task selector dropdown when task changed by scheduler."""
         self.combo_box.setCurrentIndex(message.task_id)
         self.task_changed_server.get_logger().info(
