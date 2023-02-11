@@ -15,7 +15,8 @@ class TaskRequestor(Node):
 
     def __init__(self):
         # creation of a Node with its name as input
-        super().__init__('task_requestor')
+        super().__init__('task_requestor',
+                         parameter_overrides=[])
 
         # create service to handle requests for task switching
         self.request_server = self.create_service(
@@ -36,16 +37,22 @@ class TaskRequestor(Node):
                                               BasicTask,
                                               'example_task')
 
+        self.manual_control_client = ActionClient(self,
+                                                  BasicTask,
+                                                  'manual_control')
         self.active = False
 
-    def request_task_callback(self, request, response):
+        self.send_basic_goal(self.manual_control_client)
+
+    def request_task_callback(self, request: TaskRequest.Request, response: TaskRequest.Response):
         response.response = "Acknowledged"
         if self.active:
             self.cancel_goal()
 
         self.active = True
-
-        if request.task_id == Tasks.EX_GOOD_MORNING.value:
+        if request.task_id == Tasks.MANUAL_CONTROL.value:
+            self.send_basic_goal(self.manual_control_client)
+        elif request.task_id == Tasks.EX_GOOD_MORNING.value:
             self.send_morning_goal(True, True)
         elif request.task_id == Tasks.EX_TIMED.value:
             self.send_basic_goal(self.timed_task_client)
@@ -55,7 +62,6 @@ class TaskRequestor(Node):
             response.response = "Canceled"
         else:
             response.response = "Invalid task id"
-
         return response
 
     # Basic task client takes no input variables and only receives feedback,
@@ -63,20 +69,22 @@ class TaskRequestor(Node):
     #
     # send_basic_goal() takes a basic client and requests for the server it's
     # attached to to run a task
-    def send_basic_goal(self, client):
+    def send_basic_goal(self, client: ActionClient):
         goal_msg = BasicTask.Goal()
 
-        self.get_logger().info('Waiting for action server...')
+        if not self.active:
+            self.get_logger().info('Waiting for action server...')
         client.wait_for_server()
 
-        self.get_logger().info('Sending goal request...')
+        if not self.active:
+            self.get_logger().info('Sending goal request...')
         self._send_goal_future = client.send_goal_async(
             goal_msg, feedback_callback=self.feedback_callback)
         self._send_goal_future.add_done_callback(self.basic_response_callback)
 
     # A Say Good Morning server takes the time of day and cheeriness to
     # produce a greeting
-    def send_morning_goal(self, morning, cheery):
+    def send_morning_goal(self, morning: bool, cheery: bool):
         goal_msg = Example.Goal()
         goal_msg.morning = morning
         goal_msg.cheery = cheery
@@ -149,13 +157,9 @@ class TaskRequestor(Node):
             self.get_logger().info('Goal failed to cancel')
 
 
-def main(args=None):
-    rclpy.init(args=args)
+def main():
+    rclpy.init()
 
     action_client = TaskRequestor()
 
     rclpy.spin(action_client)
-
-
-if __name__ == '__main__':
-    main()

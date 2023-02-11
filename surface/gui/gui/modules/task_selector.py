@@ -8,14 +8,16 @@ from interfaces.srv import TaskRequest
 from interfaces.msg import TaskFeedback
 from gui.modules.module import Module
 
+from rclpy.impl.rcutils_logger import RcutilsLogger
+
 
 class TaskSelector(Module):
     """Module widget that handles task selection with a dropdown."""
 
     # Declare signals with "object" params b/c we don't have access to
     # the ROS service object TaskRequest_Response
-    handle_scheduler_response_signal: pyqtSignal = pyqtSignal(object)
-    update_task_dropdown_signal: pyqtSignal = pyqtSignal(object)
+    handle_scheduler_response_signal: pyqtSignal = pyqtSignal(TaskRequest.Response)
+    update_task_dropdown_signal: pyqtSignal = pyqtSignal(TaskFeedback)
 
     def __init__(self):
         super().__init__()
@@ -31,6 +33,7 @@ class TaskSelector(Module):
         # Add dropdown #
         # Create PyQt element
         self.combo_box: QComboBox = QComboBox()
+        self.combo_box.setMinimumWidth(150)
         self.combo_box.addItem('Manual Control')
         self.combo_box.addItem('Auto Docking')
         self.combo_box.addItem('Coral Modeling')
@@ -51,8 +54,6 @@ class TaskSelector(Module):
         self.task_changed_server: GUIEventSubscriber = GUIEventSubscriber(
             TaskFeedback, 'task_feedback', self.update_task_dropdown_signal)
 
-        self.task_changed_server.spin_async()
-
     def gui_changed_task(self, i: int):
         """Tell the back about the user selecting task with ID i."""
         # Cancel change if task changer hasn't connected yet
@@ -66,13 +67,13 @@ class TaskSelector(Module):
 
         self.task_changed_client.send_request_async({'task_id': i})
 
-    @ pyqtSlot(object)
-    def handle_scheduler_response(self, response):
+    @ pyqtSlot(TaskRequest.Response)
+    def handle_scheduler_response(self, response: TaskRequest.Response):
         """Handle scheduler response to request sent from gui_changed_task."""
-        print(response)
+        RcutilsLogger("task_selector.py").info(response.response)
 
-    @ pyqtSlot(object)
-    def update_task_dropdown(self, message):
+    @ pyqtSlot(TaskFeedback)
+    def update_task_dropdown(self, message: TaskFeedback):
         """Update the task selector dropdown when task changed by scheduler."""
         self.combo_box.setCurrentIndex(message.task_id)
         self.task_changed_server.get_logger().info(

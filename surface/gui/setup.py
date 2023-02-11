@@ -17,7 +17,7 @@ setup(
         (os.path.join('share', package_name, 'launch'),
          glob('launch/*launch.[pxy][yma]*'))
     ],
-    install_requires=['setuptools', 'pyqt5'],
+    install_requires=['setuptools', 'pyqt5', 'qdarkstyle'],
     zip_safe=True,
     maintainer='Benjamin Poulin',
     maintainer_email='bwp18@case.edu',
@@ -25,6 +25,6 @@ setup(
     license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': ['run_gui = gui.run_gui:run_gui'],
+        'console_scripts': ['run_app = gui.app:run_app'],
     },
 )
