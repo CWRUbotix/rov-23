@@ -6,6 +6,10 @@
 version: 2
 updates:
   - package-ecosystem: "pip" # See documentation for possible values
+    directory: "/surface/gui" # Location of package manifests
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "surface/task_selector" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
