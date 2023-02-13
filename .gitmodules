@@ -1,0 +1,10 @@
+[submodule "pi/Micro-XRCE-DDS-Agent"]
+	path = pi/Micro-XRCE-DDS-Agent
+	url = https://github.com/eProsima/Micro-XRCE-DDS-Agent.git
+[submodule "interfaces/px4_msgs"]
+	path = interfaces/px4_msgs
+	url = https://github.com/PX4/px4_msgs.git
+[submodule "mavros"]
+	path = mavros
+	url = https://github.com/mavlink/mavros.git
+	branch = ros2
