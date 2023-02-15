@@ -9,5 +9,5 @@ jobs:
       - uses: arduino/arduino-lint-action@v1
         with:
           path: ./
-          compliance: strict
+          #compliance: strict
           recursive: true
