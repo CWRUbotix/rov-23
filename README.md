@@ -16,20 +16,16 @@ mkdir -p rov_23_ws/src
 ```
 
 ```
-cd rov_23_ws/src
+cd rov_23_ws/
 ```
 
 ```
-git clone git@github.com:cwruRobotics/rov-23.git .
+git clone git@github.com:cwruRobotics/rov-23.git src
 ```
-(the period is important)
+(the src is important)
 
 If you've never contributed to a git repository before, you might receive an error message saying you don't have access. In that case visit [this tutorial](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh) to set up SSH for local GitHub access.
 
-Return to ws directory
-```
-cd ../
-```
 Install dependecies
 ```
 rosdep install --from-paths src --ignore-src -r -y
