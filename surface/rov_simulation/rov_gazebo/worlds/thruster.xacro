@@ -24,7 +24,7 @@
     <xacro:property name="pitch" value="${motor_object['pitch']}"/>
     <xacro:property name="yaw" value="${motor_object['yaw']}"/>
   
-    <origin rpy="3.141592 0 0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
 
     <joint name="body_${thruster_name}_joint" type="fixed">
       <parent link="body"/>
@@ -213,6 +213,8 @@
       <!-- Port settings -->
       <fdm_addr>127.0.0.1</fdm_addr>
       <fdm_port_in>9002</fdm_port_in>
+      <fdm_port_out>9003</fdm_port_out>
+      <!-- <imuName>rov::body::imu_sensor</imuName> -->
       <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
       <lock_step>1</lock_step>
 
@@ -237,15 +239,15 @@
         </control>
       </xacro:macro>
 
-      <xacro:thruster_control channel="0" jointName="thruster_top_front_left_body_blade_joint"/>
-      <xacro:thruster_control channel="1" jointName="thruster_top_front_right_body_blade_joint"/>
-      <xacro:thruster_control channel="2" jointName="thruster_top_back_left_body_blade_joint"/>
-      <xacro:thruster_control channel="3" jointName="thruster_top_back_right_body_blade_joint"/> 
+      <xacro:thruster_control channel="0" jointName="thruster_top_front_right_body_blade_joint"/>
+      <xacro:thruster_control channel="1" jointName="thruster_top_front_left_body_blade_joint"/>
+      <xacro:thruster_control channel="2" jointName="thruster_top_back_right_body_blade_joint"/>
+      <xacro:thruster_control channel="3" jointName="thruster_top_back_left_body_blade_joint"/> 
 
-      <xacro:thruster_control channel="4" jointName="thruster_bottom_front_left_body_blade_joint"/>
-      <xacro:thruster_control channel="5" jointName="thruster_bottom_front_right_body_blade_joint"/>
-      <xacro:thruster_control channel="6" jointName="thruster_bottom_back_left_body_blade_joint"/>
-      <xacro:thruster_control channel="7" jointName="thruster_bottom_back_right_body_blade_joint"/> 
+      <xacro:thruster_control channel="4" jointName="thruster_bottom_front_right_body_blade_joint"/>
+      <xacro:thruster_control channel="5" jointName="thruster_bottom_front_left_body_blade_joint"/>
+      <xacro:thruster_control channel="6" jointName="thruster_bottom_back_right_body_blade_joint"/>
+      <xacro:thruster_control channel="7" jointName="thruster_bottom_back_left_body_blade_joint"/> 
     </plugin>
   </gazebo>
    

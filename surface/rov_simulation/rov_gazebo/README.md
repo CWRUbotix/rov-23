@@ -1,6 +1,18 @@
 # Installation
 
-## 1. Ardupilot lib
+## 1. Ignition gazebo
+
+```
+$ sudo apt-get install ros-galactic-ros-ign
+```
+
+## 2. Ros Ign Bridge
+
+```
+$ sudo apt-get install ros-galactic-ros-ign-bridge
+```
+
+## 3. Ardupilot lib
 
 https://github.com/srmainwaring/ardupilot_gazebo/wiki
 
@@ -38,3 +50,13 @@ Directory doesn't matter here. 12 means the power of the thruster.
 ```
 $ ign topic -t "/model/rov/joint/thruster_body_blade_joint/cmd_force" -m ignition.msgs.Double  -p "data: 12"
 ```
+
+# Reference
+
+## Thruster map
+
+https://www.ardusub.com/introduction/features.html
+
+## Simulation
+
+https://www.ardusub.com/developers/sitl.html
