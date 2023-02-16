@@ -6,7 +6,7 @@ from rclpy.action import ActionServer, CancelResponse
 from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
 
-from interfaces.action import BasicTask
+from rov_interfaces.action import BasicTask
 
 
 class BasicTaskTimedNode(Node):

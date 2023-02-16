@@ -2,11 +2,11 @@ import rclpy
 from rclpy.action import ActionClient
 from rclpy.node import Node
 
-from interfaces.srv import TaskRequest
-from interfaces.msg import TaskFeedback
+from rov_interfaces.srv import TaskRequest
+from rov_interfaces.msg import TaskFeedback
 
-from interfaces.action import Example
-from interfaces.action import BasicTask
+from rov_interfaces.action import Example
+from rov_interfaces.action import BasicTask
 
 from task_selector.tasks import Tasks
 

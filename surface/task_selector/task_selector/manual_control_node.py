@@ -4,8 +4,8 @@ from rclpy.action import ActionServer, CancelResponse
 from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
 
-from interfaces.action import BasicTask
-from interfaces.msg import ROVControl
+from rov_interfaces.action import BasicTask
+from rov_interfaces.msg import ROVControl
 from sensor_msgs.msg import Joy
 
 # Button meanings for PS5 Control might be different for others

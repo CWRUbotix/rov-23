@@ -4,8 +4,8 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from gui.event_nodes.client import GUIEventClient
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
-from interfaces.srv import TaskRequest
-from interfaces.msg import TaskFeedback
+from rov_interfaces.srv import TaskRequest
+from rov_interfaces.msg import TaskFeedback
 from gui.modules.module import Module
 
 from rclpy.impl.rcutils_logger import RcutilsLogger

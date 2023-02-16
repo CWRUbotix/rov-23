@@ -3,12 +3,10 @@
 <package format="3">
   <name>thrusters</name>
   <version>0.0.3</version>
-  <description>Mate ROV task scheduler and task nodes</description>
-  <maintainer email="ery12@case.edu">ericy</maintainer>
+  <description>Manages Thrusters</description>
+  <maintainer email="rmc170@case.edu">Michael Carlstrom</maintainer>
   <license>Apache License 2.0</license>
 
-  <!-- <depend>rclpy</depend>
-  <depend>sensor_msgs</depend> -->
 
   <exec_depend>python-pymavlink</exec_depend>
   <exec_depend>ros2launch</exec_depend>
