@@ -1,8 +1,5 @@
 
-from PyQt5.QtWidgets import QWidget, QPushButton, QHBoxLayout, QCheckBox, QTextEdit
-from PyQt5.QtGui import QFont, QTextCursor, QColor
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
-
+from PyQt5.QtWidgets import QPushButton, QHBoxLayout
 from gui.event_nodes.publisher import GUIEventPublisher
 from gui.modules.module import Module
 
