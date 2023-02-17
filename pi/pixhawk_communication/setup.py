@@ -2,7 +2,7 @@ from setuptools import setup
 from glob import glob
 import os
 
-package_name = 'thrusters'
+package_name = 'pixhawk_communication'
 
 setup(
     name=package_name,

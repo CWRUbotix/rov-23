@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>thrusters</name>
+  <name>pixhawk_communication</name>
   <version>0.0.3</version>
-  <description>Manages Thrusters</description>
+  <description>Manages Pixhawk</description>
   <maintainer email="rmc170@case.edu">Michael Carlstrom</maintainer>
   <license>Apache License 2.0</license>
 
