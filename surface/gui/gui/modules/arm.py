@@ -7,9 +7,7 @@ from rov_interfaces.msg import Armed
 
 
 class Arm(Module):
-    """Logging widget for displaying ROS logs."""
-
-    armed_msg: Armed = Armed()
+    """Arm widget for sending Arm Commands."""
 
     def __init__(self):
         super().__init__()
@@ -35,9 +33,7 @@ class Arm(Module):
         )
 
     def arm_clicked(self):
-        self.armed_msg.armed = True
-        self.arm_publisher.publish(self.armed_msg)
+        self.arm_publisher.publish(Armed(armed=True))
 
     def disarm_clicked(self):
-        self.armed_msg.armed = False
-        self.arm_publisher.publish(self.armed_msg)
+        self.arm_publisher.publish(Armed(armed=False))
