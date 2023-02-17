@@ -34,6 +34,10 @@ R2PRESS_PERCENT: int = 5
 DPADHOR:         int = 6
 DPADVERT:        int = 7
 
+# Range of values Pixhawk takes
+# TODO link to doc about this
+RANGE: int = 1000
+
 
 class ManualControlNode(Node):
     _passing: bool = False
@@ -82,8 +86,8 @@ class ManualControlNode(Node):
             self.pixhawk_publisher.publish(rov_msg)
 
     # Used to create smoother adjustments
-    def joystick_profiles(self, val: float):
-        return val * abs(val)
+    def joystick_profiles(self, val: float) -> int:
+        return int(RANGE * val * abs(val))
 
     def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
         self.get_logger().info('Starting Manual Control')
