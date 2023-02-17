@@ -25,6 +25,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'pixhawk_com = pixhawk_communication.pixhawk_communication:main',
         ],
     },
 )

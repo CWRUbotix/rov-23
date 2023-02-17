@@ -54,7 +54,7 @@ class ManualControlNode(Node):
         )
         self.pixhawk_publisher: Publisher = self.create_publisher(
             ROVControl,
-            'pixhawk_direction_values',
+            'pixhawk_manual_control',
             10
         )
         # TODO add manipulators

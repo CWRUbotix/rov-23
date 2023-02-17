@@ -1,45 +1,46 @@
-# from pymavlink import mavutil
-
-# # Start a connection listening on a UDP port
-# pixhawk: mavutil.mavserial = mavutil.mavlink_connection('/dev/ttyUSB0')
-# pixhawk.wait_heartbeat()
-
-# # Once connected, use 'the_connection' to get and send messages
+from pymavlink import mavutil
 
 import rclpy
-from rclpy.node import Node
+from rclpy.node import Node, Subscription
 
-from std_msgs.msg import String
+from rov_interfaces.msg import Armed, ROVControl
 
 
 class PixhawkCommunication(Node):
 
     def __init__(self):
-        super().__init__('minimal_subscriber')
-        self.subscription = self.create_subscription(
-            String,
-            'topic',
-            self.listener_callback,
-            10)
-        self.subscription  # prevent unused variable warning
+        super().__init__('Pixhawk Communication')
+        self.arm_sub: Subscription = self.create_subscription(
+            Armed,
+            'armed',
+            self.arm_callback,
+            1)
+        self.rov_control_sub: Subscription = self.create_subscription(
+            ROVControl,
+            "pixhawk_manual_control",
+            self.rov_control_callback,
+            100
+        )
+        self.pixhawk: mavutil.mavserial = mavutil.mavlink_connection('/dev/ttyUSB0')
+        self.pixhawk.wait_heartbeat()
 
-    def listener_callback(self, msg):
-        self.get_logger().info('I heard: "%s"' % msg.data)
+    def arm_callback(self, msg: Armed):
+        self.pixhawk.mav.command_long_send(
+            self.pixhawk.target_system,
+            self.pixhawk.target_component,
+            mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM,
+            0,
+            # ternary for this bit for deciding arm
+            # 1 is armed 0 is disarmed
+            1 if msg.armed else 0,
+            0, 0, 0, 0, 0, 0)
+
+    def rov_control_callback(self, msg: ROVControl):
+        # TODO send manual control
+        print("")
 
 
-def main(args=None):
-    rclpy.init(args=args)
-
-    minimal_subscriber = MinimalSubscriber()
-
-    rclpy.spin(minimal_subscriber)
-
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    minimal_subscriber.destroy_node()
-    rclpy.shutdown()
-
-
-if __name__ == '__main__':
-    main()
+def main():
+    rclpy.init()
+    pixhawk_com = PixhawkCommunication()
+    rclpy.spin(pixhawk_com)
