@@ -21,7 +21,9 @@ class PixhawkCommunication(Node):
             self.rov_control_callback,
             100
         )
-        self.pixhawk: mavutil.mavserial = mavutil.mavlink_connection('/dev/ttyUSB0')
+        # TODO should setup some mask for pixhawk
+        # https://docs.px4.io/main/en/companion_computer/pixhawk_companion.html
+        self.pixhawk: mavutil.mavserial = mavutil.mavlink_connection("/dev/ttyPixhawk")
         self.pixhawk.wait_heartbeat()
 
     def arm_callback(self, msg: Armed):
@@ -34,23 +36,21 @@ class PixhawkCommunication(Node):
             # 1 is armed 0 is disarmed
             1 if msg.armed else 0,
             0, 0, 0, 0, 0, 0)
-        # print("todo")
         self.pixhawk.motors_armed_wait() if msg.armed else self.pixhawk.motors_disarmed_wait()
-        self.get_logger().info("ROV Armed") if self.pixhawk.motors_armed else self.get_logger().info("ROV disarmed")
+        self.get_logger().info("ROV Armed") if self.pixhawk.motors_armed() else self.get_logger().info("ROV disarmed")
 
     def rov_control_callback(self, msg: ROVControl):
         # TODO send manual control
         # https://mavlink.io/en/messages/common.html#COMMAND_LONG
-        self.pixhawk.mav.command_long_send(
-            self.pixhawk.target_system,
-            self.pixhawk.target_component
-            mavutil.mavlink.MAVLINK_MSG_ID_MANUAL_CONTROL,
-            msg.x,
-            msg.y,
-            msg.z,
-
-        )
-        print("")
+        # self.pixhawk.mav.command_long_send(
+        #     self.pixhawk.target_system,
+        #     self.pixhawk.target_component
+        #     mavutil.mavlink.MAVLINK_MSG_ID_MANUAL_CONTROL,
+        #     msg.x,
+        #     msg.y,
+        #     msg.z,
+        # )
+        self.get_logger().info("control callback")
 
 
 def main():
