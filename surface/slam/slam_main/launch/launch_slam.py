@@ -20,19 +20,9 @@ def generate_launch_description():
     remappings = [
           ('rgb/image', '/camera/color/image_raw'),
           ('rgb/camera_info', '/camera/color/camera_info'),
-          ('depth/image', '/camera/depth/image_rect_raw')]
+          ('depth/image', '/camera/aligned_depth_to_color/image_raw')]
 
     return LaunchDescription([
-
-        # Nodes to launch
-        # IncludeLaunchDescription(
-        #     PythonLaunchDescriptionSource([
-        #         os.path.join(
-        #             get_package_share_directory('realsense'), 'launch', 'realsense_launch.py'
-        #         )
-        #     ]),
-        # ),
-
         Node(
             package='rtabmap_ros', executable='rgbd_odometry', output='screen',
             parameters=parameters,
