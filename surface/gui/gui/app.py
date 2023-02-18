@@ -16,11 +16,24 @@ class App(Node, QWidget):
 
         self.resize(1850, 720)
 
+        layout: QGridLayout = QGridLayout()
+        self.setLayout(layout)
+
+        self.video_area = VideoArea()
+        layout.addWidget(self.video_area, 0, 0)
+
+        self.task_selector: TaskSelector = TaskSelector()
+        layout.addWidget(self.task_selector, 0, 1)
+
+        self.logger: Logger = Logger()
+        layout.addWidget(self.logger, 1, 0)
+
     # Variable name a0 because it's overloading parent closeEvent method
     def closeEvent(self, a0: QCloseEvent):
         """Piggyback the PyQt window close to kill rclpy."""
         # Kill all executors
-        self.kill_all_executors()
+        for module in [self.video_area, self.task_selector, self.logger]:
+            module.kill_module()
 
         # Shutdown rclpy
         rclpy.shutdown()

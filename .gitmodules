@@ -1,1 +1,3 @@
-
+[submodule "surface/ros2_video_streamer"]
+	path = surface/ros2_video_streamer
+	url = git@github.com:cwruRobotics/ros2_video_streamer.git
