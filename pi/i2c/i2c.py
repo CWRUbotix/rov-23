@@ -12,10 +12,13 @@ gpio = TCA9555() # can put in the address as a param in hexadecimal
 print(gpio.format_config())
 
 # Set pins 0 through 5 as output
-# gpio.set_direction(1, bits=(0, 1, 2, 3, 4, 5)) # Turns the lights off
+gpio.set_direction(0, bits=(0, 1, 2, 3, 4, 5))
 
-# gpio.set_direction(0, bits=(0, 1, 2, 3, 4, 5)) # Turns the lights on
-# gpio.set_direction(1, bits=(0, 1, 2)) # Turns the lights on
-gpio.set_direction(0, bits=(2)) # Turns the lights on
+# Turn on the LEDs
+gpio.set_bits(bits=(0, 1, 2, 3, 4, 5))
+
+# Turn off the LEDs
+gpio.unset_bits(bits=(0, 1, 2, 3, 4, 5))
+
 
 
