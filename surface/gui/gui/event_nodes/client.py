@@ -45,7 +45,6 @@ class GUIEventClient(GUIEventNode):
 
     def send_request_with_signal(self, request: SrvTypeRequest):
         """Send synchronous request to server and emit signal."""
-
         future = self.cli.call_async(request)
         rclpy.spin_until_future_complete(
             self, future, timeout_sec=TIMEOUT_SEC)
