@@ -68,7 +68,6 @@ class VideoWidget(QLabel):
 
     def convert_cv_qt(self, cv_img, width=None, height=None) -> QImage:
         """Convert from an opencv image to QPixmap."""
-
         # Color image
         if len(cv_img.shape) == 3:
             cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
