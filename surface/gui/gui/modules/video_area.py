@@ -35,7 +35,6 @@ class VideoWidget(QLabel):
         self.handle_frame_signal.connect(self.handle_frame)
         self.camera_subscriber: GUIEventSubscriber = GUIEventSubscriber(
             Image, topic, self.handle_frame_signal)
-        self.camera_subscriber.spin_async()
 
     def mousePressEvent(self, ev: QMouseEvent):
         """Swap this video with the big video on click."""
@@ -48,10 +47,16 @@ class VideoWidget(QLabel):
             frame, desired_encoding='passthrough')
 
         # TODO: dynamic image scaling based on Qt element size
+        # qt_image: QImage = self.convert_cv_qt(
+        #     cv_image,
+        #     self.frameGeometry().width(),
+        #     self.frameGeometry().height()
+        # )
+
         qt_image: QImage = self.convert_cv_qt(
             cv_image,
-            self.frameGeometry().width(),
-            self.frameGeometry().height()
+            600,
+            600
         )
 
         # self.setPixmap(qt_image.scaled(
@@ -103,6 +108,8 @@ class VideoArea(Module):
         self.setLayout(self.grid_layout)
         self.grid_layout.setRowStretch(0, 4)
         self.grid_layout.setRowStretch(1, 4)
+        self.grid_layout.setColumnStretch(0, 1)
+        self.grid_layout.setColumnStretch(1, 1)
 
         # MAGIC VALUE WARNING: i=0 represents the big video
         self.video_widgets: list[VideoWidget] = []
