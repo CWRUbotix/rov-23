@@ -36,7 +36,9 @@ DPADVERT:        int = 7
 
 # Range of values Pixhawk takes
 # TODO link to doc about this
-RANGE: int = 1000
+# In microseconds
+ZERO_SPEED: int = 1500
+RANGE_SPEED: int = 400
 
 
 class ManualControlNode(Node):
@@ -81,13 +83,13 @@ class ManualControlNode(Node):
             # Not sure if it spins correct way around z
             rov_msg.yaw = self.joystick_profiles((axes[L2PRESS_PERCENT] -
                                                   axes[R2PRESS_PERCENT])/2)
-            rov_msg.pitch = axes[DPADVERT]
-            rov_msg.roll = -buttons[L1] + buttons[R1]
+            rov_msg.pitch = self.joystick_profiles(axes[DPADVERT])
+            rov_msg.roll = self.joystick_profiles(-buttons[L1] + buttons[R1])
             self.pixhawk_publisher.publish(rov_msg)
 
     # Used to create smoother adjustments
     def joystick_profiles(self, val: float) -> int:
-        return int(RANGE * val * abs(val))
+        return ZERO_SPEED + int(RANGE_SPEED * val * abs(val))
 
     def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
         self.get_logger().info('Starting Manual Control')
