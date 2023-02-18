@@ -9,8 +9,8 @@
                 "${workspaceFolder}/src/.vscode/easy_all.sh"
             ],
             "presentation": {
+                "panel": "dedicated",
                 "revealProblems": "onProblem",
-                "close": true
             },
             "problemMatcher": []
         },
@@ -22,8 +22,8 @@
                 "${workspaceFolder}/src/.vscode/easy_build.sh"
             ],
             "presentation": {
+                "panel": "dedicated",
                 "revealProblems": "onProblem",
-                "close": true
             },
             "problemMatcher": []
         }
