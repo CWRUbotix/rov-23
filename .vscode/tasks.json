@@ -9,6 +9,7 @@
                 "${workspaceFolder}/src/.vscode/easy_all.sh"
             ],
             "presentation": {
+                "revealProblems": "onProblem",
                 "close": true
             },
             "problemMatcher": []
@@ -21,6 +22,7 @@
                 "${workspaceFolder}/src/.vscode/easy_build.sh"
             ],
             "presentation": {
+                "revealProblems": "onProblem",
                 "close": true
             },
             "problemMatcher": []
