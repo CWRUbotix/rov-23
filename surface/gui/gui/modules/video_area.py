@@ -64,7 +64,7 @@ class VideoWidget(QLabel):
 
         # Color image
         if len(cv_img.shape) == 3:
-            # cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+            cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
             h, w, ch = cv_img.shape
             bytes_per_line = ch * w
 
@@ -91,14 +91,16 @@ class VideoArea(Module):
     """Container widget handling all video streams."""
 
     # First entry here will start as the big video
-    CAMERA_TOPICS = ['/bottom_cam/image_raw', '/front_cam/image_raw']
+    CAMERA_TOPICS = ['/image/image_raw', '/bottom_cam/image_raw', '/front_cam/image_raw']
+    CAMERA_COORDS = [(0,0), (0,1), (1,0)]
 
     def __init__(self):
         super().__init__()
 
         self.grid_layout = QGridLayout(self)
         self.setLayout(self.grid_layout)
-        self.grid_layout.setRowStretch(0, 3)
+        self.grid_layout.setRowStretch(0, 4)
+        self.grid_layout.setRowStretch(1, 4)
 
         # MAGIC VALUE WARNING: i=0 represents the big video
         self.video_widgets: list[VideoWidget] = []
@@ -106,16 +108,14 @@ class VideoArea(Module):
             video: VideoWidget = VideoWidget(i, topic)
             self.video_widgets.append(video)
 
-            debounce = QTimer()
-            debounce.setInterval(500)
-            debounce.setSingleShot(True)
-            debounce.timeout.connect(lambda: self.set_as_big_video(video))
-            video.update_big_video_signal.connect(debounce)
+            self.grid_layout.addWidget(video, self.CAMERA_COORDS[i][0], self.CAMERA_COORDS[i][1], 1, 3)
 
-            if i == 0:
-                self.grid_layout.addWidget(video, 0, 0, 1, 3)
-            else:
-                self.grid_layout.addWidget(video, 1, i - 1, 1, 1)
+            # video.update_big_video_signal.connect(self.set_as_big_video)
+
+            # if i == 0:
+            #     self.grid_layout.addWidget(video, 0, 0, 1, 3)
+            # else:
+            #     self.grid_layout.addWidget(video, 1, i - 1, 1, 1)
 
     def kill_module(self):
         for video_widget in self.video_widgets:
