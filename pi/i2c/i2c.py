@@ -1,25 +1,21 @@
-from tca9555 import TCA9555
+"""
+Need to run this command:
+sudo chmod a+rw /dev/i2c-*
+"""
+
+from TCA9555.tca9555 import TCA9555
 
 # Initialize with standard I2C-bus address of TCA9555 a.k.a 0x20
-gpio = TCA9555()
+gpio = TCA9555() # can put in the address as a param in hexadecimal
 
-# Print startup-config as human-readable
-# print(gpio.format_config())
+# Print :startup-config as human-readable
+print(gpio.format_config())
 
-# # Set pins 0, 1, 2 as output
-# # gpio.set_output(bits=(0,1,2)) # maybe this is set_bits()???
+# Set pins 0 through 5 as output
+# gpio.set_direction(1, bits=(0, 1, 2, 3, 4, 5)) # Turns the lights off
 
-# # Write value 5 to bits 0, 1, 2
-# gpio.int_to_bits(bits=(0,1,2), val=5)
+# gpio.set_direction(0, bits=(0, 1, 2, 3, 4, 5)) # Turns the lights on
+# gpio.set_direction(1, bits=(0, 1, 2)) # Turns the lights on
+gpio.set_direction(0, bits=(2)) # Turns the lights on
 
-# # Read value from bits 0, 1, 2 
-# print(gpio.int_from_bits(bits=(0,1,2)))  # 5
 
-# # Check if bit 0 is high
-# gpio.is_high(0)
-
-# # Set bit 1 and 2
-# gpio.set_bits(bits=(1, 2))
-
-# # Unset bits 2
-# gpio.unset_bits(bits=2)
