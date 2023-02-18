@@ -21,6 +21,9 @@ class Arm(Module):
         arm_button.setText("Arm")
         disarm_button.setText("Disarm")
 
+        arm_button.setFixedSize(300, 200)
+        disarm_button.setFixedSize(300, 200)
+
         arm_button.clicked.connect(self.arm_clicked)
         disarm_button.clicked.connect(self.disarm_clicked)
 
