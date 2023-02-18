@@ -17,7 +17,7 @@ class GUIEventPublisher(GUIEventNode):
 
     def publish(self, params: Dict[str, Any]):
         """Send a message with the provided parameters."""
-        msg: self.interface = self.interface()
+        msg: type = self.interface
 
         for key, value in params.items():
             setattr(msg, key, value)

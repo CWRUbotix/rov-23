@@ -9,7 +9,8 @@ class GUIEventNode(Node):
     """
 
     def __init__(self, node_name: str):
-        super().__init__(node_name, namespace='/gui')
+        super().__init__(node_name, namespace='/gui',
+                         parameter_overrides=[])
         self.node_name = node_name
 
     def kill_executor(self):

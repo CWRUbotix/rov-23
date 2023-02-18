@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QTimer
-from PyQt5.QtGui import QPixmap, QImage
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
+from PyQt5.QtGui import QPixmap, QImage, QMouseEvent
+
+from rclpy.impl.rcutils_logger import RcutilsLogger
 
 import cv2
 
@@ -35,7 +37,7 @@ class VideoWidget(QLabel):
             Image, topic, self.handle_frame_signal)
         self.camera_subscriber.spin_async()
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, ev: QMouseEvent):
         """Swap this video with the big video on click."""
         if self.index != 0:
             self.update_big_video_signal.emit(self)
@@ -104,6 +106,7 @@ class VideoArea(Module):
 
         # MAGIC VALUE WARNING: i=0 represents the big video
         self.video_widgets: list[VideoWidget] = []
+
         for i, topic in enumerate(self.CAMERA_TOPICS):
             video: VideoWidget = VideoWidget(i, topic)
             self.video_widgets.append(video)
@@ -127,21 +130,25 @@ class VideoArea(Module):
         big_widget: QWidget = self.grid_layout.itemAtPosition(
             0, 0).widget()
 
-        self.grid_layout.removeWidget(target_widget)
-        self.grid_layout.removeWidget(big_widget)
+        # TODO check this works with real camera stream
+        if isinstance(big_widget, VideoWidget):
+            self.grid_layout.removeWidget(target_widget)
+            self.grid_layout.removeWidget(big_widget)
 
-        big_widget.index = target_widget.index
-        target_widget.index = 0  # 0 still represents the big video
+            big_widget.index = target_widget.index
+            target_widget.index = 0  # 0 still represents the big video
 
-        small_frame_geometry = target_widget.frameGeometry()
+            small_frame_geometry = target_widget.frameGeometry()
 
-        self.grid_layout.addWidget(target_widget, 0, 0, 1, 3)
-        self.grid_layout.addWidget(big_widget, 1, big_widget.index - 1, 1, 1)
+            self.grid_layout.addWidget(target_widget, 0, 0, 1, 3)
+            self.grid_layout.addWidget(big_widget, 1, big_widget.index - 1, 1, 1)
 
-        target_widget.setPixmap(QPixmap.fromImage(target_widget.qt_image.scaled(
-            big_widget.frameGeometry().width(),
-            big_widget.frameGeometry().height())))
+            target_widget.setPixmap(QPixmap.fromImage(target_widget.qt_image.scaled(
+                big_widget.frameGeometry().width(),
+                big_widget.frameGeometry().height())))
 
-        big_widget.setPixmap(QPixmap.fromImage(big_widget.qt_image.scaled(
-            small_frame_geometry.width(),
-            small_frame_geometry.height())))
+            big_widget.setPixmap(QPixmap.fromImage(big_widget.qt_image.scaled(
+                small_frame_geometry.width(),
+                small_frame_geometry.height())))
+        else:
+            RcutilsLogger("video_area.py").fatal("big_widget is not a VideoWidget")
