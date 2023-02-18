@@ -99,7 +99,7 @@ class VideoArea(Module):
 
     # First entry here will start as the big video
     CAMERA_TOPICS = ['/image/image_raw', '/bottom_cam/image_raw', '/front_cam/image_raw']
-    CAMERA_COORDS = [(0,0), (0,1), (1,0)]
+    CAMERA_COORDS = [(0, 0), (0, 1), (1, 0)]
 
     def __init__(self):
         super().__init__()
@@ -118,7 +118,8 @@ class VideoArea(Module):
             video: VideoWidget = VideoWidget(i, topic)
             self.video_widgets.append(video)
 
-            self.grid_layout.addWidget(video, self.CAMERA_COORDS[i][0], self.CAMERA_COORDS[i][1], 1, 3)
+            self.grid_layout.addWidget(video, self.CAMERA_COORDS[i][0],
+                                       self.CAMERA_COORDS[i][1], 1, 3)
 
             # video.update_big_video_signal.connect(self.set_as_big_video)
 
