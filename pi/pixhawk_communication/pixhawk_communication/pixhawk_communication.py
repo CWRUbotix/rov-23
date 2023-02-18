@@ -36,7 +36,7 @@ class PixhawkCommunication(Node):
         self.pixhawk.wait_heartbeat()
 
     def arm_callback(self, msg: Armed):
-        """Callback that Arms/Disarms everytime the gui buttons are clicked"""
+        """Arms/Disarms everytime the gui buttons are clicked in a callback."""
         self.pixhawk.mav.command_long_send(
             self.pixhawk.target_system,
             self.pixhawk.target_component,
@@ -51,7 +51,7 @@ class PixhawkCommunication(Node):
         self.get_logger().info(arm_str)
 
     def rov_control_callback(self, msg: ROVControl):
-        """Callback that sends RC to the Pixhawk"""
+        """Sends RC to the Pixhawk in a callback."""
         rc_channel_values = [65535 for _ in range(MAX_CHANNEL)]
         rc_channel_values[ROLL_CHANNEL - 1] = msg.roll
         rc_channel_values[PITCH_CHANNEL - 1] = msg.pitch
