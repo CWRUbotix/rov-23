@@ -1,3 +1,6 @@
+# Next year could move root of clone
+# Or Make custom vscode Extension
+
 function cdroot()
 {
   while [[ $PWD != '/' && ${PWD##*/} != 'rov_23_ws' ]]; do cd ..; done
