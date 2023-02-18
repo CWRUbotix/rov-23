@@ -32,7 +32,6 @@ class PixhawkCommunication(Node):
             self.rov_control_callback,
             100
         )
-        # https://docs.px4.io/main/en/companion_computer/pixhawk_companion.html
         self.pixhawk: mavutil.mavserial = mavutil.mavlink_connection("/dev/ttyPixhawk")
         self.pixhawk.wait_heartbeat()
 
@@ -53,8 +52,6 @@ class PixhawkCommunication(Node):
 
     def rov_control_callback(self, msg: ROVControl):
         """Callback that sends RC to the Pixhawk"""
-        # https://www.ardusub.com/developers/pymavlink.html#send-rc-joystick
-        # https://mavlink.io/en/messages/common.html#RC_CHANNELS_OVERRIDE
         rc_channel_values = [65535 for _ in range(MAX_CHANNEL)]
         rc_channel_values[ROLL_CHANNEL - 1] = msg.roll
         rc_channel_values[PITCH_CHANNEL - 1] = msg.pitch
