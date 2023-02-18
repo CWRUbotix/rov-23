@@ -37,6 +37,7 @@ class PixhawkCommunication(Node):
         self.pixhawk.wait_heartbeat()
 
     def arm_callback(self, msg: Armed):
+        """Callback that Arms/Disarms everytime the gui buttons are clicked"""
         self.pixhawk.mav.command_long_send(
             self.pixhawk.target_system,
             self.pixhawk.target_component,
@@ -51,6 +52,7 @@ class PixhawkCommunication(Node):
         self.get_logger().info(arm_str)
 
     def rov_control_callback(self, msg: ROVControl):
+        """Callback that sends RC to the Pixhawk"""
         # https://www.ardusub.com/developers/pymavlink.html#send-rc-joystick
         # https://mavlink.io/en/messages/common.html#RC_CHANNELS_OVERRIDE
         rc_channel_values = [65535 for _ in range(MAX_CHANNEL)]

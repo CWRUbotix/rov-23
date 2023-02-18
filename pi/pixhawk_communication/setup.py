@@ -18,9 +18,9 @@ setup(
     ],
     install_requires=['setuptools', 'pymavlink'],
     zip_safe=True,
-    maintainer='ericy',
-    maintainer_email='ery12@case.edu',
-    description='Mate ROV task scheduler and task nodes',
+    maintainer='Michael Carlstrom',
+    maintainer_email='rmc@carlstrom.com',
+    description='PI to Pixhawk Communication',
     license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
