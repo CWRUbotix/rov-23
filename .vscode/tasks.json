@@ -1,0 +1,17 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "🏃‍♂️ ROS Magic",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "${workspaceFolder}/src/.vscode/easy_build.sh"
+            ],
+            "presentation": {
+                "close": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
