@@ -1,5 +1,5 @@
 from pymavlink import mavutil
-
+from pymavlink.mavutil import mavfile
 import rclpy
 from rclpy.node import Node, Subscription
 
@@ -20,7 +20,8 @@ LATERAL_CHANNEL:  int = 6
 class PixhawkCommunication(Node):
 
     def __init__(self):
-        super().__init__('pixhawk_communication')
+        super().__init__('pixhawk_communication',
+                         parameter_overrides=[])
         self.arm_sub: Subscription = self.create_subscription(
             Armed,
             'armed',
@@ -32,7 +33,9 @@ class PixhawkCommunication(Node):
             self.rov_control_callback,
             100
         )
-        self.pixhawk: mavutil.mavserial = mavutil.mavlink_connection("/dev/ttyPixhawk")
+        self.declare_parameter('connection', '/dev/ttyPixhawk')
+        communication: str = self.get_parameter('connection').get_parameter_value().string_value
+        self.pixhawk: mavfile = mavutil.mavlink_connection(communication)
         self.pixhawk.wait_heartbeat()
 
     def arm_callback(self, msg: Armed):
