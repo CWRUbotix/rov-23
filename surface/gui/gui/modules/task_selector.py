@@ -4,8 +4,8 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from gui.event_nodes.client import GUIEventClient
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
-from interfaces.srv import TaskRequest
-from interfaces.msg import TaskFeedback
+from rov_interfaces.srv import TaskRequest
+from rov_interfaces.msg import TaskFeedback
 from gui.modules.module import Module
 
 from rclpy.impl.rcutils_logger import RcutilsLogger
@@ -65,7 +65,7 @@ class TaskSelector(Module):
             f'GUI changed task to: {self.combo_box.currentText()}' +
             f' at {self.combo_box.currentIndex()}')
 
-        self.task_changed_client.send_request_async({'task_id': i})
+        self.task_changed_client.send_request_async(TaskRequest.Request(task_id=i))
 
     @ pyqtSlot(TaskRequest.Response)
     def handle_scheduler_response(self, response: TaskRequest.Response):
