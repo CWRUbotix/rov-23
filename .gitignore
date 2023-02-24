@@ -1,6 +1,3 @@
-# Video Files
-*.mp4
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -137,3 +134,7 @@ dmypy.json
 !.vscode/tasks.json
 !.vscode/easy_build.sh
 !.vscode/easy_all.sh
+
+# Video Files
+*.mp4
+
