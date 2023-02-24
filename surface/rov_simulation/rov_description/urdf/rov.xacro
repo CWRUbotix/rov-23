@@ -194,9 +194,9 @@
           </link>
 
           <plugin filename="ignition-gazebo-thruster-system"
-        name="ignition::gazebo::systems::Thruster">
+        name="ignition::gazebo::systems::Thruster">>
             <namespace>rov</namespace>
-            <joint_name>${thruster_name}_joint</joint_name>
+            <joint_name>"${thruster_name}_joint"</joint_name>
             <thrust_coefficient>0.02</thrust_coefficient>
             <fluid_density>1000</fluid_density>
             <propeller_diameter>${motor_radius*2}</propeller_diameter>

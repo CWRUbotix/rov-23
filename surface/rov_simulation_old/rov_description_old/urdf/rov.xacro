@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <robot name="rov" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+    <!-- soontm https://github.com/clydemcqueen/bluerov2_ignition/ -->
+
+      <xacro:arg name="params_path" default=""/> 
+      <!-- Need argument to get from launch file -->
+      <xacro:property name="params_path" value="$(arg params_path)"/> 
+      <!-- Need seperate property for xacro inorder processing -->
+      <xacro:property name="params" value="${load_yaml(params_path)}"/> 
+      <!-- Read in the yaml dict as mp (short for model parameters) -->
+
+      <xacro:property name="rov_description" value="${params['rov_description']}"/>
+      <xacro:property name="motor_properties" value="${rov_description['motor']}"/>
+      
+      <xacro:property name="width" value="${rov_description['width']}"/>
+      <xacro:property name="length" value="${rov_description['length']}"/>
+      <xacro:property name="height" value="${rov_description['height']}"/>
+
+      <xacro:property name="motor_radius" value="${motor_properties['dimension']['radius']}"/>
+      <xacro:property name="motor_height" value="${motor_properties['dimension']['height']}"/>
+
+
+        <link name="base_link">
+            <!-- no basis-->
+            <inertial>
+                <mass value="136.382"/>
+                <inertia ixx="1e-3" ixy="0" ixz="0" iyy="1e-3" iyz="0" izz="1e-3" />
+            </inertial>
+
+            <visual>
+                <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find rov_description)/meshes/rov.stl"/>
+                </geometry>
+                <material name="blue" >
+                    <color rgba="0 0 1 1" />
+                </material>
+            </visual>
+
+            <collision>
+                <geometry>
+                <!-- Rough dimensions of rov-->
+                    <box size="${width} ${height} ${length}" />
+                </geometry>
+                <!-- no basis-->
+            </collision>
+
+        </link>
+
+        <xacro:property name="camera_link" value="0.05" /> <!-- Size of square 'camera' box -->
+        <xacro:property name="height3" value="0.05" /> <!-- Size of square 'camera' box -->
+        <xacro:property name="axel_offset" value="0.05" /> <!-- Size of square 'camera' box -->
+
+        <joint name="camera_joint" type="fixed">
+          <axis xyz="0 1 0" />
+          <origin xyz="${camera_link} 0 ${height3 - axel_offset*2}" rpy="0 0 0"/>
+          <parent link="base_link"/>
+          <child link="camera_link"/>
+        </joint>
+
+      <!-- Camera -->
+      <link name="camera_link">
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+        <box size="${camera_link} ${camera_link} ${camera_link}"/>
+          </geometry>
+        </collision>
+
+        <visual>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+        <box size="${camera_link} ${camera_link} ${camera_link}"/>
+          </geometry>
+          <material name="red"/>
+        </visual>
+
+        <inertial>
+          <mass value="1e-5" />
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+        </inertial>
+      </link>
+
+      <!-- camera 
+      <gazebo reference="camera_link">
+        <sensor type="camera" name="front">
+          <update_rate>30.0</update_rate>
+          <camera name="head">
+            <horizontal_fov>1.3962634</horizontal_fov>
+            <image>
+              <width>800</width>
+              <height>800</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.02</near>
+              <far>300</far>
+            </clip>
+            <noise>
+              <type>gaussian</type>
+               Noise is sampled independently per pixel on each frame.
+                  That pixel's noise value is added to each of its color
+                  channels, which at that point lie in the range [0,1]. 
+              <mean>0.0</mean>
+              <stddev>0.007</stddev>
+            </noise>
+          </camera>
+          <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+            <alwaysOn>true</alwaysOn>
+            <updateRate>0.0</updateRate>
+            <cameraName>rov/front</cameraName>
+            <imageTopicName>image_raw</imageTopicName>
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+            <frameName>camera_link</frameName>
+            <hackBaseline>0.07</hackBaseline>
+            <distortionK1>0.0</distortionK1>
+            <distortionK2>0.0</distortionK2>
+            <distortionK3>0.0</distortionK3>
+            <distortionT1>0.0</distortionT1>
+            <distortionT2>0.0</distortionT2>
+          </plugin>
+        </sensor>
+      </gazebo>
+      -->
+
+
+
+      <!-- From BlueROV2 example -->
+      <!-- Hydrodynamics plugin -->
+        <!-- <plugin filename="ignition-gazebo-hydrodynamics-system"
+        name="ignition::gazebo::systems::Hydrodynamics"><link_name>base_link</link_name>
+          <water_density>1000</water_density> -->
+          <!-- Added mass: -->
+          <!-- <xDotU>0</xDotU>
+          <yDotV>0</yDotV>`
+          <zDotW>0</zDotW>
+          <kDotP>0</kDotP>
+          <mDotQ>0</mDotQ>
+          <nDotR>0</nDotR> -->
+          <!-- First order stability derivative: -->
+          <!-- <xU>0</xU>
+          <yV>0</yV>
+          <zW>0</zW>
+          <kP>0</kP>
+          <mQ>0</mQ>
+          <nR>0</nR> -->
+          <!-- Second order stability derivative: -->
+          <!-- <xUU>-33.800000000000004</xUU>
+          <yVV>-54.26875</yVV>
+          <zWW>-73.37135</zWW>
+          <kPP>-4.0</kPP>
+          <mQQ>-4.0</mQQ>
+          <nRR>-4.0</nRR>
+        </plugin>
+
+        <xacro:macro name="thruster" params="name motor reflectx reflecty">
+
+          <xacro:property name="thruster_name" value="thruster_${motor}_${name}"/>
+          <xacro:property name="motor_object" value="${motor_properties[motor]}"/>
+
+          <xacro:property name="width_from_center" value="${motor_object['width_from_center']}"/>
+          <xacro:property name="length_from_center" value="${motor_object['length_from_center']}"/>
+          <xacro:property name="height_from_center" value="${motor_object['height_from_center']}"/>
+          
+          <xacro:property name="roll" value="${motor_object['roll']}"/>
+          <xacro:property name="pitch" value="${motor_object['pitch']}"/>
+          <xacro:property name="yaw" value="${motor_object['yaw']}"/>
+
+
+          <joint name="${thruster_name}_joint" type="fixed">
+            <parent link = "base_link"/>
+            <child link= "${thruster_name}_link"/>
+            <origin xyz="${width_from_center*reflectx} ${length_from_center*reflecty} ${height_from_center}" rpy= "${roll} ${pitch} ${reflecty*reflectx*yaw }"/>
+          </joint>
+
+          <link name="${thruster_name}_link">
+            <collision>
+              <geometry>
+                <cylinder radius="${motor_radius}" length="${motor_height}"/>
+              </geometry>     
+            </collision>
+
+            <visual>
+              <geometry>
+                <cylinder radius="${motor_radius}" length="${motor_height}"/>
+              </geometry>     
+            </visual> -->
+
+            <!-- small vals-->
+            <!-- <inertial>
+              <mass value="1e-5" />
+              <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+            </inertial>
+          </link>
+
+          <plugin filename="ignition-gazebo-thruster-system"
+        name="ignition::gazebo::systems::Thruster">
+            <namespace>rov</namespace>
+            <joint_name>${thruster_name}_joint</joint_name>
+            <thrust_coefficient>0.02</thrust_coefficient>
+            <fluid_density>1000</fluid_density>
+            <propeller_diameter>${motor_radius*2}</propeller_diameter>
+            <velocity_control>true</velocity_control>
+            <use_angvel_cmd>False</use_angvel_cmd>
+          </plugin>
+        </xacro:macro> -->
+
+
+    <!-- TODO: FOR LOOPS MAYBE?-->
+      <!-- <xacro:thruster name="front_left" motor="top" reflectx="1" reflecty="1"/>
+      <xacro:thruster name="front_right" motor="top" reflectx="1" reflecty="-1"/>
+      <xacro:thruster name="back_left" motor="top" reflectx="-1" reflecty="1"/>
+      <xacro:thruster name="back_right" motor="top" reflectx="-1" reflecty="-1"/>
+
+      <xacro:thruster name="front_left" motor="bottom" reflectx="1" reflecty="1"/>
+      <xacro:thruster name="front_right" motor="bottom" reflectx="1" reflecty="-1"/>
+      <xacro:thruster name="back_left" motor="bottom" reflectx="-1" reflecty="1"/>
+      <xacro:thruster name="back_right" motor="bottom" reflectx="-1" reflecty="-1"/>
+
+      <plugin name="ArduPilotPlugin" filename="libArduPilotPlugin.so"> -->
+          <!-- Port settings -->
+          <!-- <fdm_addr>127.0.0.1</fdm_addr>
+          <fdm_port_in>9002</fdm_port_in>
+          <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
+          <lock_step>1</lock_step> -->
+
+          <!-- Transform from the Ignition Gazebo body frame (x-forward, y-left, z-up)
+              to the ArduPilot body frame (x-forward, y-right, z-down) -->
+          <!-- <modelXYZToAirplaneXForwardZDown>0 0 0 3.141592653589793 0 0</modelXYZToAirplaneXForwardZDown> -->
+
+          <!-- Transform from the Ignition Gazebo world frame (ENU)
+              to the ArduPilot world frame (NED) -->
+          <!-- <gazeboXYZToNED>0 0 0 3.141592653589793 0 1.5707963267948966</gazeboXYZToNED>
+
+          <xacro:macro name="thruster_control" params="channel jointName"> -->
+            <!-- Thrusters -->
+            <!-- <control channel="${channel}">
+              <jointName>${jointName}_joint</jointName>
+              <servo_min>1100</servo_min>
+              <servo_max>1900</servo_max>
+              <type>COMMAND</type>
+              <cmd_topic>/model/rov/joint/${jointName}_joint/cmd_thrust</cmd_topic>
+              <offset>-0.5</offset>
+              <multiplier>100</multiplier>
+            </control>
+          </xacro:macro>
+
+          <xacro:thruster_control channel="0" jointName="top_front_left"/>
+          <xacro:thruster_control channel="1" jointName="top_front_right"/>
+          <xacro:thruster_control channel="2" jointName="top_back_left"/>
+          <xacro:thruster_control channel="3" jointName="top_back_right"/> 
+
+          <xacro:thruster_control channel="4" jointName="bottom_front_left"/>
+          <xacro:thruster_control channel="5" jointName="bottom_front_right"/>
+          <xacro:thruster_control channel="6" jointName="bottom_back_left"/>
+          <xacro:thruster_control channel="7" jointName="bottom_back_right"/> 
+        </plugin> -->
+   
+</robot>
+
