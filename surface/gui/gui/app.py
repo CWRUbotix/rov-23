@@ -10,6 +10,7 @@ import signal
 from gui.modules.task_selector import TaskSelector
 from gui.modules.video_area import VideoArea
 from gui.modules.logger import Logger
+from gui.modules.module import Module
 
 
 class App(Node, QWidget):
@@ -27,20 +28,25 @@ class App(Node, QWidget):
         layout: QGridLayout = QGridLayout()
         self.setLayout(layout)
 
-        self.video_area = VideoArea()
-        layout.addWidget(self.video_area, 0, 0)
+        self.modules: list[Module] = []
 
-        self.task_selector: TaskSelector = TaskSelector()
-        layout.addWidget(self.task_selector, 0, 1)
+        video_area: VideoArea = VideoArea()
+        self.modules.append(video_area)
+        layout.addWidget(video_area, 0, 0)
 
-        self.logger: Logger = Logger()
-        layout.addWidget(self.logger, 1, 0)
+        task_selector: TaskSelector = TaskSelector()
+        self.modules.append(task_selector)
+        layout.addWidget(task_selector, 0, 1)
+
+        logger: Logger = Logger()
+        self.modules.append(logger)
+        layout.addWidget(logger, 1, 0)
 
     # Variable name a0 because it's overloading parent closeEvent method
     def closeEvent(self, a0: QCloseEvent):
         """Piggyback the PyQt window close to kill rclpy."""
         # Kill all executors
-        for module in [self.video_area, self.task_selector, self.logger]:
+        for module in self.modules:
             module.kill_module()
 
         # Shutdown rclpy

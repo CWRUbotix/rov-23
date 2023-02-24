@@ -17,10 +17,10 @@ def generate_launch_description():
     )
 
     # example of node requesting tasks
-    ex_request_client_node: Node = Node(
-        package='task_selector',
-        executable='ex_request_client'
-    )
+    # ex_request_client_node: Node = Node(
+    #     package='task_selector',
+    #     executable='ex_request_client'
+    # )
 
     # example task- run a 10 second timer
     ex_timed_task_node: Node = Node(
@@ -43,7 +43,7 @@ def generate_launch_description():
     return LaunchDescription([
         requestor_node,
         manual_control_node,
-        ex_request_client_node,
+        # ex_request_client_node,
         ex_timed_task_node,
         ex_basic_task_node,
         ex_morning_task_node
