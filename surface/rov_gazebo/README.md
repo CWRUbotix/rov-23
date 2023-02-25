@@ -36,7 +36,7 @@ $ python3 make_sdf.py
 
 ```
 $ cd ~/rov_23_ws
-$ ros2 launch rov_gazebo ign_gazebo.launch.py
+$ ros2 launch rov_gazebo sim.launch.py
 ```
 
 ## 4. Play simulation
@@ -45,10 +45,10 @@ press play button or space bar at gazebo window
 
 ## 5. Start thruster
 
-Directory doesn't matter here. 12 means the power of the thruster.
+Directory doesn't matter here. 24 means the power of the thruster.
 
 ```
-$ ign topic -t "/model/rov/joint/thruster_body_blade_joint/cmd_force" -m ignition.msgs.Double  -p "data: 12"
+$ ign topic -t "/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_force" -m ignition.msgs.Double  -p "data: 24"
 ```
 
 # Reference
