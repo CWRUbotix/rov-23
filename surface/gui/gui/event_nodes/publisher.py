@@ -13,7 +13,6 @@ class GUIEventPublisher(GUIEventNode):
             f'gui_event_publisher_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}')
 
         self.publisher = self.create_publisher(msg_type, topic, 10)
-        # self.interface: type = interface
 
     def publish(self, msg: MsgType):
         """Send a message with the provided parameters."""

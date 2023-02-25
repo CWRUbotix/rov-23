@@ -35,7 +35,6 @@ DPADHOR:         int = 6
 DPADVERT:        int = 7
 
 # Range of values Pixhawk takes
-# TODO link to doc about this
 # In microseconds
 ZERO_SPEED: int = 1500
 RANGE_SPEED: int = 400

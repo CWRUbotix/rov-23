@@ -11,6 +11,8 @@
   <exec_depend>python-pymavlink</exec_depend>
   <exec_depend>ros2launch</exec_depend>
 
+  <build_depend>interfaces</build_depend>
+
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>

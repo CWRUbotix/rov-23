@@ -26,10 +26,11 @@ class PixhawkCommunication(Node):
             Armed,
             'armed',
             self.arm_callback,
-            1)
+            1
+        )
         self.rov_control_sub: Subscription = self.create_subscription(
             ROVControl,
-            "pixhawk_manual_control",
+            'pixhawk_manual_control',
             self.rov_control_callback,
             100
         )
@@ -49,7 +50,10 @@ class PixhawkCommunication(Node):
             # 1 is armed 0 is disarmed
             1 if msg.armed else 0,
             0, 0, 0, 0, 0, 0)
-        self.pixhawk.motors_armed_wait() if msg.armed else self.pixhawk.motors_disarmed_wait()
+        if msg.armed:
+            self.pixhawk.motors_armed_wait()
+        else:
+            self.pixhawk.motors_disarmed_wait()
         arm_str: str = "ROV Armed" if self.pixhawk.motors_armed() else "ROV Disarmed"
         self.get_logger().info(arm_str)
 
