@@ -11,6 +11,7 @@ from gui.modules.task_selector import TaskSelector
 from gui.modules.video_area import VideoArea
 from gui.modules.logger import Logger
 from gui.modules.module import Module
+from gui.modules.arm import Arm
 
 
 class App(Node, QWidget):
@@ -41,6 +42,9 @@ class App(Node, QWidget):
         logger: Logger = Logger()
         self.modules.append(logger)
         layout.addWidget(logger, 1, 0)
+
+        self.arm: Arm = Arm()
+        layout.addWidget(self.arm, 1, 1)
 
     # Variable name a0 because it's overloading parent closeEvent method
     def closeEvent(self, a0: QCloseEvent):

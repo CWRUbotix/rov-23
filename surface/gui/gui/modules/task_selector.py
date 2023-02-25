@@ -68,7 +68,7 @@ class TaskSelector(Module):
             f'GUI changed task to: {self.combo_box.currentText()}' +
             f' at {self.combo_box.currentIndex()}')
 
-        self.task_changed_client.send_request_async({'task_id': i})
+        self.task_changed_client.send_request_async(TaskRequest.Request(task_id=i))
 
     @ pyqtSlot(TaskRequest.Response)
     def handle_scheduler_response(self, response: TaskRequest.Response):
