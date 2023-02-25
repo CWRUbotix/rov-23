@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QGridLayout
 
 from gui.modules.task_selector import TaskSelector
 from gui.modules.video_area import VideoArea
-from gui.modules.logger import Logger
 from gui.app import App
 
 
@@ -22,6 +21,4 @@ class PilotApp(App):
         self.task_selector: TaskSelector = TaskSelector()
         layout.addWidget(self.task_selector, 0, 1)
 
-        self.logger: Logger = Logger()
-        layout.addWidget(self.logger, 1, 0)
 
