@@ -7,8 +7,8 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QCheckBox, QTextEdit
 from PyQt5.QtGui import QFont, QTextCursor, QColor
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
-from gui.event_nodes.subscriber import GUIEventSubscriber
 from gui.modules.module import Module
+from gui.event_nodes.subscriber import GUIEventSubscriber
 
 # Dictionary linking LoggingSeverity to a QColor
 SEVERITY_LEVELS_DICT = {LoggingSeverity.UNSET: QColor(0, 0, 0),
@@ -54,6 +54,9 @@ class Logger(Module):
         self.subscriber: GUIEventSubscriber = GUIEventSubscriber(
             Log, '/rosout', self.print_log_signal)
 
+    def kill_module(self):
+        self.subscriber.kill_executor()
+
     @pyqtSlot(Log)
     def print_log(self, message: Log) -> None:
         """Print message to log widget if user is viewing message's type."""
@@ -68,6 +71,3 @@ class Logger(Module):
         self.textbox.setCurrentFont(self.terminal_font)
         self.textbox.setTextColor(SEVERITY_LEVELS_DICT[severity_key])
         self.textbox.insertPlainText(f'[{severity_key.name}]\t{message.msg}\n')
-
-    def kill_all_executors(self):
-        self.subscriber.kill_executor()

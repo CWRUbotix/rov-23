@@ -11,6 +11,11 @@ class Module(QWidget):
     def __init__(self):
         super().__init__()
 
-    def kill_all_executors(self):
-        """Kill all executors create by this module."""
-        return
+    def kill_module(self):
+        """
+        Kill all executors create by this module & run any other death routines.
+
+        Called when app's closeEvent occurs.
+        """
+        raise NotImplementedError('You called kill_module on a module' +
+                                  'that didn\'t implement it')

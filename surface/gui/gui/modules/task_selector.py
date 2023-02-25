@@ -54,6 +54,9 @@ class TaskSelector(Module):
         self.task_changed_server: GUIEventSubscriber = GUIEventSubscriber(
             TaskFeedback, 'task_feedback', self.update_task_dropdown_signal)
 
+    def kill_module(self):
+        self.task_changed_server.kill_executor()
+
     def gui_changed_task(self, i: int):
         """Tell the back about the user selecting task with ID i."""
         # Cancel change if task changer hasn't connected yet
@@ -79,6 +82,3 @@ class TaskSelector(Module):
         self.task_changed_server.get_logger().info(
             f'GUI received task changed to: {self.combo_box.currentText()}' +
             f' at {self.combo_box.currentIndex()}')
-
-    def kill_all_executors(self):
-        self.task_changed_server.kill_executor()

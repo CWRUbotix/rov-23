@@ -10,6 +10,7 @@ import signal
 from gui.modules.task_selector import TaskSelector
 from gui.modules.video_area import VideoArea
 from gui.modules.logger import Logger
+from gui.modules.module import Module
 from gui.modules.arm import Arm
 
 
@@ -17,7 +18,10 @@ class App(Node, QWidget):
     """Main app window."""
 
     def __init__(self):
-        super().__init__(node_name='app_node', parameter_overrides=[])
+        super().__init__(
+            node_name='app_node',
+            parameter_overrides=[],
+            namespace='surface/gui')
         super(QWidget, self).__init__()
 
         self.declare_parameter('theme', '')
@@ -28,14 +32,19 @@ class App(Node, QWidget):
         layout: QGridLayout = QGridLayout()
         self.setLayout(layout)
 
-        self.video_area = VideoArea(4)
-        layout.addWidget(self.video_area, 0, 0)
+        self.modules: list[Module] = []
 
-        self.task_selector: TaskSelector = TaskSelector()
-        layout.addWidget(self.task_selector, 0, 1)
+        video_area: VideoArea = VideoArea()
+        self.modules.append(video_area)
+        layout.addWidget(video_area, 0, 0)
 
-        self.logger: Logger = Logger()
-        layout.addWidget(self.logger, 1, 0)
+        task_selector: TaskSelector = TaskSelector()
+        self.modules.append(task_selector)
+        layout.addWidget(task_selector, 0, 1)
+
+        logger: Logger = Logger()
+        self.modules.append(logger)
+        layout.addWidget(logger, 1, 0)
 
         self.arm: Arm = Arm()
         layout.addWidget(self.arm, 1, 1)
@@ -44,8 +53,8 @@ class App(Node, QWidget):
     def closeEvent(self, a0: QCloseEvent):
         """Piggyback the PyQt window close to kill rclpy."""
         # Kill all executors
-        self.task_selector.kill_all_executors()
-        self.logger.kill_all_executors()
+        for module in self.modules:
+            module.kill_module()
 
         # Shutdown rclpy
         rclpy.shutdown()
