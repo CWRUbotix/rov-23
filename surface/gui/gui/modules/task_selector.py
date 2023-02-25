@@ -21,7 +21,6 @@ class TaskSelector(Module):
 
     def __init__(self):
         super().__init__()
-        # rclpy.init()  # We'll need to create ROS nodes
 
         layout: QHBoxLayout = QHBoxLayout()
         self.setLayout(layout)

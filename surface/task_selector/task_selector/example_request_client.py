@@ -10,7 +10,7 @@ class ExampleRequestClient(Node):
 
     def __init__(self):
         super().__init__('example_request_client')
-        self.cli = self.create_client(TaskRequest, 'task_request')
+        self.cli = self.create_client(TaskRequest, 'gui/task_request')
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
         self.req = TaskRequest.Request()

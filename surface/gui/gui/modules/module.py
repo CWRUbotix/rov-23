@@ -17,4 +17,5 @@ class Module(QWidget):
 
         Called when app's closeEvent occurs.
         """
-        return
+        raise NotImplementedError('You called kill_module on a module' +
+                                  'that didn\'t implement it')

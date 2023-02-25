@@ -13,7 +13,7 @@ class App(Node, QWidget):
         super(QWidget, self).__init__()
 
         self.declare_parameter('theme', '')
-        self.modules = []
+        self.modules: list[Module] = []
 
         self.resize(1850, 720)
 
