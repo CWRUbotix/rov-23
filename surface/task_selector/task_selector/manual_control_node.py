@@ -7,12 +7,13 @@ from rclpy.executors import MultiThreadedExecutor
 from interfaces.action import BasicTask
 from interfaces.msg import ROVControl
 from sensor_msgs.msg import Joy
+from interface.srv import ManipService
 
 # Button meanings for PS5 Control might be different for others
-X_BUTTON:        int = 0
-O_BUTTON:        int = 1
-TRI_BUTTON:      int = 2
-SQUARE_BUTTON:   int = 3
+X_BUTTON:        int = 0 # Manipulator 0
+O_BUTTON:        int = 1 # Manipulator 1
+TRI_BUTTON:      int = 2 # Manipulator 2
+SQUARE_BUTTON:   int = 3 # Manipulator 3
 L1:              int = 4
 R1:              int = 5
 L2:              int = 6
@@ -59,6 +60,11 @@ class ManualControlNode(Node):
             10
         )
         # TODO add manipulators
+        self.manip_service: Service = self.create_service(
+            ManipService,
+            'manipulator_control',
+            10
+        )
         self.subscription: Subscription = self.create_subscription(
             Joy,
             'joy',
@@ -68,6 +74,12 @@ class ManualControlNode(Node):
 
     def controller_callback(self, msg: Joy):
         if self._passing:
+            self.joystick_to_pixhawk(msg)
+
+            self.manip_callback(msg)
+
+
+    def joystick_to_pixhawk(self, msg: Joy):
             axes = msg.axes
             buttons = msg.buttons
             # TODO someone else should check to make sure these are correct
@@ -113,6 +125,14 @@ class ManualControlNode(Node):
         self._passing = False
         return CancelResponse.ACCEPT
 
+    def manip_callback(self, msg: Joy):
+        buttons = msg.buttons
+
+        buttons_to_check = [X_BUTTON, O_BUTTON, TRI_BUTTON, SQUARE_BUTTON]
+
+        for button in buttons_to_check:
+            if buttons[button] == 1:
+                pass
 
 def main():
     rclpy.init()

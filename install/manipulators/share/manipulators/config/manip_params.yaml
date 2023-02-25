@@ -1,7 +1,0 @@
-# Manipulator params
-manip_params:
-  ros__parameters:
-    claw0: 0
-    claw1: 1
-    claw2: 2
-    claw3: 3
