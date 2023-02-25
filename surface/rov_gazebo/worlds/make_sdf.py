@@ -25,10 +25,10 @@ filenameYaml: str = "rov_description_params.yaml"
 filenameRovInWorld: str = "rov_in_world.sdf"
 
 path_to_world: str = os.path.join(rov_gazebo_path, "worlds", filenameWorld)
-path_to_xacro: str = os.path.join(rov_gazebo_path, "worlds", filenameXacro)
-path_to_urdf: str = os.path.join(rov_gazebo_path, "worlds", filenameURDF)
-path_to_sdf: str = os.path.join(rov_gazebo_path, "worlds", filenameSDF)
-path_to_yaml: str = os.path.join(rov_gazebo_path, "worlds", filenameYaml)
+path_to_xacro: str = os.path.join(rov_gazebo_path, "description", filenameXacro)
+path_to_urdf: str = os.path.join(rov_gazebo_path, "description", filenameURDF)
+path_to_sdf: str = os.path.join(rov_gazebo_path, "description", filenameSDF)
+path_to_yaml: str = os.path.join(rov_gazebo_path, "description", filenameYaml)
 path_to_rov_in_world: str = os.path.join(rov_gazebo_path, "worlds", filenameRovInWorld)
 
 sensors_sdf = """

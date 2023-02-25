@@ -13,6 +13,7 @@ install(DIRECTORY
   launch
   config
   worlds
+  description
   DESTINATION share/${PROJECT_NAME}/)
 
 install(TARGETS
