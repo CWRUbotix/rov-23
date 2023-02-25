@@ -1,5 +1,5 @@
 import rclpy
-from rclpy.node import Node, Subscription, Publisher
+from rclpy.node import Node, Subscription, Publisher, Service
 from rclpy.action import ActionServer, CancelResponse
 from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
@@ -7,7 +7,7 @@ from rclpy.executors import MultiThreadedExecutor
 from interfaces.action import BasicTask
 from interfaces.msg import ROVControl
 from sensor_msgs.msg import Joy
-from interface.srv import ManipService
+from interfaces.srv import ManipService
 
 # Button meanings for PS5 Control might be different for others
 X_BUTTON:        int = 0 # Manipulator 0
