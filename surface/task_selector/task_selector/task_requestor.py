@@ -40,6 +40,9 @@ class TaskRequestor(Node):
         self.manual_control_client = ActionClient(self,
                                                   BasicTask,
                                                   'manual_control')
+        self.manual_control_client = ActionClient(self,
+                                                  BasicTask,
+                                                  'autonomous_docking')
         self.active = False
 
         self.send_basic_goal(self.manual_control_client)
@@ -51,6 +54,8 @@ class TaskRequestor(Node):
 
         self.active = True
         if request.task_id == Tasks.MANUAL_CONTROL.value:
+            self.send_basic_goal(self.manual_control_client)
+        elif request.task_id == Tasks.AUTONOMOUS_DOCKING.value:
             self.send_basic_goal(self.manual_control_client)
         elif request.task_id == Tasks.EX_GOOD_MORNING.value:
             self.send_morning_goal(True, True)
