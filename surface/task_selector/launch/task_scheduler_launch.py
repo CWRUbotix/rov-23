@@ -5,9 +5,9 @@ from launch import LaunchDescription
 def generate_launch_description():
 
     # launches main task scheduler
-    requestor_node: Node = Node(
+    selector_node: Node = Node(
         package='task_selector',
-        executable='requestor'
+        executable='selector'
     )
 
     # JoyToHawk
@@ -41,7 +41,7 @@ def generate_launch_description():
     # )
 
     return LaunchDescription([
-        requestor_node,
+        selector_node,
         manual_control_node,
         # ex_request_client_node,
         # ex_timed_task_node,
