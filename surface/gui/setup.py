@@ -25,6 +25,6 @@ setup(
     license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': ['run_app = gui.app:run_app'],
+        'console_scripts': ['run_pilot = gui.run_gui:run_gui_pilot', 'run_operator = gui.run_gui:run_gui_operator'],
     },
 )

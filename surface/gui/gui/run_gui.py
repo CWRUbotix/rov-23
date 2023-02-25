@@ -5,17 +5,23 @@ import signal
 
 from PyQt5.QtWidgets import QApplication
 
-from src.surface.gui.gui.app import App
+from gui.pilot_app import PilotApp
+from gui.operator_app import OperatorApp
 
 
-def run_app():
+def run_gui(gui_type: str):
     rclpy.init()
 
     # Kills with Control + C
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     app = QApplication(sys.argv)
-    window = App()
+
+    if gui_type.lower() == "operator":
+        window = OperatorApp()
+    else:
+        window = PilotApp()
+
     if window.get_parameter('theme').get_parameter_value().string_value == "dark":
         # https://doc.qt.io/qt-5/qwidget.html#setStyle
         app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
@@ -25,3 +31,11 @@ def run_app():
 
     window.show()
     sys.exit(app.exec_())
+
+
+def run_gui_pilot():
+    run_gui("pilot")
+
+
+def run_gui_operator():
+    run_gui("operator")

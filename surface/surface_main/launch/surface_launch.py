@@ -14,7 +14,7 @@ def generate_launch_description():
     gui_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(
-                gui_path, 'launch', 'gui_launch.py'
+                gui_path, 'launch', 'pilot_launch.py'
             )
         ]),
     )
