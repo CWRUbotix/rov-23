@@ -2,8 +2,6 @@ from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtGui import QPixmap, QImage
 
-import cv2
-
 from gui.modules.module import Module
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
