@@ -1,17 +1,26 @@
+from rclpy.node import Node
 import rclpy
 
-from PyQt5.QtWidgets import QWidget, QGridLayout
+from PyQt5.QtWidgets import QWidget, QGridLayout, QApplication
+import qdarkstyle
+from PyQt5.QtGui import QCloseEvent
+import sys
+import signal
 
-from modules.task_selector import TaskSelector
-from modules.video_area import VideoArea
-from modules.logger import Logger
+from gui.modules.task_selector import TaskSelector
+from gui.modules.video_area import VideoArea
+from gui.modules.logger import Logger
+from gui.modules.arm import Arm
 
 
-class App(QWidget):
+class App(Node, QWidget):
     """Main app window."""
 
     def __init__(self):
-        super().__init__()
+        super().__init__(node_name='app_node', parameter_overrides=[])
+        super(QWidget, self).__init__()
+
+        self.declare_parameter('theme', '')
 
         self.setWindowTitle('ROV 2023')
         self.resize(1850, 720)
@@ -28,7 +37,11 @@ class App(QWidget):
         self.logger: Logger = Logger()
         layout.addWidget(self.logger, 1, 0)
 
-    def closeEvent(self, event):
+        self.arm: Arm = Arm()
+        layout.addWidget(self.arm, 1, 1)
+
+    # Variable name a0 because it's overloading parent closeEvent method
+    def closeEvent(self, a0: QCloseEvent):
         """Piggyback the PyQt window close to kill rclpy."""
         # Kill all executors
         self.task_selector.kill_all_executors()
@@ -36,5 +49,23 @@ class App(QWidget):
 
         # Shutdown rclpy
         rclpy.shutdown()
+        a0.accept()
 
-        event.accept()
+
+def run_app():
+    rclpy.init()
+
+    # Kills with Control + C
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+    app = QApplication(sys.argv)
+    window = App()
+    if window.get_parameter('theme').get_parameter_value().string_value == "dark":
+        # https://doc.qt.io/qt-5/qwidget.html#setStyle
+        app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+    elif window.get_parameter('theme').get_parameter_value().string_value == "watermelon":
+        # UGLY But WORKS
+        app.setStyleSheet("QWidget { background-color: green; color: pink; }")
+
+    window.show()
+    sys.exit(app.exec_())

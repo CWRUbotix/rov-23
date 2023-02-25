@@ -1,6 +1,6 @@
 // rf69 demo tx rx.pde
 // -*- mode: C++ -*-
-// Example sketch showing how to create a simple messageing client
+// Example sketch showing how to create a simple messaging client
 // with the RH_RF69 class. RH_RF69 class does not provide for addressing or
 // reliability, so you should only use RH_RF69  if you do not need the higher
 // level messaging abilities.
@@ -94,7 +94,7 @@ void setup()
   Serial.begin(115200);
   //while (!Serial) { delay(1); } // wait until serial console is open, remove if not tethered to computer
 
-  Serial.println("Float Reciever");
+  Serial.println("Float Receiver");
   pinMode(LED, OUTPUT);     
   pinMode(RFM69_RST, OUTPUT);
   digitalWrite(RFM69_RST, LOW);

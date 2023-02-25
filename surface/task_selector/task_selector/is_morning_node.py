@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionServer
+from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
 
 from interfaces.action import Example
@@ -9,7 +10,8 @@ from interfaces.action import Example
 class IsMorning(Node):
 
     def __init__(self):
-        super().__init__('good_morning_sayer')
+        super().__init__('good_morning_sayer',
+                         parameter_overrides=[])
         self._action_server = ActionServer(
             self,
             Example,
@@ -17,7 +19,7 @@ class IsMorning(Node):
             self.execute_callback
         )
 
-    def execute_callback(self, goal_handle):
+    def execute_callback(self, goal_handle: ServerGoalHandle):
         self.get_logger().info('Executing goal...')
 
         if goal_handle.is_cancel_requested:
@@ -51,15 +53,9 @@ class IsMorning(Node):
             return result
 
 
-def main(args=None):
-    rclpy.init(args=args)
+def main():
+    rclpy.init()
 
     task_controller = IsMorning()
-
     executor = MultiThreadedExecutor()
-
     rclpy.spin(task_controller, executor=executor)
-
-
-if __name__ == '__main__':
-    main()

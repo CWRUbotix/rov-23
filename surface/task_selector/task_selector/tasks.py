@@ -1,8 +1,10 @@
-from enum import Enum, auto
+from enum import IntEnum, auto
 
 
-class Tasks(Enum):
+class Tasks(IntEnum):
+    MANUAL_CONTROL = 0
     CANCEL = auto()
     EX_BASIC = auto()
     EX_TIMED = auto()
     EX_GOOD_MORNING = auto()
+    ERROR = auto()
