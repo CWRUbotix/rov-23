@@ -58,18 +58,31 @@ class ManualControlNode(Node):
             'pixhawk_manual_control',
             10
         )
-        # TODO add manipulators
-        self.manip_publisher: Publisher = self.create_publisher(
-            Manip,
-            'manipulator_control',
-            10
-        )
         self.subscription: Subscription = self.create_subscription(
             Joy,
             'joy',
             self.controller_callback,
             100
         )
+
+        # Manipulators 
+        self.manip_publisher: Publisher = self.create_publisher(
+            Manip,
+            'manipulator_control',
+            10
+        )
+        self.manip_states: dict = {
+            "claw0": False, 
+            "claw1": False, 
+            "claw2": False, 
+            "claw3": False 
+        }
+        self.last_manip_states: dict = {
+            "claw0": False, 
+            "claw1": False, 
+            "claw2": False, 
+            "claw3": False 
+        }
 
     def controller_callback(self, msg: Joy):
         if self._passing:
@@ -137,12 +150,21 @@ class ManualControlNode(Node):
         }
 
         for button in manip_buttons:
-            if buttons[button] == 1:
-                is_activated = True
-            else:
-                is_activated = False
+            manip_id = manip_ids[button]
 
-            msg: Manip = Manip(manip_id=manip_ids[button], activated=is_activated)
+            if buttons[button] == 1:
+                activated = True
+            else:
+                activated = False
+
+            if activated and activated != self.last_manip_states[manip_id]:
+                new_manip_state = not self.manip_states[manip_id]
+                self.manip_states[manip_id] = new_manip_state
+                self.get_logger().info("manip_id="+str(manip_id)+" manip_active="+str(new_manip_state))
+
+            self.last_manip_states[manip_id] = activated
+
+            msg: Manip = Manip(manip_id=manip_ids[button], activated=activated)
             self.manip_publisher.publish(msg)
 
 

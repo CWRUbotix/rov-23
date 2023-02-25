@@ -1,0 +1,14 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from interfaces/msg/Manip.msg
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module msg {
+    struct Manip {
+      string manip_id;
+
+      boolean activated;
+    };
+  };
+};

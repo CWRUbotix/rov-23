@@ -1,0 +1,16 @@
+action/BasicTask.action
+action/BasicTask.idl
+action/Example.action
+action/Example.idl
+msg/Armed.idl
+msg/Armed.msg
+msg/Manip.idl
+msg/Manip.msg
+msg/ROVControl.idl
+msg/ROVControl.msg
+msg/TaskFeedback.idl
+msg/TaskFeedback.msg
+srv/TaskRequest.idl
+srv/TaskRequest.srv
+srv/TaskRequest_Request.msg
+srv/TaskRequest_Response.msg

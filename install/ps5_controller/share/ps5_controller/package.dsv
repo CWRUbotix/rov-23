@@ -1,0 +1,8 @@
+source;share/ps5_controller/hook/cmake_prefix_path.ps1
+source;share/ps5_controller/hook/cmake_prefix_path.dsv
+source;share/ps5_controller/hook/cmake_prefix_path.sh
+source;share/ps5_controller/local_setup.bash
+source;share/ps5_controller/local_setup.dsv
+source;share/ps5_controller/local_setup.ps1
+source;share/ps5_controller/local_setup.sh
+source;share/ps5_controller/local_setup.zsh

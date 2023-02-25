@@ -1,0 +1,6 @@
+source;share/pixhawk_communication/hook/pythonpath.ps1
+source;share/pixhawk_communication/hook/pythonpath.dsv
+source;share/pixhawk_communication/hook/pythonpath.sh
+source;share/pixhawk_communication/hook/ament_prefix_path.ps1
+source;share/pixhawk_communication/hook/ament_prefix_path.dsv
+source;share/pixhawk_communication/hook/ament_prefix_path.sh

@@ -1,0 +1,3 @@
+source;share/TCA9555/hook/pythonpath.ps1
+source;share/TCA9555/hook/pythonpath.dsv
+source;share/TCA9555/hook/pythonpath.sh
