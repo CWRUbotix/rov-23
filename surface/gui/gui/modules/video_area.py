@@ -56,8 +56,8 @@ class VideoWidget(QLabel):
 
         qt_image: QImage = self.convert_cv_qt(
             cv_image,
-            600,
-            600
+            480,
+            480
         )
 
         # self.setPixmap(qt_image.scaled(
@@ -71,7 +71,8 @@ class VideoWidget(QLabel):
         """Convert from an opencv image to QPixmap."""
         # Color image
         if len(cv_img.shape) == 3:
-            cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+            # Rectify weird colors
+            # cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2RGBA)
             h, w, ch = cv_img.shape
             bytes_per_line = ch * w
 

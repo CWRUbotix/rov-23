@@ -24,7 +24,17 @@ def generate_launch_description():
         ]
     )
 
+    manip_cam_node: Node = Node(
+        package="v4l2_camera",
+        executable="v4l2_camera_node",
+        namespace="manip_cam",
+        parameters=[
+            {"video_device": "/dev/video6"}
+        ]
+    )
+
     return LaunchDescription([
         front_cam_node,
-        bottom_cam_node
+        bottom_cam_node,
+        manip_cam_node
     ])
