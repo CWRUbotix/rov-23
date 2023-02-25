@@ -1,2 +1,2 @@
-int64 manip_id
+string manip_id
 bool activated

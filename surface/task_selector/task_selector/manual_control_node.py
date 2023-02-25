@@ -130,10 +130,10 @@ class ManualControlNode(Node):
         manip_buttons = [X_BUTTON, O_BUTTON, TRI_BUTTON, SQUARE_BUTTON]
 
         manip_ids = {
-            X_BUTTON: 0,
-            O_BUTTON: 1,
-            TRI_BUTTON: 2,
-            SQUARE_BUTTON: 3
+            X_BUTTON: "claw0",
+            O_BUTTON: "claw1",
+            TRI_BUTTON: "claw2",
+            SQUARE_BUTTON: "claw3"
         }
 
         for button in manip_buttons:

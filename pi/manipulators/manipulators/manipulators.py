@@ -8,8 +8,6 @@ class Manipulator(Node):
     def __init__(self):
         super().__init__('manipulator')
 
-        # self.service = self.create_service(ManipService, "manip_service", self.listener_callback)
-
         self.subscription: Subscription = self.create_subscription(
             Manip,
             'manipulator_control',
@@ -26,11 +24,35 @@ class Manipulator(Node):
                 ("claw3", rclpy.Parameter.Type.INTEGER),
             ])
         
+        self.manip_states: dict = {
+            "claw0": False, 
+            "claw1": False, 
+            "claw2": False, 
+            "claw3": False 
+        }
+
+        self.last_manip_states: dict = {
+            "claw0": False, 
+            "claw1": False, 
+            "claw2": False, 
+            "claw3": False 
+        }
+        
     def manip_callback(self, request: Manip):
         manip_id = request.manip_id
         activated = request.activated
+        
+        # self.get_logger().info("activated="+str(activated))
 
-        self.get_logger().info("manip_id="+str(manip_id)+" activated="+str(activated))
+        if activated and activated != self.last_manip_states[manip_id]:
+            new_manip_state = not self.manip_states[manip_id]
+
+            self.manip_states[manip_id] = new_manip_state
+        self.get_logger().info("manip_id="+str(manip_id)+" manip_active="+str(new_manip_state))
+
+        pin = self.get_parameter(manip_id).get_parameter_value().integer_value
+
+        self.last_manip_states[manip_id] = activated
 
 def main(args=None):
     rclpy.init(args=args)
