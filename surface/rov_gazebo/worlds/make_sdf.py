@@ -31,12 +31,45 @@ path_to_sdf: str = os.path.join(rov_gazebo_path, "worlds", filenameSDF)
 path_to_yaml: str = os.path.join(rov_gazebo_path, "worlds", filenameYaml)
 path_to_rov_in_world: str = os.path.join(rov_gazebo_path, "worlds", filenameRovInWorld)
 
-imu_sdf = """
+sensors_sdf = """
       <sensor name="imu_sensor" type="imu">
         <pose>0 0 0 3.141592653589793 0 0</pose>
         <always_on>1</always_on>
         <update_rate>1000.0</update_rate>
       </sensor>
+        <sensor name="camera" type="camera">
+            <camera>
+                <horizontal_fov>1.047</horizontal_fov>
+                <image>
+                <width>320</width>
+                <height>240</height>
+                </image>
+                <clip>
+                <near>0.1</near>
+                <far>100</far>
+                </clip>
+            </camera>
+            <always_on>1</always_on>
+            <update_rate>30</update_rate>
+            <visualize>true</visualize>
+            <topic>camera</topic>
+        </sensor>
+        <sensor name="depth_camera1" type="depth_camera">
+          <update_rate>10</update_rate>
+          <topic>depth_camera</topic>
+          <camera>
+            <horizontal_fov>1.05</horizontal_fov>
+            <image>
+              <width>256</width>
+              <height>256</height>
+              <format>R_FLOAT32</format>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100.0</far>
+            </clip>
+          </camera>
+          </sensor>
       """
 
 with open(path_to_urdf, "w") as f:
@@ -46,7 +79,7 @@ with open(path_to_urdf, "w") as f:
 with open(path_to_sdf, "w") as f:
     sdf = os.popen("gz sdf -p " + path_to_urdf).read().splitlines(True)
     f.writelines(sdf)
-    sdf[3:3] = imu_sdf
+    sdf[3:3] = sensors_sdf
 
 with open(path_to_world, "r") as f:
     contents = f.readlines()
