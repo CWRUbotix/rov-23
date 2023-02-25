@@ -4,6 +4,8 @@ from rclpy.node import Node
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QCloseEvent
 
+from gui.modules.module import Module
+
 
 class App(Node, QWidget):
     """Main app window."""

@@ -17,7 +17,8 @@ class OperatorApp(App):
 
         self.task_selector: TaskSelector = TaskSelector()
         layout.addWidget(self.task_selector, 0, 1)
+        self.modules.append(self.task_selector)
 
         self.logger: Logger = Logger()
         layout.addWidget(self.logger, 0, 0)
-
+        self.modules.append(self.logger)
