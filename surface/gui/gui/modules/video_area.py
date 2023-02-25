@@ -2,8 +2,6 @@ from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtGui import QPixmap, QImage
 
-import cv2
-
 from gui.modules.module import Module
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
@@ -56,8 +54,8 @@ class VideoWidget(QLabel):
 
         qt_image: QImage = self.convert_cv_qt(
             cv_image,
-            600,
-            600
+            480,
+            480
         )
 
         # self.setPixmap(qt_image.scaled(
@@ -71,7 +69,8 @@ class VideoWidget(QLabel):
         """Convert from an opencv image to QPixmap."""
         # Color image
         if len(cv_img.shape) == 3:
-            cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+            # Rectify weird colors
+            # cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2RGBA)
             h, w, ch = cv_img.shape
             bytes_per_line = ch * w
 
@@ -88,9 +87,6 @@ class VideoWidget(QLabel):
 
         if width is not None:
             qt_image = qt_image.scaled(width, height, Qt.KeepAspectRatio)
-
-        self.qt_image = qt_image
-
         return qt_image
 
 

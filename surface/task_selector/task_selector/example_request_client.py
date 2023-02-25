@@ -9,7 +9,8 @@ from task_selector.tasks import Tasks
 class ExampleRequestClient(Node):
 
     def __init__(self):
-        super().__init__('example_request_client')
+        super().__init__('example_request_client',
+                         namespace='surface')
         self.cli = self.create_client(TaskRequest, 'gui/task_request')
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
