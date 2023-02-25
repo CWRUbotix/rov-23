@@ -28,7 +28,7 @@ $ colcon build
 ## 2. Make sdf file for simulation
 
 ```
-$ cd ~/rov_23_ws/src/surface/rov_simulation/rov_gazebo/worlds
+$ cd ~/rov_23_ws/src/surface/rov_gazebo/worlds
 $ python3 make_sdf.py
 ```
 
