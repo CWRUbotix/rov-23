@@ -18,7 +18,10 @@ class App(Node, QWidget):
     """Main app window."""
 
     def __init__(self):
-        super().__init__(node_name='app_node', parameter_overrides=[])
+        super().__init__(
+            node_name='app_node',
+            parameter_overrides=[],
+            namespace='surface/gui')
         super(QWidget, self).__init__()
 
         self.declare_parameter('theme', '')
