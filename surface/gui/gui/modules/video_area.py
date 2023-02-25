@@ -87,9 +87,6 @@ class VideoWidget(QLabel):
 
         if width is not None:
             qt_image = qt_image.scaled(width, height, Qt.KeepAspectRatio)
-
-        self.qt_image = qt_image
-
         return qt_image
 
 
