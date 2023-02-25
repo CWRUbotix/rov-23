@@ -22,11 +22,21 @@ def generate_launch_description():
     )
 
     # Launches the keyboard controller
-    keyboard_controller = Node(
+    teleop_twist_keyboard = Node(
         package="teleop_twist_keyboard",
         executable="teleop_twist_keyboard",
         output="screen",
         prefix="xterm -e",
     )
 
-    return LaunchDescription([gazeboLaunch, keyboard_controller])
+    # Bridge
+    bridge = Node(
+        package="ros_ign_bridge",
+        executable="parameter_bridge",
+        arguments=[
+            "/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_force@std_msgs/msg/Float64@ignition.msgs.Double",
+        ],
+        output="screen",
+    )
+
+    return LaunchDescription([gazeboLaunch, teleop_twist_keyboard, bridge])
