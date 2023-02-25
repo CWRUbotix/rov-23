@@ -1,8 +1,0 @@
-source;share/surface_main/hook/cmake_prefix_path.ps1
-source;share/surface_main/hook/cmake_prefix_path.dsv
-source;share/surface_main/hook/cmake_prefix_path.sh
-source;share/surface_main/local_setup.bash
-source;share/surface_main/local_setup.dsv
-source;share/surface_main/local_setup.ps1
-source;share/surface_main/local_setup.sh
-source;share/surface_main/local_setup.zsh
