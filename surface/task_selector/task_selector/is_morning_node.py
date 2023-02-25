@@ -4,7 +4,7 @@ from rclpy.action import ActionServer
 from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
 
-from rov_interfaces.action import Example
+from interfaces.action import Example
 
 
 class IsMorning(Node):

@@ -3,7 +3,7 @@ from pymavlink.mavutil import mavfile
 import rclpy
 from rclpy.node import Node, Subscription
 
-from rov_interfaces.msg import Armed, ROVControl
+from interfaces.msg import Armed, ROVControl
 
 
 MAX_CHANNEL: int = 8

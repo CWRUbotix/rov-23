@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QPushButton, QHBoxLayout
 from gui.event_nodes.publisher import GUIEventPublisher
 from gui.modules.module import Module
 
-from rov_interfaces.msg import Armed
+from interfaces.msg import Armed
 
 
 class Arm(Module):
