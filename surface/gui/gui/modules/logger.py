@@ -9,7 +9,6 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 from gui.modules.module import Module
 from gui.event_nodes.subscriber import GUIEventSubscriber
-from gui.modules.module import Module
 
 # Dictionary linking LoggingSeverity to a QColor
 SEVERITY_LEVELS_DICT = {LoggingSeverity.UNSET: QColor(0, 0, 0),
