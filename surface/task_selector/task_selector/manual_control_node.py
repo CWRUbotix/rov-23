@@ -1,13 +1,12 @@
 import rclpy
-from rclpy.node import Node, Subscription, Publisher, Service
+from rclpy.node import Node, Subscription, Publisher
 from rclpy.action import ActionServer, CancelResponse
 from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
 
 from interfaces.action import BasicTask
-from interfaces.msg import ROVControl
+from interfaces.msg import ROVControl, Manip
 from sensor_msgs.msg import Joy
-from interfaces.srv import ManipService
 
 # Button meanings for PS5 Control might be different for others
 X_BUTTON:        int = 0 # Manipulator 0
@@ -60,8 +59,8 @@ class ManualControlNode(Node):
             10
         )
         # TODO add manipulators
-        self.manip_service: Service = self.create_service(
-            ManipService,
+        self.manip_publisher: Publisher = self.create_publisher(
+            Manip,
             'manipulator_control',
             10
         )
@@ -128,11 +127,24 @@ class ManualControlNode(Node):
     def manip_callback(self, msg: Joy):
         buttons = msg.buttons
 
-        buttons_to_check = [X_BUTTON, O_BUTTON, TRI_BUTTON, SQUARE_BUTTON]
+        manip_buttons = [X_BUTTON, O_BUTTON, TRI_BUTTON, SQUARE_BUTTON]
 
-        for button in buttons_to_check:
+        manip_ids = {
+            X_BUTTON: 0,
+            O_BUTTON: 1,
+            TRI_BUTTON: 2,
+            SQUARE_BUTTON: 3
+        }
+
+        for button in manip_buttons:
             if buttons[button] == 1:
-                pass
+                is_activated = True
+            else:
+                is_activated = False
+
+            msg: Manip = Manip(manip_id=manip_ids[button], activated=is_activated)
+            self.manip_publisher.publish(msg)
+
 
 def main():
     rclpy.init()

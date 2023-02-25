@@ -27,12 +27,12 @@ find_package(std_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/TaskRequest.srv"
-  "srv/ManipService.srv"
   "action/Example.action"
   "action/BasicTask.action"
   "msg/TaskFeedback.msg"
   "msg/ROVControl.msg"
   "msg/Armed.msg"
+  "msg/Manip.msg"
   DEPENDENCIES std_msgs
 )
 
