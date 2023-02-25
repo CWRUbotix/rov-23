@@ -20,11 +20,11 @@ topic_names = [
 class ThrusterControllerNode(Node):
     def __init__(self):
         super().__init__("thruster_controller_node")
-        self.publishers = []
-        self.subscriber = self.create_subscription(
-            Twist, "/cmd_vel", self.callback, qos_history_depth=10
+        self.publishers_ = []
+        self.subscriber_ = self.create_subscription(
+            Twist, "/cmd_vel", self.callback, qos_profile=10
         )
-        self.dummy = self.create_publisher(String, "dummy", qos_history_depth=10)
+        self.dummy = self.create_publisher(String, "dummy", qos_profile=10)
 
     def callback(self, msg):
         self.dummy.publish(String(data="got message"))
@@ -34,16 +34,14 @@ class ThrusterControllerNode(Node):
         elif msg.linear.z < 0:
             self.publish_all(-1, msg.linear.z)
         else:
-            self.publish_all(0, 0)
+            self.publish_all(0.0, 0.0)
 
-    def create_publishers(self, msg_type, qos_history_depth=10):
+    def create_publishers(self, msg_type, qos_profile=10):
         for topic in topic_names:
-            self.publishers.append(
-                self.create_publisher(msg_type, topic, qos_history_depth)
-            )
+            self.publishers_.append(self.create_publisher(msg_type, topic, qos_profile))
 
     def publish_all(self, direction, speed):
-        for publisher in self.publishers:
+        for publisher in self.publishers_:
             publisher.publish(Float64(data=direction * speed * 50))
 
     def spin(self):
