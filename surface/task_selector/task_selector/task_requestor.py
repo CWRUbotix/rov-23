@@ -16,7 +16,8 @@ class TaskRequestor(Node):
     def __init__(self):
         # creation of a Node with its name as input
         super().__init__('task_requestor',
-                         parameter_overrides=[])
+                         parameter_overrides=[],
+                         namespace='surface')
 
         # create service to handle requests for task switching
         self.request_server = self.create_service(

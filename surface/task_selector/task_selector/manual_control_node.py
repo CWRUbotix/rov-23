@@ -40,7 +40,8 @@ class ManualControlNode(Node):
 
     def __init__(self):
         super().__init__('manual_control_node',
-                         parameter_overrides=[])
+                         parameter_overrides=[],
+                         namespace='surface')
         # TODO would Service make more sense then Actions?
         self._action_server: ActionServer = ActionServer(
             self,
