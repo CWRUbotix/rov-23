@@ -1,1 +1,0 @@
-https://discuss.bluerobotics.com/t/setting-up-a-simulation-environment/2892/2
