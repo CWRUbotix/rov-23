@@ -1,17 +1,19 @@
 from PyQt5.QtWidgets import QWidget
+from typing import Union
 
 
-class Module(QWidget):
+class ExecutorModule(QWidget):
     """
-    Superclass for all modules.
+    Superclass for all Executor modules.
 
     Requires that modules which create spinning nodes implement an executor killer.
+    This is for modules that have subscribers or servers.
     """
 
     def __init__(self):
         super().__init__()
 
-    def kill_module(self):
+    def kill_module(self) -> None:
         """
         Kill all executors create by this module & run any other death routines.
 
@@ -19,3 +21,24 @@ class Module(QWidget):
         """
         raise NotImplementedError('You called kill_module on a module' +
                                   'that didn\'t implement it')
+
+
+class NonExecutorModule(QWidget):
+    """
+    Superclass for all non-excuptr modules.
+
+    This is modules that only have publishers or clients.
+    """
+
+    def __init__(self):
+        super().__init__()
+
+    def kill_module(self):
+        """
+        No Executors to kill so pass
+        """
+        pass
+
+
+Module = Union[ExecutorModule, NonExecutorModule]
+""" Super Class for all Modules"""

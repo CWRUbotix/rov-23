@@ -1,10 +1,10 @@
 import re
 
-from gui.event_nodes.event_node import GUIEventNode
+from gui.event_nodes.event_node import GUIEventNodeNonExecutor
 from rclpy.publisher import MsgType
 
 
-class GUIEventPublisher(GUIEventNode):
+class GUIEventPublisher(GUIEventNodeNonExecutor):
     """Publisher for sending messages from the GUI."""
 
     def __init__(self, msg_type: MsgType, topic: str):

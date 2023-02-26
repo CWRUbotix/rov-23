@@ -1,6 +1,6 @@
 import re
 from threading import Thread
-from gui.event_nodes.event_node import GUIEventNode
+from gui.event_nodes.event_node import GUIEventNodeNonExecutor
 
 import rclpy
 from rclpy.client import SrvType, SrvTypeRequest, SrvTypeResponse
@@ -12,7 +12,7 @@ from PyQt5.QtCore import pyqtBoundSignal
 TIMEOUT_SEC: float = 1.0
 
 
-class GUIEventClient(GUIEventNode):
+class GUIEventClient(GUIEventNodeNonExecutor):
     """Multithreaded client for sending service requests from the GUI."""
 
     def __init__(self, srv_type: SrvType, topic: str, signal: pyqtBoundSignal):

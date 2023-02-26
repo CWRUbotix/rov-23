@@ -1,13 +1,13 @@
 import re
 from threading import Thread
-from gui.event_nodes.event_node import GUIEventNode
+from gui.event_nodes.event_node import GUIEventNodeExecutor
 
 from rclpy.executors import SingleThreadedExecutor
 
 from PyQt5.QtCore import pyqtBoundSignal
 
 
-class GUIEventSubscriber(GUIEventNode):
+class GUIEventSubscriber(GUIEventNodeExecutor):
     """Multithreaded subscriber for receiving messages to the GUI."""
 
     def __init__(self, msg_type: type, topic: str, signal: pyqtBoundSignal):

@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QCheckBox, QTextEdit
 from PyQt5.QtGui import QFont, QTextCursor, QColor
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
-from gui.modules.module import Module
+from gui.modules.module import ExecutorModule
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
 # Dictionary linking LoggingSeverity to a QColor
@@ -19,7 +19,7 @@ SEVERITY_LEVELS_DICT = {LoggingSeverity.UNSET: QColor(0, 0, 0),
                         LoggingSeverity.FATAL: QColor(168, 0, 0)}
 
 
-class Logger(Module):
+class Logger(ExecutorModule):
     """Logging widget for displaying ROS logs."""
 
     print_log_signal: pyqtSignal = pyqtSignal(Log)

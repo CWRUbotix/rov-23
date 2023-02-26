@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtGui import QPixmap, QImage
 
-from gui.modules.module import Module
+from gui.modules.module import ExecutorModule
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
 from sensor_msgs.msg import Image
@@ -90,7 +90,7 @@ class VideoWidget(QLabel):
         return qt_image
 
 
-class VideoArea(Module):
+class VideoArea(ExecutorModule):
     """Container widget handling all video streams."""
 
     # First entry here will start as the big video

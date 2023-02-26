@@ -6,12 +6,12 @@ from gui.event_nodes.subscriber import GUIEventSubscriber
 
 from interfaces.srv import TaskRequest
 from interfaces.msg import TaskFeedback
-from gui.modules.module import Module
+from gui.modules.module import ExecutorModule
 
 from rclpy.impl.rcutils_logger import RcutilsLogger
 
 
-class TaskSelector(Module):
+class TaskSelector(ExecutorModule):
     """Module widget that handles task selection with a dropdown."""
 
     # Declare signals with "object" params b/c we don't have access to
