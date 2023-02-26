@@ -1,6 +1,6 @@
 import re
 from threading import Thread
-from event_nodes.event_node import GUIEventNode
+from event_nodes.event_node import GUIEventNodeExecutor
 
 from rclpy.executors import SingleThreadedExecutor
 from rclpy.client import SrvType
