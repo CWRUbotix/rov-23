@@ -34,9 +34,7 @@ class NonExecutorModule(QWidget):
         super().__init__()
 
     def kill_module(self):
-        """
-        No Executors to kill so pass
-        """
+        """No Executors to kill so pass."""
         pass
 
 
