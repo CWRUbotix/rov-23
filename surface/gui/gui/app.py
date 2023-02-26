@@ -39,6 +39,7 @@ class App(Node, QWidget):
         rclpy.shutdown()
         a0.accept()
 
+
 def run_gui(gui_class: typing.Callable[[], App]):
     rclpy.init()
 
