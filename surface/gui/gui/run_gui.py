@@ -1,3 +1,5 @@
+import typing
+
 import rclpy
 import qdarkstyle
 import sys
@@ -10,13 +12,15 @@ from gui.pilot_app import PilotApp
 from gui.operator_app import OperatorApp
 
 
-def run_gui(gui_window: App):
+def run_gui(gui_class: typing.Callable[[], App]):
     rclpy.init()
 
     # Kills with Control + C
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     app: QApplication = QApplication(sys.argv)
+
+    gui_window = gui_class()
 
     if gui_window.get_parameter('theme').get_parameter_value().string_value == "dark":
         # https://doc.qt.io/qt-5/qwidget.html#setStyle
@@ -30,8 +34,8 @@ def run_gui(gui_window: App):
 
 
 def run_gui_pilot():
-    run_gui(PilotApp())
+    run_gui(PilotApp)
 
 
 def run_gui_operator():
-    run_gui(OperatorApp())
+    run_gui(OperatorApp)
