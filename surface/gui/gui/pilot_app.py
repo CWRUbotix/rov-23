@@ -9,9 +9,9 @@ from gui.app import App
 
 class PilotApp(App):
     def __init__(self):
-        super().__init__("pilot_gui_node")
+        super().__init__('pilot_gui_node')
 
-        self.setWindowTitle('CWRUbotix ROV 2023 - Pilot')
+        self.setWindowTitle('Pilot GUI - CWRUbotix ROV 2023')
 
         layout: QGridLayout = QGridLayout()
         self.setLayout(layout)

@@ -8,9 +8,9 @@ from gui.app import App
 
 class OperatorApp(App):
     def __init__(self):
-        super().__init__("pilot_gui_node")
+        super().__init__('operator_gui_node')
 
-        self.setWindowTitle('CWRUbotix ROV 2023 - Operator')
+        self.setWindowTitle('Operator Gui - CWRUbotix ROV 2023')
 
         layout: QGridLayout = QGridLayout()
         self.setLayout(layout)
