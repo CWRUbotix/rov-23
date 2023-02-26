@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QGridLayout
 
 from gui.modules.task_selector import TaskSelector
 from gui.modules.logger import Logger
-from gui.app import App, run_gui
+from gui.app import App
 
 
 class OperatorApp(App):
@@ -25,4 +25,4 @@ class OperatorApp(App):
 
 
 def run_gui_operator():
-    run_gui(OperatorApp)
+    OperatorApp().run_gui()

@@ -1,4 +1,3 @@
-import typing
 import qdarkstyle
 import sys
 import signal
@@ -17,6 +16,9 @@ class App(Node, QWidget):
     """Main app window."""
 
     def __init__(self, node_name: str):
+        self.app: QApplication = QApplication(sys.argv)
+        rclpy.init()
+
         super().__init__(
             node_name=node_name,
             parameter_overrides=[],
@@ -25,7 +27,6 @@ class App(Node, QWidget):
 
         self.declare_parameter('theme', '')
         self.modules: list[Module] = []
-
         self.resize(1850, 720)
 
     # Variable name a0 because it's overloading parent closeEvent method
@@ -39,23 +40,16 @@ class App(Node, QWidget):
         rclpy.shutdown()
         a0.accept()
 
+    def run_gui(self):
+        # Kills with Control + C
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-def run_gui(gui_class: typing.Callable[[], App]):
-    rclpy.init()
+        if self.get_parameter('theme').get_parameter_value().string_value == "dark":
+            # https://doc.qt.io/qt-5/qwidget.html#setStyle
+            self.app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+        elif self.get_parameter('theme').get_parameter_value().string_value == "watermelon":
+            # UGLY But WORKS
+            self.app.setStyleSheet("QWidget { background-color: green; color: pink; }")
 
-    # Kills with Control + C
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
-
-    app: QApplication = QApplication(sys.argv)
-
-    gui_window = gui_class()
-
-    if gui_window.get_parameter('theme').get_parameter_value().string_value == "dark":
-        # https://doc.qt.io/qt-5/qwidget.html#setStyle
-        app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
-    elif gui_window.get_parameter('theme').get_parameter_value().string_value == "watermelon":
-        # UGLY But WORKS
-        app.setStyleSheet("QWidget { background-color: green; color: pink; }")
-
-    gui_window.show()
-    sys.exit(app.exec_())
+        self.show()
+        sys.exit(self.app.exec_())

@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QGridLayout
 from gui.modules.task_selector import TaskSelector
 from gui.modules.video_area import VideoArea
 from gui.modules.arm import Arm
-from gui.app import App, run_gui
+from gui.app import App
 
 
 class PilotApp(App):
@@ -29,4 +29,4 @@ class PilotApp(App):
 
 
 def run_gui_pilot():
-    run_gui(PilotApp)
+    PilotApp().run_gui()
