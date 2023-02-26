@@ -1,6 +1,12 @@
+import typing
+import qdarkstyle
+import sys
+import signal
+
 import rclpy
 from rclpy.node import Node
 
+from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QCloseEvent
 
@@ -32,3 +38,23 @@ class App(Node, QWidget):
         # Shutdown rclpy
         rclpy.shutdown()
         a0.accept()
+
+def run_gui(gui_class: typing.Callable[[], App]):
+    rclpy.init()
+
+    # Kills with Control + C
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+    app: QApplication = QApplication(sys.argv)
+
+    gui_window = gui_class()
+
+    if gui_window.get_parameter('theme').get_parameter_value().string_value == "dark":
+        # https://doc.qt.io/qt-5/qwidget.html#setStyle
+        app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+    elif gui_window.get_parameter('theme').get_parameter_value().string_value == "watermelon":
+        # UGLY But WORKS
+        app.setStyleSheet("QWidget { background-color: green; color: pink; }")
+
+    gui_window.show()
+    sys.exit(app.exec_())
