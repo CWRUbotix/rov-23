@@ -1,12 +1,12 @@
 import re
 from threading import Thread
-from event_nodes.event_node import GUIEventNodeExecutor
+from event_nodes.event_node import GUIEventNode
 
 from rclpy.executors import SingleThreadedExecutor
 from rclpy.client import SrvType
 
 
-class GUIEventServer(GUIEventNodeExecutor):
+class GUIEventServer(GUIEventNode):
     """Multithreaded server for processing service requests to update GUI."""
 
     def __init__(self, srv_type: SrvType, topic: str, callback: callable):

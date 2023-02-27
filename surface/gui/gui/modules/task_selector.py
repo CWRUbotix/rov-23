@@ -54,8 +54,7 @@ class TaskSelector(ExecutorModule):
         self.task_changed_server: GUIEventSubscriber = GUIEventSubscriber(
             TaskFeedback, 'task_feedback', self.update_task_dropdown_signal)
 
-    def kill_module(self):
-        self.task_changed_server.kill_executor()
+        self.event_nodes.append(self.task_changed_server)
 
     def gui_changed_task(self, i: int):
         """Tell the back about the user selecting task with ID i."""

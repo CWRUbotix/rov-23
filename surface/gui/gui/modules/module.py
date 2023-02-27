@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QWidget
-from typing import Union
+from typing import Union, List
+from gui.event_nodes.event_node import GUIEventNode
 
 
 class ExecutorModule(QWidget):
@@ -12,6 +13,7 @@ class ExecutorModule(QWidget):
 
     def __init__(self):
         super().__init__()
+        self.event_nodes: List[GUIEventNode] = []
 
     def kill_module(self) -> None:
         """
@@ -19,8 +21,11 @@ class ExecutorModule(QWidget):
 
         Called when app's closeEvent occurs.
         """
-        raise NotImplementedError('You called kill_module on a module' +
-                                  'that didn\'t implement it')
+        if len(self.event_nodes) == 0:
+            raise NotImplementedError('You called kill_module on a module' +
+                                      'that didn\'t implement it')
+        for event_node in self.event_nodes:
+            event_node.kill_executor()
 
 
 class NonExecutorModule(QWidget):

@@ -54,8 +54,7 @@ class Logger(ExecutorModule):
         self.subscriber: GUIEventSubscriber = GUIEventSubscriber(
             Log, '/rosout', self.print_log_signal)
 
-    def kill_module(self):
-        self.subscriber.kill_executor()
+        self.event_nodes.append(self.subscriber)
 
     @pyqtSlot(Log)
     def print_log(self, message: Log) -> None:
