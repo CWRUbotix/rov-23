@@ -25,7 +25,7 @@ class ExecutorModule(QWidget):
 
 class NonExecutorModule(QWidget):
     """
-    Superclass for all non-excuptr modules.
+    Superclass for all non-executor modules.
 
     This is modules that only have publishers or clients.
     """
