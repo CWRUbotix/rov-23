@@ -34,10 +34,10 @@ class ThrusterControllerNode(Node):
         super().__init__("thruster_controller_node")
         self.publishers_ = []
         self.subscriber_ = self.create_subscription(
-            Twist, "/cmd_vel", self.callback, qos_profile=10
+            Twist, "/cmd_vel", self.control, qos_profile=10
         )
 
-    def callback(self, msg):
+    def control(self, msg):
         if msg.linear.z > 0:
             self.z_control(msg.linear.z)
         elif msg.linear.z < 0:
@@ -54,8 +54,14 @@ class ThrusterControllerNode(Node):
             )
             self.publishers_.append(self.create_publisher(msg_type, topic, qos_profile))
 
+    def x_control(self, speed):
+        pass
+
+    def y_control(self, speed):
+        pass
+
     def z_control(self, speed):
-        multiplier = 30
+        multiplier = 3
         for publisher in self.publishers_[4:8]:
             thruster_input = speed * multiplier
             publisher.publish(Float64(data=thruster_input))

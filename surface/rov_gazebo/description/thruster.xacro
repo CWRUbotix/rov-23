@@ -11,7 +11,7 @@
   <xacro:property name="rov_description" value="${params['rov_description']}"/>
   <xacro:property name="motor_properties" value="${rov_description['motor']}"/>
 
-  <xacro:macro name="thruster" params="name motor reflectx reflecty reflect_blade">
+  <xacro:macro name="thruster" params="name motor reflectx reflecty">
 
     <xacro:property name="thruster_name" value="thruster_${motor}_${name}"/>
     <xacro:property name="motor_object" value="${motor_properties[motor]}"/>
@@ -29,7 +29,7 @@
     <joint name="body_${thruster_name}_joint" type="fixed">
       <parent link="body"/>
       <child link="${thruster_name}_body"/>
-      <origin xyz="${width_from_center*reflectx} ${length_from_center*reflecty} ${height_from_center}" rpy= "${roll} ${pitch} ${reflecty*reflectx*yaw }"/>
+      <origin xyz="${width_from_center*reflectx} ${length_from_center*reflecty} ${height_from_center}" rpy= "${roll} ${pitch} ${reflecty*reflectx*yaw}"/>
     </joint>
 
     <link name='${thruster_name}_body'>
@@ -59,52 +59,52 @@
       </inertial>
 
       <visual>
-        <origin rpy="${-0.7853981633974483 * reflect_blade} 0 0" xyz="0.03 0 0"/>
+        <origin rpy="0.7853981633974483 0 0" xyz="0.03 0 0"/>
         <geometry>
           <box size="0.04 0.02 0.005"/>
         </geometry>
       </visual>
       <collision>
-        <origin rpy="${-0.7853981633974483 * reflect_blade} 0 0" xyz="0.03 0 0"/>
+        <origin rpy="0.7853981633974483 0 0" xyz="0.03 0 0"/>
         <geometry>
           <box size="0.04 0.02 0.005"/>
         </geometry>
       </collision>
 
       <visual>
-        <origin rpy="${-0.7853981633974483 * reflect_blade} 0 1.5707963267948966" xyz="0 0.03 0"/>
+        <origin rpy="0.7853981633974483 0 1.5707963267948966" xyz="0 0.03 0"/>
         <geometry>
           <box size="0.04 0.02 0.005"/>
         </geometry>
       </visual>
       <collision>
-        <origin rpy="${-0.7853981633974483 * reflect_blade} 0 1.5707963267948966" xyz="0 0.03 0"/>
+        <origin rpy="0.7853981633974483 0 1.5707963267948966" xyz="0 0.03 0"/>
         <geometry>
           <box size="0.04 0.02 0.005"/>
         </geometry>
       </collision>
 
       <visual>
-        <origin rpy="${0.7853981633974483 * reflect_blade} 0 0" xyz="-0.03 0 0"/>
+        <origin rpy="-0.7853981633974483 0 0" xyz="-0.03 0 0"/>
         <geometry>
           <box size="0.04 0.02 0.005"/>
         </geometry>
       </visual>
       <collision>
-        <origin rpy="${0.7853981633974483 * reflect_blade} 0 0" xyz="-0.03 0 0"/>
+        <origin rpy="-0.7853981633974483 0 0" xyz="-0.03 0 0"/>
         <geometry>
           <box size="0.04 0.02 0.005"/>
         </geometry>
       </collision>
 
       <visual>
-        <origin rpy="${0.7853981633974483 * reflect_blade} 0 1.5707963267948966" xyz="0 -0.03 0"/>
+        <origin rpy="-0.7853981633974483 0 1.5707963267948966" xyz="0 -0.03 0"/>
         <geometry>
           <box size="0.04 0.02 0.005"/>
         </geometry>
       </visual>
       <collision>
-        <origin rpy="${0.7853981633974483 * reflect_blade} 0 1.5707963267948966" xyz="0 -0.03 0"/>
+        <origin rpy="-0.7853981633974483 0 1.5707963267948966" xyz="0 -0.03 0"/>
         <geometry>
           <box size="0.04 0.02 0.005"/>
         </geometry>
@@ -124,7 +124,7 @@
           name="ignition::gazebo::systems::Thruster">
           <namespace>rov</namespace>
           <joint_name>${thruster_name}_body_blade_joint</joint_name>
-          <thrust_coefficient>${0.004422 * reflect_blade}</thrust_coefficient>
+          <thrust_coefficient>0.004422</thrust_coefficient>
           <fluid_density>1000</fluid_density>
           <propeller_diameter>0.2</propeller_diameter>
         </plugin>
@@ -132,14 +132,14 @@
     
   </xacro:macro>  
 
-  <xacro:thruster name="front_left" motor="top" reflectx="1" reflecty="1" reflect_blade="-1"/>
-  <xacro:thruster name="front_right" motor="top" reflectx="1" reflecty="-1" reflect_blade="-1"/>
-  <xacro:thruster name="back_left" motor="top" reflectx="-1" reflecty="1" reflect_blade="1"/>
-  <xacro:thruster name="back_right" motor="top" reflectx="-1" reflecty="-1" reflect_blade="1"/>
+  <xacro:thruster name="front_left" motor="top" reflectx="1" reflecty="1"/>
+  <xacro:thruster name="front_right" motor="top" reflectx="1" reflecty="-1"/>
+  <xacro:thruster name="back_left" motor="top" reflectx="-1" reflecty="1"/>
+  <xacro:thruster name="back_right" motor="top" reflectx="-1" reflecty="-1"/>
 
-  <xacro:thruster name="front_left" motor="bottom" reflectx="1" reflecty="1" reflect_blade="1"/>
-  <xacro:thruster name="front_right" motor="bottom" reflectx="1" reflecty="-1" reflect_blade="-1"/>
-  <xacro:thruster name="back_left" motor="bottom" reflectx="-1" reflecty="1" reflect_blade="-1"/>
-  <xacro:thruster name="back_right" motor="bottom" reflectx="-1" reflecty="-1" reflect_blade="1"/>
+  <xacro:thruster name="front_left" motor="bottom" reflectx="1" reflecty="1"/>
+  <xacro:thruster name="front_right" motor="bottom" reflectx="1" reflecty="-1"/>
+  <xacro:thruster name="back_left" motor="bottom" reflectx="-1" reflecty="1"/>
+  <xacro:thruster name="back_right" motor="bottom" reflectx="-1" reflecty="-1"/>
    
 </robot>
