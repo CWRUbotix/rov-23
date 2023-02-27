@@ -120,80 +120,14 @@
 
     <gazebo>
       <plugin
-        filename="ignition-gazebo-lift-drag-system"
-        name="ignition::gazebo::systems::LiftDrag">
-        <air_density>1000</air_density>
-        <cla>1.2535816618911175</cla>
-        <cla_stall>-1.4326647564469914</cla_stall>
-        <cda>0</cda>
-        <cda_stall>1.4326647564469914</cda_stall>
-        <alpha_stall>1.396</alpha_stall>
-        <a0>0</a0>
-        <area>0.27637</area>
-        <upward>0 -0.707106781186547 -0.707106781186547</upward>
-        <forward>0 -0.707106781186547 0.707106781186547</forward>
-        <link_name>${thruster_name}_blade</link_name>
-        <cp>${0.35 * reflect_blade} 0 0</cp>
-      </plugin>
-
-      <plugin
-        filename="ignition-gazebo-lift-drag-system"
-        name="ignition::gazebo::systems::LiftDrag">
-        <air_density>1000</air_density>
-        <cla>1.2535816618911175</cla>
-        <cla_stall>-1.4326647564469914</cla_stall>
-        <cda>0</cda>
-        <cda_stall>1.4326647564469914</cda_stall>
-        <alpha_stall>1.396</alpha_stall>
-        <a0>0</a0>
-        <area>0.27637</area>
-        <upward>-0.707106781186547 0 -0.707106781186547</upward>
-        <forward>-0.707106781186547 0 0.707106781186547</forward>
-        <link_name>${thruster_name}_blade</link_name>
-        <cp>0 ${-0.35 * reflect_blade} 0</cp>
-      </plugin>
-
-      <plugin
-        filename="ignition-gazebo-lift-drag-system"
-        name="ignition::gazebo::systems::LiftDrag">
-
-        <air_density>1000</air_density>
-        <cla>1.2535816618911175</cla>
-        <cla_stall>-1.4326647564469914</cla_stall>
-        <cda>0</cda>
-        <cda_stall>1.4326647564469914</cda_stall>
-        <alpha_stall>1.396</alpha_stall>
-        <a0>0</a0>
-        <area>0.27637</area>
-        <upward>0 0.707106781186547 -0.707106781186547</upward>
-        <forward>0 -0.707106781186547 -0.707106781186547</forward>
-        <link_name>${thruster_name}_blade</link_name>
-        <cp>${-0.35 * reflect_blade} 0 0</cp>
-      </plugin>
-
-      <plugin
-        filename="ignition-gazebo-lift-drag-system"
-        name="ignition::gazebo::systems::LiftDrag">
-
-        <air_density>1000</air_density>
-        <cla>1.2535816618911175</cla>
-        <cla_stall>-1.4326647564469914</cla_stall>
-        <cda>0</cda>
-        <cda_stall>1.4326647564469914</cda_stall>
-        <alpha_stall>1.396</alpha_stall>
-        <a0>0</a0>
-        <area>0.27637</area>
-        <upward>0.707106781186547 0 -0.707106781186547</upward>
-        <forward>0.707106781186547 0 0.707106781186547</forward>
-        <link_name>${thruster_name}_blade</link_name>
-        <cp>0 ${0.35 * reflect_blade} 0</cp>
-      </plugin>
-
-      <plugin
-        filename="ignition-gazebo-apply-joint-force-system"
-        name="ignition::gazebo::systems::ApplyJointForce">
-        <joint_name>${thruster_name}_body_blade_joint</joint_name>
-      </plugin>
+          filename="ignition-gazebo-thruster-system"
+          name="ignition::gazebo::systems::Thruster">
+          <namespace>rov</namespace>
+          <joint_name>${thruster_name}_body_blade_joint</joint_name>
+          <thrust_coefficient>${0.004422 * reflect_blade}</thrust_coefficient>
+          <fluid_density>1000</fluid_density>
+          <propeller_diameter>0.2</propeller_diameter>
+        </plugin>
     </gazebo>
     
   </xacro:macro>  
