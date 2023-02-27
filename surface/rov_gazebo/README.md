@@ -60,3 +60,7 @@ https://www.ardusub.com/introduction/features.html
 ## Simulation
 
 https://www.ardusub.com/developers/sitl.html
+
+# Comment
+
+- At `thruster.xacro`, <cp> tag in lift-drag plugin means the direction of thrust. Multiplied `reflect_blade` to change the direction based on the angle of the blade.
