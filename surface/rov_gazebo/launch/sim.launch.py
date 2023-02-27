@@ -48,14 +48,22 @@ def generate_launch_description():
         package="ros_ign_bridge",
         executable="parameter_bridge",
         arguments=[
-            "/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_top_front_right_body_blade_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_top_back_left_body_blade_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_top_back_right_body_blade_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_bottom_front_left_body_blade_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_bottom_front_right_body_blade_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_bottom_back_left_body_blade_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_bottom_back_right_body_blade_joint/cmd_thrust@std_msgs/msg/Float64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_thrust"
+            "@std_msgs/msg/Float64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_top_front_right_body_blade_joint/cmd_thrust"
+            "@std_msgs/msg/Float64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_top_back_left_body_blade_joint/cmd_thrust"
+            "@std_msgs/msg/Float64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_top_back_right_body_blade_joint/cmd_thrust"
+            "@std_msgs/msg/Float64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_bottom_front_left_body_blade_joint/cmd_thrust"
+            "@std_msgs/msg/Float64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_bottom_front_right_body_blade_joint/cmd_thrust"
+            "@std_msgs/msg/Float64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_bottom_back_left_body_blade_joint/cmd_thrust"
+            "@std_msgs/msg/Float64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_bottom_back_right_body_blade_joint/cmd_thrust"
+            "@std_msgs/msg/Float64@ignition.msgs.Double",
         ],
         output="screen",
     )

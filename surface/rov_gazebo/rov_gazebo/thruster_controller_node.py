@@ -50,7 +50,7 @@ class ThrusterControllerNode(Node):
             topic = (
                 "model/rov/joint/thruster_"
                 + thruster["location"]
-                + "_body_blade_joint/cmd_force"
+                + "_body_blade_joint/cmd_thrust"
             )
             self.publishers_.append(self.create_publisher(msg_type, topic, qos_profile))
 
