@@ -4,9 +4,7 @@ from rclpy.executors import SingleThreadedExecutor
 
 
 class GUIEventNode(Node):
-    """
-    Superclass for all event nodes.
-    """
+    """Superclass for all event nodes."""
 
     def __init__(self, node_name: str):
         super().__init__(node_name, namespace='surface/gui',
