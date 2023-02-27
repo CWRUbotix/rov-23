@@ -141,48 +141,5 @@
   <xacro:thruster name="front_right" motor="bottom" reflectx="1" reflecty="-1" reflect_blade="-1"/>
   <xacro:thruster name="back_left" motor="bottom" reflectx="-1" reflecty="1" reflect_blade="-1"/>
   <xacro:thruster name="back_right" motor="bottom" reflectx="-1" reflecty="-1" reflect_blade="1"/>
-
-  <gazebo>
-    <plugin name="ArduPilotPlugin" filename="libArduPilotPlugin.so">
-      <!-- Port settings -->
-      <fdm_addr>127.0.0.1</fdm_addr>
-      <fdm_port_in>9002</fdm_port_in>
-      <fdm_port_out>9003</fdm_port_out>
-      <!-- <imuName>rov::body::imu_sensor</imuName> -->
-      <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
-      <lock_step>1</lock_step>
-
-      <!-- Transform from the Ignition Gazebo body frame (x-forward, y-left, z-up)
-          to the ArduPilot body frame (x-forward, y-right, z-down) -->
-      <modelXYZToAirplaneXForwardZDown>0 0 0 3.141592653589793 0 0</modelXYZToAirplaneXForwardZDown>
-
-      <!-- Transform from the Ignition Gazebo world frame (ENU)
-          to the ArduPilot world frame (NED) -->
-      <gazeboXYZToNED>0 0 0 3.141592653589793 0 1.5707963267948966</gazeboXYZToNED>
-
-      <xacro:macro name="thruster_control" params="channel jointName">
-        <!-- Thrusters -->
-        <control channel="${channel}">
-          <jointName>${jointName}</jointName>
-          <servo_min>1100</servo_min>
-          <servo_max>1900</servo_max>
-          <type>COMMAND</type>
-          <cmd_topic>/model/rov/joint/${jointName}_joint/cmd_force</cmd_topic>
-          <offset>-0.5</offset>
-          <multiplier>100</multiplier>
-        </control>
-      </xacro:macro>
-
-      <xacro:thruster_control channel="0" jointName="thruster_top_front_right_body_blade_joint"/>
-      <xacro:thruster_control channel="1" jointName="thruster_top_front_left_body_blade_joint"/>
-      <xacro:thruster_control channel="2" jointName="thruster_top_back_right_body_blade_joint"/>
-      <xacro:thruster_control channel="3" jointName="thruster_top_back_left_body_blade_joint"/> 
-
-      <xacro:thruster_control channel="4" jointName="thruster_bottom_front_right_body_blade_joint"/>
-      <xacro:thruster_control channel="5" jointName="thruster_bottom_front_left_body_blade_joint"/>
-      <xacro:thruster_control channel="6" jointName="thruster_bottom_back_right_body_blade_joint"/>
-      <xacro:thruster_control channel="7" jointName="thruster_bottom_back_left_body_blade_joint"/> 
-    </plugin>
-  </gazebo>
    
 </robot>
