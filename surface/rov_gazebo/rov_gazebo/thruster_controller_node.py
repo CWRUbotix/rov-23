@@ -43,7 +43,7 @@ class ThrusterControllerNode(Node):
         elif msg.linear.z < 0:
             self.z_control(msg.linear.z)
         else:
-            self.z_control(0.0, 0.0)
+            self.z_control(0.0)
 
     def create_publishers(self, msg_type, qos_profile=10):
         for thruster in thrusters:
@@ -56,9 +56,9 @@ class ThrusterControllerNode(Node):
 
     def z_control(self, speed):
         multiplier = 30
-        for i in range(4, 8):
-            thruster_input = speed * multiplier * thrusters[i]["reflect_blade"]
-            self.publishers_[i].publish(Float64(data=thruster_input))
+        for publisher in self.publishers_[4:8]:
+            thruster_input = speed * multiplier
+            publisher.publish(Float64(data=thruster_input))
 
     def spin(self):
         rclpy.spin(self)
