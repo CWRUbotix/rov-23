@@ -32,10 +32,12 @@ path_to_yaml: str = os.path.join(rov_gazebo_path, "description", filenameYaml)
 path_to_rov_in_world: str = os.path.join(rov_gazebo_path, "worlds", filenameRovInWorld)
 
 sensors_sdf = """
-      <sensor name="imu_sensor" type="imu">
-        <pose>0 0 0 3.141592653589793 0 0</pose>
+      <sensor name="imu" type="imu">
         <always_on>1</always_on>
-        <update_rate>1000.0</update_rate>
+        <update_rate>100</update_rate>
+        <visualize>true</visualize>
+        <topic>imu</topic>
+        <enable_metrics>true</enable_metrics>
       </sensor>
         <sensor name="camera" type="camera">
             <camera>
@@ -54,7 +56,7 @@ sensors_sdf = """
             <visualize>true</visualize>
             <topic>camera</topic>
         </sensor>
-        <sensor name="depth_camera1" type="depth_camera">
+        <sensor name="depth_camera" type="depth_camera">
           <update_rate>10</update_rate>
           <topic>depth_camera</topic>
           <camera>
