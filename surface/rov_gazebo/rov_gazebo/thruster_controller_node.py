@@ -100,6 +100,15 @@ class ThrusterControllerNode(Node):
         return thrust_list
 
     def yaw_control(self, speed, thrust_list):
+        thrust = speed * self.multiplier
+        # first: subtract thrust
+        thrust_list[0] -= thrust
+        # second: subtract thrust
+        thrust_list[1] -= thrust
+        # third: add thrust
+        thrust_list[2] += thrust
+        # fourth: add thrust
+        thrust_list[3] += thrust
         return thrust_list
 
     def publish_thrust(self, thrust_list):
