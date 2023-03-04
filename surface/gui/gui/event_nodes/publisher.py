@@ -1,16 +1,17 @@
 import re
 
-from gui.event_nodes.event_node import GUIEventNode
+from rclpy.node import Node
 from rclpy.publisher import MsgType
 
 
-class GUIEventPublisher(GUIEventNode):
+class GUIEventPublisher(Node):
     """Publisher for sending messages from the GUI."""
 
     def __init__(self, msg_type: MsgType, topic: str):
         # Name this node with a sanitized version of the topic
-        super().__init__(
-            f'gui_event_publisher_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}')
+        name: str = f'gui_event_subscriber_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}'
+        super().__init__(name, namespace="surface/gui",
+                         parameter_overrides=[])
 
         self.publisher = self.create_publisher(msg_type, topic, 10)
 
