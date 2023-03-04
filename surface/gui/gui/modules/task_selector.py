@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel
+from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel, QWidget
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 from gui.event_nodes.client import GUIEventClient
@@ -6,13 +6,12 @@ from gui.event_nodes.subscriber import GUIEventSubscriber
 
 from interfaces.srv import TaskRequest
 from interfaces.msg import TaskFeedback
-from gui.modules.module import ExecutorModule
 
 from rclpy.impl.rcutils_logger import RcutilsLogger
 
 
-class TaskSelector(ExecutorModule):
-    """Module widget that handles task selection with a dropdown."""
+class TaskSelector(QWidget):
+    """Qwidget that handles task selection with a dropdown."""
 
     # Declare signals with "object" params b/c we don't have access to
     # the ROS service object TaskRequest_Response
@@ -53,8 +52,6 @@ class TaskSelector(ExecutorModule):
         self.update_task_dropdown_signal.connect(self.update_task_dropdown)
         self.task_changed_server: GUIEventSubscriber = GUIEventSubscriber(
             TaskFeedback, 'task_feedback', self.update_task_dropdown_signal)
-
-        self.event_nodes.append(self.task_changed_server)
 
     def gui_changed_task(self, i: int):
         """Tell the back about the user selecting task with ID i."""

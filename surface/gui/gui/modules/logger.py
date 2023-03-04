@@ -3,11 +3,10 @@ from typing import Dict
 from rcl_interfaces.msg import Log
 from rclpy.logging import LoggingSeverity
 
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QCheckBox, QTextEdit
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QCheckBox, QTextEdit, QWidget
 from PyQt5.QtGui import QFont, QTextCursor, QColor
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
-from gui.modules.module import ExecutorModule
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
 # Dictionary linking LoggingSeverity to a QColor
@@ -19,7 +18,7 @@ SEVERITY_LEVELS_DICT = {LoggingSeverity.UNSET: QColor(0, 0, 0),
                         LoggingSeverity.FATAL: QColor(168, 0, 0)}
 
 
-class Logger(ExecutorModule):
+class Logger(QWidget):
     """Logging widget for displaying ROS logs."""
 
     print_log_signal: pyqtSignal = pyqtSignal(Log)
@@ -53,8 +52,6 @@ class Logger(ExecutorModule):
         self.print_log_signal.connect(self.print_log)
         self.subscriber: GUIEventSubscriber = GUIEventSubscriber(
             Log, '/rosout', self.print_log_signal)
-
-        self.event_nodes.append(self.subscriber)
 
     @pyqtSlot(Log)
     def print_log(self, message: Log) -> None:

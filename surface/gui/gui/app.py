@@ -7,8 +7,6 @@ from rclpy.node import Node
 
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QWidget
-
-from gui.modules.module import Module
 import atexit
 
 
@@ -26,7 +24,6 @@ class App(Node, QWidget):
         super(QWidget, self).__init__()
 
         self.declare_parameter('theme', '')
-        self.modules: list[Module] = []
         self.resize(1850, 720)
 
         def kill():

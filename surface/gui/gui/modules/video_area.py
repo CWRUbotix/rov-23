@@ -1,8 +1,7 @@
-from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
+from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy, QWidget
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtGui import QPixmap, QImage
 
-from gui.modules.module import ExecutorModule
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
 from sensor_msgs.msg import Image
@@ -94,7 +93,7 @@ class VideoWidget(QLabel):
         return qt_image
 
 
-class VideoArea(ExecutorModule):
+class VideoArea(QWidget):
     """Container widget handling all video streams."""
 
     # First entry here will start as the big video
@@ -127,9 +126,6 @@ class VideoArea(ExecutorModule):
             #     self.grid_layout.addWidget(video, 0, 0, 1, 3)
             # else:
             #     self.grid_layout.addWidget(video, 1, i - 1, 1, 1)
-
-        for video_widget in self.video_widgets:
-            self.event_nodes.append(video_widget.camera_subscriber)
 
     # @pyqtSlot(QWidget)
     # def set_as_big_video(self, target_widget: VideoWidget):
