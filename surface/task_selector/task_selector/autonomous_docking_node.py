@@ -89,21 +89,12 @@ class AutonomousDockingControlNode(Node):
         )
 
         # Video Streaming logic 
-        if self.type == 'video':
-            if not os.path.isfile(self.path):
-                raise RuntimeError(f'Invalid video path: {self.path}')
-            try:
-                self.vc: VideoCapture = cv2.VideoCapture(self.path)
-                self.vc.set(cv2.CAP_PROP_POS_MSEC, self.start)
-            except EOFError:
-                print('End of file')
-            video_fps: float = self.vc.get(cv2.CAP_PROP_FPS)
-        elif self.type == 'image':
+        if self.type == 'image':
             if not os.path.isfile(self.path):
                 raise RuntimeError(f'Invalid image path: {self.path}')
             self.image = cv2.imread(self.path)
             video_fps = 10
-        else:
+        else:   
             raise ValueError(f'Unknown type: {self.type}')
         # I believe this is redundant, but not quite certain yet
         self.timer = self.create_timer(1.0/video_fps, self.image_callback)
@@ -117,18 +108,23 @@ class AutonomousDockingControlNode(Node):
         return cv_image
     
     def image_callback(self, msg: Image):
-            
-            rov_msg = ROVControl()
-            rov_msg.header = msg.header
-            # Directional commands for the ROV
-            rov_msg.x = None
-            rov_msg.y = None
-            rov_msg.z = None
-            # Rotational directions for the ROV
-            rov_msg.yaw = None
-            rov_msg.pitch = None
-            rov_msg.roll = None
-            self.pixhawk_publisher.publish(rov_msg)
+        if self.type == 'image':
+            cv_image = self.handle_frame(self, self.image)
+        else:
+            raise ValueError(f'Unknown type: {self.type}')
+        
+        
+        rov_msg = ROVControl()
+        rov_msg.header = msg.header
+        # Directional commands for the ROV
+        rov_msg.x = None
+        rov_msg.y = None
+        rov_msg.z = None
+        # Rotational directions for the ROV
+        rov_msg.yaw = None
+        rov_msg.pitch = None
+        rov_msg.roll = None
+        self.pixhawk_publisher.publish(rov_msg)
 
     def load_launch_parameters(self):
         """Load the launch ROS parameters."""
@@ -159,7 +155,7 @@ class AutonomousDockingControlNode(Node):
             .get_parameter_value().integer_value
 
         self.path = os.path.join(get_package_share_directory(
-                                 'ros2_video_streamer'), self.path)
+                                 'ros2_video_streamer'), self.path)     # Change the directory?
 
 
 
