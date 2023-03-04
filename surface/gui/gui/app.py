@@ -28,10 +28,12 @@ class App(Node, QWidget):
         self.declare_parameter('theme', '')
         self.modules: list[Module] = []
         self.resize(1850, 720)
-        atexit.register(
-            lambda:
-            [self.destroy_node(),
-            rclpy.shutdown()])
+
+        def kill():
+            self.destroy_node()
+            rclpy.shutdown()
+
+        atexit.register(kill)
 
     def run_gui(self):
         # Kills with Control + C
