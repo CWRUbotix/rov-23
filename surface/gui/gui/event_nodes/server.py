@@ -28,6 +28,3 @@ class GUIEventServer(Node):
         Thread(target=self.custom_executor.spin, daemon=True,
                name=f'{name}_spin').start()
         atexit.register(self.custom_executor.shutdown)
-
-    def kill_executor(self):
-        self.custom_executor.shutdown()
