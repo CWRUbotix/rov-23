@@ -1,19 +1,20 @@
 import re
 from threading import Thread
-from gui.event_nodes.event_node import GUIEventNode
 
 from rclpy.executors import SingleThreadedExecutor
-
+from rclpy.node import Node
 from PyQt5.QtCore import pyqtBoundSignal
+import atexit
 
 
-class GUIEventSubscriber(GUIEventNode):
+class GUIEventSubscriber(Node):
     """Multithreaded subscriber for receiving messages to the GUI."""
 
     def __init__(self, msg_type: type, topic: str, signal: pyqtBoundSignal):
         # Name this node with a sanitized version of the topic
-        super().__init__(
-            f'gui_event_subscriber_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}')
+        name: str = f'gui_event_subscriber_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}'
+        super().__init__(name, namespace="surface/gui",
+                         parameter_overrides=[])
 
         self.subscription = self.create_subscription(
             msg_type, topic, signal.emit, 10)
@@ -21,7 +22,5 @@ class GUIEventSubscriber(GUIEventNode):
         self.custom_executor = SingleThreadedExecutor()
         self.custom_executor.add_node(self)
         Thread(target=self.custom_executor.spin, daemon=True,
-               name=f'{self.node_name}_spin').start()
-
-    def kill_executor(self):
-        self.custom_executor.shutdown()
+               name=f'{name}_spin').start()
+        atexit.register(self.custom_executor.shutdown)
