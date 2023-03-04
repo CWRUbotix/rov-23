@@ -7,9 +7,9 @@ from rclpy.node import Node
 
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QCloseEvent
 
 from gui.modules.module import Module
+import atexit
 
 
 class App(Node, QWidget):
@@ -28,17 +28,10 @@ class App(Node, QWidget):
         self.declare_parameter('theme', '')
         self.modules: list[Module] = []
         self.resize(1850, 720)
-
-    # Variable name a0 because it's overloading parent closeEvent method
-    def closeEvent(self, a0: QCloseEvent):
-        """Piggyback the PyQt window close to kill rclpy."""
-        # Kill all executors
-        for module in self.modules:
-            module.kill_module()
-
-        # Shutdown rclpy
-        rclpy.shutdown()
-        a0.accept()
+        atexit.register(
+            lambda:
+            [self.destroy_node(),
+            rclpy.shutdown()])
 
     def run_gui(self):
         # Kills with Control + C

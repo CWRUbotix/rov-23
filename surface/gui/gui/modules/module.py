@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget
 from typing import Union, List
 from gui.event_nodes.event_node import GUIEventNode
+import atexit
 
 
 class ExecutorModule(QWidget):
@@ -14,6 +15,7 @@ class ExecutorModule(QWidget):
     def __init__(self):
         super().__init__()
         self.event_nodes: List[GUIEventNode] = []
+        atexit.register(self.kill_module)
 
     def kill_module(self) -> None:
         """
