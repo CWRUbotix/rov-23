@@ -71,6 +71,14 @@ class ManualControlNode(Node):
             'manipulator_control',
             10
         )
+        self.manip_buttons = [X_BUTTON, O_BUTTON, TRI_BUTTON, SQUARE_BUTTON]
+
+        self.manip_ids = {
+            X_BUTTON: "claw0",
+            O_BUTTON: "claw1",
+            TRI_BUTTON: "claw2",
+            SQUARE_BUTTON: "claw3"
+        }
         self.manip_states: dict = {
             "claw0": False, 
             "claw1": False, 
@@ -140,17 +148,8 @@ class ManualControlNode(Node):
     def manip_callback(self, msg: Joy):
         buttons = msg.buttons
 
-        manip_buttons = [X_BUTTON, O_BUTTON, TRI_BUTTON, SQUARE_BUTTON]
-
-        manip_ids = {
-            X_BUTTON: "claw0",
-            O_BUTTON: "claw1",
-            TRI_BUTTON: "claw2",
-            SQUARE_BUTTON: "claw3"
-        }
-
-        for button in manip_buttons:
-            manip_id = manip_ids[button]
+        for button in self.manip_buttons:
+            manip_id = self.manip_ids[button]
 
             if buttons[button] == 1:
                 activated = True
@@ -164,7 +163,7 @@ class ManualControlNode(Node):
 
             self.last_manip_states[manip_id] = activated
 
-            msg: Manip = Manip(manip_id=manip_ids[button], activated=activated)
+            msg: Manip = Manip(manip_id=self.manip_ids[button], activated=activated)
             self.manip_publisher.publish(msg)
 
 
