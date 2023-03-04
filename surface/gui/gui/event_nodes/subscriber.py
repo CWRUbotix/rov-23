@@ -19,8 +19,8 @@ class GUIEventSubscriber(Node):
         self.subscription = self.create_subscription(
             msg_type, topic, signal.emit, 10)
 
-        self.custom_executor = SingleThreadedExecutor()
-        self.custom_executor.add_node(self)
-        Thread(target=self.custom_executor.spin, daemon=True,
+        custom_executor = SingleThreadedExecutor()
+        custom_executor.add_node(self)
+        Thread(target=custom_executor.spin, daemon=True,
                name=f'{name}_spin').start()
-        atexit.register(self.custom_executor.shutdown)
+        atexit.register(custom_executor.shutdown)

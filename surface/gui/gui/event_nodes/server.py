@@ -23,8 +23,8 @@ class GUIEventServer(Node):
 
         self.srv = self.create_service(srv_type, topic, callback)
 
-        self.custom_executor = SingleThreadedExecutor()
-        self.custom_executor.add_node(self)
-        Thread(target=self.custom_executor.spin, daemon=True,
+        custom_executor = SingleThreadedExecutor()
+        custom_executor.add_node(self)
+        Thread(target=custom_executor.spin, daemon=True,
                name=f'{name}_spin').start()
-        atexit.register(self.custom_executor.shutdown)
+        atexit.register(custom_executor.shutdown)
