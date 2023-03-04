@@ -18,7 +18,7 @@ setup(
         (os.path.join('share', package_name, 'config'),
          glob('config/*')),
     ],
-    install_requires=['setuptools'],
+    install_requires=['setuptools', 'wiringpi', 'bitstring'],
     zip_safe=True,
     maintainer='taz',
     maintainer_email='tzupfer@gmail.com',
