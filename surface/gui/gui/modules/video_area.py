@@ -89,7 +89,6 @@ class VideoWidget(QLabel):
 
         qt_image = QImage(cv_img.data, w, h, bytes_per_line, img_format)
 
-        # Move to front for early return?
         if width == 0:
             qt_image: QImage = qt_image.scaled(width, height, Qt.KeepAspectRatio)
         return qt_image
