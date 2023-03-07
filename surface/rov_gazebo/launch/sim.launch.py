@@ -35,12 +35,11 @@ def generate_launch_description():
         launch_arguments={"ign_args": world_path}.items(),
     )
 
-    # Launches the keyboard controller
-    teleop_twist_keyboard = Node(
-        package="teleop_twist_keyboard",
-        executable="teleop_twist_keyboard",
+    keyboard_driver = Node(
+        package="keyboard_driver",
+        executable="keyboard_driver_node",
         output="screen",
-        prefix="xterm -e",
+        name="keyboard_driver_node",
     )
 
     # Bridge
@@ -75,5 +74,5 @@ def generate_launch_description():
     )
 
     return LaunchDescription(
-        [gazeboLaunch, teleop_twist_keyboard, bridge, thruster_controller]
+        [gazeboLaunch, keyboard_driver, bridge, thruster_controller]
     )
