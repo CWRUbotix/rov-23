@@ -22,8 +22,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "keyboard_listener_node = keyboard_driver.keyboard_listener_node:main",
-            "twist_publisher_node = keyboard_driver.twist_publisher_node:main",
+            "keyboard_driver_node = keyboard_driver.keyboard_driver_node:main",
         ],
     },
 )

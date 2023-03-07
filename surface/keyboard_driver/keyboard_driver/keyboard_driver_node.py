@@ -69,6 +69,14 @@ class keyboardListenerNode(Node):
         self.tmr_twist = self.create_timer(0.1, self.on_tmr)
         self.linear_scale = 1
         self.angular_scale = 1
+        self.logger.info(
+            "\n".join(
+                [
+                    "Use keyboard to control ROV.",
+                    "[p] = Show this help",
+                ]
+            )
+        )
 
     def on_tmr(self):
         twist = Twist(
@@ -100,8 +108,6 @@ class keyboardListenerNode(Node):
                 key = key.char
             elif type(key) == keyboard.Key:
                 key = key.name
-
-            self.logger.info("pressed " + key)
 
             if key == FORWARD:
                 self.status["forward"] = True
@@ -149,8 +155,6 @@ class keyboardListenerNode(Node):
                 key = key.char
             elif type(key) == keyboard.Key:
                 key = key.name
-
-            self.logger.info("released " + key)
 
             if key == FORWARD:
                 self.status["forward"] = False

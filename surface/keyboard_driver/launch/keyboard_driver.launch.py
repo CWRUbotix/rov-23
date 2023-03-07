@@ -21,9 +21,9 @@ def generate_launch_description():
         [
             launch_ros.actions.Node(
                 package="keyboard_driver",
-                executable="keyboard_listener_node",
+                executable="keyboard_driver_node",
                 output="screen",
-                name="keyboard_listener_node",
+                name="keyboard_driver_node",
             ),
         ]
     )
