@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import sys
+import rclpy
 
 if sys.platform not in ("darwin", "win32"):
     import os
@@ -21,7 +22,6 @@ if sys.platform not in ("darwin", "win32"):
 
 from pynput import keyboard
 
-import rclpy
 from rclpy.node import Node
 from rov_interfaces.msg import KeyboardStatus
 from geometry_msgs.msg import Twist, Vector3
