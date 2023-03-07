@@ -24,6 +24,7 @@ from pynput import keyboard
 import rclpy
 from rclpy.node import Node
 from rov_interfaces.msg import KeyboardStatus
+from geometry_msgs.msg import Twist, Vector3
 
 
 # key bindings
@@ -41,7 +42,7 @@ PITCH_DOWN = "k"
 YAW_LEFT = "h"
 YAW_RIGHT = ";"
 
-HELP = "h"
+HELP = "p"
 
 
 class keyboardListenerNode(Node):
@@ -64,13 +65,30 @@ class keyboardListenerNode(Node):
         self.pub_status = self.create_publisher(
             KeyboardStatus, "keyboard_status", qos_profile=10
         )
+        self.pub_twist = self.create_publisher(Twist, "cmd_vel", qos_profile=10)
+        self.tmr_twist = self.create_timer(0.1, self.on_tmr)
+        self.linear_scale = 1
+        self.angular_scale = 1
 
-    def spin(self):
-        with keyboard.Listener(
-            on_press=self.on_press, on_release=self.on_release
-        ) as listener:
-            while rclpy.ok() and listener.running:
-                rclpy.spin_once(self, timeout_sec=0.1)
+    def on_tmr(self):
+        twist = Twist(
+            linear=Vector3(
+                x=float(
+                    (self.status["forward"] - self.status["backward"])
+                    * self.linear_scale
+                ),
+                y=float(
+                    (self.status["left"] - self.status["right"]) * self.linear_scale
+                ),
+                z=float((self.status["up"] - self.status["down"]) * self.linear_scale),
+            ),
+            angular=Vector3(
+                x=float(self.status["roll_left"] - self.status["roll_right"]),
+                y=float(self.status["pitch_up"] - self.status["pitch_down"]),
+                z=float(self.status["yaw_left"] - self.status["yaw_right"]),
+            ),
+        )
+        self.pub_twist.publish(twist)
 
     @property
     def logger(self):
@@ -113,11 +131,8 @@ class keyboardListenerNode(Node):
                 self.logger.info(
                     "\n".join(
                         [
-                            "Use keyboard to change speed.",
-                            "[h] = Show this help",
-                            "[Up]/[Down] = Forward and backward",
-                            "[Left]/[Right] = Clockwise and counterclockwise"
-                            "[Space] = Stop",
+                            "Use keyboard to control ROV.",
+                            "[p] = Show this help",
                         ]
                     )
                 )
@@ -130,7 +145,7 @@ class keyboardListenerNode(Node):
 
     def on_release(self, key):
         try:
-            if type(key) == KeyCode:
+            if type(key) == keyboard.KeyCode:
                 key = key.char
             elif type(key) == keyboard.Key:
                 key = key.name
@@ -167,6 +182,13 @@ class keyboardListenerNode(Node):
         except Exception as e:
             self.logger.error(str(e))
             raise
+
+    def spin(self):
+        with keyboard.Listener(
+            on_press=self.on_press, on_release=self.on_release
+        ) as listener:
+            while rclpy.ok() and listener.running:
+                rclpy.spin_once(self, timeout_sec=0.1)
 
 
 def main(args=None):
