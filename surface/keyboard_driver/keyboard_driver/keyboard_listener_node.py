@@ -12,20 +12,13 @@ from pynput import keyboard
 
 import rclpy
 from rclpy.node import Node
-from rclpy.parameter import Parameter
-import std_msgs.msg
+from std_msgs.msg import String
 
 
 class keyboardListenerNode(Node):
     def __init__(self):
         super().__init__("keyboard_listener_node")
-        self.pub_glyph = self.create_publisher(
-            std_msgs.msg.String, "glyphkey_pressed", qos_profile=10
-        )
-        # todo: when ROS2 supports Enums, use them: https://github.com/ros2/rosidl/issues/260
-        self.pub_code = self.create_publisher(
-            std_msgs.msg.UInt32, "key_pressed", qos_profile=10
-        )
+        self.pub_code = self.create_publisher(String, "key_pressed", qos_profile=10)
 
     def spin(self):
         with keyboard.Listener(
@@ -44,22 +37,13 @@ class keyboardListenerNode(Node):
 
     def on_press(self, key):
         try:
-            char = getattr(key, "char", None)
-            if isinstance(char, str):
-                self.logger.info("pressed " + char)
-                self.pub_glyph.publish(self.pub_glyph.msg_type(data=char))
-            else:
-                try:
-                    # known keys like spacebar, ctrl
-                    name = key.name
-                    vk = key.value.vk
-                except AttributeError:
-                    # unknown keys like headphones skip song button
-                    name = "UNKNOWN"
-                    vk = key.vk
-                self.logger.info("pressed {} ({})".format(name, vk))
-                # todo: These values are not cross-platform. When ROS2 supports Enums, use them instead
-                self.pub_code.publish(self.pub_code.msg_type(data=vk))
+            if type(key) == KeyCode:
+                key = key.char
+            elif type(key) == keyboard.Key:
+                key = key.name
+
+            self.logger.info("pressed " + key)
+            self.pub_code.publish(String(data=key))
         except Exception as e:
             self.logger.error(str(e))
             raise
