@@ -12,17 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
 import rclpy
 
-if sys.platform not in ("darwin", "win32"):
-    import os
-
-    os.environ.setdefault("DISPLAY", ":0")
-
-from pynput import keyboard
-
 from rclpy.node import Node
+from pynput import keyboard
 from rov_interfaces.msg import KeyboardStatus
 from geometry_msgs.msg import Twist, Vector3
 
