@@ -84,9 +84,18 @@ class keyboardListenerNode(Node):
                 z=float((self.status["up"] - self.status["down"]) * self.linear_scale),
             ),
             angular=Vector3(
-                x=float(self.status["roll_left"] - self.status["roll_right"]),
-                y=float(self.status["pitch_up"] - self.status["pitch_down"]),
-                z=float(self.status["yaw_left"] - self.status["yaw_right"]),
+                x=float(
+                    (self.status["roll_right"] - self.status["roll_left"])
+                    * self.angular_scale
+                ),
+                y=float(
+                    (self.status["pitch_down"] - self.status["pitch_up"])
+                    * self.angular_scale
+                ),
+                z=float(
+                    (self.status["yaw_left"] - self.status["yaw_right"])
+                    * self.angular_scale
+                ),
             ),
         )
         self.pub_twist.publish(twist)
