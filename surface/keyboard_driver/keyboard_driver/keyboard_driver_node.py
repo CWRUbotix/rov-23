@@ -37,6 +37,31 @@ YAW_RIGHT = ";"
 
 HELP = "p"
 
+help_txt = """
+Use keyboard to control ROV
+
+Key Bindings:
+   [2]                     
+   [w]            [i]      
+[a][s][d]   [h][j][k][l][;]
+   [x]                     
+
+[w] = Forward
+[s] = Backward
+[a] = Left
+[d] = Right
+[2] = Up
+[x] = Down
+
+[j] = Roll Left
+[l] = Roll Right
+[i] = Pitch Up
+[k] = Pitch Down
+[h] = Yaw Left
+[;] = Yaw Right
+
+[p] = Show this help"""
+
 
 class keyboardListenerNode(Node):
     def __init__(self):
@@ -62,35 +87,7 @@ class keyboardListenerNode(Node):
         self.tmr_twist = self.create_timer(0.1, self.on_tmr)
         self.linear_scale = 1
         self.angular_scale = 1
-        self.logger.info(
-            "\n".join(
-                [
-                    "Use keyboard to control ROV.",
-                    "",
-                    "Key Bindings:",
-                    "   [2]                     ",
-                    "   [w]            [i]      ",
-                    "[a][s][d]   [h][j][k][l][;]",
-                    "   [z]                     ",
-                    "",
-                    "[w] = Forward",
-                    "[s] = Backward",
-                    "[a] = Left",
-                    "[d] = Right",
-                    "[2] = Up",
-                    "[x] = Down",
-                    "",
-                    "[j] = Roll Left",
-                    "[l] = Roll Right",
-                    "[i] = Pitch Up",
-                    "[k] = Pitch Down",
-                    "[h] = Yaw Left",
-                    "[;] = Yaw Right",
-                    "",
-                    "[p] = Show this help",
-                ]
-            )
-        )
+        self.logger.info(help_txt)
 
     def on_tmr(self):
         twist = Twist(
@@ -157,14 +154,7 @@ class keyboardListenerNode(Node):
             if key == YAW_RIGHT:
                 self.status["yaw_right"] = True
             if key == HELP:
-                self.logger.info(
-                    "\n".join(
-                        [
-                            "Use keyboard to control ROV.",
-                            "[p] = Show this help",
-                        ]
-                    )
-                )
+                self.logger.info(help_txt)
 
             self.pub_status.publish(KeyboardStatus(**self.status))
 
