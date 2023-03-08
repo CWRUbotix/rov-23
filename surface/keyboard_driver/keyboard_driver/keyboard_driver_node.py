@@ -66,6 +66,27 @@ class keyboardListenerNode(Node):
             "\n".join(
                 [
                     "Use keyboard to control ROV.",
+                    "",
+                    "Key Bindings:",
+                    "   [2]                     ",
+                    "   [w]            [i]      ",
+                    "[a][s][d]   [h][j][k][l][;]",
+                    "   [z]                     ",
+                    "",
+                    "[w] = Forward",
+                    "[s] = Backward",
+                    "[a] = Left",
+                    "[d] = Right",
+                    "[2] = Up",
+                    "[x] = Down",
+                    "",
+                    "[j] = Roll Left",
+                    "[l] = Roll Right",
+                    "[i] = Pitch Up",
+                    "[k] = Pitch Down",
+                    "[h] = Yaw Left",
+                    "[;] = Yaw Right",
+                    "",
                     "[p] = Show this help",
                 ]
             )
