@@ -94,9 +94,27 @@ class ThrusterControllerNode(Node):
         return thrust_list
 
     def roll_control(self, speed, thrust_list):
+        thrust = speed * self.multiplier
+        # 5th: add thrust
+        thrust_list[4] += thrust
+        # 6th: subtract thrust
+        thrust_list[5] -= thrust
+        # 7th: add thrust
+        thrust_list[6] += thrust
+        # 8th: subtract thrust
+        thrust_list[7] -= thrust
         return thrust_list
 
     def pitch_control(self, speed, thrust_list):
+        thrust = speed * self.multiplier
+        # 5th: subtract thrust
+        thrust_list[4] -= thrust
+        # 6th: subtract thrust
+        thrust_list[5] -= thrust
+        # 7th: add thrust
+        thrust_list[6] += thrust
+        # 8th: add thrust
+        thrust_list[7] += thrust
         return thrust_list
 
     def yaw_control(self, speed, thrust_list):
