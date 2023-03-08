@@ -12,9 +12,11 @@ $ sudo apt-get install ros-galactic-ros-ign
 $ sudo apt-get install ros-galactic-ros-ign-bridge
 ```
 
-## 3. Ardupilot lib
+## 3. Pynput
 
-https://github.com/srmainwaring/ardupilot_gazebo/wiki
+```
+$ pip install pynput
+```
 
 # Instruction
 
@@ -41,15 +43,11 @@ $ ros2 launch rov_gazebo sim.launch.py
 
 ## 4. Play simulation
 
-press play button or space bar at gazebo window
+Press play button or space bar at gazebo window
 
-## 5. Start thruster
+## 5. Move ROV
 
-Directory doesn't matter here. 24 means the power of the thruster.
-
-```
-$ ign topic -t "/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_force" -m ignition.msgs.Double  -p "data: 24"
-```
+See help message from terminal
 
 # Reference
 
@@ -60,7 +58,3 @@ https://www.ardusub.com/introduction/features.html
 ## Simulation
 
 https://www.ardusub.com/developers/sitl.html
-
-# Comment
-
-- At `thruster.xacro`, <cp> tag in lift-drag plugin means the direction of thrust. Multiplied `reflect_blade` to change the direction based on the angle of the blade.
