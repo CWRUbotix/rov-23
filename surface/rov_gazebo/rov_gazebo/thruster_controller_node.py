@@ -1,12 +1,14 @@
+from typing import List
 import rclpy
-from rclpy.node import Node
+from rclpy.node import Node, Publisher
 from std_msgs.msg import Float64
 from geometry_msgs.msg import Twist
 
 
 class ThrusterControllerNode(Node):
     def __init__(self):
-        super().__init__("thruster_controller_node")
+        super().__init__("thruster_controller_node",
+                         parameter_overrides=[])
         self.thrusters = [
             {"location": "top_front_left"},
             {"location": "top_front_right"},
@@ -19,12 +21,12 @@ class ThrusterControllerNode(Node):
         ]
         self.multiplier = 3
 
-        self.publishers_ = []
+        self.publishers_: List[Publisher] = []
         self.subscriber_ = self.create_subscription(
             Twist, "/cmd_vel", self.control, qos_profile=10
         )
 
-    def create_publishers(self, msg_type, qos_profile=10):
+    def create_publishers(self, msg_type: type, qos_profile: int = 10):
         for thruster in self.thrusters:
             topic = (
                 "model/rov/joint/thruster_"
@@ -33,7 +35,7 @@ class ThrusterControllerNode(Node):
             )
             self.publishers_.append(self.create_publisher(msg_type, topic, qos_profile))
 
-    def control(self, msg):
+    def control(self, msg: Twist):
         thrust_list = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         thrust_list = self.x_control(msg.linear.x, thrust_list)
         thrust_list = self.y_control(msg.linear.y, thrust_list)
@@ -43,7 +45,7 @@ class ThrusterControllerNode(Node):
         thrust_list = self.yaw_control(msg.angular.z, thrust_list)
         self.publish_thrust(thrust_list)
 
-    def x_control(self, speed, thrust_list):
+    def x_control(self, speed: float, thrust_list: List[float]):
         thrust = speed * self.multiplier
         # first: add thrust
         thrust_list[0] += thrust
@@ -55,7 +57,7 @@ class ThrusterControllerNode(Node):
         thrust_list[3] += thrust
         return thrust_list
 
-    def y_control(self, speed, thrust_list):
+    def y_control(self, speed: float, thrust_list: List[float]):
         thrust = speed * self.multiplier
         # first: subtract thrust
         thrust_list[0] -= thrust
@@ -67,7 +69,7 @@ class ThrusterControllerNode(Node):
         thrust_list[3] -= thrust
         return thrust_list
 
-    def z_control(self, speed, thrust_list):
+    def z_control(self, speed: float, thrust_list: List[float]):
         thrust = speed * self.multiplier
         # 5th: add thrust
         thrust_list[4] += thrust
@@ -79,7 +81,7 @@ class ThrusterControllerNode(Node):
         thrust_list[7] += thrust
         return thrust_list
 
-    def roll_control(self, speed, thrust_list):
+    def roll_control(self, speed: float, thrust_list: List[float]):
         thrust = speed * self.multiplier
         # 5th: add thrust
         thrust_list[4] += thrust
@@ -91,7 +93,7 @@ class ThrusterControllerNode(Node):
         thrust_list[7] -= thrust
         return thrust_list
 
-    def pitch_control(self, speed, thrust_list):
+    def pitch_control(self, speed: float, thrust_list: List[float]):
         thrust = speed * self.multiplier
         # 5th: subtract thrust
         thrust_list[4] -= thrust
@@ -103,7 +105,7 @@ class ThrusterControllerNode(Node):
         thrust_list[7] += thrust
         return thrust_list
 
-    def yaw_control(self, speed, thrust_list):
+    def yaw_control(self, speed: float, thrust_list: List[float]):
         thrust = speed * self.multiplier
         # first: subtract thrust
         thrust_list[0] -= thrust
@@ -115,7 +117,7 @@ class ThrusterControllerNode(Node):
         thrust_list[3] += thrust
         return thrust_list
 
-    def publish_thrust(self, thrust_list):
+    def publish_thrust(self, thrust_list: List[float]):
         for i in range(len(self.thrusters)):
             self.publishers_[i].publish(Float64(data=thrust_list[i]))
 
@@ -123,10 +125,10 @@ class ThrusterControllerNode(Node):
         rclpy.spin(self)
 
 
-def main(args=None):
-    rclpy.init(args=args)
+def main():
+    rclpy.init()
 
-    print("Keyboard controller node started")
+    print("Thruster controller node started")
 
     node = ThrusterControllerNode()
     node.create_publishers(Float64)
