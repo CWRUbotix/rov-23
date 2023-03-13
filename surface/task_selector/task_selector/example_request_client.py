@@ -2,15 +2,16 @@ import time
 
 import rclpy
 from rclpy.node import Node
-from rov_interfaces.srv import TaskRequest
+from interfaces.srv import TaskRequest
 from task_selector.tasks import Tasks
 
 
 class ExampleRequestClient(Node):
 
     def __init__(self):
-        super().__init__('example_request_client')
-        self.cli = self.create_client(TaskRequest, 'task_request')
+        super().__init__('example_request_client',
+                         namespace='surface')
+        self.cli = self.create_client(TaskRequest, 'gui/task_request')
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
         self.req = TaskRequest.Request()

@@ -6,14 +6,15 @@ from rclpy.action import ActionServer, CancelResponse
 from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
 
-from rov_interfaces.action import BasicTask
+from interfaces.action import BasicTask
 
 
 class BasicTaskTimedNode(Node):
 
     def __init__(self):
         super().__init__('basic_task_timed',
-                         parameter_overrides=[])
+                         parameter_overrides=[],
+                         namespace='surface')
         self._action_server = ActionServer(
             self,
             BasicTask,

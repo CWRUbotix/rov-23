@@ -2,28 +2,29 @@ import rclpy
 from rclpy.action import ActionClient
 from rclpy.node import Node
 
-from rov_interfaces.srv import TaskRequest
-from rov_interfaces.msg import TaskFeedback
+from interfaces.srv import TaskRequest
+from interfaces.msg import TaskFeedback
 
-from rov_interfaces.action import Example
-from rov_interfaces.action import BasicTask
+from interfaces.action import Example
+from interfaces.action import BasicTask
 
 from task_selector.tasks import Tasks
 
 
-class TaskRequestor(Node):
+class TaskSelector(Node):
 
     def __init__(self):
         # creation of a Node with its name as input
-        super().__init__('task_requestor',
-                         parameter_overrides=[])
+        super().__init__('task_selector',
+                         parameter_overrides=[],
+                         namespace='surface')
 
         # create service to handle requests for task switching
         self.request_server = self.create_service(
-            TaskRequest, 'task_request', self.request_task_callback)
+            TaskRequest, 'gui/task_request', self.request_task_callback)
 
         self.feedback_server = self.create_publisher(
-            TaskFeedback, 'task_feedback', 10)
+            TaskFeedback, 'gui/task_feedback', 10)
 
         # instantiates new action clients with inputs of node,
         # action type, action name
@@ -160,6 +161,6 @@ class TaskRequestor(Node):
 def main():
     rclpy.init()
 
-    action_client = TaskRequestor()
+    action_client = TaskSelector()
 
     rclpy.spin(action_client)

@@ -4,8 +4,8 @@ from rclpy.action import ActionServer, CancelResponse
 from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
 
-from rov_interfaces.action import BasicTask
-from rov_interfaces.msg import ROVControl
+from interfaces.action import BasicTask
+from interfaces.msg import ROVControl
 from sensor_msgs.msg import Joy
 
 # Button meanings for PS5 Control might be different for others
@@ -35,7 +35,6 @@ DPADHOR:         int = 6
 DPADVERT:        int = 7
 
 # Range of values Pixhawk takes
-# TODO link to doc about this
 # In microseconds
 ZERO_SPEED: int = 1500
 RANGE_SPEED: int = 400
@@ -46,7 +45,8 @@ class ManualControlNode(Node):
 
     def __init__(self):
         super().__init__('manual_control_node',
-                         parameter_overrides=[])
+                         parameter_overrides=[],
+                         namespace='surface')
         # TODO would Service make more sense then Actions?
         self._action_server: ActionServer = ActionServer(
             self,

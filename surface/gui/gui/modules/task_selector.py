@@ -1,18 +1,17 @@
-from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel
+from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel, QWidget
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 from gui.event_nodes.client import GUIEventClient
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
-from rov_interfaces.srv import TaskRequest
-from rov_interfaces.msg import TaskFeedback
-from gui.modules.module import Module
+from interfaces.srv import TaskRequest
+from interfaces.msg import TaskFeedback
 
 from rclpy.impl.rcutils_logger import RcutilsLogger
 
 
-class TaskSelector(Module):
-    """Module widget that handles task selection with a dropdown."""
+class TaskSelector(QWidget):
+    """Qwidget that handles task selection with a dropdown."""
 
     # Declare signals with "object" params b/c we don't have access to
     # the ROS service object TaskRequest_Response
@@ -79,6 +78,3 @@ class TaskSelector(Module):
         self.task_changed_server.get_logger().info(
             f'GUI received task changed to: {self.combo_box.currentText()}' +
             f' at {self.combo_box.currentIndex()}')
-
-    def kill_all_executors(self):
-        self.task_changed_server.kill_executor()

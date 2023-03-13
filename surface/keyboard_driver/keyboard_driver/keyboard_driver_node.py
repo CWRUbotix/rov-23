@@ -1,22 +1,8 @@
-# Copyright 2023 CWRUbotix
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import rclpy
 
 from rclpy.node import Node
 from pynput import keyboard
-from rov_interfaces.msg import KeyboardStatus
+from interfaces.msg import KeyboardStatus
 from geometry_msgs.msg import Twist, Vector3
 
 
@@ -37,7 +23,7 @@ YAW_RIGHT = ";"
 
 HELP = "p"
 
-help_txt = """
+HELP_MSG = """
 Use keyboard to control ROV
 
 Key Bindings:
@@ -87,7 +73,7 @@ class keyboardListenerNode(Node):
         self.tmr_twist = self.create_timer(0.1, self.on_tmr)
         self.linear_scale = 1
         self.angular_scale = 1
-        self.logger.info(help_txt)
+        self.logger.info(HELP_MSG)
 
     def on_tmr(self):
         twist = Twist(
@@ -154,7 +140,7 @@ class keyboardListenerNode(Node):
             if key == YAW_RIGHT:
                 self.status["yaw_right"] = True
             if key == HELP:
-                self.logger.info(help_txt)
+                self.logger.info(HELP_MSG)
 
             self.pub_status.publish(KeyboardStatus(**self.status))
 

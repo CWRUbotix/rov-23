@@ -4,10 +4,10 @@ from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
-    """Asynchronously launches gui node."""
+    """Asynchronously launches pilot's gui node."""
     gui_node: Node = Node(
         package='gui',
-        executable='run_app',
+        executable='run_pilot',
         parameters=[
                 {'theme': LaunchConfiguration('theme', default='')}]
     )
