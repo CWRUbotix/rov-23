@@ -27,10 +27,10 @@ HELP_MSG = """
 Use keyboard to control ROV
 
 Key Bindings:
-   [2]                     
-   [w]            [i]      
+   [2]
+   [w]            [i]
 [a][s][d]   [h][j][k][l][;]
-   [x]                     
+   [x]
 
 [w] = Forward
 [s] = Backward
