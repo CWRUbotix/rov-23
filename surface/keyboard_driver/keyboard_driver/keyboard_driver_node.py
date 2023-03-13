@@ -51,7 +51,8 @@ Key Bindings:
 
 class keyboardListenerNode(Node):
     def __init__(self):
-        super().__init__("keyboard_listener_node")
+        super().__init__("keyboard_listener_node",
+                         parameter_overrides=[])
         self.status = {
             "forward": False,
             "backward": False,
@@ -110,9 +111,9 @@ class keyboardListenerNode(Node):
 
     def on_press(self, key):
         try:
-            if type(key) == keyboard.KeyCode:
+            if isinstance(key, keyboard.KeyCode):
                 key = key.char
-            elif type(key) == keyboard.Key:
+            elif isinstance(key, keyboard.Key):
                 key = key.name
 
             if key == FORWARD:
@@ -150,9 +151,9 @@ class keyboardListenerNode(Node):
 
     def on_release(self, key):
         try:
-            if type(key) == keyboard.KeyCode:
+            if isinstance(key, keyboard.KeyCode):
                 key = key.char
-            elif type(key) == keyboard.Key:
+            elif isinstance(key, keyboard.Key):
                 key = key.name
 
             if key == FORWARD:
@@ -194,8 +195,8 @@ class keyboardListenerNode(Node):
                 rclpy.spin_once(self, timeout_sec=0.1)
 
 
-def main(args=None):
-    rclpy.init(args=args)
+def main():
+    rclpy.init()
     keyboardListenerNode().spin()
 
 
