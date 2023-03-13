@@ -10,14 +10,14 @@ class ThrusterControllerNode(Node):
         super().__init__("thruster_controller_node",
                          parameter_overrides=[])
         self.thrusters = [
-            {"location": "top_front_left"},
-            {"location": "top_front_right"},
-            {"location": "top_back_left"},
-            {"location": "top_back_right"},
-            {"location": "bottom_front_left"},
-            {"location": "bottom_front_right"},
-            {"location": "bottom_back_left"},
-            {"location": "bottom_back_right"},
+            "top_front_left",
+            "top_front_right",
+            "top_back_left",
+            "top_back_right",
+            "bottom_front_left",
+            "bottom_front_right",
+            "bottom_back_left",
+            "bottom_back_right",
         ]
         self.multiplier = 3
 
@@ -30,7 +30,7 @@ class ThrusterControllerNode(Node):
         for thruster in self.thrusters:
             topic = (
                 "model/rov/joint/thruster_"
-                + thruster["location"]
+                + thruster
                 + "_body_blade_joint/cmd_thrust"
             )
             self.publishers_.append(self.create_publisher(msg_type, topic, qos_profile))
