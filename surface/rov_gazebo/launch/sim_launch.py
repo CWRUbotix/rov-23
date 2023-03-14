@@ -37,11 +37,12 @@ def generate_launch_description():
         remappings=[(f"/{NS}/manual_control", "/manual_control")]
     )
 
-    # Bridge
-    bridge = Node(
+    # Thrust Bridge
+    thrust_bridge = Node(
         package="ros_ign_bridge",
         executable="parameter_bridge",
         namespace=NS,
+        name="thrust_bridge",
         arguments=[
             "/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_thrust"
             "@std_msgs/msg/Float64@ignition.msgs.Double",
@@ -81,6 +82,26 @@ def generate_launch_description():
         output="screen",
     )
 
+    cam_bridge = Node(
+        package="ros_ign_bridge",
+        executable="parameter_bridge",
+        namespace=NS,
+        name="cam_bridge",
+        arguments=["/bottom_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
+                   "/front_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
+                   "/manip_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
+                   "/depth_cam@sensor_msgs/msg/Image@ignition.msgs.Image",
+                   "/depth_cam/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked",
+                   ],
+        remappings=[(f"/{NS}/bottom_cam/image_raw", "/bottom_cam/image_raw"),
+                    (f"/{NS}/front_cam/image_raw", "/front_cam/image_raw"),
+                    (f"/{NS}/manip_cam/image_raw", "/manip_cam/image_raw"),
+                    (f"/{NS}/depth_cam", "/depth_cam/image_raw"),
+                    (f"/{NS}/depth_cam/points", "/depth_cam/points")],
+
+        output="screen",
+    )
+
     thruster_controller = Node(
         package="rov_gazebo",
         executable="thruster_controller_node",
@@ -99,5 +120,10 @@ def generate_launch_description():
     )
 
     return LaunchDescription(
-        [gazeboLaunch, keyboard_driver, bridge, thruster_controller, surface_launch]
+        [gazeboLaunch,
+         keyboard_driver,
+         thrust_bridge,
+         cam_bridge,
+         thruster_controller,
+         surface_launch]
     )

@@ -19,7 +19,7 @@ $ colcon build
 
 ```
 $ cd ~/rov_23_ws
-$ ros2 launch rov_gazebo sim.launch.py
+$ ros2 launch rov_gazebo sim_launch.py
 ```
 
 ## 3. Play simulation
@@ -28,7 +28,7 @@ Press play button or space bar at gazebo window
 
 ## 4. Move ROV
 
-See help message from terminal
+See help message from terminal or use PS5 controller
 
 # Reference
 

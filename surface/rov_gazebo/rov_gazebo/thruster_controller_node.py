@@ -77,8 +77,6 @@ class ThrusterControllerNode(Node):
         thrust_list = self.roll_control(msg.angular.x, thrust_list)
         thrust_list = self.pitch_control(msg.angular.y, thrust_list)
         thrust_list = self.yaw_control(msg.angular.z, thrust_list)
-
-        self.get_logger().info(f"in callback{str(thrust_list)}")
         self.publish_thrust(thrust_list)
 
     def x_control(self, speed: float, thrust_list: List[float]):
