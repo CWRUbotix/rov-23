@@ -14,7 +14,7 @@ def generate_launch_description():
     manual_control_node: Node = Node(
         package='task_selector',
         executable='manual_control_node',
-        remappings=[("/surface/manual_control", "/manual_control"),]
+        remappings=[("/surface/manual_control", "/manual_control")]
     )
 
     # # example of node requesting tasks
