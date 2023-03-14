@@ -8,6 +8,7 @@ filenameXacro: str = "rov.xacro"
 filenameURDF: str = "rov.urdf"
 filenameSDF: str = "rov.sdf"
 filenameYaml: str = "rov_description_params.yaml"
+filenameSensors: str = "sensors.sdf"
 filenameRovInWorld: str = "rov_in_world.sdf"
 
 path_to_world: str = os.path.join(rov_gazebo_path, "worlds", filenameWorld)
@@ -15,88 +16,16 @@ path_to_xacro: str = os.path.join(rov_gazebo_path, "description", filenameXacro)
 path_to_urdf: str = os.path.join(rov_gazebo_path, "description", filenameURDF)
 path_to_sdf: str = os.path.join(rov_gazebo_path, "description", filenameSDF)
 path_to_yaml: str = os.path.join(rov_gazebo_path, "description", filenameYaml)
+path_to_sensors: str = os.path.join(rov_gazebo_path, "description", filenameSensors)
 path_to_rov_in_world: str = os.path.join(rov_gazebo_path, "worlds", filenameRovInWorld)
 
-sensors_sdf = """
-      <sensor name="imu" type="imu">
-        <always_on>1</always_on>
-        <update_rate>100</update_rate>
-        <visualize>true</visualize>
-        <topic>imu</topic>
-        <enable_metrics>true</enable_metrics>
-      </sensor>
-        <sensor name="front_cam" type="camera">
-            <camera>
-                <horizontal_fov>1.047</horizontal_fov>
-                <image>
-                <width>320</width>
-                <height>240</height>
-                </image>
-                <clip>
-                <near>0.1</near>
-                <far>100</far>
-                </clip>
-            </camera>
-            <always_on>1</always_on>
-            <update_rate>30</update_rate>
-            <visualize>true</visualize>
-            <topic>front_cam/image_raw</topic>
-        </sensor>
-        <sensor name="bottom_cam" type="camera">
-            <camera>
-                <horizontal_fov>1.047</horizontal_fov>
-                <image>
-                <width>320</width>
-                <height>240</height>
-                </image>
-                <clip>
-                <near>0.1</near>
-                <far>100</far>
-                </clip>
-            </camera>
-            <always_on>1</always_on>
-            <update_rate>30</update_rate>
-            <visualize>true</visualize>
-            <topic>bottom_cam/image_raw</topic>
-        </sensor>
-        <sensor name="manip_cam" type="camera">
-            <camera>
-                <horizontal_fov>1.047</horizontal_fov>
-                <image>
-                <width>320</width>
-                <height>240</height>
-                </image>
-                <clip>
-                <near>0.1</near>
-                <far>100</far>
-                </clip>
-            </camera>
-            <always_on>1</always_on>
-            <update_rate>30</update_rate>
-            <visualize>true</visualize>
-            <topic>manip_cam/image_raw</topic>
-        </sensor>
-        <sensor name="depth_cam" type="depth_camera">
-          <update_rate>10</update_rate>
-          <topic>depth_cam</topic>
-          <camera>
-            <horizontal_fov>1.05</horizontal_fov>
-            <image>
-              <width>256</width>
-              <height>256</height>
-              <format>R_FLOAT32</format>
-            </image>
-            <clip>
-              <near>0.1</near>
-              <far>100.0</far>
-            </clip>
-          </camera>
-          </sensor>
-      """
 
 with open(path_to_urdf, "w") as f:
     urdf = os.popen("xacro " + path_to_xacro + " params_path:=" + path_to_yaml).read()
     f.writelines(urdf)
+
+with open(path_to_sensors, "r") as f:
+    sensors_sdf = f.readlines()
 
 with open(path_to_sdf, "w") as f:
     sdf = os.popen("gz sdf -p " + path_to_urdf).read().splitlines(True)
