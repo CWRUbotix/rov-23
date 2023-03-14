@@ -32,7 +32,6 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/TaskFeedback.msg"
   "msg/ROVControl.msg"
   "msg/Armed.msg"
-  "msg/KeyboardStatus.msg"
   DEPENDENCIES std_msgs
 )
 

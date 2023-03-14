@@ -1,8 +1,16 @@
 from typing import List
+
 import rclpy
+from geometry_msgs.msg import Twist, Vector3
 from rclpy.node import Node, Publisher
 from std_msgs.msg import Float64
-from geometry_msgs.msg import Twist
+
+from interfaces.msg import ROVControl
+
+# Range of values Pixhawk takes
+# In microseconds
+ZERO_SPEED: int = 1500
+RANGE_SPEED: int = 400
 
 
 class ThrusterControllerNode(Node):
@@ -19,20 +27,46 @@ class ThrusterControllerNode(Node):
             "bottom_back_left",
             "bottom_back_right",
         ]
+
+        self.linear_scale = 1
+        self.angular_scale = 1
         self.multiplier = 3
 
         self.publishers_: List[Publisher] = []
-        self.subscriber_ = self.create_subscription(
-            Twist, "/cmd_vel", self.control, qos_profile=10
+        self.sub_keyboard = self.create_subscription(ROVControl,
+                                                     "manual_control",
+                                                     self.control_callback,
+                                                     qos_profile=10)
+
+    def control_callback(self, msg: ROVControl):
+        twist = Twist(
+            linear=Vector3(
+                x=float(
+                    (msg.x - ZERO_SPEED) / RANGE_SPEED * self.linear_scale
+                ),
+                y=float(
+                        (msg.y - ZERO_SPEED) / RANGE_SPEED * self.linear_scale
+                ),
+                z=float((msg.z - ZERO_SPEED) / RANGE_SPEED * self.linear_scale),
+            ),
+            angular=Vector3(
+                x=float(
+                     (msg.roll - ZERO_SPEED) / RANGE_SPEED * self.angular_scale
+                ),
+                y=float(
+                     (msg.pitch - ZERO_SPEED) / RANGE_SPEED * self.angular_scale
+                ),
+                z=float(
+                     (msg.yaw - ZERO_SPEED) / RANGE_SPEED * self.angular_scale
+                ),
+            ),
         )
+        self.control(twist)
 
     def create_publishers(self, msg_type: type, qos_profile: int = 10):
+        ns: str = self.get_namespace()
         for thruster in self.thrusters:
-            topic = (
-                "model/rov/joint/thruster_"
-                + thruster
-                + "_body_blade_joint/cmd_thrust"
-            )
+            topic = f'{ns}/model/rov/joint/thruster_{thruster}_body_blade_joint/cmd_thrust'
             self.publishers_.append(self.create_publisher(msg_type, topic, qos_profile))
 
     def control(self, msg: Twist):
@@ -43,6 +77,8 @@ class ThrusterControllerNode(Node):
         thrust_list = self.roll_control(msg.angular.x, thrust_list)
         thrust_list = self.pitch_control(msg.angular.y, thrust_list)
         thrust_list = self.yaw_control(msg.angular.z, thrust_list)
+
+        self.get_logger().info(f"in callback{str(thrust_list)}")
         self.publish_thrust(thrust_list)
 
     def x_control(self, speed: float, thrust_list: List[float]):

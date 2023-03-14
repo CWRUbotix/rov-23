@@ -54,9 +54,9 @@ class ManualControlNode(Node):
             'manual_control',
             self.execute_callback
         )
-        self.pixhawk_publisher: Publisher = self.create_publisher(
+        self.controller_pub: Publisher = self.create_publisher(
             ROVControl,
-            'pixhawk_manual_control',
+            'manual_control',
             10
         )
         # TODO add manipulators
@@ -85,7 +85,7 @@ class ManualControlNode(Node):
                                                   axes[R2PRESS_PERCENT])/2)
             rov_msg.pitch = self.joystick_profiles(axes[DPADVERT])
             rov_msg.roll = self.joystick_profiles(-buttons[L1] + buttons[R1])
-            self.pixhawk_publisher.publish(rov_msg)
+            self.controller_pub.publish(rov_msg)
 
     # Used to create smoother adjustments
     def joystick_profiles(self, val: float) -> int:

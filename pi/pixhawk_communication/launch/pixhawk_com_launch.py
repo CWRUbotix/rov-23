@@ -10,7 +10,7 @@ def generate_launch_description():
         package='pixhawk_communication',
         executable='pixhawk_com',
         parameters=[
-                {'communication': LaunchConfiguration('communication', default='/dev/ttyPixhawk')}]
+                {'communication': LaunchConfiguration('communication', default='/dev/ttyPixhawk')}],
     )
 
     return LaunchDescription([pixhawk_com_node])
