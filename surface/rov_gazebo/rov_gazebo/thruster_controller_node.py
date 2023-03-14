@@ -5,7 +5,7 @@ from geometry_msgs.msg import Twist, Vector3
 from rclpy.node import Node, Publisher
 from std_msgs.msg import Float64
 
-from interfaces.msg import ROVControl
+from rov_interfaces.msg import ROVControl
 
 # Range of values Pixhawk takes
 # In microseconds
@@ -15,8 +15,7 @@ RANGE_SPEED: int = 400
 
 class ThrusterControllerNode(Node):
     def __init__(self):
-        super().__init__("thruster_controller_node",
-                         parameter_overrides=[])
+        super().__init__("thruster_controller_node", parameter_overrides=[])
         self.thrusters = [
             "top_front_left",
             "top_front_right",
@@ -33,32 +32,21 @@ class ThrusterControllerNode(Node):
         self.multiplier = 3
 
         self.publishers_: List[Publisher] = []
-        self.sub_keyboard = self.create_subscription(ROVControl,
-                                                     "manual_control",
-                                                     self.control_callback,
-                                                     qos_profile=10)
+        self.sub_keyboard = self.create_subscription(
+            ROVControl, "manual_control", self.control_callback, qos_profile=10
+        )
 
     def control_callback(self, msg: ROVControl):
         twist = Twist(
             linear=Vector3(
-                x=float(
-                    (msg.x - ZERO_SPEED) / RANGE_SPEED * self.linear_scale
-                ),
-                y=float(
-                        (msg.y - ZERO_SPEED) / RANGE_SPEED * self.linear_scale
-                ),
+                x=float((msg.x - ZERO_SPEED) / RANGE_SPEED * self.linear_scale),
+                y=float((msg.y - ZERO_SPEED) / RANGE_SPEED * self.linear_scale),
                 z=float((msg.z - ZERO_SPEED) / RANGE_SPEED * self.linear_scale),
             ),
             angular=Vector3(
-                x=float(
-                     (msg.roll - ZERO_SPEED) / RANGE_SPEED * self.angular_scale
-                ),
-                y=float(
-                     (msg.pitch - ZERO_SPEED) / RANGE_SPEED * self.angular_scale
-                ),
-                z=float(
-                     (msg.yaw - ZERO_SPEED) / RANGE_SPEED * self.angular_scale
-                ),
+                x=float((msg.roll - ZERO_SPEED) / RANGE_SPEED * self.angular_scale),
+                y=float((msg.pitch - ZERO_SPEED) / RANGE_SPEED * self.angular_scale),
+                z=float((msg.yaw - ZERO_SPEED) / RANGE_SPEED * self.angular_scale),
             ),
         )
         self.control(twist)
@@ -66,7 +54,9 @@ class ThrusterControllerNode(Node):
     def create_publishers(self, msg_type: type, qos_profile: int = 10):
         ns: str = self.get_namespace()
         for thruster in self.thrusters:
-            topic = f'{ns}/model/rov/joint/thruster_{thruster}_body_blade_joint/cmd_thrust'
+            topic = (
+                f"{ns}/model/rov/joint/thruster_{thruster}_body_blade_joint/cmd_thrust"
+            )
             self.publishers_.append(self.create_publisher(msg_type, topic, qos_profile))
 
     def control(self, msg: Twist):

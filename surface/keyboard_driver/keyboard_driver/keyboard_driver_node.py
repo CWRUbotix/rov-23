@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from pynput import keyboard
 from pynput.keyboard import Key, KeyCode
-from interfaces.msg import ROVControl
+from rov_interfaces.msg import ROVControl
 
 
 # key bindings
@@ -57,8 +57,7 @@ RANGE_SPEED: int = 400
 
 class keyboardListenerNode(Node):
     def __init__(self):
-        super().__init__("keyboard_listener_node",
-                         parameter_overrides=[])
+        super().__init__("keyboard_listener_node", parameter_overrides=[])
 
         self.pub_status = self.create_publisher(
             ROVControl, "manual_control", qos_profile=10
