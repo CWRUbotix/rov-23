@@ -27,6 +27,7 @@ def generate_launch_description():
         launch_arguments={"ign_args": world_path}.items(),
     )
 
+    # Not using keyboard launch file
     keyboard_driver = Node(
         package="keyboard_driver",
         executable="keyboard_driver_node",
