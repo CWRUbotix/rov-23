@@ -5,7 +5,7 @@ from geometry_msgs.msg import Twist, Vector3
 from rclpy.node import Node, Publisher
 from std_msgs.msg import Float64
 
-from rov_interfaces.msg import ROVControl
+from interfaces.msg import ROVControl
 
 # Range of values Pixhawk takes
 # In microseconds
