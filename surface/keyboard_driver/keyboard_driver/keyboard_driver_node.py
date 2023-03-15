@@ -63,6 +63,7 @@ class keyboardListenerNode(Node):
             ROVControl, "manual_control", qos_profile=10
         )
         self.logger.info(HELP_MSG)
+        self.status = ROVControl()
 
     @property
     def logger(self):
@@ -72,7 +73,8 @@ class keyboardListenerNode(Node):
         self.keypress_helper(key)
 
     def on_release(self, key: Union[Key, KeyCode, None]):
-        self.pub_status.publish(ROVControl())
+        self.status = ROVControl()
+        self.pub_status.publish(self.status)
 
     # Can only handle one key at a time
     def keypress_helper(self, key: Union[Key, KeyCode, None]):
@@ -87,34 +89,32 @@ class keyboardListenerNode(Node):
             else:  # Is type Key
                 key_string = key.name
 
-            status = ROVControl()
-
             if key_string == FORWARD:
-                status.x = ZERO_SPEED + RANGE_SPEED
+                self.status.x = ZERO_SPEED + RANGE_SPEED
             elif key_string == BACKWARD:
-                status.x = ZERO_SPEED - RANGE_SPEED
+                self.status.x = ZERO_SPEED - RANGE_SPEED
             elif key_string == LEFT:
-                status.y = ZERO_SPEED + RANGE_SPEED
+                self.status.y = ZERO_SPEED + RANGE_SPEED
             elif key_string == RIGHT:
-                status.y = ZERO_SPEED - RANGE_SPEED
+                self.status.y = ZERO_SPEED - RANGE_SPEED
             elif key_string == UP:
-                status.z = ZERO_SPEED + RANGE_SPEED
+                self.status.z = ZERO_SPEED + RANGE_SPEED
             elif key_string == DOWN:
-                status.z = ZERO_SPEED - RANGE_SPEED
+                self.status.z = ZERO_SPEED - RANGE_SPEED
             elif key_string == ROLL_LEFT:
-                status.roll = ZERO_SPEED + RANGE_SPEED
+                self.status.roll = ZERO_SPEED + RANGE_SPEED
             elif key_string == ROLL_RIGHT:
-                status.roll = ZERO_SPEED - RANGE_SPEED
+                self.status.roll = ZERO_SPEED - RANGE_SPEED
             elif key_string == PITCH_UP:
-                status.pitch = ZERO_SPEED + RANGE_SPEED
+                self.status.pitch = ZERO_SPEED + RANGE_SPEED
             elif key_string == PITCH_DOWN:
-                status.pitch = ZERO_SPEED - RANGE_SPEED
+                self.status.pitch = ZERO_SPEED - RANGE_SPEED
             elif key_string == YAW_LEFT:
-                status.yaw = ZERO_SPEED + RANGE_SPEED
+                self.status.yaw = ZERO_SPEED + RANGE_SPEED
             elif key_string == YAW_RIGHT:
-                status.yaw = ZERO_SPEED - RANGE_SPEED
+                self.status.yaw = ZERO_SPEED - RANGE_SPEED
 
-            self.pub_status.publish(status)
+            self.pub_status.publish(self.status)
 
         except Exception as e:
             self.logger.error(str(e))
