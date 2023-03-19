@@ -36,7 +36,7 @@ class ThrusterControllerNode(Node):
             ROVControl, "manual_control", self.control_callback, qos_profile=10
         )
         self.arm_sub = self.create_subscription(
-            Armed,'armed', self.arm_callback, 10
+            Armed, 'armed', self.arm_callback, 10
         )
         self.is_armed = False
 
