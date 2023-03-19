@@ -87,22 +87,17 @@ def generate_launch_description():
         executable="parameter_bridge",
         namespace=NS,
         name="cam_bridge",
-        arguments=[
-            "/bottom_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
-            "/front_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
-            "/manip_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
-            "/depth_cam@sensor_msgs/msg/Image@ignition.msgs.Image",
-            "/depth_cam/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked",
-        ],
-        remappings=[
-            ("/bottom_cam/image_raw", f"/{NS}/bottom_cam/image_raw"),
-            ("/front_cam/image_raw", f"/{NS}/front_cam/image_raw"),
-            ("/manip_cam/image_raw", f"/{NS}/manip_cam/image_raw"),
-            ("/depth_cam/image_raw", f"/{NS}/depth_cam"),
-            ("/depth_cam/points", f"/{NS}/depth_cam/points"),
-        ],
-        output="screen",
-    )
+        arguments=["/bottom_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
+                   "/front_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
+                   "/manip_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
+                   "/depth_cam@sensor_msgs/msg/Image@ignition.msgs.Image",
+                   "/depth_cam/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked",
+                   ],
+        remappings=[(f"/{NS}/bottom_cam/image_raw", "/bottom_cam/image_raw"),
+                    (f"/{NS}/front_cam/image_raw", "/front_cam/image_raw"),
+                    (f"/{NS}/manip_cam/image_raw", "/manip_cam/image_raw"),
+                    (f"/{NS}/depth_cam", "/depth_cam/image_raw"),
+                    (f"/{NS}/depth_cam/points", "/depth_cam/points")],
 
         output="screen",
     )
@@ -112,7 +107,8 @@ def generate_launch_description():
         executable="thruster_controller_node",
         output="screen",
         namespace=NS,
-        remappings=[(f"/{NS}/manual_control", '/manual_control')]
+        remappings=[(f"/{NS}/manual_control", '/manual_control'),
+                    (f"/{NS}/armed", '/armed')]
     )
 
     # Launches Controller

@@ -5,7 +5,7 @@ from geometry_msgs.msg import Twist, Vector3
 from rclpy.node import Node, Publisher
 from std_msgs.msg import Float64
 
-from interfaces.msg import ROVControl
+from interfaces.msg import ROVControl, Armed
 
 # Range of values Pixhawk takes
 # In microseconds
@@ -35,8 +35,18 @@ class ThrusterControllerNode(Node):
         self.sub_keyboard = self.create_subscription(
             ROVControl, "manual_control", self.control_callback, qos_profile=10
         )
+        self.arm_sub = self.create_subscription(
+            Armed,'armed', self.arm_callback, 10
+        )
+        self.is_armed = False
+
+    def arm_callback(self, msg: Armed):
+        self.is_armed = msg.armed
 
     def control_callback(self, msg: ROVControl):
+        if not self.is_armed:
+            return
+
         twist = Twist(
             linear=Vector3(
                 x=float((msg.x - ZERO_SPEED) / RANGE_SPEED * self.linear_scale),
