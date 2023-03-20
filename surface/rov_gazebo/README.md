@@ -28,6 +28,8 @@ Press play button or space bar at gazebo window
 
 ## 4. Move ROV
 
+Don't forget to arm the ROV
+
 See help message from terminal or use PS5 controller
 
 # Reference
@@ -39,3 +41,17 @@ https://www.ardusub.com/introduction/features.html
 ## Simulation
 
 https://www.ardusub.com/developers/sitl.html
+## Published Topics
+/bottom_cam/image_raw
+
+/front_cam/image_raw
+
+/manip_cam/image_raw
+
+/depth_cam/image_raw
+
+/depth_cam/points
+## Subscription Topics
+/manual_control
+
+/arm
