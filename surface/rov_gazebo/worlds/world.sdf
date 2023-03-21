@@ -171,38 +171,6 @@
       </link>
     </model>
 
-    <!-- model will be inserted here -->
-
-      <plugin
-        filename="ignition-gazebo-hydrodynamics-system"
-        name="ignition::gazebo::systems::Hydrodynamics">
-        <link_name>body</link_name>
-        <!-- <water_density>1000</water_density> -->
-        <!-- Added mass: -->
-        <xDotU>0</xDotU>
-        <yDotV>0</yDotV>
-        <zDotW>0</zDotW>
-        <kDotP>0</kDotP>
-        <mDotQ>0</mDotQ>
-        <nDotR>0</nDotR>
-        <!-- First order stability derivative: -->
-        <xU>0</xU>
-        <yV>0</yV>
-        <zW>0</zW>
-        <kP>0</kP>
-        <mQ>0</mQ>
-        <nR>0</nR>
-        <!-- Second order stability derivative: -->
-        <xUU>-33.800000000000004</xUU>
-        <yVV>-54.26875</yVV>
-        <zWW>-73.37135</zWW>
-        <kPP>-4.0</kPP>
-        <mQQ>-4.0</mQQ>
-        <nRR>-4.0</nRR>
-      </plugin>
-
-    </model>
-
   </world>
 
 </sdf>

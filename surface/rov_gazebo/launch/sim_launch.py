@@ -15,13 +15,10 @@ def generate_launch_description():
     ros_ign_gazebo_path: str = get_package_share_directory("ros_ign_gazebo")
     surface_main_path: str = get_package_share_directory("surface_main")
 
-    world_path: str = os.path.join(rov_gazebo_path, "worlds", "rov_in_world.sdf")
+    world_path: str = os.path.join(rov_gazebo_path, "worlds", "world.sdf")
 
     # Process the URDF file
-    pkg_path = os.path.join(get_package_share_directory("rov_gazebo"))
-    xacro_file = os.path.join(
-        get_package_share_directory("rov_gazebo"), "description", "rov.xacro"
-    )
+    xacro_file = os.path.join(rov_gazebo_path, "description", "rov.xacro")
     robot_description = Command(["xacro ", xacro_file])
     params = {"robot_description": robot_description}
 
@@ -39,6 +36,21 @@ def generate_launch_description():
             [os.path.join(ros_ign_gazebo_path, "launch", "ign_gazebo.launch.py")]
         ),
         launch_arguments={"ign_args": world_path}.items(),
+    )
+
+    # Spawn entity
+    ignition_spawn_entity = Node(
+        package="ros_ign_gazebo",
+        executable="create",
+        output="screen",
+        arguments=[
+            "-topic",
+            "robot_description",
+            "-name",
+            "ROV",
+            "-allow_renaming",
+            "true",
+        ],
     )
 
     # Not using keyboard launch file
@@ -156,6 +168,7 @@ def generate_launch_description():
         [
             robot_state_publisher,
             gazeboLaunch,
+            ignition_spawn_entity,
             keyboard_driver,
             thrust_bridge,
             cam_bridge,
