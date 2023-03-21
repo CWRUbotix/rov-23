@@ -14,9 +14,6 @@ def generate_launch_description():
     ros_ign_gazebo_path: str = get_package_share_directory("ros_ign_gazebo")
     surface_main_path: str = get_package_share_directory("surface_main")
 
-    # Generates rov_in_world.sdf file
-    exec(open(os.path.join(rov_gazebo_path, "worlds", "make_sdf.py")).read())
-
     world_path: str = os.path.join(rov_gazebo_path, "worlds", "rov_in_world.sdf")
 
     # Launches Gazebo
@@ -34,7 +31,7 @@ def generate_launch_description():
         output="screen",
         name="keyboard_driver_node",
         namespace=NS,
-        remappings=[(f"/{NS}/manual_control", "/manual_control")]
+        remappings=[(f"/{NS}/manual_control", "/manual_control")],
     )
 
     # Thrust Bridge
@@ -62,22 +59,38 @@ def generate_launch_description():
             "@std_msgs/msg/Float64@ignition.msgs.Double",
         ],
         remappings=[
-            ("/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_thrust",
-             f"/{NS}/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_thrust"),
-            ("/model/rov/joint/thruster_top_front_right_body_blade_joint/cmd_thrust",
-             f"/{NS}/model/rov/joint/thruster_top_front_right_body_blade_joint/cmd_thrust"),
-            ("/model/rov/joint/thruster_top_back_left_body_blade_joint/cmd_thrust",
-             f"/{NS}/model/rov/joint/thruster_top_back_left_body_blade_joint/cmd_thrust"),
-            ("/model/rov/joint/thruster_top_back_right_body_blade_joint/cmd_thrust",
-             f"/{NS}/model/rov/joint/thruster_top_back_right_body_blade_joint/cmd_thrust"),
-            ("/model/rov/joint/thruster_bottom_front_left_body_blade_joint/cmd_thrust",
-             f"/{NS}/model/rov/joint/thruster_bottom_front_left_body_blade_joint/cmd_thrust"),
-            ("/model/rov/joint/thruster_bottom_front_right_body_blade_joint/cmd_thrust",
-             f"/{NS}/model/rov/joint/thruster_bottom_front_right_body_blade_joint/cmd_thrust"),
-            ("/model/rov/joint/thruster_bottom_back_left_body_blade_joint/cmd_thrust",
-             f"/{NS}/model/rov/joint/thruster_bottom_back_left_body_blade_joint/cmd_thrust"),
-            ("/model/rov/joint/thruster_bottom_back_right_body_blade_joint/cmd_thrust",
-             f"/{NS}/model/rov/joint/thruster_bottom_back_right_body_blade_joint/cmd_thrust"),
+            (
+                "/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_thrust",
+            ),
+            (
+                "/model/rov/joint/thruster_top_front_right_body_blade_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_top_front_right_body_blade_joint/cmd_thrust",
+            ),
+            (
+                "/model/rov/joint/thruster_top_back_left_body_blade_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_top_back_left_body_blade_joint/cmd_thrust",
+            ),
+            (
+                "/model/rov/joint/thruster_top_back_right_body_blade_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_top_back_right_body_blade_joint/cmd_thrust",
+            ),
+            (
+                "/model/rov/joint/thruster_bottom_front_left_body_blade_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_bottom_front_left_body_blade_joint/cmd_thrust",
+            ),
+            (
+                "/model/rov/joint/thruster_bottom_front_right_body_blade_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_bottom_front_right_body_blade_joint/cmd_thrust",
+            ),
+            (
+                "/model/rov/joint/thruster_bottom_back_left_body_blade_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_bottom_back_left_body_blade_joint/cmd_thrust",
+            ),
+            (
+                "/model/rov/joint/thruster_bottom_back_right_body_blade_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_bottom_back_right_body_blade_joint/cmd_thrust",
+            ),
         ],
         output="screen",
     )
@@ -87,18 +100,20 @@ def generate_launch_description():
         executable="parameter_bridge",
         namespace=NS,
         name="cam_bridge",
-        arguments=["/bottom_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
-                   "/front_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
-                   "/manip_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
-                   "/depth_cam@sensor_msgs/msg/Image@ignition.msgs.Image",
-                   "/depth_cam/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked",
-                   ],
-        remappings=[(f"/{NS}/bottom_cam/image_raw", "/bottom_cam/image_raw"),
-                    (f"/{NS}/front_cam/image_raw", "/front_cam/image_raw"),
-                    (f"/{NS}/manip_cam/image_raw", "/manip_cam/image_raw"),
-                    (f"/{NS}/depth_cam", "/depth_cam/image_raw"),
-                    (f"/{NS}/depth_cam/points", "/depth_cam/points")],
-
+        arguments=[
+            "/bottom_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
+            "/front_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
+            "/manip_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
+            "/depth_cam@sensor_msgs/msg/Image@ignition.msgs.Image",
+            "/depth_cam/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked",
+        ],
+        remappings=[
+            (f"/{NS}/bottom_cam/image_raw", "/bottom_cam/image_raw"),
+            (f"/{NS}/front_cam/image_raw", "/front_cam/image_raw"),
+            (f"/{NS}/manip_cam/image_raw", "/manip_cam/image_raw"),
+            (f"/{NS}/depth_cam", "/depth_cam/image_raw"),
+            (f"/{NS}/depth_cam/points", "/depth_cam/points"),
+        ],
         output="screen",
     )
 
@@ -107,24 +122,26 @@ def generate_launch_description():
         executable="thruster_controller_node",
         output="screen",
         namespace=NS,
-        remappings=[(f"/{NS}/manual_control", '/manual_control'),
-                    (f"/{NS}/armed", '/armed')]
+        remappings=[
+            (f"/{NS}/manual_control", "/manual_control"),
+            (f"/{NS}/armed", "/armed"),
+        ],
     )
 
     # Launches Controller
     surface_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            os.path.join(
-                surface_main_path, 'launch', 'surface_all_nodes_launch.py'
-            )
-        ]),
+        PythonLaunchDescriptionSource(
+            [os.path.join(surface_main_path, "launch", "surface_all_nodes_launch.py")]
+        ),
     )
 
     return LaunchDescription(
-        [gazeboLaunch,
-         keyboard_driver,
-         thrust_bridge,
-         cam_bridge,
-         thruster_controller,
-         surface_launch]
+        [
+            gazeboLaunch,
+            keyboard_driver,
+            thrust_bridge,
+            cam_bridge,
+            thruster_controller,
+            surface_launch,
+        ]
     )

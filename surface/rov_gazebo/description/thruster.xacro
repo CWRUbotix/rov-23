@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="thruster">
 
-  <xacro:arg name="params_path" default=""/> 
+  <xacro:arg name="params_path" default="$(find rov_gazebo)/description/rov_description_params.yaml"/> 
   <!-- Need argument to get from launch file -->
   <xacro:property name="params_path" value="$(arg params_path)"/> 
   <!-- Need seperate property for xacro inorder processing -->

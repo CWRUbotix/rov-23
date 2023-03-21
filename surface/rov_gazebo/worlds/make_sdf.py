@@ -7,7 +7,6 @@ filenameWorld: str = "world.sdf"
 filenameXacro: str = "rov.xacro"
 filenameURDF: str = "rov.urdf"
 filenameSDF: str = "rov.sdf"
-filenameYaml: str = "rov_description_params.yaml"
 filenameSensors: str = "sensors.sdf"
 filenameRovInWorld: str = "rov_in_world.sdf"
 
@@ -15,13 +14,12 @@ path_to_world: str = os.path.join(rov_gazebo_path, "worlds", filenameWorld)
 path_to_xacro: str = os.path.join(rov_gazebo_path, "description", filenameXacro)
 path_to_urdf: str = os.path.join(rov_gazebo_path, "description", filenameURDF)
 path_to_sdf: str = os.path.join(rov_gazebo_path, "description", filenameSDF)
-path_to_yaml: str = os.path.join(rov_gazebo_path, "description", filenameYaml)
 path_to_sensors: str = os.path.join(rov_gazebo_path, "description", filenameSensors)
 path_to_rov_in_world: str = os.path.join(rov_gazebo_path, "worlds", filenameRovInWorld)
 
 
 with open(path_to_urdf, "w") as f:
-    urdf = os.popen("xacro " + path_to_xacro + " params_path:=" + path_to_yaml).read()
+    urdf = os.popen("xacro " + path_to_xacro).read()
     f.writelines(urdf)
 
 with open(path_to_sensors, "r") as f:
