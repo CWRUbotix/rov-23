@@ -5,6 +5,7 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
+from launch.substitutions import Command
 
 NS = "simulation"
 
@@ -15,6 +16,22 @@ def generate_launch_description():
     surface_main_path: str = get_package_share_directory("surface_main")
 
     world_path: str = os.path.join(rov_gazebo_path, "worlds", "rov_in_world.sdf")
+
+    # Process the URDF file
+    pkg_path = os.path.join(get_package_share_directory("rov_gazebo"))
+    xacro_file = os.path.join(
+        get_package_share_directory("rov_gazebo"), "description", "rov.xacro"
+    )
+    robot_description = Command(["xacro ", xacro_file])
+    params = {"robot_description": robot_description}
+
+    # Create a robot_state_publisher node
+    robot_state_publisher = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        output="screen",
+        parameters=[params],
+    )
 
     # Launches Gazebo
     gazeboLaunch = IncludeLaunchDescription(
@@ -137,6 +154,7 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
+            robot_state_publisher,
             gazeboLaunch,
             keyboard_driver,
             thrust_bridge,
