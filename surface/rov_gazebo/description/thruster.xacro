@@ -42,6 +42,7 @@
         <geometry>
           <cylinder length="0.05" radius="0.01"/>
         </geometry>
+        <material name="orange"/>
       </visual>
 
       <collision>
@@ -63,6 +64,7 @@
         <geometry>
           <box size="0.04 0.02 0.005"/>
         </geometry>
+        <material name="orange"/>
       </visual>
       <collision>
         <origin rpy="0.7853981633974483 0 0" xyz="0.03 0 0"/>
