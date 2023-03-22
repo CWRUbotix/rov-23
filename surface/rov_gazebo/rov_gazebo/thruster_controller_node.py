@@ -4,7 +4,7 @@ import rclpy
 from geometry_msgs.msg import Twist, Vector3
 from rclpy.node import Node, Publisher
 from std_msgs.msg import Float64
-
+from sensor_msgs.msg import Imu
 from interfaces.msg import ROVControl, Armed
 
 # Range of values Pixhawk takes
@@ -35,13 +35,19 @@ class ThrusterControllerNode(Node):
         self.sub_keyboard = self.create_subscription(
             ROVControl, "manual_control", self.control_callback, qos_profile=10
         )
-        self.arm_sub = self.create_subscription(
-            Armed, 'armed', self.arm_callback, 10
+        self.imu_sub = self.create_subscription(
+            Imu, "simulation/imu", self.imu_callback, 10
         )
+        self.arm_sub = self.create_subscription(Armed, "armed", self.arm_callback, 10)
         self.is_armed = False
+        self.imu = Imu()
 
     def arm_callback(self, msg: Armed):
         self.is_armed = msg.armed
+
+    def imu_callback(self, msg: Imu):
+        self.prev_imu = self.imu
+        self.imu = msg
 
     def control_callback(self, msg: ROVControl):
         if not self.is_armed:
