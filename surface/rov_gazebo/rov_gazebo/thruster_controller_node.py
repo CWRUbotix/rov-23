@@ -5,6 +5,7 @@ from geometry_msgs.msg import Twist, Vector3
 from rclpy.node import Node, Publisher
 from std_msgs.msg import Float64
 from sensor_msgs.msg import Imu
+from tf2_msgs.msg import TFMessage
 from interfaces.msg import ROVControl, Armed
 
 # Range of values Pixhawk takes
@@ -33,21 +34,33 @@ class ThrusterControllerNode(Node):
 
         self.publishers_: List[Publisher] = []
         self.sub_keyboard = self.create_subscription(
-            ROVControl, "manual_control", self.control_callback, qos_profile=10
+            ROVControl, "/manual_control", self.control_callback, qos_profile=10
         )
         self.imu_sub = self.create_subscription(
-            Imu, "simulation/imu", self.imu_callback, 10
+            Imu, "/simulation/imu", self.imu_callback, qos_profile=10
         )
-        self.arm_sub = self.create_subscription(Armed, "armed", self.arm_callback, 10)
+        self.pos_sub = self.create_subscription(
+            TFMessage, "/simulation/rov_pose", self.pos_callback, qos_profile=10
+        )
+        self.arm_sub = self.create_subscription(
+            Armed, "/armed", self.arm_callback, qos_profile=10
+        )
         self.is_armed = False
         self.imu = Imu()
 
     def arm_callback(self, msg: Armed):
         self.is_armed = msg.armed
+        self.get_logger().info("Got Armed message: " + str(self.is_armed))
 
     def imu_callback(self, msg: Imu):
+        self.get_logger().info("Got IMU message")
         self.prev_imu = self.imu
         self.imu = msg
+
+    def pos_callback(self, msg: TFMessage):
+        # msg[0] is a pose of ROV body
+        self.pose = msg.transforms[0]
+        self.get_logger().info("Got Pose message: " + str(self.pose.transform))
 
     def control_callback(self, msg: ROVControl):
         if not self.is_armed:

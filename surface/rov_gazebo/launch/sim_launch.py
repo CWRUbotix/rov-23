@@ -160,6 +160,20 @@ def generate_launch_description():
         output="screen",
     )
 
+    pos_bridge = Node(
+        package="ros_ign_bridge",
+        executable="parameter_bridge",
+        namespace=NS,
+        name="pos_bridge",
+        arguments=[
+            "/world/rov_simulation/dynamic_pose/info@tf2_msgs/msg/TFMessage@ignition.msgs.Pose_V",
+        ],
+        remappings=[
+            ("/world/rov_simulation/dynamic_pose/info", f"/{NS}/rov_pose"),
+        ],
+        output="screen",
+    )
+
     thruster_controller = Node(
         package="rov_gazebo",
         executable="thruster_controller_node",
@@ -187,6 +201,7 @@ def generate_launch_description():
             thrust_bridge,
             cam_bridge,
             imu_bridge,
+            pos_bridge,
             thruster_controller,
             surface_launch,
         ]
