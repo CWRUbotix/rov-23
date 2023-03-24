@@ -146,20 +146,6 @@ def generate_launch_description():
         output="screen",
     )
 
-    imu_bridge = Node(
-        package="ros_ign_bridge",
-        executable="parameter_bridge",
-        namespace=NS,
-        name="imu_bridge",
-        arguments=[
-            "/imu@sensor_msgs/msg/Imu@ignition.msgs.IMU",
-        ],
-        remappings=[
-            ("/imu", f"/{NS}/imu"),
-        ],
-        output="screen",
-    )
-
     pos_bridge = Node(
         package="ros_ign_bridge",
         executable="parameter_bridge",
@@ -200,7 +186,6 @@ def generate_launch_description():
             keyboard_driver,
             thrust_bridge,
             cam_bridge,
-            imu_bridge,
             pos_bridge,
             thruster_controller,
             surface_launch,

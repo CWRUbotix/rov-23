@@ -6,7 +6,6 @@ import rclpy
 from geometry_msgs.msg import Twist, Vector3
 from rclpy.node import Node, Publisher
 from std_msgs.msg import Float64
-from sensor_msgs.msg import Imu
 from geometry_msgs.msg import PoseStamped
 from tf2_msgs.msg import TFMessage
 from interfaces.msg import ROVControl, Armed
@@ -39,9 +38,6 @@ class ThrusterControllerNode(Node):
         self.sub_keyboard = self.create_subscription(
             ROVControl, "/manual_control", self.control_callback, qos_profile=10
         )
-        self.imu_sub = self.create_subscription(
-            Imu, "/simulation/imu", self.imu_callback, qos_profile=10
-        )
         self.pos_sub = self.create_subscription(
             TFMessage, "/simulation/rov_pose", self.pos_callback, qos_profile=10
         )
@@ -49,7 +45,6 @@ class ThrusterControllerNode(Node):
             Armed, "/armed", self.arm_callback, qos_profile=10
         )
         self.is_armed = False
-        self.imu = Imu()
         self.control_msg = Twist()
         self.prev_pose = PoseStamped()
         self.pose = PoseStamped()
@@ -57,11 +52,6 @@ class ThrusterControllerNode(Node):
     def arm_callback(self, msg: Armed):
         self.is_armed = msg.armed
         self.get_logger().info("Got Armed message: " + str(self.is_armed))
-
-    def imu_callback(self, msg: Imu):
-        # self.get_logger().info("Got IMU message")
-        self.prev_imu = self.imu
-        self.imu = msg
 
     def pos_callback(self, msg: TFMessage):
         # msg[0] is a pose of ROV body
@@ -193,11 +183,8 @@ class ThrusterControllerNode(Node):
     def stablize(self, control_msg: Twist, thrust_list: List[float]):
         # stablize directions or rotations when it is 0.0
         coeff = 1000
-        self.get_logger().info("cur_z: " + str(self.pose.pose.position.z))
-        self.get_logger().info("prv_z: " + str(self.prev_pose.pose.position.z))
         if control_msg.linear.z == 0.0:
             diff = self.pose.pose.position.z - self.prev_pose.pose.position.z
-            self.get_logger().info(f"stabilizing... diff: {diff}")
             thrust_list = self.z_control(-1 * diff * coeff, thrust_list)
 
         return thrust_list
