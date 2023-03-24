@@ -145,11 +145,17 @@ void setup()
 
 void loop() {
   receiveData();
-
-  // Check if the button has been pressed
-  if (digitalRead(SyringeInput) == HIGH) {
-    // Send the submerge signal
-    sendSubmergeSignal();
+  // Check if serial signal recieved
+  if(Serial.available() == 1){
+    String command;
+    command = Serial.readString();
+    if(command == "submerge")
+      sendControlSignal("submerge");
+    else if (command == "extend")
+      sendControlSignal("extend");
+    else if (command == "retract")
+      sendControlSignal("retract");
+    else Serial.println("Invalid command");
   }
 }
 
@@ -173,15 +179,11 @@ void receiveData() {
   }
 }
 
-void sendSubmergeSignal() {
-  // Send a message to the base station
-  Serial.println("Submerge");
-
+void sendControlSignal(char* message) {
   // Send a message to rf69_server
-  uint8_t data[] = "Submerge";
-  rf69.send(data, sizeof(data));
+  rf69.send(message, sizeof(message));
   rf69.waitPacketSent();
-  Serial.println("Submerge signal sent.");
+  Serial.print(message); Serial.println(" signal sent!");
 }
 
 

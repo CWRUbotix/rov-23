@@ -117,6 +117,7 @@ void setup()
     while (1) delay(10);
   }
 
+  //set rtc if power lost
   if (! rtc.initialized() || rtc.lostPower()) {
     Serial.println("RTC is NOT initialized, let's set the time!");
 
@@ -266,6 +267,10 @@ void receiveSubmergeSignal() {
 
       if ((char*)buf == "submerge"){
         submerge();
+      } else if ((char*)buf == "extend"){
+        extend();
+      } else if ((char*)buf == "retract"){
+        retract();
       }
     } else {
       Serial.println("Receive failed");
@@ -277,6 +282,14 @@ void submerge() {
   digitalWrite(SyringeOutput, HIGH);
   delay(1000);
   digitalWrite(SyringeOutput, LOW);
+}
+
+void extend(){
+  //extend code here
+}
+
+void retract(){
+  //retract code here
 }
 
 void Blink(byte PIN, byte DELAY_MS, byte loops) {
