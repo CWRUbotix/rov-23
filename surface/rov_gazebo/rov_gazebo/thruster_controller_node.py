@@ -1,10 +1,12 @@
 from typing import List
 
+import time
 import rclpy
 from geometry_msgs.msg import Twist, Vector3
 from rclpy.node import Node, Publisher
 from std_msgs.msg import Float64
 from sensor_msgs.msg import Imu
+from geometry_msgs.msg import PoseStamped
 from tf2_msgs.msg import TFMessage
 from interfaces.msg import ROVControl, Armed
 
@@ -47,6 +49,7 @@ class ThrusterControllerNode(Node):
         )
         self.is_armed = False
         self.imu = Imu()
+        self.pose = PoseStamped()
 
     def arm_callback(self, msg: Armed):
         self.is_armed = msg.armed
@@ -59,8 +62,19 @@ class ThrusterControllerNode(Node):
 
     def pos_callback(self, msg: TFMessage):
         # msg[0] is a pose of ROV body
-        self.pose = msg.transforms[0]
-        self.get_logger().info("Got Pose message: " + str(self.pose.transform))
+        cur_time = time.time()
+        time_sec = int(cur_time)
+        time_nsec = int((cur_time - time_sec) * 1e9)
+        self.pose.header.stamp.sec = time_sec
+        self.pose.header.stamp.nanosec = time_nsec
+        self.pose.pose.position.x = msg.transforms[0].transform.translation.x
+        self.pose.pose.position.y = msg.transforms[0].transform.translation.y
+        self.pose.pose.position.z = msg.transforms[0].transform.translation.z
+        self.pose.pose.orientation.x = msg.transforms[0].transform.rotation.x
+        self.pose.pose.orientation.y = msg.transforms[0].transform.rotation.y
+        self.pose.pose.orientation.z = msg.transforms[0].transform.rotation.z
+        self.pose.pose.orientation.w = msg.transforms[0].transform.rotation.w
+        self.get_logger().info(str(self.pose))
 
     def control_callback(self, msg: ROVControl):
         if not self.is_armed:
