@@ -183,9 +183,24 @@ class ThrusterControllerNode(Node):
     def stablize(self, control_msg: Twist, thrust_list: List[float]):
         # stablize directions or rotations when it is 0.0
         coeff = 1000
+        if control_msg.linear.x == 0.0:
+            diff = self.pose.pose.position.x - self.prev_pose.pose.position.x
+            thrust_list = self.x_control(-1 * diff * coeff, thrust_list)
+        if control_msg.linear.y == 0.0:
+            diff = self.pose.pose.position.y - self.prev_pose.pose.position.y
+            thrust_list = self.y_control(-1 * diff * coeff, thrust_list)
         if control_msg.linear.z == 0.0:
             diff = self.pose.pose.position.z - self.prev_pose.pose.position.z
             thrust_list = self.z_control(-1 * diff * coeff, thrust_list)
+        if control_msg.angular.x == 0.0:
+            diff = self.pose.pose.orientation.x - self.prev_pose.pose.orientation.x
+            thrust_list = self.roll_control(1 * diff * coeff, thrust_list)
+        if control_msg.angular.y == 0.0:
+            diff = self.pose.pose.orientation.y - self.prev_pose.pose.orientation.y
+            thrust_list = self.pitch_control(-1 * diff * coeff, thrust_list)
+        if control_msg.angular.z == 0.0:
+            diff = self.pose.pose.orientation.z - self.prev_pose.pose.orientation.z
+            thrust_list = self.yaw_control(-1 * diff * coeff, thrust_list)
 
         return thrust_list
 
