@@ -3,9 +3,10 @@
 
     <link name="body">
         <visual>
-            <origin xyz="0 0 0"/>
+            <origin xyz="0 0 0" rpy="0 0 1.6" />
             <geometry>
-                <box size="0.3 0.3 0.15"/>
+                <!-- <box size="0.3 0.3 0.15"/> -->
+                <mesh filename="file://$(find rov_gazebo)/meshes/rov.stl"/>
             </geometry>
             <material name="blue"/>
         </visual>
