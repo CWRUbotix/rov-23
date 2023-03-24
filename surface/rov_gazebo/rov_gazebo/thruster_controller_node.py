@@ -1,6 +1,7 @@
 from typing import List
 
 import time
+import copy
 import rclpy
 from geometry_msgs.msg import Twist, Vector3
 from rclpy.node import Node, Publisher
@@ -49,6 +50,8 @@ class ThrusterControllerNode(Node):
         )
         self.is_armed = False
         self.imu = Imu()
+        self.control_msg = Twist()
+        self.prev_pose = PoseStamped()
         self.pose = PoseStamped()
 
     def arm_callback(self, msg: Armed):
@@ -56,12 +59,13 @@ class ThrusterControllerNode(Node):
         self.get_logger().info("Got Armed message: " + str(self.is_armed))
 
     def imu_callback(self, msg: Imu):
-        self.get_logger().info("Got IMU message")
+        # self.get_logger().info("Got IMU message")
         self.prev_imu = self.imu
         self.imu = msg
 
     def pos_callback(self, msg: TFMessage):
         # msg[0] is a pose of ROV body
+        self.prev_pose = copy.deepcopy(self.pose)
         cur_time = time.time()
         time_sec = int(cur_time)
         time_nsec = int((cur_time - time_sec) * 1e9)
@@ -74,7 +78,7 @@ class ThrusterControllerNode(Node):
         self.pose.pose.orientation.y = msg.transforms[0].transform.rotation.y
         self.pose.pose.orientation.z = msg.transforms[0].transform.rotation.z
         self.pose.pose.orientation.w = msg.transforms[0].transform.rotation.w
-        self.get_logger().info(str(self.pose))
+        self.control()
 
     def control_callback(self, msg: ROVControl):
         if not self.is_armed:
@@ -92,7 +96,7 @@ class ThrusterControllerNode(Node):
                 z=float((msg.yaw - ZERO_SPEED) / RANGE_SPEED * self.angular_scale),
             ),
         )
-        self.control(twist)
+        self.control_msg = twist  # for stablization
 
     def create_publishers(self, msg_type: type, qos_profile: int = 10):
         ns: str = self.get_namespace()
@@ -102,14 +106,16 @@ class ThrusterControllerNode(Node):
             )
             self.publishers_.append(self.create_publisher(msg_type, topic, qos_profile))
 
-    def control(self, msg: Twist):
+    def control(self):
         thrust_list = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        msg = self.control_msg
         thrust_list = self.x_control(msg.linear.x, thrust_list)
         thrust_list = self.y_control(msg.linear.y, thrust_list)
         thrust_list = self.z_control(msg.linear.z, thrust_list)
         thrust_list = self.roll_control(msg.angular.x, thrust_list)
         thrust_list = self.pitch_control(msg.angular.y, thrust_list)
         thrust_list = self.yaw_control(msg.angular.z, thrust_list)
+        thrust_list = self.stablize(msg, thrust_list)
         self.publish_thrust(thrust_list)
 
     def x_control(self, speed: float, thrust_list: List[float]):
@@ -182,6 +188,18 @@ class ThrusterControllerNode(Node):
         thrust_list[2] += thrust
         # fourth: add thrust
         thrust_list[3] += thrust
+        return thrust_list
+
+    def stablize(self, control_msg: Twist, thrust_list: List[float]):
+        # stablize directions or rotations when it is 0.0
+        coeff = 1000
+        self.get_logger().info("cur_z: " + str(self.pose.pose.position.z))
+        self.get_logger().info("prv_z: " + str(self.prev_pose.pose.position.z))
+        if control_msg.linear.z == 0.0:
+            diff = self.pose.pose.position.z - self.prev_pose.pose.position.z
+            self.get_logger().info(f"stabilizing... diff: {diff}")
+            thrust_list = self.z_control(-1 * diff * coeff, thrust_list)
+
         return thrust_list
 
     def publish_thrust(self, thrust_list: List[float]):
