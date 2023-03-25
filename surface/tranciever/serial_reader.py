@@ -24,11 +24,13 @@ class SerialReader(Node):
         msg.data = self.ser.readline().decode()
         self.publisher_.publish(msg)
         self.get_logger().info('Publishing: "%s"' % msg.data)
+        if self.i is 15:
+            self.control_callback("submerge")
         self.i += 1
     
     def control_callback(self, msg):
-        self.ser.write(msg)
-        self.get_logger().info('Command sent via serial monitor: "%s"' % msg.data)
+        self.ser.write(bytes(msg, 'utf-8'))
+        self.get_logger().info('Command sent via serial monitor: "%s"' % msg)
 
 def main(args=None):
     rclpy.init(args=args)

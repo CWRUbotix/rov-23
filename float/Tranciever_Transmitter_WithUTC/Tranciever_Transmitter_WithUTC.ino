@@ -265,12 +265,14 @@ void receiveSubmergeSignal() {
       Serial.print("RSSI: ");
       Serial.println(rf69.lastRssi(), DEC);
 
-      if ((char*)buf == "submerge"){
+      if (strcmp((char*)buf, "su") == 0){
         submerge();
-      } else if ((char*)buf == "extend"){
+      } else if (strcmp((char*)buf, "ex") == 0){
         extend();
-      } else if ((char*)buf == "retract"){
+      } else if (strcmp((char*)buf, "re") == 0){
         retract();
+      } else {
+        Serial.println("Invalid command");
       }
     } else {
       Serial.println("Receive failed");
