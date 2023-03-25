@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QGridLayout
 
 from gui.modules.task_selector import TaskSelector
 from gui.modules.logger import Logger
+from gui.modules.float_comm import FloatComm
 from gui.app import App
 
 
@@ -19,7 +20,10 @@ class OperatorApp(App):
         layout.addWidget(self.task_selector, 0, 1)
 
         self.logger: Logger = Logger()
-        layout.addWidget(self.logger, 0, 0)
+        layout.addWidget(self.logger, 0, 2)
+
+        self.float_comm: FloatComm = FloatComm()
+        layout.addWidget(self.float_comm, 0,0)
 
 
 def run_gui_operator():
