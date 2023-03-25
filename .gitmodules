@@ -1,0 +1,3 @@
+[submodule "surface/slam/isaac_ros_nvblox"]
+	path = surface/slam/isaac_ros_nvblox
+	url = https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_nvblox

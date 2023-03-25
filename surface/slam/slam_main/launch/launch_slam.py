@@ -23,6 +23,15 @@ def generate_launch_description():
           ('depth/image', '/camera/aligned_depth_to_color/image_raw')]
 
     return LaunchDescription([
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                os.path.join(
+                    get_package_share_directory('realsense'), 'launch', 'realsense_launch.py'
+                )
+            ]),
+            launch_arguments={"align_depth.enable": "true"}.items()
+        ),
+
         Node(
             package='rtabmap_ros', executable='rgbd_odometry', output='screen',
             parameters=parameters,
