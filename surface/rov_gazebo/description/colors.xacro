@@ -5,6 +5,10 @@
         <color rgba="1 1 1 1" />
     </material>
 
+    <material name="red">
+        <color rgba="1 0 0 1"/>
+    </material>
+
     <material name="orange">
         <color rgba="1 0.3 0.1 1"/>
     </material>

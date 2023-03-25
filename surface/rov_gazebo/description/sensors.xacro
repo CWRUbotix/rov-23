@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="sensors">
 
-    <gazebo reference="body">
-
+    <gazebo reference="front_cam_link">
         <sensor name="front_cam" type="camera">
         
             <camera>
@@ -21,7 +20,9 @@
             <visualize>true</visualize>
             <topic>front_cam/image_raw</topic>
         </sensor>
-
+    </gazebo>
+    
+    <gazebo reference="bottom_cam_link">
         <sensor name="bottom_cam" type="camera">
             <camera>
                 <horizontal_fov>1.047</horizontal_fov>
@@ -39,7 +40,9 @@
             <visualize>true</visualize>
             <topic>bottom_cam/image_raw</topic>
         </sensor>
+    </gazebo>
 
+    <gazebo reference="manip_cam_link">
         <sensor name="manip_cam" type="camera">
             <camera>
                 <horizontal_fov>1.047</horizontal_fov>
@@ -57,7 +60,9 @@
             <visualize>true</visualize>
             <topic>manip_cam/image_raw</topic>
         </sensor>
+    </gazebo>
 
+    <gazebo reference="depth_cam_link">
         <sensor name="depth_cam" type="depth_camera">
             <update_rate>10</update_rate>
             <topic>depth_cam</topic>

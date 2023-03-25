@@ -21,6 +21,106 @@
         </xacro:inertial_box>
     </link>
 
+    <joint name="body_front_cam_link_joint" type="fixed">
+        <parent link="body"/>
+        <child link="front_cam_link"/>
+        <origin xyz="0.215 0 0.075" rpy="0 0 0"/>
+    </joint>
+
+    <link name="front_cam_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_box mass="0.0001" x="0.01" y="0.01" z="0.01">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
+    <joint name="body_bottom_cam_link_joint" type="fixed">
+        <parent link="body"/>
+        <child link="bottom_cam_link"/>
+        <origin xyz="0 0 -0.048" rpy="0 1.57 0"/>
+    </joint>
+
+    <link name="bottom_cam_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_box mass="0.0001" x="0.01" y="0.01" z="0.01">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
+    <joint name="body_manip_cam_link_joint" type="fixed">
+        <parent link="body"/>
+        <child link="manip_cam_link"/>
+        <origin xyz="0.095 0 -0.007" rpy="0 0 0"/>
+    </joint>
+
+    <link name="manip_cam_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_box mass="0.0001" x="0.01" y="0.01" z="0.01">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
+    <joint name="body_depth_cam_link_joint" type="fixed">
+        <parent link="body"/>
+        <child link="depth_cam_link"/>
+        <origin xyz="-0.19 0 0.067" rpy="0 0.785 3.14"/>
+    </joint>
+
+    <link name="depth_cam_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_box mass="0.0001" x="0.01" y="0.01" z="0.01">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
     <gazebo>
         <plugin
             filename="ignition-gazebo-hydrodynamics-system"
