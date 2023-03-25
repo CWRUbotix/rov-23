@@ -137,7 +137,7 @@ def _get_struct_fmt(is_bigendian, fields, field_names=None):
     fmt = '>' if is_bigendian else '<'
 
     offset = 0
-    for field in (f for f in sPointCloud2orted(fields, key=lambda f: f.offset) if field_names is None or f.name in field_names):
+    for field in (f for f in sorted(fields, key=lambda f: f.offset) if field_names is None or f.name in field_names):
         if offset < field.offset:
             fmt += 'x' * (field.offset - offset)
             offset = field.offset
