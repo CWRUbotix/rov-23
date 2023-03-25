@@ -28,6 +28,7 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="screen",
         parameters=[params],
+        namespace=NS
     )
 
     # Launches Gazebo
@@ -51,6 +52,7 @@ def generate_launch_description():
             "-allow_renaming",
             "true",
         ],
+        namespace=NS
     )
 
     # Not using keyboard launch file
