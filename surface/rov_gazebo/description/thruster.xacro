@@ -33,7 +33,6 @@
     </joint>
 
     <link name='${thruster_name}_body'>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
       <xacro:inertial_cylinder mass="0.5" length="0.05" radius="0.01">
       <origin rpy="0 0 0" xyz="0 0 0"/>
       </xacro:inertial_cylinder>
