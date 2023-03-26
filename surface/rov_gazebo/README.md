@@ -3,7 +3,7 @@
 ## 1. Ignition Gazebo and Dependencies
 
 ```
-$ rosdep install --from-paths src --ignore-src -r -y
+rosdep install --from-paths src --ignore-src -r -y
 ```
 
 # Instruction
@@ -11,15 +11,15 @@ $ rosdep install --from-paths src --ignore-src -r -y
 ## 1. Build
 
 ```
-$ cd ~/rov_23_ws
-$ colcon build
+cd ~/rov_23_ws
+colcon build
 ```
 
 ## 2. Run launch file
 
 ```
-$ cd ~/rov_23_ws
-$ ros2 launch rov_gazebo sim_launch.py
+cd ~/rov_23_ws
+ros2 launch rov_gazebo sim_launch.py
 ```
 
 ## 3. Play simulation
@@ -41,7 +41,9 @@ https://www.ardusub.com/introduction/features.html
 ## Simulation
 
 https://www.ardusub.com/developers/sitl.html
+
 ## Published Topics
+
 /bottom_cam/image_raw
 
 /front_cam/image_raw
@@ -51,7 +53,9 @@ https://www.ardusub.com/developers/sitl.html
 /depth_cam/image_raw
 
 /depth_cam/points
+
 ## Subscription Topics
+
 /manual_control
 
 /arm

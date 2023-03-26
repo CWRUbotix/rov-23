@@ -110,79 +110,55 @@ class ThrusterControllerNode(Node):
 
     def x_control(self, speed: float, thrust_list: List[float]):
         thrust = speed * self.multiplier
-        # first: add thrust
         thrust_list[0] += thrust
-        # second: subtract thrust
         thrust_list[1] -= thrust
-        # third: subtract thrust
         thrust_list[2] -= thrust
-        # fourth: add thrust
         thrust_list[3] += thrust
         return thrust_list
 
     def y_control(self, speed: float, thrust_list: List[float]):
         thrust = speed * self.multiplier
-        # first: subtract thrust
         thrust_list[0] -= thrust
-        # second: subtract thrust
         thrust_list[1] -= thrust
-        # third: subtract thrust
         thrust_list[2] -= thrust
-        # fourth: subtract thrust
         thrust_list[3] -= thrust
         return thrust_list
 
     def z_control(self, speed: float, thrust_list: List[float]):
         thrust = speed * self.multiplier
-        # 5th: add thrust
         thrust_list[4] += thrust
-        # 6th: add thrust
         thrust_list[5] += thrust
-        # 7th: add thrust
         thrust_list[6] += thrust
-        # 8th: add thrust
         thrust_list[7] += thrust
         return thrust_list
 
     def roll_control(self, speed: float, thrust_list: List[float]):
         thrust = speed * self.multiplier
-        # 5th: subtract thrust
         thrust_list[4] -= thrust
-        # 6th: add thrust
         thrust_list[5] += thrust
-        # 7th: subtract thrust
         thrust_list[6] -= thrust
-        # 8th: add thrust
         thrust_list[7] += thrust
         return thrust_list
 
     def pitch_control(self, speed: float, thrust_list: List[float]):
         thrust = speed * self.multiplier
-        # 5th: subtract thrust
         thrust_list[4] -= thrust
-        # 6th: subtract thrust
         thrust_list[5] -= thrust
-        # 7th: add thrust
         thrust_list[6] += thrust
-        # 8th: add thrust
         thrust_list[7] += thrust
         return thrust_list
 
     def yaw_control(self, speed: float, thrust_list: List[float]):
         thrust = speed * self.multiplier
-        # first: subtract thrust
         thrust_list[0] -= thrust
-        # second: subtract thrust
         thrust_list[1] -= thrust
-        # third: add thrust
         thrust_list[2] += thrust
-        # fourth: add thrust
         thrust_list[3] += thrust
         return thrust_list
 
     def stablize(self, control_msg: Twist, thrust_list: List[float]):
         # stablize directions or rotations when it is 0.0
-        coeff = 5000
+        coeff = 1000
         if control_msg.linear.x == 0.0:
             diff = self.pose.pose.position.x - self.prev_pose.pose.position.x
             thrust_list = self.x_control(-1 * diff * coeff, thrust_list)
@@ -207,9 +183,6 @@ class ThrusterControllerNode(Node):
     def publish_thrust(self, thrust_list: List[float]):
         for i in range(len(self.thrusters)):
             self.publishers_[i].publish(Float64(data=thrust_list[i]))
-
-    def spin(self):
-        rclpy.spin(self)
 
 
 def main():

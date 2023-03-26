@@ -3,9 +3,9 @@
 <package format="3">
   <name>keyboard_driver</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="sxj754@case.edu">seongmin</maintainer>
-  <license>TODO: License declaration</license>
+  <description>MATE ROV keyboard driver</description>
+  <maintainer email="sxj754@case.edu">Seongmin Jung</maintainer>
+  <license>Apache License 2.0</license>
 
   <depend>rclpy</depend>
 

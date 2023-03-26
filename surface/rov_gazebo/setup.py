@@ -19,10 +19,10 @@ setup(
     ],
     install_requires=["setuptools"],
     zip_safe=True,
-    maintainer="seongmin",
+    maintainer="Seongmin Jung",
     maintainer_email="sxj754@case.edu",
-    description="TODO: Package description",
-    license="TODO: License declaration",
+    description="MATE ROV simulation",
+    license="Apache License 2.0",
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
