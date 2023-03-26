@@ -49,6 +49,16 @@ class ThrusterControllerNode(Node):
         self.prev_pose = PoseStamped()
         self.pose = PoseStamped()
 
+        # for PID control
+        self.integral_roll = 0
+        self.kp_roll = 1
+        self.ki_roll = 1
+        self.kd_roll = 1
+        self.integral_pitch = 0
+        self.kp_pitch = 1
+        self.ki_pitch = 1
+        self.kd_pitch = 1
+
     def arm_callback(self, msg: Armed):
         self.is_armed = msg.armed
         self.get_logger().info("Got Armed message: " + str(self.is_armed))
@@ -169,11 +179,47 @@ class ThrusterControllerNode(Node):
             diff = self.pose.pose.position.z - self.prev_pose.pose.position.z
             thrust_list = self.z_control(-1 * diff * coeff, thrust_list)
         if control_msg.angular.x == 0.0:
-            diff = self.pose.pose.orientation.x - self.prev_pose.pose.orientation.x
-            thrust_list = self.roll_control(1 * diff * coeff, thrust_list)
+            cur_time = self.pose.header.stamp.sec + self.pose.header.stamp.nanosec / 1e9
+            prev_time = (
+                self.prev_pose.header.stamp.sec
+                + self.prev_pose.header.stamp.nanosec / 1e9
+            )
+            dt = cur_time - prev_time
+
+            current = self.pose.pose.orientation.x
+            derivative = (current - self.prev_pose.pose.orientation.x) / dt
+            integral_roll = (
+                self.integral_roll + (current - self.prev_pose.pose.orientation.x) * dt
+            )
+            pid = (
+                self.kp_roll * (current - self.prev_pose.pose.orientation.x / 10)
+                # slowly goes to upright position by dividing by 10
+                + self.ki_roll * integral_roll
+                + self.kd_roll * derivative
+            )
+            self.integral_roll = integral_roll
+            thrust_list = self.roll_control(1 * pid * coeff / 20, thrust_list)
         if control_msg.angular.y == 0.0:
-            diff = self.pose.pose.orientation.y - self.prev_pose.pose.orientation.y
-            thrust_list = self.pitch_control(-1 * diff * coeff, thrust_list)
+            cur_time = self.pose.header.stamp.sec + self.pose.header.stamp.nanosec / 1e9
+            prev_time = (
+                self.prev_pose.header.stamp.sec
+                + self.prev_pose.header.stamp.nanosec / 1e9
+            )
+            dt = cur_time - prev_time
+
+            current = self.pose.pose.orientation.y
+            derivative = (current - self.prev_pose.pose.orientation.y) / dt
+            integral_roll = (
+                self.integral_roll + (current - self.prev_pose.pose.orientation.y) * dt
+            )
+            pid = (
+                # slowly goes to upright position by dividing by 10
+                self.kp_roll * (current - self.prev_pose.pose.orientation.y / 10)
+                + self.ki_roll * integral_roll
+                + self.kd_roll * derivative
+            )
+            self.integral_roll = integral_roll
+            thrust_list = self.pitch_control(-1 * pid * coeff / 20, thrust_list)
         if control_msg.angular.z == 0.0:
             diff = self.pose.pose.orientation.z - self.prev_pose.pose.orientation.z
             thrust_list = self.yaw_control(-1 * diff * coeff, thrust_list)
