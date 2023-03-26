@@ -8,16 +8,15 @@
                 <!-- <box size="0.3 0.3 0.15"/> -->
                 <mesh filename="file://$(find rov_gazebo)/meshes/rov.stl"/>
             </geometry>
-            <material name="blue"/>
         </visual>
         <collision>
-            <origin xyz="0 0 0"/>
+            <origin xyz="0 0 0.05"/>
             <geometry>
                 <box size="0.3 0.3 0.15"/>
             </geometry>
         </collision>
         <xacro:inertial_box mass="6" x="0.3" y="0.3" z="0.15">
-            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <origin xyz="0 0 0.05" rpy="0 0 0"/>
         </xacro:inertial_box>
     </link>
 
