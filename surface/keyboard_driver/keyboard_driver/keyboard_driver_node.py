@@ -63,62 +63,116 @@ class keyboardListenerNode(Node):
             ROVControl, "manual_control", qos_profile=10
         )
         self.logger.info(HELP_MSG)
-        self.status = ROVControl()
+        self.status = {
+            "forward": False,
+            "backward": False,
+            "left": False,
+            "right": False,
+            "up": False,
+            "down": False,
+            "roll_left": False,
+            "roll_right": False,
+            "pitch_up": False,
+            "pitch_down": False,
+            "yaw_left": False,
+            "yaw_right": False,
+        }
 
     @property
     def logger(self):
         return self.get_logger()
 
     def on_press(self, key: Union[Key, KeyCode, None]):
-        self.keypress_helper(key)
-
-    def on_release(self, key: Union[Key, KeyCode, None]):
-        self.status = ROVControl()
-        self.pub_status.publish(self.status)
-
-    # Can only handle one key at a time
-    def keypress_helper(self, key: Union[Key, KeyCode, None]):
         try:
-            if key is None:
-                return
+            if isinstance(key, keyboard.KeyCode):
+                key = key.char
+            elif isinstance(key, keyboard.Key):
+                key = key.name
 
-            if isinstance(key, KeyCode):
-                key_string = key.char
-                if key_string is None:
-                    return
-            else:  # Is type Key
-                key_string = key.name
+            if key == FORWARD:
+                self.status["forward"] = True
+            if key == BACKWARD:
+                self.status["backward"] = True
+            if key == LEFT:
+                self.status["left"] = True
+            if key == RIGHT:
+                self.status["right"] = True
+            if key == UP:
+                self.status["up"] = True
+            if key == DOWN:
+                self.status["down"] = True
+            if key == ROLL_LEFT:
+                self.status["roll_left"] = True
+            if key == ROLL_RIGHT:
+                self.status["roll_right"] = True
+            if key == PITCH_UP:
+                self.status["pitch_up"] = True
+            if key == PITCH_DOWN:
+                self.status["pitch_down"] = True
+            if key == YAW_LEFT:
+                self.status["yaw_left"] = True
+            if key == YAW_RIGHT:
+                self.status["yaw_right"] = True
+            if key == HELP:
+                self.logger.info(HELP_MSG)
 
-            if key_string == FORWARD:
-                self.status.x = ZERO_SPEED + RANGE_SPEED
-            elif key_string == BACKWARD:
-                self.status.x = ZERO_SPEED - RANGE_SPEED
-            elif key_string == LEFT:
-                self.status.y = ZERO_SPEED + RANGE_SPEED
-            elif key_string == RIGHT:
-                self.status.y = ZERO_SPEED - RANGE_SPEED
-            elif key_string == UP:
-                self.status.z = ZERO_SPEED + RANGE_SPEED
-            elif key_string == DOWN:
-                self.status.z = ZERO_SPEED - RANGE_SPEED
-            elif key_string == ROLL_LEFT:
-                self.status.roll = ZERO_SPEED + RANGE_SPEED
-            elif key_string == ROLL_RIGHT:
-                self.status.roll = ZERO_SPEED - RANGE_SPEED
-            elif key_string == PITCH_UP:
-                self.status.pitch = ZERO_SPEED + RANGE_SPEED
-            elif key_string == PITCH_DOWN:
-                self.status.pitch = ZERO_SPEED - RANGE_SPEED
-            elif key_string == YAW_LEFT:
-                self.status.yaw = ZERO_SPEED + RANGE_SPEED
-            elif key_string == YAW_RIGHT:
-                self.status.yaw = ZERO_SPEED - RANGE_SPEED
-
-            self.pub_status.publish(self.status)
+            self.pub_rov_control()
 
         except Exception as e:
             self.logger.error(str(e))
             raise
+
+    def on_release(self, key: Union[Key, KeyCode, None]):
+        try:
+            if isinstance(key, keyboard.KeyCode):
+                key = key.char
+            elif isinstance(key, keyboard.Key):
+                key = key.name
+
+            if key == FORWARD:
+                self.status["forward"] = False
+            if key == BACKWARD:
+                self.status["backward"] = False
+            if key == LEFT:
+                self.status["left"] = False
+            if key == RIGHT:
+                self.status["right"] = False
+            if key == UP:
+                self.status["up"] = False
+            if key == DOWN:
+                self.status["down"] = False
+            if key == ROLL_LEFT:
+                self.status["roll_left"] = False
+            if key == ROLL_RIGHT:
+                self.status["roll_right"] = False
+            if key == PITCH_UP:
+                self.status["pitch_up"] = False
+            if key == PITCH_DOWN:
+                self.status["pitch_down"] = False
+            if key == YAW_LEFT:
+                self.status["yaw_left"] = False
+            if key == YAW_RIGHT:
+                self.status["yaw_right"] = False
+
+            self.pub_rov_control()
+
+        except Exception as e:
+            self.logger.error(str(e))
+            raise
+
+    # Can only handle one key at a time
+    def pub_rov_control(self):
+        msg = ROVControl()
+        msg.x = (self.status["forward"] - self.status["backward"]) * 400 + 1500
+        msg.y = (self.status["left"] - self.status["right"]) * 400 + 1500
+        msg.z = (self.status["up"] - self.status["down"]) * 400 + 1500
+        msg.roll = (self.status["roll_left"] - self.status["roll_right"]) * 400 + 1500
+
+        msg.pitch = (self.status["pitch_up"] - self.status["pitch_down"]) * 400 + 1500
+
+        msg.yaw = (self.status["yaw_left"] - self.status["yaw_right"]) * 400 + 1500
+
+        self.pub_status.publish(msg)
 
     def spin(self):
         with keyboard.Listener(
