@@ -49,15 +49,8 @@ class ThrusterControllerNode(Node):
         self.prev_pose = PoseStamped()
         self.pose = PoseStamped()
 
-        # for PID control
-        self.integral_roll = 0
-        self.kp_roll = 1
-        self.ki_roll = 1
-        self.kd_roll = 1
-        self.integral_pitch = 0
-        self.kp_pitch = 1
-        self.ki_pitch = 1
-        self.kd_pitch = 1
+        # for PID control [x, y, z, roll, pitch, yaw]
+        self.integral = [0, 0, 0, 0, 0, 0]
 
     def arm_callback(self, msg: Armed):
         self.is_armed = msg.armed
@@ -167,64 +160,80 @@ class ThrusterControllerNode(Node):
         return thrust_list
 
     def stablize(self, control_msg: Twist, thrust_list: List[float]):
-        # stablize directions or rotations when it is 0.0
-        coeff = 1000
-        if control_msg.linear.x == 0.0:
-            diff = self.pose.pose.position.x - self.prev_pose.pose.position.x
-            thrust_list = self.x_control(-1 * diff * coeff, thrust_list)
-        if control_msg.linear.y == 0.0:
-            diff = self.pose.pose.position.y - self.prev_pose.pose.position.y
-            thrust_list = self.y_control(-1 * diff * coeff, thrust_list)
+        coeff = 30
+        pid = self.get_pid(control_msg, self.pose, self.prev_pose)
+        if control_msg.linear.x == 0.0 and control_msg.linear.y == 0.0:
+            thrust_list = self.x_control(-1 * pid[0] * coeff, thrust_list)
+            thrust_list = self.y_control(-1 * pid[1] * coeff, thrust_list)
+
         if control_msg.linear.z == 0.0:
-            diff = self.pose.pose.position.z - self.prev_pose.pose.position.z
-            thrust_list = self.z_control(-1 * diff * coeff, thrust_list)
+            thrust_list = self.z_control(-1 * pid[2] * coeff, thrust_list)
+
         if control_msg.angular.x == 0.0:
-            cur_time = self.pose.header.stamp.sec + self.pose.header.stamp.nanosec / 1e9
-            prev_time = (
-                self.prev_pose.header.stamp.sec
-                + self.prev_pose.header.stamp.nanosec / 1e9
-            )
-            dt = cur_time - prev_time
+            thrust_list = self.roll_control(1 * pid[3] * coeff, thrust_list)
 
-            current = self.pose.pose.orientation.x
-            derivative = (current - self.prev_pose.pose.orientation.x) / dt
-            integral_roll = (
-                self.integral_roll + (current - self.prev_pose.pose.orientation.x) * dt
-            )
-            pid = (
-                self.kp_roll * (current - self.prev_pose.pose.orientation.x / 10)
-                # slowly goes to upright position by dividing by 10
-                + self.ki_roll * integral_roll
-                + self.kd_roll * derivative
-            )
-            self.integral_roll = integral_roll
-            thrust_list = self.roll_control(1 * pid * coeff / 20, thrust_list)
         if control_msg.angular.y == 0.0:
-            cur_time = self.pose.header.stamp.sec + self.pose.header.stamp.nanosec / 1e9
-            prev_time = (
-                self.prev_pose.header.stamp.sec
-                + self.prev_pose.header.stamp.nanosec / 1e9
-            )
-            dt = cur_time - prev_time
+            thrust_list = self.pitch_control(-1 * pid[4] * coeff, thrust_list)
 
-            current = self.pose.pose.orientation.y
-            derivative = (current - self.prev_pose.pose.orientation.y) / dt
-            integral_roll = (
-                self.integral_roll + (current - self.prev_pose.pose.orientation.y) * dt
-            )
-            pid = (
-                # slowly goes to upright position by dividing by 10
-                self.kp_roll * (current - self.prev_pose.pose.orientation.y / 10)
-                + self.ki_roll * integral_roll
-                + self.kd_roll * derivative
-            )
-            self.integral_roll = integral_roll
-            thrust_list = self.pitch_control(-1 * pid * coeff / 20, thrust_list)
         if control_msg.angular.z == 0.0:
-            diff = self.pose.pose.orientation.z - self.prev_pose.pose.orientation.z
-            thrust_list = self.yaw_control(-1 * diff * coeff, thrust_list)
+            thrust_list = self.yaw_control(-1 * pid[5] * coeff, thrust_list)
 
         return thrust_list
+
+    def get_pid(self, control_msg, cur_pose: PoseStamped, prev_pose: PoseStamped):
+        cur_time = cur_pose.header.stamp.sec + cur_pose.header.stamp.nanosec / 1e9
+        prev_time = prev_pose.header.stamp.sec + prev_pose.header.stamp.nanosec / 1e9
+        dt = cur_time - prev_time
+
+        control_list = [
+            control_msg.linear.x,
+            control_msg.linear.y,
+            control_msg.linear.z,
+            control_msg.angular.x,
+            control_msg.angular.y,
+            control_msg.angular.z,
+        ]
+        cur_list = [
+            cur_pose.pose.position.x,
+            cur_pose.pose.position.y,
+            cur_pose.pose.position.z,
+            cur_pose.pose.orientation.x,
+            cur_pose.pose.orientation.y,
+            cur_pose.pose.orientation.z,
+        ]
+        prev_list = [
+            prev_pose.pose.position.x,
+            prev_pose.pose.position.y,
+            prev_pose.pose.position.z,
+            prev_pose.pose.orientation.x,
+            prev_pose.pose.orientation.y,
+            prev_pose.pose.orientation.z,
+        ]
+        pid_val_list = [0, 0, 0, 0, 0, 0]
+
+        for i in [0, 1, 2, 5]:
+            if control_list[i] != 0.0:
+                pid_val_list[i] = 0.0
+                continue
+            current = cur_list[i] - prev_list[i]
+            derivative = current / dt
+            integral = self.integral[i] + current * dt
+            self.integral[i] = integral
+            pid = current + integral + derivative
+            pid_val_list[i] = pid
+
+        for i in [3, 4]:
+            if control_list[i] != 0.0:
+                pid_val_list[i] = 0.0
+                continue
+            current = cur_list[i]
+            derivative = (current - prev_list[i]) / dt
+            integral = self.integral[i] + (current - prev_list[i]) * dt
+            self.integral[i] = integral
+            pid = current - prev_list[i] / 10 + integral + derivative
+            pid_val_list[i] = pid
+
+        return pid_val_list
 
     def publish_thrust(self, thrust_list: List[float]):
         for i in range(len(self.thrusters)):
