@@ -1,22 +1,15 @@
-import os
 import rclpy
 import time
 import numpy as np
 import cv2
-from cv2 import VideoCapture
 from rclpy.node import Node, Subscription, Publisher
 from rclpy.action import ActionServer, CancelResponse
 from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
-
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from cv_bridge import CvBridge
 
 from interfaces.action import BasicTask
 from interfaces.msg import ROVControl
-from sensor_msgs.msg import Image
-from ament_index_python.packages import get_package_share_directory
-
 
 #TODO: Refine correctional parameters
 #TODO: Ask what this means: Chop dual cam frame in half
