@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel, QWidget
+from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel, QWidget, QPushButton
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 from gui.event_nodes.client import GUIEventClient
@@ -31,15 +31,26 @@ class TaskSelector(QWidget):
 
         # Add dropdown #
         # Create PyQt element
-        self.combo_box: QComboBox = QComboBox()
-        self.combo_box.setMinimumWidth(150)
-        self.combo_box.addItem('Manual Control')
-        self.combo_box.addItem('Auto Docking')
-        self.combo_box.addItem('Coral Modeling')
-        layout.addWidget(self.combo_box)
+        # Create Start button
+        self.startBtn = QPushButton("Start Auto Docking")
+        self.startBtn.clicked.connect(self.startBtnClicked)
+
+        # Create Stop button
+        self.stopBtn = QPushButton("Stop Auto Docking")
+        self.stopBtn.clicked.connect(self.stopBtnClicked)
+
+        # Create label
+        # # self.combo_box: QComboBox = QComboBox()
+        # self.combo_box.setMinimumWidth(150)
+        # self.combo_box.addItem('Manual Control')
+        # self.combo_box.addItem('Auto Docking')
+        # self.combo_box.addItem('Coral Modeling')
+        
+        layout.addWidget(self.startBtn)
+        layout.addWidget(self.stopBtn)
 
         # Connect signals
-        self.combo_box.currentIndexChanged.connect(self.gui_changed_task)
+        # self.combo_box.currentIndexChanged.connect(self.gui_changed_task)
 
         # Create ROS nodes #
         # Create client (in separate thread to let GUI load before it connects)
@@ -53,19 +64,29 @@ class TaskSelector(QWidget):
         self.task_changed_server: GUIEventSubscriber = GUIEventSubscriber(
             TaskFeedback, 'task_feedback', self.update_task_dropdown_signal)
 
-    def gui_changed_task(self, i: int):
-        """Tell the back about the user selecting task with ID i."""
+    def startBtnClicked(self):
+        """Tell the back about the user selecting the start button."""
         # Cancel change if task changer hasn't connected yet
         if not self.task_changed_client.connected:
-            self.combo_box.setCurrentIndex(0)
             return
 
         self.task_changed_client.get_logger().info(
-            f'GUI changed task to: {self.combo_box.currentText()}' +
-            f' at {self.combo_box.currentIndex()}')
+            f'GUI changed task to: Auto Docking')
 
-        self.task_changed_client.send_request_async(TaskRequest.Request(task_id=i))
+        self.task_changed_client.send_request_async(TaskRequest.Request(task_id=1))
 
+    def stopBtnClicked(self):
+        """Tell the back about the user selecting the stop button"""
+        # Cancel change if task changer hasn't connected yet
+        if not self.task_changed_client.connected:
+            return
+
+        self.task_changed_client.get_logger().info(
+            f'GUI changed task to: Manual Control')
+
+        self.task_changed_client.send_request_async(TaskRequest.Request(task_id=0))
+        
+        
     @ pyqtSlot(TaskRequest.Response)
     def handle_scheduler_response(self, response: TaskRequest.Response):
         """Handle scheduler response to request sent from gui_changed_task."""
