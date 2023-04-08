@@ -37,6 +37,8 @@ class FloatComm(QWidget):
         layout.addWidget(extend_button)
         layout.addWidget(retract_button)
 
+        self.handle_scheduler_response_signal.connect(self.handle_text)
+
         self.label: QLabel = QLabel()
         self.label.setText('Waiting for radio...')
         layout.addWidget(self.label)
@@ -49,10 +51,11 @@ class FloatComm(QWidget):
         self.tranciever_subscription: GUIEventSubscriber = GUIEventSubscriber(
             String,
             "tranciever_data",
-            self.update_task_dropdown_signal
+            self.handle_scheduler_response_signal
         )
 
-    def update_text(self, msg: String):
+    @pyqtSlot(String)
+    def handle_text(self, msg: String):
         self.label.setText(msg.data)
 
     def submerge_clicked(self):
