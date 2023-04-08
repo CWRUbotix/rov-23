@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'coral_processing_node = mesh_processing.coral_processing:main',
         ],
     },
 )
