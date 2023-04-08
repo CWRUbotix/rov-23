@@ -15,12 +15,16 @@ def generate_launch_description():
     ros_ign_gazebo_path: str = get_package_share_directory("ros_ign_gazebo")
     surface_main_path: str = get_package_share_directory("surface_main")
 
-    world_path: str = os.path.join(rov_gazebo_path, "worlds", "pool.sdf")
+    world_path: str = os.path.join(rov_gazebo_path, "worlds", "world.sdf")
 
     # Process the URDF file
     xacro_file = os.path.join(rov_gazebo_path, "description", "rov.xacro")
     robot_description = Command(["xacro ", xacro_file])
     params = {"robot_description": robot_description}
+
+    pool_file = os.path.join(rov_gazebo_path, "description", "pool.xacro")
+    pool_description = Command(["xacro ", pool_file])
+    pool_params = {"robot_description": pool_description}
 
     # Create a robot_state_publisher node
     robot_state_publisher = Node(
@@ -29,6 +33,14 @@ def generate_launch_description():
         output="screen",
         parameters=[params],
         namespace=NS,
+    )
+
+    pool_state_publisher = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        output="screen",
+        parameters=[pool_params],
+        namespace="pool",
     )
 
     # Launches Gazebo
@@ -53,6 +65,21 @@ def generate_launch_description():
             "true",
         ],
         namespace=NS,
+    )
+
+    ignition_spawn_pool = Node(
+        package="ros_ign_gazebo",
+        executable="create",
+        output="screen",
+        arguments=[
+            "-topic",
+            "robot_description",
+            "-name",
+            "pool",
+            "-allow_renaming",
+            "true",
+        ],
+        namespace="pool",
     )
 
     # Not using keyboard launch file
@@ -187,8 +214,10 @@ def generate_launch_description():
     return LaunchDescription(
         [
             robot_state_publisher,
+            pool_state_publisher,
             gazeboLaunch,
             ignition_spawn_entity,
+            ignition_spawn_pool,
             keyboard_driver,
             thrust_bridge,
             cam_bridge,

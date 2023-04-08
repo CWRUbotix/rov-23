@@ -160,7 +160,6 @@ class keyboardListenerNode(Node):
             self.logger.error(str(e))
             raise
 
-    # Can only handle one key at a time
     def pub_rov_control(self):
         msg = ROVControl()
         msg.x = (self.status["forward"] - self.status["backward"]) * 400 + 1500
