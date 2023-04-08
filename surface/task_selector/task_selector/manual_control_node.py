@@ -79,13 +79,15 @@ class ManualControlNode(Node):
             TRI_BUTTON: "claw2",
             SQUARE_BUTTON: "claw3"
         }
-        self.manip_states: dict = {
-            "claw0": False, 
-            "claw1": False, 
-            "claw2": False, 
-            "claw3": False 
+
+        self.last_button_state = {
+            X_BUTTON: False,
+            O_BUTTON: False,
+            TRI_BUTTON: False,
+            SQUARE_BUTTON: False
         }
-        self.last_manip_states: dict = {
+
+        self.manip_state: dict = {
             "claw0": False, 
             "claw1": False, 
             "claw2": False, 
@@ -152,18 +154,21 @@ class ManualControlNode(Node):
             manip_id = self.manip_ids[button]
 
             if buttons[button] == 1:
-                activated = True
+                just_pressed = True
             else:
-                activated = False
+                just_pressed = False
 
-            if activated and activated != self.last_manip_states[manip_id]:
-                new_manip_state = not self.manip_states[manip_id]
-                self.manip_states[manip_id] = new_manip_state
+            if self.last_button_state[button] == False and just_pressed:
+                new_manip_state = not self.manip_state[manip_id]
+                self.manip_state[manip_id] = new_manip_state
                 self.get_logger().info("manip_id="+str(manip_id)+" manip_active="+str(new_manip_state))
 
-            self.last_manip_states[manip_id] = activated
+            self.last_button_state[button] = just_pressed
 
-            msg: Manip = Manip(manip_id=self.manip_ids[button], activated=activated)
+            # if manip_id == "claw2":
+            #     self.get_logger().info("manip_id="+str(manip_id)+" manip_active="+str(new_manip_state))
+
+            msg: Manip = Manip(manip_id=self.manip_ids[button], activated=self.manip_state[manip_id])
             self.manip_publisher.publish(msg)
 
 
