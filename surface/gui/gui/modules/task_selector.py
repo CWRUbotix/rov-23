@@ -9,6 +9,8 @@ from interfaces.msg import TaskFeedback
 
 from rclpy.impl.rcutils_logger import RcutilsLogger
 
+width = 200
+
 
 class TaskSelector(QWidget):
     """Qwidget that handles task selection with a dropdown."""
@@ -27,19 +29,25 @@ class TaskSelector(QWidget):
         # Create Start button
         self.startBtn = QPushButton("Start Auto Docking")
         self.startBtn.clicked.connect(self.startBtnClicked)
+        self.startBtn.setFixedHeight(75)
+        self.startBtn.setFixedWidth(width)
+
 
         # Create Stop button
         self.stopBtn = QPushButton("Stop Auto Docking")
         self.stopBtn.clicked.connect(self.stopBtnClicked)
+        self.stopBtn.setFixedHeight(75)
+        self.stopBtn.setFixedWidth(width)
        
         # Add 'Task: ' label
         self.label: QLabel = QLabel()
-        self.label.setText('Task: ')
+        self.label.setFixedWidth(width)
+        self.label.setText('Task: Manual Control')
         
         # Setup Grid
-        layout.addWidget(self.label)
-        layout.addWidget(self.startBtn)
-        layout.addWidget(self.stopBtn)
+        layout.addWidget(self.label, 1, 1, 2, 2)
+        layout.addWidget(self.startBtn, 2, 1)
+        layout.addWidget(self.stopBtn, 3, 1)
 
 
         
