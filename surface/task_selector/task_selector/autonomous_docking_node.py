@@ -125,8 +125,6 @@ def get_button_contour(cv_img):
     # Use LAB colorspace to segment/enhance red in the original image
     Lab = cv2.cvtColor(cv_img, cv2.COLOR_BGR2LAB)
     L, A, B = cv2.split(Lab)
-    
-    cv2.imshow("LAB Thresh", A)
 
     gray = A                                    # Takes the A-channel, grayscale representing the red and green in the image
     gray = cv2.GaussianBlur(gray, (7, 7), 0)    # Blurs the image to smooth the edges
@@ -134,8 +132,6 @@ def get_button_contour(cv_img):
     
     # Threshold it, getting a bitmap
     gaussian = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, c)
-    cv2.imshow("Gaussian", cv2.bitwise_and(cv_img, cv_img, mask=gaussian))
-    cv2.imshow("Original", cv_img)
 
     # The HSV colormap of the original image, but with the gaussian threshold mask applied
     gaussMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian), cv2.COLOR_BGR2HSV)
