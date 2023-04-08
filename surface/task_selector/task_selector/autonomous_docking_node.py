@@ -1,5 +1,4 @@
 import rclpy
-import time
 import numpy as np
 import cv2
 from rclpy.node import Node, Subscription, Publisher
@@ -16,7 +15,7 @@ from interfaces.msg import ROVControl
 # TODO: Ask what this means: Chop dual cam frame in half
 # --------------------------------------------------------------------------------------------
 # Direction robot should move while steering
-RIGHT = 1 
+RIGHT = 1
 LEFT = -1
 UP = 1
 DOWN = -1
@@ -74,13 +73,13 @@ class AutonomousDockingControlNode(Node):
         self.pixhawk_publisher: Publisher = self.create_publisher(
             ROVControl,
             'pixhawk_autonomous_control',
-            10                  
+            10
         )
 
     def handle_frame(self, frame: Image):
         # Converts image msg to BGR w/ alpha channel
-        cv_image = self.cv_bridge.imgmsg_to_cv2(frame, desired_encoding='CV_8UC4') 
-        horizontal_direction, vertical_direction = move_direction()
+        cv_image = self.cv_bridge.imgmsg_to_cv2(frame, desired_encoding='CV_8UC4')
+        horizontal_direction, vertical_direction = move_direction(self, cv_image)
 
         rov_msg = ROVControl()
 
@@ -116,8 +115,7 @@ class AutonomousDockingControlNode(Node):
             self.stopped = True
 
 
-
-# Takes a OpenCV image as input, and returns a contour surrounding the button (The largest red object)
+# Takes a OpenCV image as input and returns a contour surrounding the button
 def get_button_contour(cv_img):
     # Constant value to offset CV binary threshhold
     c = 0
@@ -126,29 +124,36 @@ def get_button_contour(cv_img):
     Lab = cv2.cvtColor(cv_img, cv2.COLOR_BGR2LAB)
     L, A, B = cv2.split(Lab)
 
-    gray = A                                    # Takes the A-channel, grayscale representing the red and green in the image
+    gray = A    # Takes the A-channel, grayscale representing the red and green in the image
     gray = cv2.GaussianBlur(gray, (7, 7), 0)    # Blurs the image to smooth the edges
     img_h, img_w = gray.shape                   # Calling this on the BGR will get (x, y, 3)
-    
+
     # Threshold it, getting a bitmap
-    gaussian = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, c)
+    gaussian = cv2.adaptiveThreshold(
+        gray,
+        255,
+        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        cv2.THRESH_BINARY,
+        21,
+        c
+    )
 
     # The HSV colormap of the original image, but with the gaussian threshold mask applied
-    gaussMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian), cv2.COLOR_BGR2HSV)
+    gausMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian), cv2.COLOR_BGR2HSV)
 
     # Lower mask (0-10 red range of color)
     lower_red = np.array([0,50,50])
     upper_red = np.array([10,255,255])
-    mask0 = cv2.inRange(gaussMaskedHSV, lower_red, upper_red)
+    mask0 = cv2.inRange(gausMaskedHSV, lower_red, upper_red)
 
     # upper mask (170-180 red range of color)
-    lower_red = np.array([170,50,50])
-    upper_red = np.array([180,255,255])
-    mask1 = cv2.inRange(gaussMaskedHSV, lower_red, upper_red)
+    lower_red = np.array([170, 50, 50])
+    upper_red = np.array([180, 255, 255])
+    mask1 = cv2.inRange(gausMaskedHSV, lower_red, upper_red)
     # The final mask of the lower red and upper red combined
     finalMasked2 = mask0 + mask1
 
-#TODO: Add morphological CLOSE and OPEN? 
+    # TODO: Add morphological CLOSE and OPEN? 
 
     # Find the largest contour
     gaussContours, _ = cv2.findContours(finalMasked2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
