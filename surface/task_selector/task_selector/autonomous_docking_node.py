@@ -33,7 +33,12 @@ MIN_TASK_DURATION = 2
 # Ratio of the camera frame's dimenions to dimensions of the square we want the button to be in
 # Currently 10 to 1
 BP = 0.1
+# Range of values Pixhawk takes in microseconds
+ZERO_SPEED: int = 1500
+RANGE_SPEED: int = 400
 # --------------------------------------------------------------------------------------------
+
+
 
 class AutonomousDockingControlNode(Node):
 
@@ -74,7 +79,8 @@ class AutonomousDockingControlNode(Node):
     def handle_frame(self, frame: Image):
         # Converts image msg to BGR w/ alpha channel
         cv_image = self.cv_bridge.imgmsg_to_cv2(frame, desired_encoding='CV_8UC4') 
-
+        get_button_contour(cv_image)
+        
         rov_msg = ROVControl()
         # TODO: Should I made a header? If so, to what?
         # rov_msg.header = header
