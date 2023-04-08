@@ -9,10 +9,10 @@ from interfaces.msg import ROVControl, Manip
 from sensor_msgs.msg import Joy
 
 # Button meanings for PS5 Control might be different for others
-X_BUTTON:        int = 0 # Manipulator 0
-O_BUTTON:        int = 1 # Manipulator 1
-TRI_BUTTON:      int = 2 # Manipulator 2
-SQUARE_BUTTON:   int = 3 # Manipulator 3
+X_BUTTON:        int = 0  # Manipulator 0
+O_BUTTON:        int = 1  # Manipulator 1
+TRI_BUTTON:      int = 2  # Manipulator 2
+SQUARE_BUTTON:   int = 3  # Manipulator 3
 L1:              int = 4
 R1:              int = 5
 L2:              int = 6
@@ -88,10 +88,10 @@ class ManualControlNode(Node):
         }
 
         self.manip_state: dict = {
-            "claw0": False, 
-            "claw1": False, 
-            "claw2": False, 
-            "claw3": False 
+            "claw0": False,
+            "claw1": False,
+            "claw2": False,
+            "claw3": False
         }
 
     def controller_callback(self, msg: Joy):
@@ -99,7 +99,6 @@ class ManualControlNode(Node):
             self.joystick_to_pixhawk(msg)
 
             self.manip_callback(msg)
-
 
     def joystick_to_pixhawk(self, msg: Joy):
             axes = msg.axes
