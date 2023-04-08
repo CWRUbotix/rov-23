@@ -1,12 +1,11 @@
 
-from PyQt5.QtWidgets import QPushButton, QHBoxLayout
+from PyQt5.QtWidgets import QPushButton, QHBoxLayout, QWidget
 from gui.event_nodes.publisher import GUIEventPublisher
-from gui.modules.module import Module
 
 from interfaces.msg import Armed
 
 
-class Arm(Module):
+class Arm(QWidget):
     """Arm widget for sending Arm Commands."""
 
     def __init__(self):

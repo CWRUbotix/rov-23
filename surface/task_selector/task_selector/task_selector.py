@@ -11,11 +11,11 @@ from interfaces.action import BasicTask
 from task_selector.tasks import Tasks
 
 
-class TaskRequestor(Node):
+class TaskSelector(Node):
 
     def __init__(self):
         # creation of a Node with its name as input
-        super().__init__('task_requestor',
+        super().__init__('task_selector',
                          parameter_overrides=[],
                          namespace='surface')
 
@@ -166,6 +166,6 @@ class TaskRequestor(Node):
 def main():
     rclpy.init()
 
-    action_client = TaskRequestor()
+    action_client = TaskSelector()
 
     rclpy.spin(action_client)

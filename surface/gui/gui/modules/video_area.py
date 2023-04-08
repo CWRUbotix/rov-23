@@ -2,13 +2,11 @@ from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtGui import QPixmap, QImage
 
-import cv2
-
-from gui.modules.module import Module
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
+from cv2 import Mat
 
 
 # This file has a lot commented out. Commented code is mostly used for
@@ -44,7 +42,7 @@ class VideoWidget(QLabel):
 
     @pyqtSlot(Image)
     def handle_frame(self, frame: Image):
-        cv_image = self.cv_bridge.imgmsg_to_cv2(
+        cv_image: Mat = self.cv_bridge.imgmsg_to_cv2(
             frame, desired_encoding='passthrough')
 
         # TODO: dynamic image scaling based on Qt element size
@@ -56,8 +54,8 @@ class VideoWidget(QLabel):
 
         qt_image: QImage = self.convert_cv_qt(
             cv_image,
-            600,
-            600
+            480,
+            480
         )
 
         # self.setPixmap(qt_image.scaled(
@@ -67,34 +65,35 @@ class VideoWidget(QLabel):
 
         self.setPixmap(QPixmap.fromImage(qt_image))
 
-    def convert_cv_qt(self, cv_img, width=None, height=None) -> QImage:
+    def convert_cv_qt(self, cv_img: Mat, width: int = 0, height: int = 0) -> QImage:
         """Convert from an opencv image to QPixmap."""
         # Color image
         if len(cv_img.shape) == 3:
-            cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+            # Rectify weird colors
+            # cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2RGBA)
             h, w, ch = cv_img.shape
-            bytes_per_line = ch * w
+            bytes_per_line: int = ch * w
 
             img_format = QImage.Format_RGB888
 
         # Grayscale image
         elif len(cv_img.shape) == 2:
             h, w = cv_img.shape
-            bytes_per_line = w
+            bytes_per_line: int = w
 
             img_format = QImage.Format_Grayscale8
 
+        else:
+            raise Exception("Somehow not color or grayscale image.")
+
         qt_image = QImage(cv_img.data, w, h, bytes_per_line, img_format)
 
-        if width is not None:
-            qt_image = qt_image.scaled(width, height, Qt.KeepAspectRatio)
-
-        self.qt_image = qt_image
-
+        if width == 0:
+            qt_image: QImage = qt_image.scaled(width, height, Qt.KeepAspectRatio)
         return qt_image
 
 
-class VideoArea(Module):
+class VideoArea(QWidget):
     """Container widget handling all video streams."""
 
     # First entry here will start as the big video
@@ -127,10 +126,6 @@ class VideoArea(Module):
             #     self.grid_layout.addWidget(video, 0, 0, 1, 3)
             # else:
             #     self.grid_layout.addWidget(video, 1, i - 1, 1, 1)
-
-    def kill_module(self):
-        for video_widget in self.video_widgets:
-            video_widget.camera_subscriber.kill_executor()
 
     # @pyqtSlot(QWidget)
     # def set_as_big_video(self, target_widget: VideoWidget):
