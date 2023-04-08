@@ -221,8 +221,8 @@ def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
 
 # Can I remove goal_handle as a parameter?
 def cancel_callback(self, goal_handle: ServerGoalHandle):
-        self.get_logger().info('Received cancel request')
-        return CancelResponse.ACCEPT
+    self.get_logger().info('Received cancel request')
+    return CancelResponse.ACCEPT
 
 
 def main():
