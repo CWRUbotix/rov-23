@@ -4,12 +4,13 @@ from launch import LaunchDescription
 
 def generate_launch_description():
 
-    # launches tranceiver
+    # launches transceiver
     reader_node: Node = Node(
         namespace='surface',
         package='transceiver',
         executable='serial',
-        remappings=[("surface/transceiver", "surface/gui/transceiver")]
+        remappings=[("transceiver_control", "gui/transceiver_control"),
+                    ("transceiver_data", "gui/transceiver_data")]
     )
 
     return LaunchDescription([

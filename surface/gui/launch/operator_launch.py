@@ -10,6 +10,6 @@ def generate_launch_description():
         executable='run_operator',
         parameters=[
                 {'theme': LaunchConfiguration('theme', default='')}],
-    )
+        )
 
     return LaunchDescription([gui_node])
