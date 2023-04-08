@@ -16,26 +16,25 @@ from interfaces.msg import ROVControl
 # TODO: Ask what this means: Chop dual cam frame in half
 # --------------------------------------------------------------------------------------------
 # Direction robot should move while steering
-RIGHT = "RIGHT" 
-LEFT = "LEFT"
-UP = "UP"
-DOWN = "DOWN"
-NONE = "NONE"
+RIGHT = 1 
+LEFT = -1
+UP = 1
+DOWN = -1
+NONE = 0
 # --------------------------------------------------------------------------------------------
 # Fraction of screen the button takes up when we stop crawling & start steering
 START_WIDTH_FRACTION = 0.035
 START_HEIGHT_FRACTION = 0.035
-# --------------------------------------------------------------------------------------------
-# Theoretical task durations
-MAX_TASK_DURATION = 500
-MIN_TASK_DURATION = 2
 # ---------------------------------------------------------------------------------------------
-# Ratio of the camera frame's dimenions to dimensions of the square we want the button to be in
-# Currently 10 to 1
-BP = 0.1
+# Represents size of the square the button should be in relative to height of the image
+BOUND = 0.1
 # Range of values Pixhawk takes in microseconds
 ZERO_SPEED: int = 1500
 RANGE_SPEED: int = 400
+# The speed at which we adjust the ROV
+CRAWL_SPEED = 1550
+# The speed of which we hit the button
+CHARGE_SPEED = 1650
 # --------------------------------------------------------------------------------------------
 
 
@@ -55,8 +54,10 @@ class AutonomousDockingControlNode(Node):
         # Object to bridge ROV Images and CV2 Images
         self.cv_bridge: CvBridge = CvBridge()
         self.handle_frame_signal.connect(self.handle_frame)
-        # Initial conditions for image dimension
+        # Initial Image dimensions given no images have been received
         self.image_dims = [-1, -1]
+        # Represents if the ROV is at a standstill
+        self.stopped = False
 
         # Camera Subscription
         # Subscription or GUIEventSubscriber
@@ -79,20 +80,42 @@ class AutonomousDockingControlNode(Node):
     def handle_frame(self, frame: Image):
         # Converts image msg to BGR w/ alpha channel
         cv_image = self.cv_bridge.imgmsg_to_cv2(frame, desired_encoding='CV_8UC4') 
-        get_button_contour(cv_image)
-        
+        horizontal_direction, vertical_direction = move_direction()
+
         rov_msg = ROVControl()
-        # TODO: Should I made a header? If so, to what?
-        # rov_msg.header = header
-        # Directional commands for the ROV
-        rov_msg.x = None
-        rov_msg.y = None
-        rov_msg.z = None
-        # Rotational directions for the ROV
-        rov_msg.yaw = None
-        rov_msg.pitch = None
-        rov_msg.roll = None
-        self.pixhawk_publisher.publish(rov_msg)
+
+        if horizontal_direction != 0 and vertical_direction != 0:
+            # TODO: Should I made a header? If so, to what?
+            # rov_msg.header = header
+            # Directional commands for the ROV
+            # TODO: Double check x y axes are right
+            rov_msg.x = horizontal_direction * CRAWL_SPEED
+            rov_msg.z = vertical_direction * CRAWL_SPEED
+            # Rotational directions for the ROV
+            # Yaw and Pitch should be at equilibrium
+            # TODO: Put the ROV at equilibrium?
+            rov_msg.yaw = ZERO_SPEED
+            rov_msg.pitch = ZERO_SPEED
+            rov_msg.roll = None
+            self.pixhawk_publisher.publish(rov_msg)
+        elif self.stopped:
+            rov_msg.x = ZERO_SPEED
+            rov_msg.y = CHARGE_SPEED
+            rov_msg.z = ZERO_SPEED
+            rov_msg.yaw = ZERO_SPEED
+            rov_msg.pitch = ZERO_SPEED
+            rov_msg.roll = ZERO_SPEED
+            self.pixhawk_publisher.publish(rov_msg)
+        else:
+            rov_msg.x = ZERO_SPEED
+            rov_msg.z = ZERO_SPEED
+            rov_msg.yaw = ZERO_SPEED
+            rov_msg.pitch = ZERO_SPEED
+            rov_msg.roll = ZERO_SPEED
+            self.pixhawk_publisher.publish(rov_msg)
+            self.stopped = True
+
+
 
 # Takes a OpenCV image as input, and returns a contour surrounding the button (The largest red object)
 def get_button_contour(cv_img):
@@ -114,9 +137,6 @@ def get_button_contour(cv_img):
     cv2.imshow("Gaussian", cv2.bitwise_and(cv_img, cv_img, mask=gaussian))
     cv2.imshow("Original", cv_img)
 
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
     # The HSV colormap of the original image, but with the gaussian threshold mask applied
     gaussMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian), cv2.COLOR_BGR2HSV)
 
@@ -131,10 +151,6 @@ def get_button_contour(cv_img):
     mask1 = cv2.inRange(gaussMaskedHSV, lower_red, upper_red)
     # The final mask of the lower red and upper red combined
     finalMasked2 = mask0 + mask1
-
-    cv2.imshow("Final Mask", finalMasked2)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
 
 #TODO: Add morphological CLOSE and OPEN? 
 
@@ -152,15 +168,12 @@ def get_button_contour(cv_img):
 
     return gauss_contour, currentArea
 
-#TODO: Somehow parse camera frame into an OpenCV image
-# Takes and processes a camera frame
-# Determines the direction that the bot should move in
-    # Does position processing regarding the button
-
+# Does position processing regarding the button
 def move_direction(self, image):
+    contour, area = get_button_contour(image)
+    #Indicators for what directions we should be moving
     horizontal_move = NONE
     vertical_move = NONE
-    contour, area = get_button_contour(image)
 
     # Gets the coordinates for the button's position and image dimensions
     # Once a contour has been found
@@ -170,21 +183,21 @@ def move_direction(self, image):
     
     # Takes the dimensions of the image
     # And then determines if the button is close to the center
-    if (self.frame.dimension[0] / 2 + self.frame.dimension[0] * BP) < button_x:
+    if (self.frame.dimension[0] / 2 + BOUND * self.frame.dimension[1]) < button_x:
         horizontal_move = LEFT
-    elif (self.frame.dimension[0] / 2 - self.frame.dimension[0] * BP) > button_x:
+    elif (self.frame.dimension[0] / 2 - BOUND * self.frame.dimension[1]) > button_x:
         horizontal_move = RIGHT
     else:
         horizontal_move = NONE
     
-    if (self.frame.dimension[1] / 2 + self.frame.dimension[1] * BP) < button_y:
+    if (self.frame.dimension[1] / 2 + BOUND * self.frame.dimension[1]) < button_y:
         vertical_move = DOWN
-    elif (self.frame.dimension[1] / 2 - self.frame.dimension[1] * BP) > button_y:
+    elif (self.frame.dimension[1] / 2 - BOUND * self.frame.dimension[1]) > button_y:
         vertical_move = UP
     else:
         vertical_move = NONE
 
-    return horizontal_move, vertical_move   
+    return horizontal_move, vertical_move
 
 def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
         self.get_logger().info('Starting Autonomous Docking...')
