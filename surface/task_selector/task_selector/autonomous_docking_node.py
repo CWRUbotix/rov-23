@@ -37,7 +37,6 @@ CHARGE_RATE = 0.5
 # --------------------------------------------------------------------------------------------
 
 
-
 class AutonomousDockingControlNode(Node):
 
     def __init__(self):
@@ -142,8 +141,8 @@ def get_button_contour(cv_img):
     gausMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian), cv2.COLOR_BGR2HSV)
 
     # Lower mask (0-10 red range of color)
-    lower_red = np.array([0,50,50])
-    upper_red = np.array([10,255,255])
+    lower_red = np.array([0, 50, 50])
+    upper_red = np.array([10, 255, 255])
     mask0 = cv2.inRange(gausMaskedHSV, lower_red, upper_red)
 
     # upper mask (170-180 red range of color)
@@ -153,7 +152,7 @@ def get_button_contour(cv_img):
     # The final mask of the lower red and upper red combined
     finalMasked2 = mask0 + mask1
 
-    # TODO: Add morphological CLOSE and OPEN? 
+    # TODO: Add morphological CLOSE and OPEN?
 
     # Find the largest contour
     gaussContours, _ = cv2.findContours(finalMasked2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -169,10 +168,11 @@ def get_button_contour(cv_img):
 
     return gauss_contour, currentArea
 
+
 # Does position processing regarding the button
 def move_direction(self, image):
     contour, area = get_button_contour(image)
-    #Indicators for what directions we should be moving
+    # Indicators for what directions we should be moving
     horizontal_move = NONE
     vertical_move = NONE
 
@@ -181,7 +181,7 @@ def move_direction(self, image):
     if area > 0:
         (button_x, button_y), radius = cv2.minEnclosingCircle(contour)
         self.image_dims[0], self.image_dims[1] = image.shape
-    
+
     # Takes the dimensions of the image
     # And then determines if the button is close to the center
     if (self.image_dims[0] / 2 + BOUND * self.image_dims[1]) < button_x:
@@ -190,7 +190,7 @@ def move_direction(self, image):
         horizontal_move = RIGHT
     else:
         horizontal_move = NONE
-    
+
     if (self.image_dims[1] / 2 + BOUND * self.image_dims[1]) < button_y:
         vertical_move = DOWN
     elif (self.image_dims[1] / 2 - BOUND * self.image_dims[1]) > button_y:
@@ -200,28 +200,31 @@ def move_direction(self, image):
 
     return horizontal_move, vertical_move
 
+
 def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
-        self.get_logger().info('Starting Autonomous Docking...')
+    self.get_logger().info('Starting Autonomous Docking...')
 
-        if goal_handle.is_cancel_requested:
-            goal_handle.canceled()
-            self.get_logger().info('Docking canceled')
-            return BasicTask.Result()
-        else:
-            feedback_msg = BasicTask.Feedback()
-            feedback_msg.feedback_message = "Task is executing"
+    if goal_handle.is_cancel_requested:
+        goal_handle.canceled()
+        self.get_logger().info('Docking canceled')
+        return BasicTask.Result()
+    else:
+        feedback_msg = BasicTask.Feedback()
+        feedback_msg.feedback_message = "Task is executing"
 
-            self.get_logger().info('Feedback: ' + feedback_msg.feedback_message)
+        self.get_logger().info('Feedback: ' + feedback_msg.feedback_message)
 
-            goal_handle.publish_feedback(feedback_msg)
-            goal_handle.succeed()
-            return BasicTask.Result()
+        goal_handle.publish_feedback(feedback_msg)
+        goal_handle.succeed()
+        return BasicTask.Result()
+
 
 # Can I remove goal_handle as a parameter?
 def cancel_callback(self, goal_handle: ServerGoalHandle):
         self.get_logger().info('Received cancel request')
         return CancelResponse.ACCEPT
-    
+
+
 def main():
     rclpy.init()
     docking_control = AutonomousDockingControlNode()
