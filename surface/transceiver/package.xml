@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>tranciever</name>
+  <name>transceiver</name>
   <version>0.0.3</version>
-  <description>Mate ROV tranciever communication code</description>
+  <description>Mate ROV transceiver communication code</description>
   <maintainer email="ery12@case.edu">ericy</maintainer>
   <license>Apache License 2.0</license>
 

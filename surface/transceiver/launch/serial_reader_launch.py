@@ -4,10 +4,12 @@ from launch import LaunchDescription
 
 def generate_launch_description():
 
-    # launches main task scheduler
+    # launches tranceiver
     reader_node: Node = Node(
-        package='tranciever',
-        executable='selector'
+        namespace='surface',
+        package='transceiver',
+        executable='serial',
+        remappings=[("surface/transceiver", "surface/gui/transceiver")]
     )
 
     return LaunchDescription([

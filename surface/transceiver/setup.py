@@ -2,7 +2,7 @@ from setuptools import setup
 from glob import glob
 import os
 
-package_name = 'tranciever'
+package_name = 'transceiver'
 
 setup(
     name=package_name,
@@ -20,12 +20,12 @@ setup(
     zip_safe=True,
     maintainer='ericy',
     maintainer_email='ery12@case.edu',
-    description='Mate ROV tranciever communication code',
+    description='Mate ROV transceiver communication code',
     license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'serial = tranciever.serial_reader:main',
+            'serial = transceiver.serial_reader:main',
         ],
     },
 )

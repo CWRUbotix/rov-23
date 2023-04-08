@@ -43,14 +43,14 @@ class FloatComm(QWidget):
         self.label.setText('Waiting for radio...')
         layout.addWidget(self.label)
 
-        self.tranciever_publisher: GUIEventPublisher = GUIEventPublisher(
+        self.transceiver_publisher: GUIEventPublisher = GUIEventPublisher(
             String,
-            "tranciever_control"
+            "transceiver_control"
         )
 
-        self.tranciever_subscription: GUIEventSubscriber = GUIEventSubscriber(
+        self.transceiver_subscription: GUIEventSubscriber = GUIEventSubscriber(
             String,
-            "tranciever_data",
+            "transceiver_data",
             self.handle_scheduler_response_signal
         )
 
@@ -59,10 +59,10 @@ class FloatComm(QWidget):
         self.label.setText(msg.data)
 
     def submerge_clicked(self):
-        self.tranciever_publisher.publish("submerge")
+        self.transceiver_publisher.publish("submerge")
 
     def extend_clicked(self):
-        self.tranciever_publisher.publish("extend")
+        self.transceiver_publisher.publish("extend")
 
     def retract_clicked(self):
-        self.tranciever_publisher.publish("retract")
+        self.transceiver_publisher.publish("retract")

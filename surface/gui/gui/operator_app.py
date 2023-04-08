@@ -23,7 +23,7 @@ class OperatorApp(App):
         layout.addWidget(self.logger, 0, 2)
 
         self.float_comm: FloatComm = FloatComm()
-        layout.addWidget(self.float_comm, 0,0)
+        layout.addWidget(self.float_comm, 0, 0)
 
 
 def run_gui_operator():

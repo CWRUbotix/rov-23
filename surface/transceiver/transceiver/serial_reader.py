@@ -9,10 +9,10 @@ class SerialReader(Node):
     def __init__(self):
         super().__init__('serial_reader',
                          parameter_overrides=[])
-        self.publisher_ = self.create_publisher(String, 'tranciever_data', 10)
+        self.publisher_ = self.create_publisher(String, 'transceiver_data', 10)
         self.listener = self.create_subscription(
             String,
-            'tranciever_control',
+            'transceiver_control',
             self.control_callback,
             10)
         timer_period = .5
