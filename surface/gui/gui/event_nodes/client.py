@@ -1,7 +1,7 @@
 import re
 from threading import Thread
-from gui.event_nodes.event_node import GUIEventNode
 
+from rclpy.node import Node
 import rclpy
 from rclpy.client import SrvType, SrvTypeRequest, SrvTypeResponse
 
@@ -12,13 +12,14 @@ from PyQt5.QtCore import pyqtBoundSignal
 TIMEOUT_SEC: float = 1.0
 
 
-class GUIEventClient(GUIEventNode):
+class GUIEventClient(Node):
     """Multithreaded client for sending service requests from the GUI."""
 
     def __init__(self, srv_type: SrvType, topic: str, signal: pyqtBoundSignal):
         # Name this node with a sanitized version of the topic
-        super().__init__(
-            f'gui_event_client_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}')
+        name: str = f'gui_event_subscriber_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}'
+        super().__init__(name, namespace="surface/gui",
+                         parameter_overrides=[])
 
         self.srv_type = srv_type
         self.topic: str = topic
@@ -27,7 +28,7 @@ class GUIEventClient(GUIEventNode):
 
         self.cli = self.create_client(srv_type, topic)
         Thread(target=self.__connect_to_service, daemon=True,
-               name=f'{self.node_name}_connect_to_service').start()
+               name=f'{name}_connect_to_service').start()
 
     def __connect_to_service(self):
         """Connect this client to a server in a separate thread; set self.connected when done."""

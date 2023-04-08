@@ -9,14 +9,11 @@ def generate_launch_description():
 
     gui_path: str = get_package_share_directory('gui')
     task_selector_path: str = get_package_share_directory('task_selector')
-    controller_path: str = get_package_share_directory('ps5_controller')
-    manip_path: str = get_package_share_directory('manipulators')
-
     # Launches Gui
     gui_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(
-                gui_path, 'launch', 'gui_launch.py'
+                gui_path, 'launch', 'operator_launch.py'
             )
         ]),
     )
@@ -29,26 +26,8 @@ def generate_launch_description():
             )
         ]),
     )
-    # Launches Controller
-    controller_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            os.path.join(
-                controller_path, 'launch', 'controller_launch.py'
-            )
-        ]),
-    )
-
-    # Manipulator Controller
-    manip_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            os.path.join(
-                manip_path, 'launch', 'manipulators.py'
-            )
-        ]),
-    )
 
     return LaunchDescription([
         gui_launch,
         task_selector_launch,
-        controller_launch,
     ])
