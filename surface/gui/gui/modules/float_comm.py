@@ -1,11 +1,15 @@
 
-from PyQt5.QtWidgets import QPushButton, QHBoxLayout, QLabel
-from gui.event_nodes.publisher import GUIEventPublisher, GUIEventSubscription
-from gui.modules.module import Module
+from PyQt5.QtWidgets import QPushButton, QHBoxLayout, QLabel, QWidget
+from gui.event_nodes.publisher import GUIEventPublisher
+from gui.event_nodes.subscriber import GUIEventSubscriber
+from std_msgs.msg import String
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 
-class FloatComm(Module):
+class FloatComm(QWidget):
     """Arm widget for sending Arm Commands."""
+
+    handle_scheduler_response_signal: pyqtSignal = pyqtSignal(String)
 
     def __init__(self):
         super().__init__()
@@ -33,7 +37,7 @@ class FloatComm(Module):
         layout.addWidget(extend_button)
         layout.addWidget(retract_button)
 
-        self.label : QLabel = QLabel()
+        self.label: QLabel = QLabel()
         self.label.setText('Waiting for radio...')
         layout.addWidget(self.label)
 
@@ -42,14 +46,14 @@ class FloatComm(Module):
             "tranciever_control"
         )
 
-        self.tranciever_subscription: GUIEventSubscription = GUIEventSubscription(
+        self.tranciever_subscription: GUIEventSubscriber = GUIEventSubscriber(
             String,
             "tranciever_data",
-            self.update_text
+            self.update_task_dropdown_signal
         )
-    
-    def update_text(self, msg):
-        self.label.setText(msg)
+
+    def update_text(self, msg: String):
+        self.label.setText(msg.data)
 
     def submerge_clicked(self):
         self.tranciever_publisher.publish("submerge")

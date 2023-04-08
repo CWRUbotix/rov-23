@@ -1,18 +1,19 @@
 import serial
 import rclpy
 from rclpy.node import Node
-
 from std_msgs.msg import String
 
+
 class SerialReader(Node):
-    
+
     def __init__(self):
-        super().__init__('serial_reader')
+        super().__init__('serial_reader',
+                         parameter_overrides=[])
         self.publisher_ = self.create_publisher(String, 'tranciever_data', 10)
         self.listener = self.create_subscription(
-            String, 
-            'tranciever_control', 
-            self.control_callback, 
+            String,
+            'tranciever_control',
+            self.control_callback,
             10)
         timer_period = .5
         self.ser = serial.Serial('/dev/ttyUSB0', 115200)
@@ -25,17 +26,19 @@ class SerialReader(Node):
         self.publisher_.publish(msg)
         self.get_logger().info('Publishing: "%s"' % msg.data)
         self.i += 1
-    
+
     def control_callback(self, msg):
         self.ser.write(bytes(msg, 'utf-8'))
         self.get_logger().info('Command sent via serial monitor: "%s"' % msg)
 
-def main(args=None):
-    rclpy.init(args=args)
+
+def main():
+    rclpy.init()
 
     serial_reader = SerialReader()
 
     rclpy.spin(serial_reader)
+
 
 if __name__ == '__main__':
     main()
