@@ -27,9 +27,10 @@ class SerialReader(Node):
         # self.get_logger().info('Publishing: "%s"' % msg.data)
         # self.i += 1
 
-    def control_callback(self, msg):
-        self.ser.write(bytes(msg, 'utf-8'))
-        self.get_logger().info('Command sent via serial monitor: "%s"' % msg)
+    def control_callback(self, msg: String):
+        msg_encode: bytes = msg.data.encode()
+        self.ser.write(msg_encode)
+        self.get_logger().info(f'Command sent via serial monitor: {msg_encode}')
 
 
 def main():

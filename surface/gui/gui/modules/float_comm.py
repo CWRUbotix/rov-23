@@ -59,10 +59,10 @@ class FloatComm(QWidget):
         self.label.setText(msg.data)
 
     def submerge_clicked(self):
-        self.transceiver_publisher.publish("submerge")
+        self.transceiver_publisher.publish(String(data="submerge"))
 
     def extend_clicked(self):
-        self.transceiver_publisher.publish("extend")
+        self.transceiver_publisher.publish(String(data="extend"))
 
     def retract_clicked(self):
-        self.transceiver_publisher.publish("retract")
+        self.transceiver_publisher.publish(String(data="retract"))
