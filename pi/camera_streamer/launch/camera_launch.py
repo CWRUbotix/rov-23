@@ -9,9 +9,10 @@ def generate_launch_description():
         executable="usb_cam_node_exe",
         namespace="front_cam",
         parameters=[
-            {"image_width": "640"},
-            {"image_height": "480"},
-            {"pixel_format": "mjpeg2rgb"}
+            {"video_device": "/dev/video0"},
+            {"image_width": 640},
+            {"image_height": 480},
+            {"pixel_format": "mjpeg"}
         ]
     )
 
