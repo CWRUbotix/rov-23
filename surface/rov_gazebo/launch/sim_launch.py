@@ -40,7 +40,8 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="screen",
         parameters=[pool_params],
-        namespace="pool",
+        namespace=NS,
+        remappings=[(f"/{NS}/robot_description", f"/{NS}/pool_description")],
     )
 
     # Launches Gazebo
@@ -73,13 +74,13 @@ def generate_launch_description():
         output="screen",
         arguments=[
             "-topic",
-            "robot_description",
+            "pool_description",
             "-name",
             "pool",
             "-allow_renaming",
             "true",
         ],
-        namespace="pool",
+        namespace=NS,
     )
 
     # Not using keyboard launch file
