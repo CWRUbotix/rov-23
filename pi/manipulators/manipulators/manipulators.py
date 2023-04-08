@@ -3,10 +3,12 @@ from rclpy.node import Node, Subscription
 from interfaces.msg import Manip
 from .tca9555 import TCA9555
 
+
 class Manipulator(Node):
 
     def __init__(self):
-        super().__init__('manipulator')
+        super().__init__('manipulator',
+                         parameter_overrides=[])
 
         self.subscription: Subscription = self.create_subscription(
             Manip,
@@ -23,10 +25,10 @@ class Manipulator(Node):
                 ("claw2", rclpy.Parameter.Type.INTEGER),
                 ("claw3", rclpy.Parameter.Type.INTEGER),
             ])
-        
+
         # Initialize with standard I2C-bus address of TCA9555 a.k.a 0x20
-        self.gpio = TCA9555() # can put in the address as a param in hexadecimal     
-        self.get_logger().info(str(self.gpio.format_config()))    
+        self.gpio = TCA9555()  # can put in the address as a param in hexadecimal
+        self.get_logger().info(str(self.gpio.format_config()))
 
         # Set pins 0 through 5 as output
         self.gpio.set_direction(0, bits=(0, 1, 2, 3, 4, 5))
@@ -43,8 +45,9 @@ class Manipulator(Node):
         else:
             self.gpio.unset_bits(bits=(pin))
 
-def main(args=None):
-    rclpy.init(args=args)
+
+def main():
+    rclpy.init()
 
     subscriber = Manipulator()
 
