@@ -31,9 +31,9 @@ BOUND = 0.1
 ZERO_SPEED: int = 1500
 RANGE_SPEED: int = 400
 # The speed at which we adjust the ROV
-CRAWL_SPEED = 1550
+CRAWL_RATE = 0.25
 # The speed of which we hit the button
-CHARGE_SPEED = 1650
+CHARGE_RATE = 0.5
 # --------------------------------------------------------------------------------------------
 
 
@@ -88,18 +88,18 @@ class AutonomousDockingControlNode(Node):
             # rov_msg.header = header
             # Directional commands for the ROV
             # TODO: Double check x y axes are right
-            rov_msg.x = horizontal_direction * CRAWL_SPEED
-            rov_msg.z = vertical_direction * CRAWL_SPEED
+            rov_msg.x = horizontal_direction * RANGE_SPEED * CRAWL_RATE
+            rov_msg.z = horizontal_direction * RANGE_SPEED * CRAWL_RATE
             # Rotational directions for the ROV
             # Yaw and Pitch should be at equilibrium
             # TODO: Put the ROV at equilibrium?
+            rov_msg.roll = ZERO_SPEED
             rov_msg.yaw = ZERO_SPEED
             rov_msg.pitch = ZERO_SPEED
-            rov_msg.roll = None
             self.pixhawk_publisher.publish(rov_msg)
         elif self.stopped:
+            rov_msg.y = RANGE_SPEED * CHARGE_RATE
             rov_msg.x = ZERO_SPEED
-            rov_msg.y = CHARGE_SPEED
             rov_msg.z = ZERO_SPEED
             rov_msg.yaw = ZERO_SPEED
             rov_msg.pitch = ZERO_SPEED
@@ -184,16 +184,16 @@ def move_direction(self, image):
     
     # Takes the dimensions of the image
     # And then determines if the button is close to the center
-    if (self.frame.dimension[0] / 2 + BOUND * self.frame.dimension[1]) < button_x:
+    if (self.image_dims[0] / 2 + BOUND * self.image_dims[1]) < button_x:
         horizontal_move = LEFT
-    elif (self.frame.dimension[0] / 2 - BOUND * self.frame.dimension[1]) > button_x:
+    elif (self.image_dims[0] / 2 - BOUND * self.image_dims[1]) > button_x:
         horizontal_move = RIGHT
     else:
         horizontal_move = NONE
     
-    if (self.frame.dimension[1] / 2 + BOUND * self.frame.dimension[1]) < button_y:
+    if (self.image_dims[1] / 2 + BOUND * self.image_dims[1]) < button_y:
         vertical_move = DOWN
-    elif (self.frame.dimension[1] / 2 - BOUND * self.frame.dimension[1]) > button_y:
+    elif (self.image_dims[1] / 2 - BOUND * self.image_dims[1]) > button_y:
         vertical_move = UP
     else:
         vertical_move = NONE
@@ -217,7 +217,7 @@ def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
             goal_handle.succeed()
             return BasicTask.Result()
 
-    # Can I remove goal_handle as a parameter?
+# Can I remove goal_handle as a parameter?
 def cancel_callback(self, goal_handle: ServerGoalHandle):
         self.get_logger().info('Received cancel request')
         return CancelResponse.ACCEPT
