@@ -24,8 +24,8 @@ class SerialReader(Node):
         msg = String()
         msg.data = self.ser.readline().decode()
         self.publisher_.publish(msg)
-        self.get_logger().info('Publishing: "%s"' % msg.data)
-        self.i += 1
+        # self.get_logger().info('Publishing: "%s"' % msg.data)
+        # self.i += 1
 
     def control_callback(self, msg):
         self.ser.write(bytes(msg, 'utf-8'))

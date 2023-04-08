@@ -171,8 +171,8 @@ void receiveData() {
       Serial.print(len);
       Serial.print("]: ");
       Serial.println((char*)buf);
-      Serial.print("RSSI: ");
-      Serial.println(rf69.lastRssi(), DEC);
+      //Serial.print("RSSI: ");
+      //Serial.println(rf69.lastRssi(), DEC);
     } else {
       Serial.println("Receive failed");
     }
