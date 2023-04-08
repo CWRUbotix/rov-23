@@ -165,9 +165,6 @@ class ManualControlNode(Node):
 
             self.last_button_state[button] = just_pressed
 
-            # if manip_id == "claw2":
-            #     self.get_logger().info("manip_id="+str(manip_id)+" manip_active="+str(new_manip_state))
-
             msg: Manip = Manip(manip_id=self.manip_ids[button], activated=self.manip_state[manip_id])
             self.manip_publisher.publish(msg)
 
