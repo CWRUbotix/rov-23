@@ -17,8 +17,8 @@ class GUIEventClient(Node):
 
     def __init__(self, srv_type: SrvType, topic: str, signal: pyqtBoundSignal):
         # Name this node with a sanitized version of the topic
-        name: str = f'gui_event_subscriber_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}'
-        super().__init__(name, namespace="surface/gui",
+        self.name: str = f'gui_event_subscriber_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}'
+        super().__init__(self.name, namespace="surface/gui",
                          parameter_overrides=[])
 
         self.srv_type = srv_type
@@ -28,7 +28,7 @@ class GUIEventClient(Node):
 
         self.cli = self.create_client(srv_type, topic)
         Thread(target=self.__connect_to_service, daemon=True,
-               name=f'{name}_connect_to_service').start()
+               name=f'{self.name}_connect_to_service').start()
 
     def __connect_to_service(self):
         """Connect this client to a server in a separate thread; set self.connected when done."""
@@ -42,7 +42,7 @@ class GUIEventClient(Node):
     def send_request_async(self, request: SrvTypeRequest):
         """Send request to server in separate thread."""
         Thread(target=self.send_request_with_signal, kwargs={'request': request},
-               daemon=True, name=f'{self.node_name}_send_request').start()
+               daemon=True, name=f'{self.name}_send_request').start()
 
     def send_request_with_signal(self, request: SrvTypeRequest):
         """Send synchronous request to server and emit signal."""
