@@ -260,8 +260,9 @@ void receiveSubmergeSignal() {
       buf[len] = 0;
       Serial.print("Received [");
       Serial.print(len);
-      Serial.print("]: ");
-      Serial.println((char*)buf);
+      Serial.print("]: '");
+      Serial.print((char*)buf);
+      Serial.println("'");
       Serial.print("RSSI: ");
       Serial.println(rf69.lastRssi(), DEC);
 
@@ -281,6 +282,12 @@ void receiveSubmergeSignal() {
 }
 
 void submerge() {
+  char radiopacket[20] = "Submerging!";
+  Serial.print("Sending: "); Serial.println(radiopacket);
+
+  // Send a message!
+  rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
+  rf69.waitPacketSent();
   digitalWrite(SyringeOutput, HIGH);
   delay(1000);
   digitalWrite(SyringeOutput, LOW);
@@ -288,9 +295,21 @@ void submerge() {
 
 void extend(){
   //extend code here
+  char radiopacket[20] = "Extending!";
+  Serial.print("Sending: "); Serial.println(radiopacket);
+
+  // Send a message!
+  rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
+  rf69.waitPacketSent();
 }
 
 void retract(){
+  char radiopacket[20] = "Retracting!";
+  Serial.print("Sending: "); Serial.println(radiopacket);
+
+  // Send a message!
+  rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
+  rf69.waitPacketSent();
   //retract code here
 }
 
