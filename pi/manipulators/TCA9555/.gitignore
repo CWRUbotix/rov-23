@@ -1,9 +1,0 @@
-# pyc
-*.pyc
-# pycharm
-.idea/
-# eclipse
-.project
-.pydevproject
-# egg-info folder
-TCA9555.egg-info/

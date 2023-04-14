@@ -1,9 +1,6 @@
-[submodule "pi/TCA9555"]
-	path = pi/manipulators/TCA9555
-	url = https://github.com/leloup314/TCA9555
-[submodule "pi/raspi-config"]
-	path = pi/raspi-config
-	url = https://github.com/RPi-Distro/raspi-config.git
 [submodule "surface/ros2_video_streamer"]
 	path = surface/ros2_video_streamer
 	url = git@github.com:cwruRobotics/ros2_video_streamer.git
+[submodule "pi/manipulators/TCA9555"]
+	path = pi/manipulators/TCA9555
+	url = git@github.com:leloup314/TCA9555.git
