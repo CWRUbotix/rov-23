@@ -84,9 +84,6 @@ class TaskSelector(QWidget):
         self.task_changed_client.get_logger().info(
             'GUI changed task to: Manual Control')
 
-        self.task_changed_client.send_request_async(
-            TaskRequest.Request(task_id=0))
-
         self.task_label.setText('Task: Manual Control')
 
         self.task_changed_client.send_request_async(

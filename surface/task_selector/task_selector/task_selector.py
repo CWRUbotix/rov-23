@@ -60,6 +60,8 @@ class TaskSelector(Node):
         #     self.send_basic_goal(self.timed_task_client)
         # elif request.task_id == Tasks.EX_BASIC.value:
         #     self.send_basic_goal(self.basic_task_client)
+        elif request.task_id == Tasks.AUTO_DOCKING.value:
+            pass
         elif request.task_id == Tasks.CANCEL.value:
             response.response = "Canceled"
         else:
