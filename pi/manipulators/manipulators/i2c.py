@@ -6,8 +6,10 @@ sudo chmod a+rw /dev/i2c-*
 from rclpy.node import Node
 from .tca9555 import TCA9555
 
+
 class I2CTest(Node):
     pass
+
 
 def main():
     # Initialize with standard I2C-bus address of TCA9555 a.k.a 0x20
@@ -24,6 +26,7 @@ def main():
 
     # # Turn off the LEDs
     gpio.unset_bits(bits=(0, 1, 2, 3, 4, 5))
+
 
 if __name__ == "__main__":
     main()

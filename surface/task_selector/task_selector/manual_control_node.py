@@ -8,6 +8,9 @@ from interfaces.action import BasicTask
 from interfaces.msg import ROVControl, Manip
 from sensor_msgs.msg import Joy
 
+from typing import Dict
+
+
 # Button meanings for PS5 Control might be different for others
 X_BUTTON:        int = 0  # Manipulator 0
 O_BUTTON:        int = 1  # Manipulator 1
@@ -66,7 +69,7 @@ class ManualControlNode(Node):
             100
         )
 
-        # Manipulators 
+        # Manipulators
         self.manip_publisher: Publisher = self.create_publisher(
             Manip,
             'manipulator_control',
@@ -88,7 +91,7 @@ class ManualControlNode(Node):
             SQUARE_BUTTON: False
         }
 
-        self.manip_state: dict = {
+        self.manip_state: Dict[str, bool] = {
             "claw0": False,
             "claw1": False,
             "claw2": False,
@@ -98,27 +101,26 @@ class ManualControlNode(Node):
     def controller_callback(self, msg: Joy):
         if self._passing:
             self.joystick_to_pixhawk(msg)
-
             self.manip_callback(msg)
 
     def joystick_to_pixhawk(self, msg: Joy):
-            axes = msg.axes
-            buttons = msg.buttons
-            # TODO someone else should check to make sure these are correct
-            # as in pitch yaw roll spin the right way
-            rov_msg = ROVControl()
-            rov_msg.header = msg.header
-            # Left Joystick XY
-            rov_msg.x = self.joystick_profiles(axes[LJOYX])
-            rov_msg.y = self.joystick_profiles(axes[LJOYY])
-            # Right Joystick Z
-            rov_msg.z = self.joystick_profiles(axes[RJOYX])
-            # Not sure if it spins correct way around z
-            rov_msg.yaw = self.joystick_profiles((axes[L2PRESS_PERCENT] -
-                                                  axes[R2PRESS_PERCENT])/2)
-            rov_msg.pitch = self.joystick_profiles(axes[DPADVERT])
-            rov_msg.roll = self.joystick_profiles(-buttons[L1] + buttons[R1])
-            self.pixhawk_publisher.publish(rov_msg)
+        axes = msg.axes
+        buttons = msg.buttons
+        # TODO someone else should check to make sure these are correct
+        # as in pitch yaw roll spin the right way
+        rov_msg = ROVControl()
+        rov_msg.header = msg.header
+        # Left Joystick XY
+        rov_msg.x = self.joystick_profiles(axes[LJOYX])
+        rov_msg.y = self.joystick_profiles(axes[LJOYY])
+        # Right Joystick Z
+        rov_msg.z = self.joystick_profiles(axes[RJOYX])
+        # Not sure if it spins correct way around z
+        rov_msg.yaw = self.joystick_profiles((axes[L2PRESS_PERCENT] -
+                                              axes[R2PRESS_PERCENT])/2)
+        rov_msg.pitch = self.joystick_profiles(axes[DPADVERT])
+        rov_msg.roll = self.joystick_profiles(-buttons[L1] + buttons[R1])
+        self.pixhawk_publisher.publish(rov_msg)
 
     # Used to create smoother adjustments
     def joystick_profiles(self, val: float) -> int:
@@ -158,15 +160,16 @@ class ManualControlNode(Node):
             else:
                 just_pressed = False
 
-            if self.last_button_state[button] == False and just_pressed:
+            if self.last_button_state[button] is False and just_pressed:
                 new_manip_state = not self.manip_state[manip_id]
                 self.manip_state[manip_id] = new_manip_state
                 self.get_logger().info("manip_id="+str(manip_id)+" manip_active="+str(new_manip_state))
 
             self.last_button_state[button] = just_pressed
 
-            msg: Manip = Manip(manip_id=self.manip_ids[button], activated=self.manip_state[manip_id])
-            self.manip_publisher.publish(msg)
+            manip_msg: Manip = Manip(manip_id=self.manip_ids[button],
+                                     activated=self.manip_state[manip_id])
+            self.manip_publisher.publish(manip_msg)
 
 
 def main():
