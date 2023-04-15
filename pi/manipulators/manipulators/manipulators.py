@@ -32,7 +32,7 @@ class Manipulator(Node):
 
         # Set pins 0 through 5 as output
         self.gpio.set_direction(0, bits=(0, 1, 2, 3, 4, 5))
-        # self.gpio.set_bits(bits=(0, 1, 2, 3, 4, 5))
+        self.gpio.unset_bits(bits=(0, 1, 2, 3, 4, 5))
 
     def manip_callback(self, request: Manip):
         manip_id = request.manip_id
