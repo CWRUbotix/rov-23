@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QHBoxLayout, QLabel
+from PyQt5.QtWidgets import QGridLayout, QLabel
 from PyQt5.QtWidgets import QWidget, QPushButton
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
@@ -9,6 +9,8 @@ from interfaces.srv import TaskRequest
 from interfaces.msg import TaskFeedback
 
 from rclpy.impl.rcutils_logger import RcutilsLogger
+
+width = 200
 
 
 class TaskSelector(QWidget):
@@ -22,24 +24,31 @@ class TaskSelector(QWidget):
     def __init__(self):
         super().__init__()
 
-        layout: QHBoxLayout = QHBoxLayout()
+        layout: QGridLayout = QGridLayout()
         self.setLayout(layout)
 
-        # Add 'Task: ' label #
-        label: QLabel = QLabel()
-        label.setText('Task: ')
-        layout.addWidget(label)
-
-        # Add dropdown #
-        # Create PyQt element
         # Create Start button
         self.startBtn = QPushButton("Start Auto Docking")
         self.startBtn.clicked.connect(self.startBtnClicked)
+        self.startBtn.setFixedHeight(75)
+        self.startBtn.setFixedWidth(width)
+
         # Create Stop button
         self.stopBtn = QPushButton("Stop Auto Docking")
         self.stopBtn.clicked.connect(self.stopBtnClicked)
-        layout.addWidget(self.startBtn)
-        layout.addWidget(self.stopBtn)
+        self.stopBtn.setFixedHeight(75)
+        self.stopBtn.setFixedWidth(width)
+
+        # Add 'Task: ' label
+        self.label: QLabel = QLabel()
+        self.label.setFixedWidth(width)
+        self.label.setText('Task: Manual Control')
+
+        # Setup Grid
+        layout.addWidget(self.label, 1, 1, 2, 2)
+        layout.addWidget(self.startBtn, 2, 1)
+        layout.addWidget(self.stopBtn, 3, 1)
+
         # Create ROS nodes #
         # Create client (in separate thread to let GUI load before it connects)
         self.scheduler_response_signal.connect(
@@ -61,6 +70,8 @@ class TaskSelector(QWidget):
         self.task_changed_client.get_logger().info(
             'GUI changed task to: Auto Docking')
 
+        self.label.setText('Task: Auto Docking')
+
         self.task_changed_client.send_request_async(
             TaskRequest.Request(task_id=1))
 
@@ -72,6 +83,11 @@ class TaskSelector(QWidget):
 
         self.task_changed_client.get_logger().info(
             'GUI changed task to: Manual Control')
+
+        self.task_changed_client.send_request_async(
+            TaskRequest.Request(task_id=0))
+
+        self.label.setText('Task: Manual Control')
 
         self.task_changed_client.send_request_async(
             TaskRequest.Request(task_id=0))
