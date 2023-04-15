@@ -1,4 +1,4 @@
-from task_selector.task_selector.tasks import Tasks
+from task_selector.tasks import Tasks
 
 from PyQt5.QtWidgets import QGridLayout, QLabel
 from PyQt5.QtWidgets import QWidget, QPushButton
