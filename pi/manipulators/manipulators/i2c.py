@@ -4,7 +4,7 @@ sudo chmod a+rw /dev/i2c-*
 """
 
 from rclpy.node import Node
-from .tca9555 import TCA9555
+from manipulators.tca9555 import TCA9555
 
 
 class I2CTest(Node):
