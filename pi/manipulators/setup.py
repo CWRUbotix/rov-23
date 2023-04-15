@@ -29,7 +29,7 @@ setup(
     zip_safe=True,
     maintainer='taz',
     maintainer_email='tzupfer@gmail.com',
-    description='TODO: Package description',
+    description='Code for manipulators',
     license='Apache 2.0',
     tests_require=['pytest'],
     entry_points={
