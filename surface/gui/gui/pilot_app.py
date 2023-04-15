@@ -1,6 +1,4 @@
 from PyQt5.QtWidgets import QGridLayout
-
-from gui.modules.task_selector import TaskSelector
 from gui.modules.video_area import VideoArea
 from gui.modules.arm import Arm
 from gui.app import App

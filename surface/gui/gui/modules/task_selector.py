@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel, QWidget, QPushButton
+from PyQt5.QtWidgets import QHBoxLayout, QLabel
+from PyQt5.QtWidgets import QWidget, QPushButton
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 from gui.event_nodes.client import GUIEventClient
@@ -15,7 +16,7 @@ class TaskSelector(QWidget):
 
     # Declare signals with "object" params b/c we don't have access to
     # the ROS service object TaskRequest_Response
-    handle_scheduler_response_signal: pyqtSignal = pyqtSignal(TaskRequest.Response)
+    scheduler_response_signal: pyqtSignal = pyqtSignal(TaskRequest.Response)
     update_task_dropdown_signal: pyqtSignal = pyqtSignal(TaskFeedback)
 
     def __init__(self):
@@ -34,30 +35,17 @@ class TaskSelector(QWidget):
         # Create Start button
         self.startBtn = QPushButton("Start Auto Docking")
         self.startBtn.clicked.connect(self.startBtnClicked)
-
         # Create Stop button
         self.stopBtn = QPushButton("Stop Auto Docking")
         self.stopBtn.clicked.connect(self.stopBtnClicked)
-
-        # Create label
-        # # self.combo_box: QComboBox = QComboBox()
-        # self.combo_box.setMinimumWidth(150)
-        # self.combo_box.addItem('Manual Control')
-        # self.combo_box.addItem('Auto Docking')
-        # self.combo_box.addItem('Coral Modeling')
-        
         layout.addWidget(self.startBtn)
         layout.addWidget(self.stopBtn)
-
-        # Connect signals
-        # self.combo_box.currentIndexChanged.connect(self.gui_changed_task)
-
         # Create ROS nodes #
         # Create client (in separate thread to let GUI load before it connects)
-        self.handle_scheduler_response_signal.connect(
+        self.scheduler_response_signal.connect(
             self.handle_scheduler_response)
         self.task_changed_client: GUIEventClient = GUIEventClient(
-            TaskRequest, 'task_request', self.handle_scheduler_response_signal)
+            TaskRequest, 'task_request', self.scheduler_response_signal)
 
         # Server doesn't spin, so we init in main thread
         self.update_task_dropdown_signal.connect(self.update_task_dropdown)
@@ -71,9 +59,10 @@ class TaskSelector(QWidget):
             return
 
         self.task_changed_client.get_logger().info(
-            f'GUI changed task to: Auto Docking')
+            'GUI changed task to: Auto Docking')
 
-        self.task_changed_client.send_request_async(TaskRequest.Request(task_id=1))
+        self.task_changed_client.send_request_async(
+            TaskRequest.Request(task_id=1))
 
     def stopBtnClicked(self):
         """Tell the back about the user selecting the stop button"""
@@ -82,11 +71,11 @@ class TaskSelector(QWidget):
             return
 
         self.task_changed_client.get_logger().info(
-            f'GUI changed task to: Manual Control')
+            'GUI changed task to: Manual Control')
 
-        self.task_changed_client.send_request_async(TaskRequest.Request(task_id=0))
-        
-        
+        self.task_changed_client.send_request_async(
+            TaskRequest.Request(task_id=0))
+
     @ pyqtSlot(TaskRequest.Response)
     def handle_scheduler_response(self, response: TaskRequest.Response):
         """Handle scheduler response to request sent from gui_changed_task."""
