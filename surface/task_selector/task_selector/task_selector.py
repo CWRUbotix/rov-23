@@ -103,19 +103,19 @@ class TaskSelector(Node):
     #     self._send_goal_future.add_done_callback(
     #         self.morning_response_callback)
 
-    # # Checks if goal was accepted
-    # def basic_response_callback(self, future):
-    #     goal_handle = future.result()
-    #     if not goal_handle.accepted:
-    #         self.get_logger().info('Goal rejected')
-    #         return
+    # Checks if goal was accepted
+    def basic_response_callback(self, future):
+        goal_handle = future.result()
+        if not goal_handle.accepted:
+            self.get_logger().info('Goal rejected')
+            return
 
-    #     self.get_logger().info('Goal accepted')
+        self.get_logger().info('Goal accepted')
 
-    #     self._goal_handle = goal_handle
+        self._goal_handle = goal_handle
 
-    #     self._get_result_future = goal_handle.get_result_async()
-    #     self._get_result_future.add_done_callback(self.basic_result_callback)
+        self._get_result_future = goal_handle.get_result_async()
+        self._get_result_future.add_done_callback(self.basic_result_callback)
 
     # def morning_response_callback(self, future):
     #     goal_handle = future.result()
