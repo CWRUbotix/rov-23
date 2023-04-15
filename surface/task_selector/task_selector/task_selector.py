@@ -84,7 +84,8 @@ class TaskSelector(Node):
             self.get_logger().info('Sending goal request...')
         self._send_goal_future = client.send_goal_async(
             goal_msg, feedback_callback=self.feedback_callback)
-        self._send_goal_future.add_done_callback(self.basic_response_callback)
+
+        # self._send_goal_future.add_done_callback(self.basic_response_callback)
 
     # # A Say Good Morning server takes the time of day and cheeriness to
     # # produce a greeting
