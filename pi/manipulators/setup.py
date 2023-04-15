@@ -34,7 +34,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'manipulator = manipulators.manipulators:main'
+            'manipulator = manipulators.manipulators:main',
+            'test = manipulators.i2c:main'
         ],
     },
 )
