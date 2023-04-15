@@ -1,3 +1,5 @@
+from task_selector.task_selector.tasks import Tasks
+
 from PyQt5.QtWidgets import QGridLayout, QLabel
 from PyQt5.QtWidgets import QWidget, QPushButton
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
@@ -73,7 +75,7 @@ class TaskSelector(QWidget):
         self.task_label.setText('Task: Auto Docking')
 
         self.task_changed_client.send_request_async(
-            TaskRequest.Request(task_id=1))
+            TaskRequest.Request(task_id=Tasks.AUTO_DOCKING.value))
 
     def stop_btn_clicked(self):
         """Tell the back about the user selecting the stop button."""
@@ -87,7 +89,7 @@ class TaskSelector(QWidget):
         self.task_label.setText('Task: Manual Control')
 
         self.task_changed_client.send_request_async(
-            TaskRequest.Request(task_id=0))
+            TaskRequest.Request(task_id=Tasks.MANUAL_CONTROL.value))
 
     @ pyqtSlot(TaskRequest.Response)
     def handle_scheduler_response(self, response: TaskRequest.Response):
