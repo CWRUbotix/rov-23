@@ -9,9 +9,6 @@ minor_num = sys.version_info[1]
 
 package_name = 'manipulators'
 
-a = os.path.join('lib', f'python{major_num}.{minor_num}', 'site-packages', package_name)
-b = os.path.join(package_name, 'tca9555.py')
-
 setup(
     name=package_name,
     version='0.0.0',
