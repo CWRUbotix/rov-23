@@ -163,7 +163,7 @@ class ManualControlNode(Node):
             if self.last_button_state[button] is False and just_pressed:
                 new_manip_state = not self.manip_state[manip_id]
                 self.manip_state[manip_id] = new_manip_state
-                self.get_logger().info("manip_id="+str(manip_id)+" manip_active="+str(new_manip_state))
+                self.get_logger().info(f"manip_id= {manip_id}+ manip_active= {new_manip_state}")
 
             self.last_button_state[button] = just_pressed
 
