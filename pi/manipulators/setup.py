@@ -1,8 +1,16 @@
 import os
 from glob import glob
 from setuptools import setup
+import sys
+
+
+major_num = sys.version_info[0]
+minor_num = sys.version_info[1]
 
 package_name = 'manipulators'
+
+a = os.path.join('lib', f'python{major_num}.{minor_num}', 'site-packages', package_name)
+b = os.path.join(package_name, 'tca9555.py')
 
 setup(
     name=package_name,
@@ -17,6 +25,8 @@ setup(
          glob('launch/*launch.[pxy][yma]*')),
         (os.path.join('share', package_name, 'config'),
          glob('config/*')),
+        (os.path.join('lib', f'python{major_num}.{minor_num}', 'site-packages', package_name),
+         glob(os.path.join('TCA9555', 'tca9555', 'tca9555.py'))),
     ],
     install_requires=['setuptools', 'wiringpi', 'bitstring'],
     zip_safe=True,
