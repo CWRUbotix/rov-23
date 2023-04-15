@@ -40,12 +40,12 @@ class TaskSelector(QWidget):
         self.stop_btn.setFixedWidth(width)
 
         # Add 'Task: ' label
-        self.label: QLabel = QLabel()
-        self.label.setFixedWidth(width)
-        self.label.setText('Task: Manual Control')
+        self.task_label: QLabel = QLabel()
+        self.task_label.setFixedWidth(width)
+        self.task_label.setText('Task: Manual Control')
 
         # Setup Grid
-        layout.addWidget(self.label, 1, 1, 2, 2)
+        layout.addWidget(self.task_label, 1, 1, 2, 2)
         layout.addWidget(self.start_btn, 2, 1)
         layout.addWidget(self.stop_btn, 3, 1)
 
@@ -70,7 +70,7 @@ class TaskSelector(QWidget):
         self.task_changed_client.get_logger().info(
             'GUI changed task to: Auto Docking')
 
-        self.label.setText('Task: Auto Docking')
+        self.task_label.setText('Task: Auto Docking')
 
         self.task_changed_client.send_request_async(
             TaskRequest.Request(task_id=1))
@@ -87,7 +87,7 @@ class TaskSelector(QWidget):
         self.task_changed_client.send_request_async(
             TaskRequest.Request(task_id=0))
 
-        self.label.setText('Task: Manual Control')
+        self.task_label.setText('Task: Manual Control')
 
         self.task_changed_client.send_request_async(
             TaskRequest.Request(task_id=0))
