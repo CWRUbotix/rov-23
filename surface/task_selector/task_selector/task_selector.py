@@ -5,7 +5,7 @@ from rclpy.node import Node
 from interfaces.srv import TaskRequest
 from interfaces.msg import TaskFeedback
 
-from interfaces.action import Example
+# from interfaces.action import Example
 from interfaces.action import BasicTask
 
 from task_selector.tasks import Tasks
@@ -28,15 +28,15 @@ class TaskSelector(Node):
 
         # instantiates new action clients with inputs of node,
         # action type, action name
-        self.morning_action_client = ActionClient(self,
-                                                  Example,
-                                                  'say_good_morning')
-        self.timed_task_client = ActionClient(self,
-                                              BasicTask,
-                                              'timed_task')
-        self.basic_task_client = ActionClient(self,
-                                              BasicTask,
-                                              'example_task')
+        # self.morning_action_client = ActionClient(self,
+        #                                           Example,
+        #                                           'say_good_morning')
+        # self.timed_task_client = ActionClient(self,
+        #                                       BasicTask,
+        #                                       'timed_task')
+        # self.basic_task_client = ActionClient(self,
+        #                                       BasicTask,
+        #                                       'example_task')
 
         self.manual_control_client = ActionClient(self,
                                                   BasicTask,
@@ -45,7 +45,8 @@ class TaskSelector(Node):
 
         self.send_basic_goal(self.manual_control_client)
 
-    def request_task_callback(self, request: TaskRequest.Request, response: TaskRequest.Response):
+    def request_task_callback(self, request: TaskRequest.Request,
+                              response: TaskRequest.Response):
         response.response = "Acknowledged"
         if self.active:
             self.cancel_goal()
@@ -53,12 +54,12 @@ class TaskSelector(Node):
         self.active = True
         if request.task_id == Tasks.MANUAL_CONTROL.value:
             self.send_basic_goal(self.manual_control_client)
-        elif request.task_id == Tasks.EX_GOOD_MORNING.value:
-            self.send_morning_goal(True, True)
-        elif request.task_id == Tasks.EX_TIMED.value:
-            self.send_basic_goal(self.timed_task_client)
-        elif request.task_id == Tasks.EX_BASIC.value:
-            self.send_basic_goal(self.basic_task_client)
+        # elif request.task_id == Tasks.EX_GOOD_MORNING.value:
+        #     self.send_morning_goal(True, True)
+        # elif request.task_id == Tasks.EX_TIMED.value:
+        #     self.send_basic_goal(self.timed_task_client)
+        # elif request.task_id == Tasks.EX_BASIC.value:
+        #     self.send_basic_goal(self.basic_task_client)
         elif request.task_id == Tasks.CANCEL.value:
             response.response = "Canceled"
         else:
@@ -83,57 +84,57 @@ class TaskSelector(Node):
             goal_msg, feedback_callback=self.feedback_callback)
         self._send_goal_future.add_done_callback(self.basic_response_callback)
 
-    # A Say Good Morning server takes the time of day and cheeriness to
-    # produce a greeting
-    def send_morning_goal(self, morning: bool, cheery: bool):
-        goal_msg = Example.Goal()
-        goal_msg.morning = morning
-        goal_msg.cheery = cheery
+    # # A Say Good Morning server takes the time of day and cheeriness to
+    # # produce a greeting
+    # def send_morning_goal(self, morning: bool, cheery: bool):
+    #     goal_msg = Example.Goal()
+    #     goal_msg.morning = morning
+    #     goal_msg.cheery = cheery
 
-        self.get_logger().info('Waiting for action server...')
-        self.morning_action_client.wait_for_server()
+    #     self.get_logger().info('Waiting for action server...')
+    #     self.morning_action_client.wait_for_server()
 
-        self.get_logger().info('Sending goal request...')
-        self._send_goal_future = self.morning_action_client.send_goal_async(
-            goal_msg, feedback_callback=self.feedback_callback)
-        self._send_goal_future.add_done_callback(
-            self.morning_response_callback)
+    #     self.get_logger().info('Sending goal request...')
+    #     self._send_goal_future = self.morning_action_client.send_goal_async(
+    #         goal_msg, feedback_callback=self.feedback_callback)
+    #     self._send_goal_future.add_done_callback(
+    #         self.morning_response_callback)
 
-    # Checks if goal was accepted
-    def basic_response_callback(self, future):
-        goal_handle = future.result()
-        if not goal_handle.accepted:
-            self.get_logger().info('Goal rejected')
-            return
+    # # Checks if goal was accepted
+    # def basic_response_callback(self, future):
+    #     goal_handle = future.result()
+    #     if not goal_handle.accepted:
+    #         self.get_logger().info('Goal rejected')
+    #         return
 
-        self.get_logger().info('Goal accepted')
+    #     self.get_logger().info('Goal accepted')
 
-        self._goal_handle = goal_handle
+    #     self._goal_handle = goal_handle
 
-        self._get_result_future = goal_handle.get_result_async()
-        self._get_result_future.add_done_callback(self.basic_result_callback)
+    #     self._get_result_future = goal_handle.get_result_async()
+    #     self._get_result_future.add_done_callback(self.basic_result_callback)
 
-    def morning_response_callback(self, future):
-        goal_handle = future.result()
-        if not goal_handle.accepted:
-            self.get_logger().info('Goal rejected')
-            return
+    # def morning_response_callback(self, future):
+    #     goal_handle = future.result()
+    #     if not goal_handle.accepted:
+    #         self.get_logger().info('Goal rejected')
+    #         return
 
-        self.get_logger().info('Goal accepted')
+    #     self.get_logger().info('Goal accepted')
 
-        self._get_result_future = goal_handle.get_result_async()
-        self._get_result_future.add_done_callback(self.morning_result_callback)
+    #     self._get_result_future = goal_handle.get_result_async()
+    #     self._get_result_future.add_done_callback(self.morning_result_callback)
 
     # Notify us that task is finished
     def basic_result_callback(self, future):
         self.get_logger().info("Task finished")
         self.active = False
 
-    # Logs greeting that the morning server sends
-    def morning_result_callback(self, future):
-        result = future.result().result
-        self.get_logger().info('Result: {0}'.format(result.message))
-        self.active = False
+    # # Logs greeting that the morning server sends
+    # def morning_result_callback(self, future):
+    #     result = future.result().result
+    #     self.get_logger().info('Result: {0}'.format(result.message))
+    #     self.active = False
 
     # Logs feedback from action server
     def feedback_callback(self, feedback_msg):

@@ -28,16 +28,16 @@ class TaskSelector(QWidget):
         self.setLayout(layout)
 
         # Create Start button
-        self.startBtn = QPushButton("Start Auto Docking")
-        self.startBtn.clicked.connect(self.startBtnClicked)
-        self.startBtn.setFixedHeight(75)
-        self.startBtn.setFixedWidth(width)
+        self.start_btn = QPushButton("Start Auto Docking")
+        self.start_btn.clicked.connect(self.start_btn_clicked)
+        self.start_btn.setFixedHeight(75)
+        self.start_btn.setFixedWidth(width)
 
         # Create Stop button
-        self.stopBtn = QPushButton("Stop Auto Docking")
-        self.stopBtn.clicked.connect(self.stopBtnClicked)
-        self.stopBtn.setFixedHeight(75)
-        self.stopBtn.setFixedWidth(width)
+        self.stop_btn = QPushButton("Stop Auto Docking")
+        self.stop_btn.clicked.connect(self.stop_btn_clicked)
+        self.stop_btn.setFixedHeight(75)
+        self.stop_btn.setFixedWidth(width)
 
         # Add 'Task: ' label
         self.label: QLabel = QLabel()
@@ -46,8 +46,8 @@ class TaskSelector(QWidget):
 
         # Setup Grid
         layout.addWidget(self.label, 1, 1, 2, 2)
-        layout.addWidget(self.startBtn, 2, 1)
-        layout.addWidget(self.stopBtn, 3, 1)
+        layout.addWidget(self.start_btn, 2, 1)
+        layout.addWidget(self.stop_btn, 3, 1)
 
         # Create ROS nodes #
         # Create client (in separate thread to let GUI load before it connects)
@@ -61,7 +61,7 @@ class TaskSelector(QWidget):
         self.task_changed_server: GUIEventSubscriber = GUIEventSubscriber(
             TaskFeedback, 'task_feedback', self.update_task_dropdown_signal)
 
-    def startBtnClicked(self):
+    def start_btn_clicked(self):
         """Tell the back about the user selecting the start button."""
         # Cancel change if task changer hasn't connected yet
         if not self.task_changed_client.connected:
@@ -75,8 +75,8 @@ class TaskSelector(QWidget):
         self.task_changed_client.send_request_async(
             TaskRequest.Request(task_id=1))
 
-    def stopBtnClicked(self):
-        """Tell the back about the user selecting the stop button"""
+    def stop_btn_clicked(self):
+        """Tell the back about the user selecting the stop button."""
         # Cancel change if task changer hasn't connected yet
         if not self.task_changed_client.connected:
             return
