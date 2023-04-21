@@ -13,7 +13,7 @@ def generate_launch_description():
     manip_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(
-                manip_path, 'launch', 'manipulators.py'
+                manip_path, 'launch', 'manip_launch.py'
             )
         ]),
     )
