@@ -15,7 +15,8 @@ def generate_launch_description():
     manip_node = Node(
         package="manipulators",
         executable="manipulator",
-        parameters=[config]
+        parameters=[config],
+        remappings=[("/pi/manipulator_control", "/manipulator_control")]
     )
 
     return LaunchDescription([
