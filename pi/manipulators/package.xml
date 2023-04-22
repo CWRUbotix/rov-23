@@ -3,7 +3,7 @@
 <package format="3">
   <name>manipulators</name>
   <version>0.0.0</version>
-  <description>A generic package for showing how to do manipulators.</description>
+  <description>Code for manipulators.</description>
   <maintainer email="case@case.edu">CWRUBotics 2022-2023</maintainer>
   <license>Apache License, Version 2.0</license>
 
