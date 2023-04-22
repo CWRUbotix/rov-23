@@ -14,15 +14,16 @@
 // Digital input pin where the input source(physical switch or GUI) will be coonnected.
 // High = submerge, Low = float
 // You might change pin number
-#define SyringeInput   9
+#define SYRINCE_INPUT   9
 
 // True = submerge, False = float
-bool SyringeCtrl = false;
+bool syringeCtrl = false;
 
 /************ Radio Setup ***************/
 
 //yes, the key is EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE. best key ever.
-uint8_t key[] = { 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE,
+uint8_t key[] = { 
+                  0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE,
                   0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE
                 };
 
@@ -137,7 +138,7 @@ void setup()
   rf69.setEncryptionKey(key);
 
   pinMode(LED, OUTPUT);
-  pinMode(SyringeInput, INPUT);
+  pinMode(SYRINCE_INPUT, INPUT);
 
   Serial.print("RFM69 radio @");  Serial.print((int)RF69_FREQ);  Serial.println(" MHz");
 }
@@ -146,16 +147,18 @@ void setup()
 void loop() {
   receiveData();
   // Check if serial signal recieved
-  if(Serial.available() == 1){
+  if (Serial.available() == 1) {
     String command;
     command = Serial.readString();
-    if(command == "submerge")
+    if (command == "submerge") {
       sendControlSignal("submerge");
-    else if (command == "extend")
+    } else if (command == "extend") {
       sendControlSignal("extend");
-    else if (command == "retract")
+    } else if (command == "retract") {
       sendControlSignal("retract");
-    else Serial.println("Invalid command");
+    } else {
+      Serial.println("Invalid command");
+    }
   }
 }
 
@@ -187,7 +190,7 @@ void sendControlSignal(char* message) {
 }
 
 
-void Blink(byte PIN, byte DELAY_MS, byte loops) {
+void blink(byte PIN, byte DELAY_MS, byte loops) {
   for (byte i = 0; i < loops; i++)  {
     digitalWrite(PIN, HIGH);
     delay(DELAY_MS);

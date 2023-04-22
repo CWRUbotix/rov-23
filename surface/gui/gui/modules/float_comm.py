@@ -2,7 +2,7 @@
 from PyQt5.QtWidgets import QPushButton, QHBoxLayout, QLabel, QWidget
 from gui.event_nodes.publisher import GUIEventPublisher
 from gui.event_nodes.subscriber import GUIEventSubscriber
-from std_msgs.msg import String
+from interfaces.msg import FloatCommand
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 
@@ -44,25 +44,25 @@ class FloatComm(QWidget):
         layout.addWidget(self.label)
 
         self.transceiver_publisher: GUIEventPublisher = GUIEventPublisher(
-            String,
+            FloatCommand,
             "transceiver_control"
         )
 
         self.transceiver_subscription: GUIEventSubscriber = GUIEventSubscriber(
-            String,
+            FloatCommand,
             "transceiver_data",
             self.handle_scheduler_response_signal
         )
 
-    @pyqtSlot(String)
-    def handle_text(self, msg: String):
-        self.label.setText(msg.data)
+    @pyqtSlot(FloatCommand)
+    def handle_text(self, msg: FloatCommand):
+        self.label.setText(msg.command)
 
     def submerge_clicked(self):
-        self.transceiver_publisher.publish(String(data="submerge"))
+        self.transceiver_publisher.publish(FloatCommand(command="submerge"))
 
     def extend_clicked(self):
-        self.transceiver_publisher.publish(String(data="extend"))
+        self.transceiver_publisher.publish(FloatCommand(command="extend"))
 
     def retract_clicked(self):
-        self.transceiver_publisher.publish(String(data="retract"))
+        self.transceiver_publisher.publish(FloatCommand(command="retract"))

@@ -1,7 +1,7 @@
 import serial
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
+from interfaces.msg import FloatCommand
 
 
 class SerialReader(Node):
@@ -9,9 +9,9 @@ class SerialReader(Node):
     def __init__(self):
         super().__init__('serial_reader',
                          parameter_overrides=[])
-        self.publisher_ = self.create_publisher(String, 'transceiver_data', 10)
+        self.publisher = self.create_publisher(FloatCommand, 'transceiver_data', 10)
         self.listener = self.create_subscription(
-            String,
+            FloatCommand,
             'transceiver_control',
             self.control_callback,
             10)
@@ -21,14 +21,14 @@ class SerialReader(Node):
         self.i = 0
 
     def timer_callback(self):
-        msg = String()
-        msg.data = self.ser.readline().decode()
-        self.publisher_.publish(msg)
+        msg = FloatCommand()
+        msg.command = self.ser.readline().decode()
+        self.publisher.publish(msg)
         # self.get_logger().info('Publishing: "%s"' % msg.data)
         # self.i += 1
 
-    def control_callback(self, msg: String):
-        msg_encode: bytes = msg.data.encode()
+    def control_callback(self, msg: FloatCommand):
+        msg_encode: bytes = msg.command.encode()
         self.ser.write(msg_encode)
         self.get_logger().info(f'Command sent via serial monitor: {msg_encode}')
 

@@ -19,15 +19,16 @@ RTC_PCF8523 rtc;
 // Digital output pin where the syringe will be connected.
 // High = submerge, Low = float
 // You might change pin number
-#define SyringeOutput   9
+#define SYRINGE_OUTPUT   9
 
 // True = submerge, False = float
-bool SyringeCtrl = false;
+bool syringeCtrl = false;
 
 /************ Radio Setup ***************/
 
 //If you ever forget the key, just remember that it's EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-uint8_t key[] = { 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE,
+uint8_t key[] = { 
+                  0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE,
                   0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE
                 };
 
@@ -123,23 +124,23 @@ void setup()
 
     Serial.println("Assume year is 2023");
     Serial.println("Enter month [number format]");
-    while (Serial.available() == 0){}
+    while (Serial.available() == 0);
     int month = Serial.parseInt();
     Serial.println(month);
     Serial.println("Enter day");
-    while (Serial.available() == 0){}
+    while (Serial.available() == 0);
     int day = Serial.parseInt();
     Serial.println(day);
     Serial.println("Enter hour");
-    while (Serial.available() == 0){}
+    while (Serial.available() == 0);
     int hour = Serial.parseInt();
     Serial.println(hour);
     Serial.println("Enter minute [make sure you have enough time to enter seconds!]");
-    while (Serial.available() == 0){}
+    while (Serial.available() == 0);
     int minute = Serial.parseInt();
     Serial.println(minute);
     Serial.println("Enter second");
-    while (Serial.available() == 0){}
+    while (Serial.available() == 0);
     int second = Serial.parseInt();
     Serial.println(second);
 
@@ -191,9 +192,11 @@ void setup()
   rf69.setEncryptionKey(key);
 
   pinMode(LED, OUTPUT);
-  pinMode(SyringeOutput, OUTPUT);
+  pinMode(SYRINGE_OUTPUT, OUTPUT);
 
-  Serial.print("RFM69 radio @");  Serial.print((int)RF69_FREQ);  Serial.println(" MHz");
+  Serial.print("RFM69 radio @");  
+  Serial.print((int)RF69_FREQ);  
+  Serial.println(" MHz");
 }
 
 
@@ -243,7 +246,7 @@ void sendData() {
         Serial.println("Receive failed");
       }
       } else {
-      Serial.println("No reply.");
+        Serial.println("No reply.");
       }*/
 
     prevTime = now;
@@ -266,11 +269,11 @@ void receiveSubmergeSignal() {
       Serial.print("RSSI: ");
       Serial.println(rf69.lastRssi(), DEC);
 
-      if (strcmp((char*)buf, "su") == 0){
+      if (strcmp((char*)buf, "su") == 0) {
         submerge();
-      } else if (strcmp((char*)buf, "ex") == 0){
+      } else if (strcmp((char*)buf, "ex") == 0) {
         extend();
-      } else if (strcmp((char*)buf, "re") == 0){
+      } else if (strcmp((char*)buf, "re") == 0) {
         retract();
       } else {
         Serial.println("Invalid command");
@@ -283,29 +286,32 @@ void receiveSubmergeSignal() {
 
 void submerge() {
   char radiopacket[20] = "Submerging!";
-  Serial.print("Sending: "); Serial.println(radiopacket);
+  Serial.print("Sending: "); 
+  Serial.println(radiopacket);
 
   // Send a message!
   rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
   rf69.waitPacketSent();
-  digitalWrite(SyringeOutput, HIGH);
+  digitalWrite(SYRINGE_OUTPUT, HIGH);
   delay(1000);
-  digitalWrite(SyringeOutput, LOW);
+  digitalWrite(SYRINGE_OUTPUT, LOW);
 }
 
-void extend(){
+void extend() {
   //extend code here
   char radiopacket[20] = "Extending!";
-  Serial.print("Sending: "); Serial.println(radiopacket);
+  Serial.print("Sending: "); 
+  Serial.println(radiopacket);
 
   // Send a message!
   rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
   rf69.waitPacketSent();
 }
 
-void retract(){
+void retract() {
   char radiopacket[20] = "Retracting!";
-  Serial.print("Sending: "); Serial.println(radiopacket);
+  Serial.print("Sending: "); 
+  Serial.println(radiopacket);
 
   // Send a message!
   rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
