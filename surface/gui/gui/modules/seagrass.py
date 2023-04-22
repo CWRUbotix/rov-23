@@ -1,10 +1,10 @@
 import sys
 import numpy as np
 
-from enum import Enum, auto
+from enum import Enum
 from typing import List
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout, QLabel
+from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout, QLabel, QFrame
 
 class Color(Enum):
     GREEN = "green"
@@ -64,10 +64,16 @@ class SeagrassGrid():
         button_layout.addWidget(set_all_white)
 
         self.root_layout.addWidget(label, alignment=Qt.AlignCenter)
-        self.root_layout.addLayout(button_layout)
 
         grid = QGridLayout()
-        self.root_layout.addLayout(grid)
+        grid.setSpacing(0)
+        grid.setContentsMargins(0, 0, 0, 0)
+
+        frame = QFrame()
+        frame.setLayout(grid)
+        frame.setStyleSheet("border: 1px solid gray")
+
+        self.root_layout.addWidget(frame)
 
         self.all_buttons: List[QPushButton] = []
         N = 8
