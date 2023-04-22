@@ -7,6 +7,7 @@ from rclpy.executors import MultiThreadedExecutor
 from interfaces.action import BasicTask
 from interfaces.msg import ROVControl, Manip
 from sensor_msgs.msg import Joy
+from manip_button import ManipButton
 
 from typing import Dict
 
@@ -75,27 +76,12 @@ class ManualControlNode(Node):
             'manipulator_control',
             10
         )
-        self.manip_buttons = [X_BUTTON, O_BUTTON, TRI_BUTTON, SQUARE_BUTTON]
 
-        self.manip_ids = {
-            X_BUTTON: "claw0",
-            O_BUTTON: "claw1",
-            TRI_BUTTON: "claw2",
-            SQUARE_BUTTON: "claw3"
-        }
-
-        self.last_button_state = {
-            X_BUTTON: False,
-            O_BUTTON: False,
-            TRI_BUTTON: False,
-            SQUARE_BUTTON: False
-        }
-
-        self.manip_state: Dict[str, bool] = {
-            "claw0": False,
-            "claw1": False,
-            "claw2": False,
-            "claw3": False
+        self.manip_buttons: dict = {
+            X_BUTTON: ManipButton("claw0"),
+            O_BUTTON: ManipButton("claw1"),
+            TRI_BUTTON: ManipButton("claw2"),
+            SQUARE_BUTTON: ManipButton("claw3")
         }
 
     def controller_callback(self, msg: Joy):
@@ -152,23 +138,26 @@ class ManualControlNode(Node):
     def manip_callback(self, msg: Joy):
         buttons = msg.buttons
 
-        for button in self.manip_buttons:
-            manip_id = self.manip_ids[button]
+        button_id: int
+        manip_button: ManipButton
 
-            if buttons[button] == 1:
+        for button_id, manip_button in self.manip_buttons.items():
+            
+            just_pressed: bool = False
+
+            if buttons[button_id] == 1:
                 just_pressed = True
-            else:
-                just_pressed = False
 
-            if self.last_button_state[button] is False and just_pressed:
-                new_manip_state = not self.manip_state[manip_id]
-                self.manip_state[manip_id] = new_manip_state
-                self.get_logger().info(f"manip_id= {manip_id}+ manip_active= {new_manip_state}")
+            if manip_button.last_button_state is False and just_pressed:
+                new_manip_state: bool = not manip_button.is_active
+                manip_button.is_active = new_manip_state
 
-            self.last_button_state[button] = just_pressed
+                self.get_logger().info(f"manip_id= {manip_button.claw}+ manip_active= {manip_button.is_active}")
 
-            manip_msg: Manip = Manip(manip_id=self.manip_ids[button],
-                                     activated=self.manip_state[manip_id])
+            manip_button.last_button_state = just_pressed
+
+            manip_msg: Manip = Manip(manip_id=manip_button.claw, 
+                                     activated=manip_button.is_active)
             self.manip_publisher.publish(manip_msg)
 
 
