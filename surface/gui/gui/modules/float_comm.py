@@ -9,7 +9,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 class FloatComm(QWidget):
     """Arm widget for sending Arm Commands."""
 
-    handle_scheduler_response_signal: pyqtSignal = pyqtSignal(String)
+    handle_scheduler_response_signal: pyqtSignal = pyqtSignal(FloatCommand)
 
     def __init__(self):
         super().__init__()
