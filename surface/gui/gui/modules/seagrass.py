@@ -64,6 +64,7 @@ class SeagrassGrid():
         button_layout.addWidget(set_all_white)
 
         self.root_layout.addWidget(label, alignment=Qt.AlignCenter)
+        self.root_layout.addLayout(button_layout)
 
         grid = QGridLayout()
         grid.setSpacing(0)
@@ -105,7 +106,6 @@ class Seagrass(QWidget):
         self.after_grid = SeagrassGrid("After")
 
         root_layout.addLayout(self.before_grid.root_layout)
-        root_layout.addStretch()
         root_layout.addLayout(self.after_grid.root_layout)
 
         sub_widget = QWidget()
