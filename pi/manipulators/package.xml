@@ -4,7 +4,7 @@
   <name>manipulators</name>
   <version>0.0.0</version>
   <description>Code for manipulators.</description>
-  <maintainer email="case@case.edu">CWRUBotics 2022-2023</maintainer>
+  <maintainer email="rmc170@case.edu">Michael Carlstrom</maintainer>
   <license>Apache License, Version 2.0</license>
 
   <test_depend>ament_copyright</test_depend>
