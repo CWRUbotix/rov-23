@@ -69,21 +69,22 @@ class Seagrass(QWidget):
         self.root_layout.addLayout(self.after_grid.root_layout)
 
         # Panel with result text and get difference button
-        self.result_layout = QVBoxLayout()
+        result_layout = QVBoxLayout()
+        result_layout.addStretch()
 
         get_diff_button = QPushButton("Get Difference")
         get_diff_button.clicked.connect(self.get_diff)
 
-        self.before_label = QLabel()
-        self.after_label = QLabel()
+        self.before_label = QLabel("Before: ")
+        self.after_label = QLabel("After: ")
         self.diff_label = QLabel()
 
-        self.result_layout.addWidget(self.before_label)
-        self.result_layout.addWidget(self.after_label)
-        self.result_layout.addWidget(self.diff_label)
-        self.result_layout.addWidget(get_diff_button)
+        result_layout.addWidget(self.before_label)
+        result_layout.addWidget(self.after_label)
+        result_layout.addWidget(self.diff_label)
+        result_layout.addWidget(get_diff_button)
 
-        self.root_layout.addLayout(self.result_layout)
+        self.root_layout.addLayout(result_layout)
 
         self.show()
 
