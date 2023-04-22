@@ -4,7 +4,6 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, GroupAction
 from launch_ros.actions import PushRosNamespace
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
@@ -14,12 +13,14 @@ def generate_launch_description():
 
     manip_launch = GroupAction(
         actions=[
-            PushRosNamespace(LaunchConfiguration(NS)),
-            PythonLaunchDescriptionSource([
-                os.path.join(
-                    manip_path, 'launch', 'manip_launch.py'
-                )
-            ]),
+            PushRosNamespace(NS),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([
+                    os.path.join(
+                        manip_path, 'launch', 'manip_launch.py'
+                    )
+                ]),
+            )
         ]
     )
 
@@ -39,12 +40,14 @@ def generate_launch_description():
 
     pixhawk_launch = GroupAction(
         actions=[
-            PushRosNamespace(LaunchConfiguration(NS)),
-            PythonLaunchDescriptionSource([
-                os.path.join(
-                    pixhawk_path, 'launch', 'pixhawk_com_launch.py'
-                )
-            ]),
+            PushRosNamespace(NS),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([
+                    os.path.join(
+                        pixhawk_path, 'launch', 'pixhawk_com_launch.py'
+                    )
+                ])
+            )
         ]
     )
 
