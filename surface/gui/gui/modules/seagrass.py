@@ -1,8 +1,14 @@
 import sys
 import numpy as np
+
+from enum import Enum, auto
 from typing import List
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout, QLabel
+
+class Color(Enum):
+    Green = auto()
+    White = auto()
 
 class SeagrassButton(QPushButton):
     def __init__(self, size: int):
@@ -11,13 +17,13 @@ class SeagrassButton(QPushButton):
         self.setFixedSize(size, size)
 
         self.color: str = "green"
-        self.setStyleSheet("background-color :" + self.color)
+        self.set_color(self.color)
 
         self.clicked.connect(self.toggle_button_color)
 
         self.recovered = True
 
-    def toggle_button_color(self):
+    def toggle_button_color(self) -> None:
         new_color: str
 
         if self.color == "white":
@@ -28,22 +34,42 @@ class SeagrassButton(QPushButton):
         self.color = new_color
         self.recovered = not self.recovered
 
-        self.setStyleSheet("background-color :" + new_color)
+        self.set_color(new_color)
+
+    def set_color(self, color: str) -> None:
+        self.color = color
+        self.recovered = self.color == "green"
+
+        self.setStyleSheet("border: 1px solid gray; background-color :" + color)
 
 class SeagrassGrid():
     def __init__(self, text:str=""):
         self.root_layout = QVBoxLayout()
+        self.root_layout.setSpacing(0)
 
         label = QLabel(text)
-        label.setAlignment(Qt.AlignCenter)
+        self.root_layout.addWidget(label, alignment=Qt.AlignCenter)
 
-        self.root_layout.addWidget(label)
+        button_layout = QHBoxLayout()
+
+        set_all_green = QPushButton("Set All Green")
+        set_all_green.setMaximumWidth(120)
+        set_all_green.clicked.connect(lambda: self.reset_grid("green"))
+
+        set_all_white = QPushButton("Set All White")
+        set_all_white.setMaximumWidth(120)
+        set_all_white.clicked.connect(lambda: self.reset_grid("white"))
+
+        button_layout.addWidget(set_all_green)
+        button_layout.addWidget(set_all_white)
+
+        self.root_layout.addWidget(label, alignment=Qt.AlignCenter)
+        self.root_layout.addLayout(button_layout)
 
         grid = QGridLayout()
         self.root_layout.addLayout(grid)
 
         self.all_buttons: List[QPushButton] = []
-
         N = 8
 
         for row in range(N): 
@@ -52,6 +78,10 @@ class SeagrassGrid():
                 seagrass_button = SeagrassButton(size=50)
                 grid.addWidget(seagrass_button, row, col)
                 self.all_buttons.append(seagrass_button)
+
+    def reset_grid(self, color:str) -> None:
+        for button in self.all_buttons:
+            button.set_color(color)
 
     def get_num_recovered(self) -> int:
         num_recovered: List[bool] = [button.recovered for button in self.all_buttons]
@@ -63,8 +93,6 @@ class Seagrass(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.resize(1200, 400)
-
         root_layout = QHBoxLayout(self)
 
         self.before_grid = SeagrassGrid("Before")
@@ -74,7 +102,6 @@ class Seagrass(QWidget):
         root_layout.addStretch()
         root_layout.addLayout(self.after_grid.root_layout)
 
-        # Panel with result text and get difference button
         sub_widget = QWidget()
         sub_widget.setMinimumWidth(200)
 
