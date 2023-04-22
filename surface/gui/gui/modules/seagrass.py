@@ -38,7 +38,7 @@ class SeagrassButton(QPushButton):
 
     def set_color(self, color: Color) -> None:
         self.color = color
-        self.recovered = self.color == Color.GREEN.value
+        self.recovered = self.color == Color.GREEN
 
         self.setStyleSheet("border: 1px solid gray; background-color :" + color.value)
 
