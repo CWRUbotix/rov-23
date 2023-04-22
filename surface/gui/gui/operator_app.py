@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGridLayout, QTabWidget, QWidget
+from PyQt5.QtWidgets import QGridLayout, QTabWidget, QWidget, QHBoxLayout
 
 
 from gui.modules.task_selector import TaskSelector
@@ -14,14 +14,9 @@ class OperatorApp(App):
         self.setWindowTitle('Operator GUI - CWRUbotix ROV 2023')
 
         tabs = QTabWidget()
-        main_tab = QWidget()
-        seagrass_tab = QWidget()
-        # self.tabs.resize(300,200)
-        
-        tabs.addTab(main_tab, "Main")
-        tabs.addTab(seagrass_tab, "Seagrass")
         
         # Main tab
+        main_tab = QWidget()
         main_layout: QGridLayout = QGridLayout()
         main_tab.setLayout(main_layout)
 
@@ -29,12 +24,20 @@ class OperatorApp(App):
         main_layout.addWidget(self.task_selector, 0, 1)
 
         # Seagrass tab
-        seagrass_layout: QGridLayout = QGridLayout()
+        seagrass_tab = QWidget()
+        seagrass_tab.setContentsMargins(0, 0, 0, 0)
+
+        seagrass_layout: QHBoxLayout = QHBoxLayout()
+
+        seagrass_tab.setLayout(seagrass_layout)
         seagrass_layout.addWidget(SeagrassWidget())
 
         # Add tabs to root
         root_layout: QGridLayout = QGridLayout()
         self.setLayout(root_layout)
+
+        tabs.addTab(main_tab, "Main")
+        tabs.addTab(seagrass_tab, "Seagrass")
 
         root_layout.addWidget(tabs)
 

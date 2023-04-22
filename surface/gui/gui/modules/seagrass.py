@@ -46,9 +46,10 @@ class SeagrassButton(QPushButton):
 
 
 class SeagrassGrid():
-    def __init__(self, text:str=""):
+    def __init__(self, text: str = ""):
         self.root_layout = QVBoxLayout()
         self.root_layout.setSpacing(0)
+        # self.root_layout.setContentsMargins(0, 0, 0, 0)
 
         label = QLabel(text)
         self.root_layout.addWidget(label, alignment=Qt.AlignCenter)
@@ -69,27 +70,32 @@ class SeagrassGrid():
         self.root_layout.addWidget(label, alignment=Qt.AlignCenter)
         self.root_layout.addLayout(button_layout)
 
+        grid_widget = QWidget()
+        grid_widget.setMaximumWidth(200)
+
         grid = QGridLayout()
         grid.setSpacing(0)
         grid.setContentsMargins(0, 0, 0, 0)
+
+        grid_widget.setLayout(grid)
 
         frame = QFrame()
         frame.setLayout(grid)
         frame.setStyleSheet("border: 1px solid gray")
 
         self.root_layout.addWidget(frame)
+        self.root_layout.addStretch()
 
         self.all_buttons: List[QPushButton] = []
         N = 8
 
-        for row in range(N): 
-           for col in range(N): 
-                
-                seagrass_button = SeagrassButton(size=50)
+        for row in range(N):
+            for col in range(N):
+                seagrass_button: SeagrassButton = SeagrassButton(size=50)
                 grid.addWidget(seagrass_button, row, col)
                 self.all_buttons.append(seagrass_button)
 
-    def reset_grid(self, color:Color) -> None:
+    def reset_grid(self, color: Color) -> None:
         for button in self.all_buttons:
             button.set_color(color)
 
@@ -108,14 +114,12 @@ class SeagrassWidget(QWidget):
         self.before_grid = SeagrassGrid("Before")
         self.after_grid = SeagrassGrid("After")
 
-        root_layout.addLayout(self.before_grid.root_layout)
-        root_layout.addLayout(self.after_grid.root_layout)
+        root_layout.addLayout(self.before_grid.root_layout, 1)
+        root_layout.addLayout(self.after_grid.root_layout, 1)
 
         sub_widget = QWidget()
-        sub_widget.setMinimumWidth(300)
 
         result_layout = QVBoxLayout()
-        result_layout.addStretch()
 
         sub_widget.setLayout(result_layout)
 
@@ -131,7 +135,9 @@ class SeagrassWidget(QWidget):
         result_layout.addWidget(self.diff_label)
         result_layout.addWidget(get_diff_button)
 
-        root_layout.addWidget(sub_widget)
+        root_layout.addWidget(sub_widget, 3)
+
+        result_layout.addStretch()
 
         self.show()
 
@@ -154,6 +160,7 @@ class SeagrassWidget(QWidget):
         self.after_label.setText(f"After: {after_num} green")
 
         self.diff_label.setText(result)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
