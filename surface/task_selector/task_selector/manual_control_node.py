@@ -7,7 +7,6 @@ from rclpy.executors import MultiThreadedExecutor
 from interfaces.action import BasicTask
 from interfaces.msg import ROVControl, Manip
 from sensor_msgs.msg import Joy
-from manip_button import ManipButton
 
 from typing import Dict
 
@@ -77,7 +76,7 @@ class ManualControlNode(Node):
             10
         )
 
-        self.manip_buttons: dict = {
+        self.manip_buttons: Dict[int, ManipButton] = {
             X_BUTTON: ManipButton("claw0"),
             O_BUTTON: ManipButton("claw1"),
             TRI_BUTTON: ManipButton("claw2"),
@@ -142,7 +141,7 @@ class ManualControlNode(Node):
         manip_button: ManipButton
 
         for button_id, manip_button in self.manip_buttons.items():
-            
+
             just_pressed: bool = False
 
             if buttons[button_id] == 1:
@@ -152,13 +151,21 @@ class ManualControlNode(Node):
                 new_manip_state: bool = not manip_button.is_active
                 manip_button.is_active = new_manip_state
 
-                self.get_logger().info(f"manip_id= {manip_button.claw}+ manip_active= {manip_button.is_active}")
+                log_msg: str = f"manip_id= {manip_button.claw}+ manip_active= {manip_button.is_active}"
+                self.get_logger().info(log_msg)
 
             manip_button.last_button_state = just_pressed
 
             manip_msg: Manip = Manip(manip_id=manip_button.claw, 
                                      activated=manip_button.is_active)
             self.manip_publisher.publish(manip_msg)
+
+
+class ManipButton:
+    def __init__(self, claw: str):
+        self.claw: str = claw
+        self.last_button_state: bool = False
+        self.is_active: bool = False
 
 
 def main():
