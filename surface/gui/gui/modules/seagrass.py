@@ -1,33 +1,29 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication
-
-class PushButton(QPushButton):
-    def __init__(self, text, parent=None):
-        super(PushButton, self).__init__(text, parent)
-
-        # self.setText(text)
-        # self.setMinimumSize(QSize(50, 50))
-        # self.setMaximumSize(QSize(50, 50))
+from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, QHBoxLayout
 
 class SeaGrass(QWidget):
 
     def __init__(self):
         super().__init__()
+        
+        self.resize(600, 600)
         self.initUI()
 
-    def initUI(self):
-        root_layout = QWidget()
-        self.layout = QGridLayout(root_layout)
 
+    def initUI(self):
+        root_layout = QGridLayout(self)
+        
         N = 8
+        BUTTON_SIZE = 50
 
         for row in range(N): 
            for col in range(N): 
                 
-                button = QPushButton("0", self)
+                button = QPushButton("", self)
+                button.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
                 button.clicked.connect(self.on_click)
 
-                self.layout.addWidget(button, row, col)
+                root_layout.addWidget(button, row, col)
 
         self.show()
 
