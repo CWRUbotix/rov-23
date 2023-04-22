@@ -1,5 +1,7 @@
 import math
 import struct
+
+import numpy as np
 from sensor_msgs.msg import PointCloud2
 
 
@@ -19,7 +21,8 @@ def read_points(cloud, field_names=None, skip_nans=False, uvs=[]):
     """
     assert isinstance(cloud, PointCloud2), 'cloud is not a sensor_msgs.msg.PointCloud2'
     fmt = "<fffxxxxBBB"
-    width, height, point_step, row_step, data, isnan = cloud.width, cloud.height, cloud.point_step, cloud.row_step, cloud.data, math.isnan
+    width, height, point_step, row_step, data, isnan = cloud.width, cloud.height, cloud.point_step, cloud.row_step, \
+                                                       cloud.data, math.isnan
     unpack_from = struct.Struct(fmt).unpack_from
 
     if skip_nans:
@@ -56,3 +59,10 @@ def read_points(cloud, field_names=None, skip_nans=False, uvs=[]):
                 for u in range(width):
                     yield unpack_from(data, offset)
                     offset += point_step
+
+
+def get_pointcloud(msg):
+    pcd = np.array(list(read_points(msg)))
+    # Transform from ROS coordinates to Open3d coordinates
+    transform_mat = np.matrix('0 -1 0; 0 0 -1; 1 0 0')
+    return np.append(pcd[:, :3].dot(transform_mat), pcd[:, 3:], axis=1)

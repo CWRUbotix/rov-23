@@ -10,12 +10,14 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
     parameters = [{
-          'frame_id': 'camera_link',
-          'subscribe_depth': True,
-          'subscribe_odom_info': False,
-          'visual_odometry': True,
-          'approx_sync': True,
-          'approx_sync_max_interval': 0.01}]
+        'frame_id': 'camera_link',
+        'subscribe_depth': True,
+        'subscribe_odom_info': False,
+        'visual_odometry': True,
+        'approx_sync': True,
+        'approx_sync_max_interval': 0.01,
+        'cloud_output_voxelized': False
+    }]
 
     remappings = [
           ('rgb/image', '/camera/color/image_raw'),

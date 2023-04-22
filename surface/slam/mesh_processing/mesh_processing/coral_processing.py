@@ -1,3 +1,4 @@
+import copy
 from threading import Thread
 
 import numpy
@@ -9,8 +10,28 @@ from rclpy.node import Node
 from rclpy.executors import SingleThreadedExecutor
 import sensor_msgs.msg as sensor_msgs
 
-from convert_pointcloud import read_points
+from convert_pointcloud import get_pointcloud
 
+WHITE_SQUARE_BRIGHTNESS_CUTOFF = 0.6
+
+
+def postprocess_mesh(mesh: o3d.geometry.TriangleMesh):
+    # Remove unconnected components
+    triangle_clusters, cluster_n_triangles, cluster_area = mesh.cluster_connected_triangles()
+    cluster_n_triangles = np.asarray(cluster_n_triangles)
+    largest_cluster_idx = cluster_n_triangles.argmax()
+    triangles_to_remove = triangle_clusters != largest_cluster_idx
+    mesh.remove_triangles_by_mask(triangles_to_remove)
+
+
+def measure_white_area(mesh: o3d.geometry.TriangleMesh) -> float:
+    colors = numpy.asarray(mesh.vertex_colors)
+    masked_mesh = copy.deepcopy(mesh)
+    masked_mesh.remove_vertices_by_mask(np.average(colors, axis=1) < WHITE_SQUARE_BRIGHTNESS_CUTOFF)
+
+    # return masked_mesh.get_surface_area()
+    print(masked_mesh.get_surface_area())
+    return masked_mesh
 
 class PCDListener(Node):
 
@@ -35,7 +56,7 @@ class PCDListener(Node):
     def listener_callback(self, msg):
         print("Revieced msg")
 
-        pcd_as_numpy_array = np.array(list(read_points(msg)))
+        pcd_as_numpy_array = get_pointcloud(msg)
 
         self.pcd = o3d.geometry.PointCloud(
             o3d.utility.Vector3dVector(pcd_as_numpy_array[:, :3]))
@@ -43,12 +64,18 @@ class PCDListener(Node):
         self.pcd.colors = o3d.utility.Vector3dVector(numpy.flip(pcd_as_numpy_array[:, 3:], axis=1) / 255.0)
 
         self.pcd.estimate_normals()
-        self.pcd.orient_normals_consistent_tangent_plane(100)
+        self.pcd.orient_normals_to_align_with_direction([0, 1, 0])
         self.mesh, densities = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(pcd=self.pcd, depth=9)
 
-        # Visualize the pointcloud
+        postprocess_mesh(self.mesh)
+
+        # Visualize the mesh
         self.vis.clear_geometries()
         self.vis.add_geometry(self.mesh)
+        self.vis.add_geometry(o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.25))
+        measure_white_area(self.mesh)
+
+        # self.vis.add_geometry(measure_white_area(self.mesh))
 
 
 def main(args=None):
