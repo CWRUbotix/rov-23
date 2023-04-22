@@ -42,6 +42,7 @@ class TaskSelector(Node):
                                                   BasicTask,
                                                   'manual_control')
         self.active = False
+        self._goal_handle = None
 
         self.send_basic_goal(self.manual_control_client)
 
@@ -51,8 +52,8 @@ class TaskSelector(Node):
         if self.active:
             self.cancel_goal()
 
-        self.active = True
         if request.task_id == Tasks.MANUAL_CONTROL.value:
+            self.active = True
             self.send_basic_goal(self.manual_control_client)
         # elif request.task_id == Tasks.EX_GOOD_MORNING.value:
         #     self.send_morning_goal(True, True)
@@ -147,6 +148,10 @@ class TaskSelector(Node):
 
     # Only works if server runs on a multithreaded executor
     def cancel_goal(self):
+        if self._goal_handle is None:
+            self.get_logger().info('Could not cancel goal because there is none')
+            return
+
         self.get_logger().info('Canceling goal')
         # Cancel the goal
         future = self._goal_handle.cancel_goal_async()

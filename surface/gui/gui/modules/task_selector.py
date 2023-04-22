@@ -30,14 +30,14 @@ class TaskSelector(QWidget):
         self.setLayout(layout)
 
         # Create Start button
-        self.start_btn = QPushButton("Start Auto Docking")
+        self.start_btn = QPushButton("Auto Docking")
         self.start_btn.clicked.connect(self.start_btn_clicked)
         self.start_btn.setFixedHeight(75)
         self.start_btn.setFixedWidth(width)
 
         # Create Stop button
-        self.stop_btn = QPushButton("Stop Auto Docking")
-        self.stop_btn.clicked.connect(self.stop_btn_clicked)
+        self.stop_btn = QPushButton("Manual Control")
+        self.stop_btn.clicked.connect(self.manual_control_btn_clicked)
         self.stop_btn.setFixedHeight(75)
         self.stop_btn.setFixedWidth(width)
 
@@ -77,8 +77,8 @@ class TaskSelector(QWidget):
         self.task_changed_client.send_request_async(
             TaskRequest.Request(task_id=Tasks.AUTO_DOCKING.value))
 
-    def stop_btn_clicked(self):
-        """Tell the back about the user selecting the stop button."""
+    def manual_control_btn_clicked(self):
+        """Tell the back about the user selecting the manual control button."""
         # Cancel change if task changer hasn't connected yet
         if not self.task_changed_client.connected:
             return
