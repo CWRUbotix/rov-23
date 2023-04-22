@@ -3,28 +3,51 @@ import numpy as np
 from typing import List
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, QHBoxLayout
 
+class SeagrassButton(QPushButton):
+    def __init__(self, size: int):
+        super(SeagrassButton, self).__init__()
+
+        self.setFixedSize(size, size)
+
+        self.color: str = "green"
+        self.setStyleSheet("background-color :" + self.color)
+
+        self.clicked.connect(self.on_click)
+
+        self.recovered = True
+
+    def on_click(self):
+        self.toggle_button_color()
+
+    def toggle_button_color(self):
+        new_color: str
+
+        if self.color == "white":
+            new_color = "green"
+        else:
+            new_color = "white"
+
+        self.color = new_color
+        self.setStyleSheet("background-color :" + new_color)
+
 class SeagrassGrid():
     def __init__(self):
         self.root_layout = QGridLayout()
+        self.all_buttons: List[QPushButton] = []
 
         N = 8
-        BUTTON_SIZE = 50
 
         for row in range(N): 
            for col in range(N): 
                 
-                button = QPushButton()
-                button.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
-                button.setStyleSheet("background-color : green")
+                seagrass_button = SeagrassButton(size=50)
+                self.root_layout.addWidget(seagrass_button, row, col)
+                self.all_buttons.append(seagrass_button)
 
-                button.clicked.connect(self.on_click)
+    def get_num_recovered(self) -> int:
+        num_recovered: List[bool] = [button.covered for button in self.all_buttons]
 
-                self.root_layout.addWidget(button, row, col)
-        
-        self.grid: List[List[bool]] = np.full((N, N), False, dtype=bool)
- 
-    def on_click(self):
-        print("PyQt5 button click")
+        return np.count_nonzero(num_recovered)
 
 class Seagrass(QWidget):
 
@@ -47,5 +70,5 @@ class Seagrass(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    sea_grass = Seagrass()
+    seagrass = Seagrass()
     sys.exit(app.exec_())
