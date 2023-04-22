@@ -7,8 +7,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout, QLabel
 
 class Color(Enum):
-    Green = auto()
-    White = auto()
+    GREEN = "green"
+    WHITE = "white"
 
 class SeagrassButton(QPushButton):
     def __init__(self, size: int):
@@ -16,7 +16,7 @@ class SeagrassButton(QPushButton):
 
         self.setFixedSize(size, size)
 
-        self.color: str = "green"
+        self.color: Color = Color.GREEN
         self.set_color(self.color)
 
         self.clicked.connect(self.toggle_button_color)
@@ -24,23 +24,23 @@ class SeagrassButton(QPushButton):
         self.recovered = True
 
     def toggle_button_color(self) -> None:
-        new_color: str
+        new_color: Color
 
-        if self.color == "white":
-            new_color = "green"
+        if self.color == Color.WHITE:
+            new_color = Color.GREEN
         else:
-            new_color = "white"
+            new_color = Color.WHITE
 
         self.color = new_color
         self.recovered = not self.recovered
 
         self.set_color(new_color)
 
-    def set_color(self, color: str) -> None:
+    def set_color(self, color: Color) -> None:
         self.color = color
-        self.recovered = self.color == "green"
+        self.recovered = self.color == Color.GREEN.value
 
-        self.setStyleSheet("border: 1px solid gray; background-color :" + color)
+        self.setStyleSheet("border: 1px solid gray; background-color :" + color.value)
 
 class SeagrassGrid():
     def __init__(self, text:str=""):
@@ -54,11 +54,11 @@ class SeagrassGrid():
 
         set_all_green = QPushButton("Set All Green")
         set_all_green.setMaximumWidth(120)
-        set_all_green.clicked.connect(lambda: self.reset_grid("green"))
+        set_all_green.clicked.connect(lambda: self.reset_grid(Color.GREEN))
 
         set_all_white = QPushButton("Set All White")
         set_all_white.setMaximumWidth(120)
-        set_all_white.clicked.connect(lambda: self.reset_grid("white"))
+        set_all_white.clicked.connect(lambda: self.reset_grid(Color.WHITE))
 
         button_layout.addWidget(set_all_green)
         button_layout.addWidget(set_all_white)
@@ -79,7 +79,7 @@ class SeagrassGrid():
                 grid.addWidget(seagrass_button, row, col)
                 self.all_buttons.append(seagrass_button)
 
-    def reset_grid(self, color:str) -> None:
+    def reset_grid(self, color:Color) -> None:
         for button in self.all_buttons:
             button.set_color(color)
 
