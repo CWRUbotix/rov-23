@@ -3,8 +3,8 @@
 <package format="3">
   <name>manipulators</name>
   <version>0.0.0</version>
-  <description>A generic package for showing how to do manipulators.</description>
-  <maintainer email="case@case.edu">CWRUBotics 2022-2023</maintainer>
+  <description>Code for manipulators.</description>
+  <maintainer email="rmc170@case.edu">Michael Carlstrom</maintainer>
   <license>Apache License, Version 2.0</license>
 
   <test_depend>ament_copyright</test_depend>
