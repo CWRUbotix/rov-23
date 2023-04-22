@@ -35,7 +35,7 @@ setup(
     entry_points={
         'console_scripts': [
             'manipulator = manipulators.manipulators:main',
-            'test = manipulators.manip_test:main'
+            'test = manipulators.manip_tester:main'
         ],
     },
 )
