@@ -8,7 +8,7 @@ from interfaces.action import BasicTask
 from interfaces.msg import ROVControl, Manip
 from sensor_msgs.msg import Joy
 
-from typing import Dict
+from typing import Dict, List
 
 
 # Button meanings for PS5 Control might be different for others
@@ -135,7 +135,7 @@ class ManualControlNode(Node):
         return CancelResponse.ACCEPT
 
     def manip_callback(self, msg: Joy):
-        buttons = msg.buttons
+        buttons: List[int] = msg.buttons
 
         button_id: int
         manip_button: ManipButton
