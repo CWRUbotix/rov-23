@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 from typing import List
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout, QLabel
 
 class SeagrassButton(QPushButton):
@@ -12,12 +13,9 @@ class SeagrassButton(QPushButton):
         self.color: str = "green"
         self.setStyleSheet("background-color :" + self.color)
 
-        self.clicked.connect(self.on_click)
+        self.clicked.connect(self.toggle_button_color)
 
         self.recovered = True
-
-    def on_click(self):
-        self.toggle_button_color()
 
     def toggle_button_color(self):
         new_color: str
@@ -33,8 +31,17 @@ class SeagrassButton(QPushButton):
         self.setStyleSheet("background-color :" + new_color)
 
 class SeagrassGrid():
-    def __init__(self):
-        self.root_layout = QGridLayout()
+    def __init__(self, text:str=""):
+        self.root_layout = QVBoxLayout()
+
+        label = QLabel(text)
+        label.setAlignment(Qt.AlignCenter)
+
+        self.root_layout.addWidget(label)
+
+        grid = QGridLayout()
+        self.root_layout.addLayout(grid)
+
         self.all_buttons: List[QPushButton] = []
 
         N = 8
@@ -43,7 +50,7 @@ class SeagrassGrid():
            for col in range(N): 
                 
                 seagrass_button = SeagrassButton(size=50)
-                self.root_layout.addWidget(seagrass_button, row, col)
+                grid.addWidget(seagrass_button, row, col)
                 self.all_buttons.append(seagrass_button)
 
     def get_num_recovered(self) -> int:
@@ -56,12 +63,12 @@ class Seagrass(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.resize(1200, 600)
+        self.resize(1200, 400)
 
         root_layout = QHBoxLayout(self)
 
-        self.before_grid = SeagrassGrid()
-        self.after_grid = SeagrassGrid()
+        self.before_grid = SeagrassGrid("Before")
+        self.after_grid = SeagrassGrid("After")
 
         root_layout.addLayout(self.before_grid.root_layout)
         root_layout.addStretch()
