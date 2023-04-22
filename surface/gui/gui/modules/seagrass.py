@@ -6,9 +6,11 @@ from typing import List
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout, QLabel, QFrame
 
+
 class Color(Enum):
     GREEN = "green"
     WHITE = "white"
+
 
 class SeagrassButton(QPushButton):
     def __init__(self, size: int):
@@ -41,6 +43,7 @@ class SeagrassButton(QPushButton):
         self.recovered = self.color == Color.GREEN
 
         self.setStyleSheet("border: 1px solid gray; background-color :" + color.value)
+
 
 class SeagrassGrid():
     def __init__(self, text:str=""):
@@ -95,8 +98,8 @@ class SeagrassGrid():
 
         return np.count_nonzero(num_recovered)
 
-class Seagrass(QWidget):
 
+class SeagrassWidget(QWidget):
     def __init__(self):
         super().__init__()
 
@@ -109,7 +112,7 @@ class Seagrass(QWidget):
         root_layout.addLayout(self.after_grid.root_layout)
 
         sub_widget = QWidget()
-        sub_widget.setMinimumWidth(200)
+        sub_widget.setMinimumWidth(300)
 
         result_layout = QVBoxLayout()
         result_layout.addStretch()
@@ -155,5 +158,5 @@ class Seagrass(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    seagrass = Seagrass()
+    seagrass = SeagrassWidget()
     sys.exit(app.exec_())
