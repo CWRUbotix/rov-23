@@ -11,23 +11,23 @@ class SeagrassWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        root_layout = QHBoxLayout(self)
+        root_layout: QHBoxLayout = QHBoxLayout(self)
 
-        self.before_grid = SeagrassGrid(self, "Before")
-        self.after_grid = SeagrassGrid(self, "After")
+        self.after_grid: SeagrassGrid = SeagrassGrid(self, "After")
+        self.before_grid: SeagrassGrid = SeagrassGrid(self, "Before", self.after_grid)
 
         root_layout.addLayout(self.before_grid.root_layout, 1)
         root_layout.addLayout(self.after_grid.root_layout, 1)
 
-        sub_widget = QWidget()
+        sub_widget: QWidget = QWidget()
 
-        result_layout = QVBoxLayout()
+        result_layout: QVBoxLayout = QVBoxLayout()
 
         sub_widget.setLayout(result_layout)
 
-        self.before_label = QLabel("Before: ")
-        self.after_label = QLabel("After: ")
-        self.diff_label = QLabel()
+        self.before_label: QLabel = QLabel("Before: ")
+        self.after_label: QLabel = QLabel("After: ")
+        self.diff_label: QLabel = QLabel()
 
         result_layout.addWidget(self.before_label)
         result_layout.addWidget(self.after_label)
@@ -40,10 +40,10 @@ class SeagrassWidget(QWidget):
         self.show()
 
     def update_result_text(self) -> None:
-        before_num = self.before_grid.get_num_recovered()
-        after_num = self.after_grid.get_num_recovered()
+        before_num: int = self.before_grid.get_num_recovered()
+        after_num: int = self.after_grid.get_num_recovered()
 
-        diff = abs(after_num - before_num)
+        diff: int = abs(after_num - before_num)
 
         result: str
 
@@ -66,8 +66,9 @@ class Color(Enum):
 
 
 class SeagrassGrid():
-    def __init__(self, parent_widget: SeagrassWidget, text: str = ""):
+    def __init__(self, parent_widget: SeagrassWidget, text: str = "", connected_grid = None):
         self.parent_widget: SeagrassWidget = parent_widget
+        self.connected_grid: SeagrassGrid = connected_grid
 
         self.root_layout: QVBoxLayout = QVBoxLayout()
         self.root_layout.setSpacing(0)
@@ -114,6 +115,7 @@ class SeagrassGrid():
             for col in range(N):
                 seagrass_button: SeagrassButton = SeagrassButton(size=50)
 
+                seagrass_button.clicked.connect(self.update_connected_grid)
                 seagrass_button.clicked.connect(self.update_result_text)
 
                 grid.addWidget(seagrass_button, row, col)
@@ -130,9 +132,22 @@ class SeagrassGrid():
 
         return np.count_nonzero(num_recovered)
 
+    def update_connected_grid(self) -> None:
+        if self.connected_grid == None:
+            return
+
+        button1: SeagrassButton
+        button2: SeagrassButton
+
+        for button1, button2 in zip(self.all_buttons, self.connected_grid.all_buttons):
+
+            while button2.color != button1.color:
+                button2.toggle_button_color()
+
     def update_result_text(self) -> None:
         self.parent_widget.update_result_text()
 
+    
 
 class SeagrassButton(QPushButton):
     def __init__(self, size: int):
