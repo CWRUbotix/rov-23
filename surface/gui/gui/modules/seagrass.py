@@ -13,17 +13,53 @@ class SeagrassWidget(QWidget):
 
         root_layout: QHBoxLayout = QHBoxLayout(self)
 
-        self.after_grid: SeagrassGrid = SeagrassGrid(self, "After")
-        self.before_grid: SeagrassGrid = SeagrassGrid(self, "Before", self.after_grid)
+        self.after_grid: SeagrassGrid = SeagrassGrid(self)
+        self.before_grid: SeagrassGrid = SeagrassGrid(self, self.after_grid)
 
-        root_layout.addLayout(self.before_grid.root_layout, 1)
-        root_layout.addLayout(self.after_grid.root_layout, 1)
+        # Before layout
+        before_layout: QVBoxLayout = QVBoxLayout()
+        before_layout.addWidget((QLabel("Before")), alignment=Qt.AlignCenter)
 
-        sub_widget: QWidget = QWidget()
+        before_btns_layout: QHBoxLayout = QHBoxLayout()
 
+        set_all_green: QPushButton = QPushButton("Set All Green")
+        set_all_green.setMaximumWidth(120)
+        set_all_green.clicked.connect(lambda: self.before_grid.reset_grid(Color.GREEN))
+
+        set_all_white: QPushButton = QPushButton("Set All White")
+        set_all_white.setMaximumWidth(120)
+        set_all_white.clicked.connect(lambda: self.before_grid.reset_grid(Color.WHITE))
+
+        before_btns_layout.addWidget(set_all_green)
+        before_btns_layout.addWidget(set_all_white)
+
+        before_layout.addLayout(before_btns_layout)
+        before_layout.addWidget(self.before_grid.frame)
+
+        before_layout.addStretch()
+
+        # After layout        
+        after_layout: QVBoxLayout = QVBoxLayout()
+        after_layout.addWidget(QLabel("After"), alignment=Qt.AlignCenter)
+
+        after_bttn_layout: QHBoxLayout = QHBoxLayout()
+
+        match_before: QPushButton = QPushButton("Match Before")
+        match_before.setMaximumWidth(120)
+        match_before.clicked.connect(self.before_grid.update_connected_grid)
+
+        after_bttn_layout.addWidget(match_before)
+
+        after_layout.addLayout(after_bttn_layout)
+        after_layout.addWidget(self.after_grid.frame)
+
+        after_layout.addStretch()
+
+        # Result layout
+        result_widget: QWidget = QWidget()
         result_layout: QVBoxLayout = QVBoxLayout()
 
-        sub_widget.setLayout(result_layout)
+        result_widget.setLayout(result_layout)
 
         self.before_label: QLabel = QLabel("Before: ")
         self.after_label: QLabel = QLabel("After: ")
@@ -33,7 +69,10 @@ class SeagrassWidget(QWidget):
         result_layout.addWidget(self.after_label)
         result_layout.addWidget(self.diff_label)
 
-        root_layout.addWidget(sub_widget, 3)
+        # # Add all sections to main layout
+        root_layout.addLayout(before_layout, 1)
+        root_layout.addLayout(after_layout, 1)
+        root_layout.addWidget(result_widget, 3)
 
         result_layout.addStretch()
 
@@ -66,47 +105,22 @@ class Color(Enum):
 
 
 class SeagrassGrid():
-    def __init__(self, parent_widget: SeagrassWidget, text: str = "", connected_grid = None):
+    def __init__(self, parent_widget: SeagrassWidget, connected_grid = None):
         self.parent_widget: SeagrassWidget = parent_widget
         self.connected_grid: SeagrassGrid = connected_grid
-
-        self.root_layout: QVBoxLayout = QVBoxLayout()
-        self.root_layout.setSpacing(0)
-
-        label: QLabel = QLabel(text)
-        self.root_layout.addWidget(label, alignment=Qt.AlignCenter)
-
-        button_layout: QHBoxLayout = QHBoxLayout()
-
-        set_all_green: QPushButton = QPushButton("Set All Green")
-        set_all_green.setMaximumWidth(120)
-        set_all_green.clicked.connect(lambda: self.reset_grid(Color.GREEN))
-
-        set_all_white: QPushButton = QPushButton("Set All White")
-        set_all_white.setMaximumWidth(120)
-        set_all_white.clicked.connect(lambda: self.reset_grid(Color.WHITE))
-
-        button_layout.addWidget(set_all_green)
-        button_layout.addWidget(set_all_white)
-
-        self.root_layout.addWidget(label, alignment=Qt.AlignCenter)
-        self.root_layout.addLayout(button_layout)
 
         grid_widget: QWidget = QWidget()
         grid_widget.setMaximumWidth(200)
 
-        grid: QGridLayout = QGridLayout()
-        grid.setSpacing(0)
-        grid.setContentsMargins(0, 0, 0, 0)
+        grid_layout: QGridLayout = QGridLayout()
+        grid_layout.setSpacing(0)
+        grid_layout.setContentsMargins(0, 0, 0, 0)
 
-        grid_widget.setLayout(grid)
+        grid_widget.setLayout(grid_layout)
 
-        frame: QFrame = QFrame()
-        frame.setLayout(grid)
-        frame.setStyleSheet("border: 1px solid gray")
-
-        self.root_layout.addWidget(frame)
-        self.root_layout.addStretch()
+        self.frame: QFrame = QFrame()
+        self.frame.setLayout(grid_layout)
+        self.frame.setStyleSheet("border: 1px solid gray")
 
         self.all_buttons: List[QPushButton] = []
         N = 8
@@ -118,12 +132,15 @@ class SeagrassGrid():
                 seagrass_button.clicked.connect(self.update_connected_grid)
                 seagrass_button.clicked.connect(self.update_result_text)
 
-                grid.addWidget(seagrass_button, row, col)
+                grid_layout.addWidget(seagrass_button, row, col)
                 self.all_buttons.append(seagrass_button)
 
     def reset_grid(self, color: Color) -> None:
         for button in self.all_buttons:
             button.set_color(color)
+
+        if self.connected_grid:
+            self.update_connected_grid()
 
         self.parent_widget.update_result_text()
 
@@ -136,9 +153,6 @@ class SeagrassGrid():
         if self.connected_grid == None:
             return
 
-        button1: SeagrassButton
-        button2: SeagrassButton
-
         for button1, button2 in zip(self.all_buttons, self.connected_grid.all_buttons):
 
             while button2.color != button1.color:
@@ -147,7 +161,6 @@ class SeagrassGrid():
     def update_result_text(self) -> None:
         self.parent_widget.update_result_text()
 
-    
 
 class SeagrassButton(QPushButton):
     def __init__(self, size: int):
