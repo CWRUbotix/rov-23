@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node, Subscription
 from interfaces.msg import Manip
-from manipulators.tca9555 import TCA9555
+from tca9555 import TCA9555
 
 
 class Manipulator(Node):
@@ -38,7 +38,7 @@ class Manipulator(Node):
         manip_id = request.manip_id
         activated = request.activated
 
-        pin = self.get_parameter(manip_id).get_parameter_value().integer_value
+        pin = self._parameters[manip_id].get_parameter_value().integer_value
 
         if activated:
             self.gpio.set_bits(bits=(pin))
