@@ -20,8 +20,6 @@ setup(
         # Include all launch files.
         (os.path.join('share', package_name, 'launch'),
          glob('launch/*launch.[pxy][yma]*')),
-        (os.path.join('share', package_name, 'config'),
-         glob('config/*')),
         (os.path.join('lib', f'python{major_num}.{minor_num}', 'site-packages', package_name),
          glob(os.path.join('TCA9555', 'tca9555', 'tca9555.py'))),
     ],
