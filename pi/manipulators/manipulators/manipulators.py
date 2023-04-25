@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node, Subscription
 from interfaces.msg import Manip
-from tca9555 import TCA9555
+from manipulators.tca9555 import TCA9555
 
 
 class Manipulator(Node):

@@ -8,7 +8,7 @@ this solution worked
 https://unix.stackexchange.com/questions/147494/how-can-i-set-device-rw-permissions-permanently-on-raspbian
 """
 
-from tca9555 import TCA9555
+from manipulators.tca9555 import TCA9555
 import time
 
 
@@ -21,13 +21,16 @@ def main():
 
     # # Set pins 0 through 5 as output
     gpio.set_direction(0, bits=(0, 1, 2, 3, 4, 5))
+    print(gpio.format_config())
 
     # Turn on the LEDs
     gpio.set_bits(bits=(0, 1, 2, 3, 4, 5))
+    print(gpio.format_config())
     time.sleep(5)
 
     # # Turn off the LEDs
     gpio.unset_bits(bits=(0, 1, 2, 3, 4, 5))
+    print(gpio.format_config())
 
 
 if __name__ == "__main__":
