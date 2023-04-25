@@ -25,7 +25,7 @@ setup(
         (os.path.join('lib', f'python{major_num}.{minor_num}', 'site-packages', package_name),
          glob(os.path.join('TCA9555', 'tca9555', 'tca9555.py'))),
     ],
-    install_requires=['setuptools', 'bitstring'],
+    install_requires=['setuptools', 'wiringpi', 'bitstring'],
     zip_safe=True,
     maintainer='taz',
     maintainer_email='tzupfer@gmail.com',
