@@ -137,9 +137,6 @@ class ManualControlNode(Node):
     def manip_callback(self, msg: Joy):
         buttons: List[int] = msg.buttons
 
-        button_id: int
-        manip_button: ManipButton
-
         for button_id, manip_button in self.manip_buttons.items():
 
             just_pressed: bool = False
