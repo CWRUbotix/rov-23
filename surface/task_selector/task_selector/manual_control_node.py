@@ -151,7 +151,7 @@ class ManualControlNode(Node):
                 new_manip_state: bool = not manip_button.is_active
                 manip_button.is_active = new_manip_state
 
-                log_msg: str = f"manip_id= {manip_button.claw}+ manip_active= {new_manip_state}"
+                log_msg: str = f"manip_id= {manip_button.claw}, manip_active= {new_manip_state}"
                 self.get_logger().info(log_msg)
 
             manip_button.last_button_state = just_pressed
