@@ -34,7 +34,7 @@ class ThrusterControllerNode(Node):
         self.angular_scale = 1
         self.multiplier = 3
 
-        self.publishers_: List[Publisher] = []
+        self.thruster_publishers: List[Publisher] = []
         self.sub_keyboard = self.create_subscription(
             ROVControl, "/manual_control", self.control_callback, qos_profile=10
         )
@@ -97,7 +97,9 @@ class ThrusterControllerNode(Node):
             topic = (
                 f"{ns}/model/rov/joint/thruster_{thruster}_body_blade_joint/cmd_thrust"
             )
-            self.publishers_.append(self.create_publisher(msg_type, topic, qos_profile))
+            self.thruster_publishers.append(
+                self.create_publisher(msg_type, topic, qos_profile)
+            )
 
     def control(self):
         thrust_list = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -237,7 +239,7 @@ class ThrusterControllerNode(Node):
 
     def publish_thrust(self, thrust_list: List[float]):
         for i in range(len(self.thrusters)):
-            self.publishers_[i].publish(Float64(data=thrust_list[i]))
+            self.thruster_publishers[i].publish(Float64(data=thrust_list[i]))
 
 
 def main():
