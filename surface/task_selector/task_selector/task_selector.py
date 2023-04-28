@@ -149,7 +149,7 @@ class TaskSelector(Node):
     # Only works if server runs on a multithreaded executor
     def cancel_goal(self):
         if self._goal_handle is None:
-            self.get_logger().info('Could not cancel goal because there is none')
+            self.get_logger().warn('Could not cancel goal because there is none')
             return
 
         self.get_logger().info('Canceling goal')
