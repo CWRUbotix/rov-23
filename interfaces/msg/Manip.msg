@@ -1,0 +1,2 @@
+string manip_id
+bool activated

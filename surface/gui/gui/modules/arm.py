@@ -31,7 +31,7 @@ class Arm(QWidget):
 
         self.arm_publisher: GUIEventPublisher = GUIEventPublisher(
             Armed,
-            "armed"
+            "/armed"
         )
 
     def arm_clicked(self):
