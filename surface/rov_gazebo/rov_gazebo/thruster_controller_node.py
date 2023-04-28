@@ -35,6 +35,15 @@ class ThrusterControllerNode(Node):
         self.multiplier = 3
 
         self.thruster_publishers: List[Publisher] = []
+        ns: str = self.get_namespace()
+        for thruster in self.thrusters:
+            topic = (
+                f"{ns}/model/rov/joint/thruster_{thruster}_body_blade_joint/cmd_thrust"
+            )
+            self.thruster_publishers.append(
+                self.create_publisher(Float64, topic, qos_profile=10)
+            )
+
         self.sub_keyboard = self.create_subscription(
             ROVControl, "/manual_control", self.control_callback, qos_profile=10
         )
@@ -90,16 +99,6 @@ class ThrusterControllerNode(Node):
             ),
         )
         self.control_msg = twist  # for stablization
-
-    def create_publishers(self, msg_type: type, qos_profile: int = 10):
-        ns: str = self.get_namespace()
-        for thruster in self.thrusters:
-            topic = (
-                f"{ns}/model/rov/joint/thruster_{thruster}_body_blade_joint/cmd_thrust"
-            )
-            self.thruster_publishers.append(
-                self.create_publisher(msg_type, topic, qos_profile)
-            )
 
     def control(self):
         thrust_list = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -248,7 +247,6 @@ def main():
     print("Thruster controller node started")
 
     node = ThrusterControllerNode()
-    node.create_publishers(Float64)
 
     rclpy.spin(node)
 
