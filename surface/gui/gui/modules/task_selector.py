@@ -12,7 +12,7 @@ from interfaces.msg import TaskFeedback
 
 from rclpy.impl.rcutils_logger import RcutilsLogger
 
-width = 200
+WIDTH = 200
 
 
 class TaskSelector(QWidget):
@@ -33,17 +33,17 @@ class TaskSelector(QWidget):
         self.start_btn = QPushButton("Auto Docking")
         self.start_btn.clicked.connect(self.start_btn_clicked)
         self.start_btn.setFixedHeight(75)
-        self.start_btn.setFixedWidth(width)
+        self.start_btn.setFixedWidth(WIDTH)
 
         # Create Stop button
         self.stop_btn = QPushButton("Manual Control")
         self.stop_btn.clicked.connect(self.manual_control_btn_clicked)
         self.stop_btn.setFixedHeight(75)
-        self.stop_btn.setFixedWidth(width)
+        self.stop_btn.setFixedWidth(WIDTH)
 
         # Add 'Task: ' label
         self.task_label: QLabel = QLabel()
-        self.task_label.setFixedWidth(width)
+        self.task_label.setFixedWidth(WIDTH)
         self.task_label.setText('Task: Manual Control')
 
         # Setup Grid
