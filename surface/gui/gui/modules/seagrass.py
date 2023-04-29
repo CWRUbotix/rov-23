@@ -3,10 +3,36 @@ import numpy as np
 
 from enum import Enum
 from typing import List
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout, QLabel, QFrame
+from PyQt5.QtGui import QPixmap, QImage
 from gui.modules.video_area import VideoWidget
+from sensor_msgs.msg import Image
+from cv2 import Mat
 
+
+class PausableVideoWidget(VideoWidget):
+
+    def __init__(self, cam_topic: str):
+        super().__init__(0, cam_topic)
+
+        self.is_paused = False
+
+    @pyqtSlot(Image)
+    def handle_frame(self, frame: Image):
+
+        if not self.is_paused:
+
+            cv_image: Mat = self.cv_bridge.imgmsg_to_cv2(
+                frame, desired_encoding='passthrough')
+
+            qt_image: QImage = self.convert_cv_qt(
+                cv_image,
+                480,
+                480
+            )
+
+            self.setPixmap(QPixmap.fromImage(qt_image))
 
 class SeagrassWidget(QWidget):
     def __init__(self):
@@ -18,18 +44,6 @@ class SeagrassWidget(QWidget):
         self.before_grid: SeagrassGrid = SeagrassGrid(self, self.after_grid)
 
         BUTTON_WIDTH = 120
-
-        # Bottom cam
-        cam_layout: QVBoxLayout = QVBoxLayout()
-        
-        bottom_cam: VideoWidget = VideoWidget(0, "/bottom_cam/image_raw")
-        
-        screenshot_bttn: QPushButton = QPushButton("Take Screenshot")
-        screenshot_bttn.setMaximumWidth(BUTTON_WIDTH)
-
-        cam_layout.addWidget((QLabel("Bottom Camera")), alignment=Qt.AlignHCenter)
-        cam_layout.addWidget(screenshot_bttn, alignment=Qt.AlignHCenter)
-        cam_layout.addWidget(bottom_cam, alignment=Qt.AlignHCenter)
 
         # Before layout
         before_layout: QVBoxLayout = QVBoxLayout()
@@ -52,6 +66,19 @@ class SeagrassWidget(QWidget):
         before_layout.addWidget(self.before_grid.frame)
 
         before_layout.addStretch()
+
+        # Bottom cam
+        cam_layout: QVBoxLayout = QVBoxLayout()
+        
+        self.bottom_cam: PausableVideoWidget = PausableVideoWidget("/bottom_cam/image_raw")
+        
+        self.toggle_pause_bttn: QPushButton = QPushButton("Pause")
+        self.toggle_pause_bttn.setMaximumWidth(BUTTON_WIDTH)
+        self.toggle_pause_bttn.clicked.connect(self.toggle_pause)
+
+        cam_layout.addWidget((QLabel("Bottom Camera")), alignment=Qt.AlignHCenter)
+        cam_layout.addWidget(self.toggle_pause_bttn, alignment=Qt.AlignHCenter)
+        cam_layout.addWidget(self.bottom_cam, alignment=Qt.AlignHCenter)
 
         # After layout        
         after_layout: QVBoxLayout = QVBoxLayout()
@@ -85,14 +112,22 @@ class SeagrassWidget(QWidget):
         result_layout.addWidget(self.diff_label)
 
         # Add all sections to main layout
-        root_layout.addLayout(cam_layout, 4)
         root_layout.addLayout(before_layout, 1)
+        root_layout.addLayout(cam_layout, 3)
         root_layout.addLayout(after_layout, 1)
         root_layout.addWidget(result_widget, 2)
 
         result_layout.addStretch()
 
         self.show()
+
+    def toggle_pause(self) -> None:
+        self.bottom_cam.is_paused = not self.bottom_cam.is_paused
+
+        if self.bottom_cam.is_paused:
+            self.toggle_pause_bttn.setText("Unpause")
+        else:
+            self.toggle_pause_bttn.setText("Pause")
 
     def update_result_text(self) -> None:
         before_num: int = self.before_grid.get_num_recovered()
