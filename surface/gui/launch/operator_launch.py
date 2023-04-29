@@ -10,6 +10,7 @@ def generate_launch_description():
         executable='run_operator',
         parameters=[
                 {'theme': LaunchConfiguration('theme', default='')}],
-        )
+        remappings=[("/surface/gui/armed", "/armed")]
+    )
 
     return LaunchDescription([gui_node])
