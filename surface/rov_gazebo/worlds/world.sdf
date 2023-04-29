@@ -113,7 +113,7 @@
       <direction>-0.5 0.1 -0.9</direction>
     </light>
 
-    <model name="box">
+    <!-- <model name="box">
       <pose>2 -1 0.5 0 0 0</pose>
       <static>true</static>
       <link name="box_link">
@@ -165,7 +165,7 @@
           <cast_shadows>false</cast_shadows>
         </visual>
       </link>
-    </model>
+    </model> -->
 
   </world>
 
