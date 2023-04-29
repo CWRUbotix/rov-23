@@ -14,7 +14,7 @@ class OperatorApp(App):
         self.setWindowTitle('Operator GUI - CWRUbotix ROV 2023')
 
         tabs = QTabWidget()
-        
+
         # Main tab
         main_tab = QWidget()
         main_layout: QGridLayout = QGridLayout()

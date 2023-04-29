@@ -3,8 +3,9 @@ import numpy as np
 
 from enum import Enum
 from typing import List
-from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout, QLabel, QFrame
+from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtWidgets import (QWidget, QPushButton, QGridLayout, QApplication,
+                             QHBoxLayout, QVBoxLayout, QLabel, QFrame)
 from PyQt5.QtGui import QPixmap, QImage
 from gui.modules.video_area import VideoWidget
 from sensor_msgs.msg import Image
@@ -33,6 +34,7 @@ class PausableVideoWidget(VideoWidget):
             )
 
             self.setPixmap(QPixmap.fromImage(qt_image))
+
 
 class SeagrassWidget(QWidget):
     def __init__(self):
@@ -80,7 +82,7 @@ class SeagrassWidget(QWidget):
         cam_layout.addWidget(self.toggle_pause_bttn, alignment=Qt.AlignHCenter)
         cam_layout.addWidget(self.bottom_cam, alignment=Qt.AlignHCenter)
 
-        # After layout        
+        # After layout
         after_layout: QVBoxLayout = QVBoxLayout()
 
         after_bttn_layout: QHBoxLayout = QHBoxLayout()
@@ -156,7 +158,7 @@ class Color(Enum):
 
 
 class SeagrassGrid():
-    def __init__(self, parent_widget: SeagrassWidget, connected_grid = None):
+    def __init__(self, parent_widget: SeagrassWidget, connected_grid=None):
         self.parent_widget: SeagrassWidget = parent_widget
         self.connected_grid: SeagrassGrid = connected_grid
 
@@ -201,7 +203,7 @@ class SeagrassGrid():
         return np.count_nonzero(num_recovered)
 
     def update_connected_grid(self) -> None:
-        if self.connected_grid == None:
+        if self.connected_grid is None:
             return
 
         for button1, button2 in zip(self.all_buttons, self.connected_grid.all_buttons):
