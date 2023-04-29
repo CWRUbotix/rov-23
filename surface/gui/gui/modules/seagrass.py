@@ -5,6 +5,7 @@ from enum import Enum
 from typing import List
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, QHBoxLayout, QVBoxLayout, QLabel, QFrame
+from gui.modules.video_area import VideoWidget
 
 
 class SeagrassWidget(QWidget):
@@ -16,23 +17,37 @@ class SeagrassWidget(QWidget):
         self.after_grid: SeagrassGrid = SeagrassGrid(self)
         self.before_grid: SeagrassGrid = SeagrassGrid(self, self.after_grid)
 
+        BUTTON_WIDTH = 120
+
+        # Bottom cam
+        cam_layout: QVBoxLayout = QVBoxLayout()
+        
+        bottom_cam: VideoWidget = VideoWidget(0, "/bottom_cam/image_raw")
+        
+        screenshot_bttn: QPushButton = QPushButton("Take Screenshot")
+        screenshot_bttn.setMaximumWidth(BUTTON_WIDTH)
+
+        cam_layout.addWidget((QLabel("Bottom Camera")), alignment=Qt.AlignHCenter)
+        cam_layout.addWidget(screenshot_bttn, alignment=Qt.AlignHCenter)
+        cam_layout.addWidget(bottom_cam, alignment=Qt.AlignHCenter)
+
         # Before layout
         before_layout: QVBoxLayout = QVBoxLayout()
-        before_layout.addWidget((QLabel("Before")), alignment=Qt.AlignCenter)
 
         before_btns_layout: QHBoxLayout = QHBoxLayout()
 
         set_all_green: QPushButton = QPushButton("Set All Green")
-        set_all_green.setMaximumWidth(120)
+        set_all_green.setMaximumWidth(BUTTON_WIDTH)
         set_all_green.clicked.connect(lambda: self.before_grid.reset_grid(Color.GREEN))
 
         set_all_white: QPushButton = QPushButton("Set All White")
-        set_all_white.setMaximumWidth(120)
+        set_all_white.setMaximumWidth(BUTTON_WIDTH)
         set_all_white.clicked.connect(lambda: self.before_grid.reset_grid(Color.WHITE))
 
         before_btns_layout.addWidget(set_all_green)
         before_btns_layout.addWidget(set_all_white)
 
+        before_layout.addWidget((QLabel("Before")), alignment=Qt.AlignCenter)
         before_layout.addLayout(before_btns_layout)
         before_layout.addWidget(self.before_grid.frame)
 
@@ -40,7 +55,6 @@ class SeagrassWidget(QWidget):
 
         # After layout        
         after_layout: QVBoxLayout = QVBoxLayout()
-        after_layout.addWidget(QLabel("After"), alignment=Qt.AlignCenter)
 
         after_bttn_layout: QHBoxLayout = QHBoxLayout()
 
@@ -50,6 +64,7 @@ class SeagrassWidget(QWidget):
 
         after_bttn_layout.addWidget(match_before)
 
+        after_layout.addWidget(QLabel("After"), alignment=Qt.AlignCenter)
         after_layout.addLayout(after_bttn_layout)
         after_layout.addWidget(self.after_grid.frame)
 
@@ -69,10 +84,11 @@ class SeagrassWidget(QWidget):
         result_layout.addWidget(self.after_label)
         result_layout.addWidget(self.diff_label)
 
-        # # Add all sections to main layout
+        # Add all sections to main layout
+        root_layout.addLayout(cam_layout, 4)
         root_layout.addLayout(before_layout, 1)
         root_layout.addLayout(after_layout, 1)
-        root_layout.addWidget(result_widget, 3)
+        root_layout.addWidget(result_widget, 2)
 
         result_layout.addStretch()
 

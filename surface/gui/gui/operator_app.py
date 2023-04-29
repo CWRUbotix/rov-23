@@ -20,6 +20,9 @@ class OperatorApp(App):
         main_layout: QGridLayout = QGridLayout()
         main_tab.setLayout(main_layout)
 
+        self.logger: Logger = Logger()
+        main_layout.addWidget(self.logger, 0, 0)
+
         self.task_selector: TaskSelector = TaskSelector()
         main_layout.addWidget(self.task_selector, 0, 1)
 
@@ -40,9 +43,6 @@ class OperatorApp(App):
         tabs.addTab(seagrass_tab, "Seagrass")
 
         root_layout.addWidget(tabs)
-
-        self.logger: Logger = Logger()
-        main_layout.addWidget(self.logger, 0, 0)
 
 
 def run_gui_operator():
