@@ -2,7 +2,7 @@ import os
 from glob import glob
 from setuptools import setup
 
-package_name = 'manipulators'
+package_name = 'flood_warning'
 
 setup(
     name=package_name,
