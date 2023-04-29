@@ -71,9 +71,9 @@ class SeagrassWidget(QWidget):
 
         # Bottom cam
         cam_layout: QVBoxLayout = QVBoxLayout()
-        
+
         self.bottom_cam: PausableVideoWidget = PausableVideoWidget("/bottom_cam/image_raw")
-        
+
         self.toggle_pause_bttn: QPushButton = QPushButton("Pause")
         self.toggle_pause_bttn.setMaximumWidth(BUTTON_WIDTH)
         self.toggle_pause_bttn.clicked.connect(self.toggle_pause)
