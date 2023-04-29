@@ -57,9 +57,9 @@ class ManualControlNode(Node):
             'manual_control',
             self.execute_callback
         )
-        self.pixhawk_publisher: Publisher = self.create_publisher(
+        self.controller_pub: Publisher = self.create_publisher(
             ROVControl,
-            'pixhawk_manual_control',
+            'manual_control',
             10
         )
         self.subscription: Subscription = self.create_subscription(
