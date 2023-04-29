@@ -14,7 +14,7 @@
 // Digital input pin where the input source(physical switch or GUI) will be coonnected.
 // High = submerge, Low = float
 // You might change pin number
-#define SYRINCE_INPUT   9
+#define SYRINGE_INPUT   9
 
 // True = submerge, False = float
 bool syringeCtrl = false;
@@ -138,7 +138,7 @@ void setup()
   rf69.setEncryptionKey(key);
 
   pinMode(LED, OUTPUT);
-  pinMode(SYRINCE_INPUT, INPUT);
+  pinMode(SYRINGE_INPUT, INPUT);
 
   Serial.print("RFM69 radio @");  Serial.print((int)RF69_FREQ);  Serial.println(" MHz");
 }
