@@ -2,6 +2,8 @@ from launch_ros.actions import Node
 from launch import LaunchDescription
 from launch.substitutions import LaunchConfiguration
 
+PORT = '/dev/ttyPixhawk'
+
 
 def generate_launch_description():
 
@@ -9,8 +11,9 @@ def generate_launch_description():
     pixhawk_com_node: Node = Node(
         package='pixhawk_communication',
         executable='pixhawk_com',
-        parameters=[
-                {'communication': LaunchConfiguration('communication', default='/dev/ttyPixhawk')}]
+        parameters=[{'communication': LaunchConfiguration('communication', default=PORT)}],
+        remappings=[("/pi/armed", "/armed"),
+                    ("/pi/pixhawk_manual_control", "/pixhawk_manual_control")]
     )
 
     return LaunchDescription([pixhawk_com_node])
