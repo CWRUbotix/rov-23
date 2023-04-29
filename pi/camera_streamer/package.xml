@@ -10,7 +10,7 @@
   <depend>rclpy</depend>
   <depend>image_transport</depend>
   <depend>v4l2_camera</depend>
-  <depend>usb_cam</depend>
+  
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
 
