@@ -1,4 +1,11 @@
-from PyQt5.QtWidgets import QVBoxLayout, QPushButton, QLabel, QWidget, QSizePolicy
+from PyQt5.QtWidgets import (
+    QHBoxLayout,
+    QVBoxLayout,
+    QPushButton,
+    QLabel,
+    QWidget,
+    QSizePolicy,
+)
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtGui import QPixmap, QImage
 
@@ -92,6 +99,7 @@ class BuoyFrogWidget(QWidget):
 
     def __init__(self):
         super().__init__()
+        self.mode = "buoy"
 
         layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(layout)
@@ -99,17 +107,35 @@ class BuoyFrogWidget(QWidget):
         self.video1: VideoWidget = VideoWidget(0, self.CAMERA_TOPICS[0])
         self.video2: VideoWidget = VideoWidget(1, self.CAMERA_TOPICS[1])
 
-        self.mode_button = QPushButton()
-        self.mode_button.setText("Buoy <--> Frog")
-        self.mode_button.setFixedSize(300, 200)
-        self.mode_button.clicked.connect(self.toggle_mode)
+        self.videos = QHBoxLayout()
+        self.videos.addWidget(self.video1)
+        self.videos.addWidget(self.video2)
 
-        layout.addWidget(self.video1)
-        layout.addWidget(self.mode_button)
+        self.mode_button = QPushButton()
+        self.mode_button.setText("Toggle Mode\nCurrent: Buoy")
+        self.mode_button.clicked.connect(self.toggle_mode)
+        self.mode_button.setFixedSize(150, 100)
+
+        self.record_button = QPushButton()
+        self.record_button.setText("Record")
+        self.record_button.clicked.connect(self.record)
+        self.record_button.setFixedSize(150, 100)
+
+        self.buttons = QHBoxLayout()
+        self.buttons.addWidget(self.mode_button)
+        self.buttons.addWidget(self.record_button)
+
+        layout.addLayout(self.videos)
+        layout.addLayout(self.buttons)
 
     def toggle_mode(self):
         # toggle video widget between video1 and video2 at first item of the layout
-        if self.layout().itemAt(0).widget() == self.video1:
-            self.layout().replaceWidget(self.video1, self.video2)
+        if self.mode == "buoy":
+            self.mode = "frog"
+            self.mode_button.setText("Toggle Mode\nCurrent: Frog")
         else:
-            self.layout().replaceWidget(self.video2, self.video1)
+            self.mode = "buoy"
+            self.mode_button.setText("Toggle Mode\nCurrent: Buoy")
+
+    def record(self):
+        pass
