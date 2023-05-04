@@ -152,7 +152,7 @@ class BuoyFrogWidget(QWidget):
             os.makedirs("videos")
 
         writer = cv2.VideoWriter(
-            f"videos/{self.mode}.mp4", cv2.VideoWriter_fourcc(*"mp4v"), 15, (480, 480)
+            f"videos/{self.mode}.mp4", cv2.VideoWriter_fourcc(*"mp4v"), 15, (640, 480)
         )
 
         while True:
