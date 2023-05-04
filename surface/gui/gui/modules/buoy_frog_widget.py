@@ -14,6 +14,8 @@ from gui.event_nodes.subscriber import GUIEventSubscriber
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from cv2 import Mat
+import cv2
+import os
 
 
 class VideoWidget(QLabel):
@@ -26,6 +28,7 @@ class VideoWidget(QLabel):
         super().__init__()
 
         self.index: int = index
+        self.cur_image: Mat = None
 
         # For debugging, display row number in each VideoWidget
         self.setText(str(index))
@@ -49,6 +52,7 @@ class VideoWidget(QLabel):
         cv_image: Mat = self.cv_bridge.imgmsg_to_cv2(
             frame, desired_encoding="passthrough"
         )
+        self.cur_image = cv_image
 
         # TODO: dynamic image scaling based on Qt element size
         # qt_image: QImage = self.convert_cv_qt(
@@ -100,6 +104,7 @@ class BuoyFrogWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.mode = "buoy"
+        self.is_recording = False
 
         layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(layout)
@@ -114,12 +119,12 @@ class BuoyFrogWidget(QWidget):
         self.mode_button = QPushButton()
         self.mode_button.setText("Toggle Mode\nCurrent: Buoy")
         self.mode_button.clicked.connect(self.toggle_mode)
-        self.mode_button.setFixedSize(150, 100)
+        self.mode_button.setFixedSize(200, 100)
 
         self.record_button = QPushButton()
         self.record_button.setText("Record")
         self.record_button.clicked.connect(self.record)
-        self.record_button.setFixedSize(150, 100)
+        self.record_button.setFixedSize(200, 100)
 
         self.buttons = QHBoxLayout()
         self.buttons.addWidget(self.mode_button)
@@ -138,4 +143,30 @@ class BuoyFrogWidget(QWidget):
             self.mode_button.setText("Toggle Mode\nCurrent: Buoy")
 
     def record(self):
-        pass
+        self.record_button.setText("Press ESC at a new window\nto stop recording.")
+        self.record_button.setDisabled(True)
+        self.is_recording = True
+
+        # make 'ros_23_ws/videos' folder if it doesn't exist
+        if not os.path.exists("videos"):
+            os.makedirs("videos")
+
+        writer = cv2.VideoWriter(
+            f"videos/{self.mode}.mp4", cv2.VideoWriter_fourcc(*"mp4v"), 15, (480, 480)
+        )
+
+        while True:
+            cv_image: Mat = (
+                self.video1.cur_image if self.mode == "buoy" else self.video2.cur_image
+            )
+            writer.write(cv_image)
+
+            cv2.imshow(f"Recording at {self.mode} mode", cv_image)
+
+            if cv2.waitKey(1) & 0xFF == 27:
+                self.record_button.setText("Record")
+                self.record_button.setDisabled(False)
+                self.is_recording = False
+                writer.release()
+                cv2.destroyAllWindows()
+                break
