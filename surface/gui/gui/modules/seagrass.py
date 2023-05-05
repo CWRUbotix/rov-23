@@ -158,7 +158,7 @@ class Color(Enum):
 
 
 class SeagrassGrid():
-    def __init__(self, parent_widget: SeagrassWidget, 
+    def __init__(self, parent_widget: SeagrassWidget,
                  connected_grid: Optional["SeagrassGrid"] = None):
         
         self.parent_widget: SeagrassWidget = parent_widget
