@@ -26,21 +26,12 @@ class OperatorApp(App):
         self.task_selector: TaskSelector = TaskSelector()
         main_layout.addWidget(self.task_selector, 0, 1)
 
-        # Seagrass tab
-        seagrass_tab = QWidget()
-        seagrass_tab.setContentsMargins(0, 0, 0, 0)
-
-        seagrass_layout: QHBoxLayout = QHBoxLayout()
-
-        seagrass_tab.setLayout(seagrass_layout)
-        seagrass_layout.addWidget(SeagrassWidget())
-
         # Add tabs to root
         root_layout: QGridLayout = QGridLayout()
         self.setLayout(root_layout)
 
         tabs.addTab(main_tab, "Main")
-        tabs.addTab(seagrass_tab, "Seagrass")
+        tabs.addTab(SeagrassWidget(), "Seagrass")
 
         root_layout.addWidget(tabs)
 
