@@ -2,7 +2,7 @@ import sys
 import numpy as np
 
 from enum import Enum
-from typing import List
+from typing import List, Optional
 from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWidgets import (QWidget, QPushButton, QGridLayout, QApplication,
                              QHBoxLayout, QVBoxLayout, QLabel, QFrame)
@@ -158,7 +158,7 @@ class Color(Enum):
 
 
 class SeagrassGrid():
-    def __init__(self, parent_widget: SeagrassWidget, connected_grid=None):
+    def __init__(self, parent_widget: SeagrassWidget, connected_grid: Optional["SeagrassGrid"] = None):
         self.parent_widget: SeagrassWidget = parent_widget
         self.connected_grid: SeagrassGrid = connected_grid
 
