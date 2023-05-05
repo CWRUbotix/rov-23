@@ -226,12 +226,7 @@ class SeagrassButton(QPushButton):
         self.color: Color = Color.GREEN
         self.set_color(self.color)
 
-        self.clicked.connect(self.on_click)
-
-        self.recovered = True
-
-    def on_click(self) -> None:
-        self.toggle_button_color()
+        self.clicked.connect(self.toggle_button_color)
 
     def toggle_button_color(self) -> None:
         new_color: Color
@@ -241,14 +236,10 @@ class SeagrassButton(QPushButton):
         else:
             new_color = Color.WHITE
 
-        self.color = new_color
-        self.recovered = not self.recovered
-
         self.set_color(new_color)
 
     def set_color(self, color: Color) -> None:
         self.color = color
-        self.recovered = self.color == Color.GREEN
 
         self.setStyleSheet("border: 1px solid gray; background-color :" + color.value)
 
