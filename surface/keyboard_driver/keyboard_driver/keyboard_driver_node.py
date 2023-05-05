@@ -55,7 +55,7 @@ ZERO_SPEED: int = 1500
 RANGE_SPEED: int = 400
 
 
-class keyboardListenerNode(Node):
+class KeyboardListenerNode(Node):
     def __init__(self):
         super().__init__("keyboard_listener_node", parameter_overrides=[])
 
@@ -183,7 +183,7 @@ class keyboardListenerNode(Node):
 
 def main():
     rclpy.init()
-    keyboardListenerNode().spin()
+    KeyboardListenerNode().spin()
 
 
 if __name__ == "__main__":
