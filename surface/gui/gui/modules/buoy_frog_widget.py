@@ -60,11 +60,12 @@ class BuoyFrogWidget(QWidget):
             os.makedirs("video")
 
         self.size = self.video1.cur_image.shape
+        frame_rate = 180 if self.video1.cur_image.shape[1] == 320 else 30
 
         writer = cv2.VideoWriter(
             f"video/{self.mode}.mp4",
             cv2.VideoWriter_fourcc(*"mp4v"),
-            180,
+            frame_rate,
             (self.size[1], self.size[0]),
         )
 
