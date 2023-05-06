@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Install git and curl
+# Install git, curl, and ip
 sudo apt install git
 sudo apt install curl
+sudo apt install python3-pip
 
 # Setting locale
 locale  # check for UTF-8
@@ -39,3 +40,6 @@ if ! grep -qF "$LINE" ~/.bashrc ;
     then echo "$LINE" >> ~/.bashrc  ;
     source ~/.bashrc
 fi
+
+# Install colcon and all extensions
+sudo apt install python3-colcon-common-extensions
