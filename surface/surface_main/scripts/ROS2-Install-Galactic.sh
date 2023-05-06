@@ -9,6 +9,8 @@ sudo apt install python3-rosdep2
 
 # Install python packages that rosdep can't install
 pip install opencv-python
+pip install pyserial
+pip install wiringpi
 
 # Setting locale
 locale  # check for UTF-8
