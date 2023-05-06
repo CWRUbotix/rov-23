@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGridLayout
+from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QTabWidget, QWidget
 
 
 from gui.modules.task_selector import TaskSelector
@@ -13,17 +13,28 @@ class OperatorApp(App):
 
         self.setWindowTitle("Operator GUI - CWRUbotix ROV 2023")
 
-        layout: QGridLayout = QGridLayout()
-        self.setLayout(layout)
+        self.layout = QVBoxLayout()
+        self.tabs = QTabWidget()
+        self.tab1: QWidget = QWidget()
+        self.tab2: BuoyFrogWidget = BuoyFrogWidget()
 
-        self.task_selector: TaskSelector = TaskSelector()
-        layout.addWidget(self.task_selector, 0, 1)
+        # Create first tab
+        self.tab1Layout: QGridLayout = QGridLayout()
 
         self.logger: Logger = Logger()
-        layout.addWidget(self.logger, 0, 0)
+        self.tab1Layout.addWidget(self.logger, 0, 0)
 
-        self.buoy_frog_widget: BuoyFrogWidget = BuoyFrogWidget()
-        layout.addWidget(self.buoy_frog_widget, 1, 0)
+        self.task_selector: TaskSelector = TaskSelector()
+        self.tab1Layout.addWidget(self.task_selector, 0, 1)
+
+        self.tab1.setLayout(self.tab1Layout)
+
+        # Add tabs
+        self.tabs.addTab(self.tab1, "Task Selector")
+        self.tabs.addTab(self.tab2, "Buoy/Frog Recorder")
+
+        self.layout.addWidget(self.tabs)
+        self.setLayout(self.layout)
 
 
 def run_gui_operator():
