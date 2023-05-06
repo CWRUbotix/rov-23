@@ -1,8 +1,11 @@
 from setuptools import setup
 from glob import glob
 import os
+import shutil
+
 
 package_name = 'pi_main'
+
 
 setup(
     name=package_name,
@@ -25,3 +28,14 @@ setup(
     tests_require=['pytest'],
     entry_points={},
 )
+
+# Robot Upstart wants *.launch.py so this copies around that
+src = os.path.join('/home', 'rov', 'rov_23_ws', 'src', 'pi', package_name, 'launch', 'pi_launch.py')
+dst_path = os.path.join('/home', 'rov', 'rov_23_ws', 'install',
+                        package_name, 'share', package_name, 'launch')
+dst = os.path.join(dst_path, 'pi.launch.py')
+try:
+    os.mkdir(dst_path)
+except FileExistsError:
+    pass
+shutil.copy2(src, dst)
