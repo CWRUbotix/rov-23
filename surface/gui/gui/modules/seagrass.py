@@ -27,11 +27,7 @@ class PausableVideoWidget(VideoWidget):
             cv_image: Mat = self.cv_bridge.imgmsg_to_cv2(
                 frame, desired_encoding='passthrough')
 
-            qt_image: QImage = self.convert_cv_qt(
-                cv_image,
-                480,
-                480
-            )
+            qt_image: QImage = self.convert_cv_qt(cv_image, 480, 480)
 
             self.setPixmap(QPixmap.fromImage(qt_image))
 
@@ -177,12 +173,8 @@ class SeagrassGrid(QWidget):
 
         for row in range(N):
             for col in range(N):
-                seagrass_button: SeagrassButton = SeagrassButton(button_id=button_id, size=50)
+                seagrass_button: SeagrassButton = SeagrassButton(button_id, 50, self.set_other_button)
                 self.all_buttons.append(seagrass_button)
-
-                seagrass_button.clicked.connect(
-                    (lambda local_button_id:
-                        lambda: self.toggle_button(local_button_id))(button_id))
 
                 grid_layout.addWidget(seagrass_button, row, col)
 
@@ -217,30 +209,22 @@ class SeagrassGrid(QWidget):
         button = self.all_buttons[button_id]
         button.set_color(recovered)
 
-        if self.set_other_button is not None:
-            self.set_other_button(button_id, recovered)
-
-        self.update_result_text()
-
-    def toggle_button(self, button_id: int) -> None:
-        button = self.all_buttons[button_id]
-        button.toggle_button_color()
-
-        if self.set_other_button is not None:
-            self.set_other_button(button_id, button.recovered)
-
         self.update_result_text()
 
 
 class SeagrassButton(QPushButton):
-    def __init__(self, button_id: int, size: int):
+    def __init__(self, button_id: int, size: int, set_other_button: Optional[Callable] = None):
         super(SeagrassButton, self).__init__()
 
         self.button_id: int = button_id
         self.setFixedSize(size, size)
 
         self.recovered = True
-        self.set_color(self.recovered)
+        self.setStyleSheet("border: 1px solid gray; background-color : green")
+
+        self.set_other_button = set_other_button
+
+        self.clicked.connect(self.toggle_button_color)
 
     def toggle_button_color(self) -> None:
         self.recovered = not self.recovered
@@ -256,6 +240,10 @@ class SeagrassButton(QPushButton):
             color = "white"
 
         self.setStyleSheet("border: 1px solid gray; background-color :" + color)
+
+        # Update other button
+        if self.set_other_button is not None:
+            self.set_other_button(self.button_id, self.recovered)
 
 
 if __name__ == "__main__":
