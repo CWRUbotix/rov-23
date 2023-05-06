@@ -7,7 +7,6 @@ from gui.event_nodes.subscriber import GUIEventSubscriber
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from cv2 import Mat
-import cv2
 
 
 # This file has a lot commented out. Commented code is mostly used for
