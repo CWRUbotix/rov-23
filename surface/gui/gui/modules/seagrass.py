@@ -173,7 +173,7 @@ class SeagrassGrid(QWidget):
 
         for row in range(N):
             for col in range(N):
-                seagrass_button: SeagrassButton = SeagrassButton(button_id, 50, 
+                seagrass_button: SeagrassButton = SeagrassButton(button_id, 50,
                                                                  self.set_other_button)
                 self.all_buttons.append(seagrass_button)
 
