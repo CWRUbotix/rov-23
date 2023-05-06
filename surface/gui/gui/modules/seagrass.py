@@ -1,38 +1,37 @@
 import sys
 
-from enum import Enum
 from typing import List, Optional, Callable
 from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWidgets import (QWidget, QPushButton, QGridLayout, QApplication,
                              QHBoxLayout, QVBoxLayout, QLabel, QFrame)
 from PyQt5.QtGui import QPixmap, QImage
-# from gui.modules.video_area import VideoWidget
-# from sensor_msgs.msg import Image
+from gui.modules.video_area import VideoWidget
+from sensor_msgs.msg import Image
 from cv2 import Mat
 
 
-# class PausableVideoWidget(VideoWidget):
+class PausableVideoWidget(VideoWidget):
 
-#     def __init__(self, cam_topic: str):
-#         super().__init__(0, cam_topic)
+    def __init__(self, cam_topic: str):
+        super().__init__(0, cam_topic)
 
-#         self.is_paused = False
+        self.is_paused = False
 
-#     @pyqtSlot(Image)
-#     def handle_frame(self, frame: Image):
+    @pyqtSlot(Image)
+    def handle_frame(self, frame: Image):
 
-#         if not self.is_paused:
+        if not self.is_paused:
 
-#             cv_image: Mat = self.cv_bridge.imgmsg_to_cv2(
-#                 frame, desired_encoding='passthrough')
+            cv_image: Mat = self.cv_bridge.imgmsg_to_cv2(
+                frame, desired_encoding='passthrough')
 
-#             qt_image: QImage = self.convert_cv_qt(
-#                 cv_image,
-#                 480,
-#                 480
-#             )
+            qt_image: QImage = self.convert_cv_qt(
+                cv_image,
+                480,
+                480
+            )
 
-#             self.setPixmap(QPixmap.fromImage(qt_image))
+            self.setPixmap(QPixmap.fromImage(qt_image))
 
 
 class SeagrassWidget(QWidget):
@@ -42,7 +41,7 @@ class SeagrassWidget(QWidget):
         root_layout: QHBoxLayout = QHBoxLayout(self)
 
         self.after_grid: SeagrassGrid = SeagrassGrid(self.update_result_text)
-        self.before_grid: SeagrassGrid = SeagrassGrid(self.update_result_text, self.after_grid.set_grid)
+        self.before_grid: SeagrassGrid = SeagrassGrid(self.update_result_text, self.after_grid.set_button)
 
         BUTTON_WIDTH = 120
 
@@ -71,15 +70,15 @@ class SeagrassWidget(QWidget):
         # Bottom cam
         cam_layout: QVBoxLayout = QVBoxLayout()
 
-        # self.bottom_cam: PausableVideoWidget = PausableVideoWidget("/bottom_cam/image_raw")
+        self.bottom_cam: PausableVideoWidget = PausableVideoWidget("/bottom_cam/image_raw")
 
-        # self.toggle_pause_bttn: QPushButton = QPushButton("Pause")
-        # self.toggle_pause_bttn.setMaximumWidth(BUTTON_WIDTH)
-        # self.toggle_pause_bttn.clicked.connect(self.toggle_pause)
+        self.toggle_pause_bttn: QPushButton = QPushButton("Pause")
+        self.toggle_pause_bttn.setMaximumWidth(BUTTON_WIDTH)
+        self.toggle_pause_bttn.clicked.connect(self.toggle_pause)
 
-        # cam_layout.addWidget((QLabel("Bottom Camera")), alignment=Qt.AlignHCenter)
-        # cam_layout.addWidget(self.toggle_pause_bttn, alignment=Qt.AlignHCenter)
-        # cam_layout.addWidget(self.bottom_cam, alignment=Qt.AlignHCenter)
+        cam_layout.addWidget((QLabel("Bottom Camera")), alignment=Qt.AlignHCenter)
+        cam_layout.addWidget(self.toggle_pause_bttn, alignment=Qt.AlignHCenter)
+        cam_layout.addWidget(self.bottom_cam, alignment=Qt.AlignHCenter)
 
         # After layout
         after_layout: QVBoxLayout = QVBoxLayout()
@@ -114,7 +113,7 @@ class SeagrassWidget(QWidget):
 
         # Add all sections to main layout
         root_layout.addLayout(before_layout, 1)
-        # root_layout.addLayout(cam_layout, 3)
+        root_layout.addLayout(cam_layout, 3)
         root_layout.addLayout(after_layout, 1)
         root_layout.addWidget(result_widget, 2)
 
@@ -151,11 +150,11 @@ class SeagrassWidget(QWidget):
 
 class SeagrassGrid(QWidget):
     def __init__(self, update_result_text: Callable,
-                 update_other_grid: Optional[Callable] = None):
+                 set_other_button: Optional[Callable] = None):
         super().__init__()
 
         self.update_result_text: Callable = update_result_text
-        self.update_other_grid: Callable = update_other_grid
+        self.set_other_button: Callable = set_other_button
 
         self.setMaximumWidth(200)
 
@@ -171,23 +170,25 @@ class SeagrassGrid(QWidget):
 
         self.all_buttons: List[SeagrassButton] = []
         N = 8
+        button_id = 0
 
         for row in range(N):
             for col in range(N):
-                seagrass_button: SeagrassButton = SeagrassButton(size=50)
+                seagrass_button: SeagrassButton = SeagrassButton(button_id = button_id, size = 50)
+                self.all_buttons.append(seagrass_button)
 
-                seagrass_button.clicked.connect(self.update_connected_grid)
-                seagrass_button.clicked.connect(update_result_text)
+                seagrass_button.clicked.connect((lambda local_button_id: lambda: self.toggle_button(local_button_id)) (button_id))
 
                 grid_layout.addWidget(seagrass_button, row, col)
-                self.all_buttons.append(seagrass_button)
+
+                button_id += 1
 
     def reset_grid(self, recovered: bool) -> None:
         for button in self.all_buttons:
             button.set_color(recovered)
 
-        if self.update_other_grid:
-            self.update_other_grid()
+            if self.set_other_button:
+                self.set_other_button(button.button_id, button.recovered)
 
         self.update_result_text()
 
@@ -201,29 +202,40 @@ class SeagrassGrid(QWidget):
         return num_recovered
 
     def update_connected_grid(self) -> None:
-        if self.update_other_grid is None:
+        if self.set_other_button is None:
             return
 
-        recovered: List[bool] = [button.recovered for button in self.all_buttons]
+        for button in self.all_buttons:
+            self.set_other_button(button.button_id, button.recovered)
 
-        self.update_other_grid(recovered)
+    def set_button(self, button_id: int, recovered: bool) -> None:
+        button = self.all_buttons[button_id]
+        button.set_color(recovered)
 
-    def set_grid(self, recovered: List[bool]) -> None:
+        if self.set_other_button is not None:
+            self.set_other_button(button_id, recovered)
 
-        for is_recovered, button in zip(recovered, self.all_buttons):
-            button.set_color(is_recovered)
+        self.update_result_text()
+
+    def toggle_button(self, button_id: int) -> None:
+        button = self.all_buttons[button_id]
+        button.toggle_button_color()
+
+        if self.set_other_button is not None:
+            self.set_other_button(button_id, button.recovered)
+
+        self.update_result_text()
 
 
 class SeagrassButton(QPushButton):
-    def __init__(self, size: int):
+    def __init__(self, button_id: int, size: int):
         super(SeagrassButton, self).__init__()
 
+        self.button_id: int = button_id
         self.setFixedSize(size, size)
 
         self.recovered = True
         self.set_color(self.recovered)
-
-        self.clicked.connect(self.toggle_button_color)
 
     def toggle_button_color(self) -> None:
         self.recovered = not self.recovered
