@@ -1,5 +1,4 @@
 import sys
-import numpy as np
 
 from enum import Enum
 from typing import List, Optional
@@ -200,18 +199,20 @@ class SeagrassGrid(QWidget):
         self.parent_widget.update_result_text()
 
     def get_num_recovered(self) -> int:
-        num_recovered: List[bool] = [button for button in self.all_buttons if button.color == Color.GREEN]
+        num_recovered: int = 0
 
-        return np.count_nonzero(num_recovered)
+        for button in self.all_buttons:
+            if button.color == Color.GREEN:
+                num_recovered += 1
+        
+        return num_recovered
 
     def update_connected_grid(self) -> None:
         if self.connected_grid is None:
             return
 
         for button1, button2 in zip(self.all_buttons, self.connected_grid.all_buttons):
-
-            while button2.color != button1.color:
-                button2.toggle_button_color()
+            button2.set_color(button1.color)
 
     def update_result_text(self) -> None:
         self.parent_widget.update_result_text()
