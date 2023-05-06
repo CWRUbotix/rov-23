@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="pool">
+
+    <xacro:include filename="inertial_macros.xacro"/>
+
+    <link name="wrapper"></link>
+
+    <link name="pool">
+        <visual name="visual">
+          <geometry>
+            <mesh filename="file://$(find rov_gazebo)/meshes/pool.dae"/>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <mesh filename="file://$(find rov_gazebo)/meshes/pool.dae"/>
+          </geometry>
+        </collision>
+    </link>
+
+    <link name="docking_station">
+        <visual name="visual">
+          <geometry>
+            <mesh filename="file://$(find rov_gazebo)/meshes/docking_station_visual.dae"/>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <mesh filename="file://$(find rov_gazebo)/meshes/docking_station_collision.dae"/>
+          </geometry>
+        </collision>
+        <xacro:inertial_box mass="1" x="1" y="1" z="1">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
+    <link name="docking_button">
+        <visual name="visual">
+          <geometry>
+            <mesh filename="file://$(find rov_gazebo)/meshes/docking_button_visual.dae"/>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <mesh filename="file://$(find rov_gazebo)/meshes/docking_button_collision.dae"/>
+          </geometry>
+        </collision>
+        <xacro:inertial_box mass="1" x="1" y="1" z="1">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
+    <joint name="wrapper_pool_joint" type="fixed">
+        <parent link="wrapper"/>
+        <child link="pool"/>
+        <origin xyz="0 0 -4" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="pool_docking_button_joint" type="fixed">
+        <parent link="pool"/>
+        <child link="docking_station"/>
+        <origin xyz="2 0 3" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="docking_station_button_joint" type="fixed">
+        <parent link="docking_station"/>
+        <child link="docking_button"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <gazebo>
+        <static>true</static>
+    </gazebo>
+
+</robot>
