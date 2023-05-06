@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGridLayout, QTabWidget, QWidget, QHBoxLayout
+from PyQt5.QtWidgets import QGridLayout, QTabWidget, QWidget
 
 
 from gui.modules.task_selector import TaskSelector

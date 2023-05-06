@@ -181,7 +181,7 @@ class SeagrassGrid(QWidget):
                 self.all_buttons.append(seagrass_button)
 
                 seagrass_button.clicked.connect(
-                    (lambda local_button_id: 
+                    (lambda local_button_id:
                         lambda: self.toggle_button(local_button_id))(button_id))
 
                 grid_layout.addWidget(seagrass_button, row, col)
@@ -203,7 +203,7 @@ class SeagrassGrid(QWidget):
         for button in self.all_buttons:
             if button.recovered:
                 num_recovered += 1
-        
+
         return num_recovered
 
     def update_connected_grid(self) -> None:
