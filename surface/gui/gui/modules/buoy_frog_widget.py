@@ -59,8 +59,13 @@ class BuoyFrogWidget(QWidget):
         if not os.path.exists("video"):
             os.makedirs("video")
 
+        self.size = self.video1.cur_image.shape
+
         writer = cv2.VideoWriter(
-            f"video/{self.mode}.mp4", cv2.VideoWriter_fourcc(*"mp4v"), 180, (320, 240)
+            f"video/{self.mode}.mp4",
+            cv2.VideoWriter_fourcc(*"mp4v"),
+            180,
+            (self.size[1], self.size[0]),
         )
 
         while True:
