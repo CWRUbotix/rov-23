@@ -81,7 +81,7 @@ interfaces, you'll need to run this every time you change something:
 Make sure you're updated (only on the first build or if something breaks)
 
 ```bash
-rosdep update --rosdistro=$ROS_DISTRO
+rosdep update --rosdistro=$ROS_DISTRO --include-eol-distros
 ```
 
 Install dependecies (only on the first build or if something breaks)
