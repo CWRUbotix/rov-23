@@ -1,13 +1,15 @@
 import sys
 
 from typing import List, Optional, Callable
+from cv2 import Mat
+
 from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWidgets import (QWidget, QPushButton, QGridLayout, QApplication,
                              QHBoxLayout, QVBoxLayout, QLabel, QFrame)
 from PyQt5.QtGui import QPixmap, QImage
+
 from gui.modules.video_area import VideoWidget
 from sensor_msgs.msg import Image
-from cv2 import Mat
 
 
 class PausableVideoWidget(VideoWidget):
@@ -41,7 +43,8 @@ class SeagrassWidget(QWidget):
         root_layout: QHBoxLayout = QHBoxLayout(self)
 
         self.after_grid: SeagrassGrid = SeagrassGrid(self.update_result_text)
-        self.before_grid: SeagrassGrid = SeagrassGrid(self.update_result_text, self.after_grid.set_button)
+        self.before_grid: SeagrassGrid = SeagrassGrid(self.update_result_text, 
+                                                      self.after_grid.set_button)
 
         BUTTON_WIDTH = 120
 
@@ -174,10 +177,11 @@ class SeagrassGrid(QWidget):
 
         for row in range(N):
             for col in range(N):
-                seagrass_button: SeagrassButton = SeagrassButton(button_id = button_id, size = 50)
+                seagrass_button: SeagrassButton = SeagrassButton(button_id=button_id, size=50)
                 self.all_buttons.append(seagrass_button)
 
-                seagrass_button.clicked.connect((lambda local_button_id: lambda: self.toggle_button(local_button_id)) (button_id))
+                seagrass_button.clicked.connect(
+                    (lambda local_button_id: lambda: self.toggle_button(local_button_id)) (button_id))
 
                 grid_layout.addWidget(seagrass_button, row, col)
 
@@ -242,10 +246,10 @@ class SeagrassButton(QPushButton):
 
         self.set_color(self.recovered)
 
-    def set_color(self, is_recovered: bool) -> None:
-        self.recovered = is_recovered
+    def set_color(self, recovered: bool) -> None:
+        self.recovered = recovered
 
-        if is_recovered:
+        if recovered:
             color = "green"
         else:
             color = "white"
