@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGridLayout
+from PyQt5.QtWidgets import QGridLayout, QWidget
 
 from gui.modules.task_selector import TaskSelector
 from gui.modules.video_area import VideoArea
@@ -16,10 +16,10 @@ class PilotApp(App):
         self.setLayout(layout)
 
         self.video_area = VideoArea()
-        layout.addWidget(self.video_area, 0, 0)
+        layout.addWidget(self.video_area, 0, 0, 1, 2)
 
         self.task_selector: TaskSelector = TaskSelector()
-        layout.addWidget(self.task_selector, 0, 1)
+        layout.addWidget(self.task_selector, 1, 0)
 
         self.arm: Arm = Arm()
         layout.addWidget(self.arm, 1, 1)

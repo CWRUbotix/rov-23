@@ -7,6 +7,7 @@ from gui.event_nodes.subscriber import GUIEventSubscriber
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from cv2 import Mat
+import cv2
 
 
 # This file has a lot commented out. Commented code is mostly used for
@@ -52,11 +53,7 @@ class VideoWidget(QLabel):
         #     self.frameGeometry().height()
         # )
 
-        qt_image: QImage = self.convert_cv_qt(
-            cv_image,
-            480,
-            480
-        )
+        qt_image: QImage = self.convert_cv_qt(cv_image, 900, 675)
 
         # self.setPixmap(qt_image.scaled(
         #     self.frameGeometry().width(),
@@ -70,7 +67,7 @@ class VideoWidget(QLabel):
         # Color image
         if len(cv_img.shape) == 3:
             # Rectify weird colors
-            # cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2RGBA)
+            # cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2BGR)
             h, w, ch = cv_img.shape
             bytes_per_line: int = ch * w
 
@@ -87,9 +84,8 @@ class VideoWidget(QLabel):
             raise Exception("Somehow not color or grayscale image.")
 
         qt_image = QImage(cv_img.data, w, h, bytes_per_line, img_format)
+        qt_image: QImage = qt_image.scaled(width, height, Qt.KeepAspectRatio)
 
-        if width == 0:
-            qt_image: QImage = qt_image.scaled(width, height, Qt.KeepAspectRatio)
         return qt_image
 
 
@@ -97,8 +93,8 @@ class VideoArea(QWidget):
     """Container widget handling all video streams."""
 
     # First entry here will start as the big video
-    CAMERA_TOPICS = ['/front_cam/image_raw', '/manip_cam/image_raw', '/bottom_cam/image_raw']
-    CAMERA_COORDS = [(0, 0), (0, 1), (1, 0)]
+    CAMERA_TOPICS = ['/front_cam/image_raw', '/bottom_cam/image_raw']
+    CAMERA_COORDS = [(0, 0), (0, 1)]
 
     def __init__(self):
         super().__init__()
