@@ -46,7 +46,7 @@ class SeagrassWidget(QWidget):
         root_layout: QHBoxLayout = QHBoxLayout(self)
 
         self.after_grid: SeagrassGrid = SeagrassGrid(self.update_result_text)
-        self.before_grid: SeagrassGrid = SeagrassGrid(self.update_result_text, 
+        self.before_grid: SeagrassGrid = SeagrassGrid(self.update_result_text,
                                                       self.after_grid.set_button)
         # Before layout
         before_layout: QVBoxLayout = QVBoxLayout()
@@ -181,7 +181,8 @@ class SeagrassGrid(QWidget):
                 self.all_buttons.append(seagrass_button)
 
                 seagrass_button.clicked.connect(
-                    (lambda local_button_id: lambda: self.toggle_button(local_button_id)) (button_id))
+                    (lambda local_button_id: 
+                        lambda: self.toggle_button(local_button_id))(button_id))
 
                 grid_layout.addWidget(seagrass_button, row, col)
 
