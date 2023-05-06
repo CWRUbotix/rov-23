@@ -37,6 +37,9 @@ class PausableVideoWidget(VideoWidget):
 
 
 class SeagrassWidget(QWidget):
+
+    BUTTON_WIDTH = 120
+
     def __init__(self):
         super().__init__()
 
@@ -45,26 +48,23 @@ class SeagrassWidget(QWidget):
         self.after_grid: SeagrassGrid = SeagrassGrid(self.update_result_text)
         self.before_grid: SeagrassGrid = SeagrassGrid(self.update_result_text, 
                                                       self.after_grid.set_button)
-
-        BUTTON_WIDTH = 120
-
         # Before layout
         before_layout: QVBoxLayout = QVBoxLayout()
 
         before_btns_layout: QHBoxLayout = QHBoxLayout()
 
         set_all_green: QPushButton = QPushButton("Set All Green")
-        set_all_green.setMaximumWidth(BUTTON_WIDTH)
+        set_all_green.setMaximumWidth(self.BUTTON_WIDTH)
         set_all_green.clicked.connect(lambda: self.before_grid.reset_grid(True))
 
         set_all_white: QPushButton = QPushButton("Set All White")
-        set_all_white.setMaximumWidth(BUTTON_WIDTH)
+        set_all_white.setMaximumWidth(self.BUTTON_WIDTH)
         set_all_white.clicked.connect(lambda: self.before_grid.reset_grid(False))
 
         before_btns_layout.addWidget(set_all_green)
         before_btns_layout.addWidget(set_all_white)
 
-        before_layout.addWidget((QLabel("Before")), alignment=Qt.AlignCenter)
+        before_layout.addWidget(QLabel("Before"), alignment=Qt.AlignCenter)
         before_layout.addLayout(before_btns_layout)
         before_layout.addWidget(self.before_grid.frame)
 
@@ -76,10 +76,10 @@ class SeagrassWidget(QWidget):
         self.bottom_cam: PausableVideoWidget = PausableVideoWidget("/bottom_cam/image_raw")
 
         self.toggle_pause_bttn: QPushButton = QPushButton("Pause")
-        self.toggle_pause_bttn.setMaximumWidth(BUTTON_WIDTH)
+        self.toggle_pause_bttn.setMaximumWidth(self.BUTTON_WIDTH)
         self.toggle_pause_bttn.clicked.connect(self.toggle_pause)
 
-        cam_layout.addWidget((QLabel("Bottom Camera")), alignment=Qt.AlignHCenter)
+        cam_layout.addWidget(QLabel("Bottom Camera"), alignment=Qt.AlignHCenter)
         cam_layout.addWidget(self.toggle_pause_bttn, alignment=Qt.AlignHCenter)
         cam_layout.addWidget(self.bottom_cam, alignment=Qt.AlignHCenter)
 
