@@ -29,15 +29,28 @@ setup(
     entry_points={},
 )
 
+dirs = os.listdir(os.path.expanduser("~"))
+
+ws = None
+for dir in dirs:
+    if "ws" in dir:
+        if ws is not None:
+            raise KeyError("Multiple Workspaces detected in home cannot pick")
+        ws = dir
+
+if ws is None:
+    raise ValueError("No workspace found")
+
 # Robot Upstart wants *.launch.py so this copies around that
-src = os.path.join('~', 'rov_23_ws', 'src', 'pi', package_name, 'launch', 'pi_launch.py')
+src = os.path.join('~', ws, 'src', 'pi', package_name, 'launch', 'pi_launch.py')
 src_home = os.path.expanduser(src)
-dst_path = os.path.join('~', 'rov_23_ws', 'install',
+dst_path = os.path.join('~', ws, 'install',
                         package_name, 'share', package_name, 'launch')
 dst_home = os.path.expanduser(dst_path)
 dst = os.path.join(dst_home, 'pi.launch.py')
+
 try:
-    os.mkdir(dst_home)
+    os.makedirs(dst_home)
 except FileExistsError:
     pass
 shutil.copy2(src_home, dst_home)
