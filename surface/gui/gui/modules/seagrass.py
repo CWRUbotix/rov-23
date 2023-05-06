@@ -157,27 +157,27 @@ class Color(Enum):
     WHITE = "white"
 
 
-class SeagrassGrid():
+class SeagrassGrid(QWidget):
     def __init__(self, parent_widget: SeagrassWidget,
                  connected_grid: Optional["SeagrassGrid"] = None):
-        
+        super().__init__()
+
         self.parent_widget: SeagrassWidget = parent_widget
         self.connected_grid: SeagrassGrid = connected_grid
 
-        grid_widget: QWidget = QWidget()
-        grid_widget.setMaximumWidth(200)
+        self.setMaximumWidth(200)
 
         grid_layout: QGridLayout = QGridLayout()
         grid_layout.setSpacing(0)
         grid_layout.setContentsMargins(0, 0, 0, 0)
 
-        grid_widget.setLayout(grid_layout)
+        self.setLayout(grid_layout)
 
         self.frame: QFrame = QFrame()
         self.frame.setLayout(grid_layout)
         self.frame.setStyleSheet("border: 1px solid gray")
 
-        self.all_buttons: List[QPushButton] = []
+        self.all_buttons: List[SeagrassButton] = []
         N = 8
 
         for row in range(N):
@@ -200,7 +200,7 @@ class SeagrassGrid():
         self.parent_widget.update_result_text()
 
     def get_num_recovered(self) -> int:
-        num_recovered: List[bool] = [button.recovered for button in self.all_buttons]
+        num_recovered: List[bool] = [button for button in self.all_buttons if button.color == Color.GREEN]
 
         return np.count_nonzero(num_recovered)
 
