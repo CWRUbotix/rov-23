@@ -30,12 +30,14 @@ setup(
 )
 
 # Robot Upstart wants *.launch.py so this copies around that
-src = os.path.join('/home', 'rov', 'rov_23_ws', 'src', 'pi', package_name, 'launch', 'pi_launch.py')
-dst_path = os.path.join('/home', 'rov', 'rov_23_ws', 'install',
+src = os.path.join('~', 'rov_23_ws', 'src', 'pi', package_name, 'launch', 'pi_launch.py')
+src_home = os.path.expanduser(src)
+dst_path = os.path.join('~', 'rov_23_ws', 'install',
                         package_name, 'share', package_name, 'launch')
-dst = os.path.join(dst_path, 'pi.launch.py')
+dst_home = os.path.expanduser(dst_path)
+dst = os.path.join(dst_home, 'pi.launch.py')
 try:
-    os.mkdir(dst_path)
+    os.mkdir(dst_home)
 except FileExistsError:
     pass
-shutil.copy2(src, dst)
+shutil.copy2(src_home, dst_home)
