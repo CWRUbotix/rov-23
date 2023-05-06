@@ -22,18 +22,19 @@ class VideoWidget(QLabel):
         super().__init__()
 
         self.index: int = index
+        self.cur_image: Mat = None
 
         # For debugging, display row number in each VideoWidget
         self.setText(str(index))
 
         self.cv_bridge: CvBridge = CvBridge()
 
-        self.setSizePolicy(QSizePolicy.Expanding,
-                           QSizePolicy.Expanding)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.handle_frame_signal.connect(self.handle_frame)
         self.camera_subscriber: GUIEventSubscriber = GUIEventSubscriber(
-            Image, topic, self.handle_frame_signal)
+            Image, topic, self.handle_frame_signal
+        )
 
     # def mousePressEvent(self, ev: QMouseEvent):
     #     """Swap this video with the big video on click."""
@@ -43,7 +44,9 @@ class VideoWidget(QLabel):
     @pyqtSlot(Image)
     def handle_frame(self, frame: Image):
         cv_image: Mat = self.cv_bridge.imgmsg_to_cv2(
-            frame, desired_encoding='passthrough')
+            frame, desired_encoding="passthrough"
+        )
+        self.cur_image = cv_image
 
         # TODO: dynamic image scaling based on Qt element size
         # qt_image: QImage = self.convert_cv_qt(
@@ -52,11 +55,7 @@ class VideoWidget(QLabel):
         #     self.frameGeometry().height()
         # )
 
-        qt_image: QImage = self.convert_cv_qt(
-            cv_image,
-            480,
-            480
-        )
+        qt_image: QImage = self.convert_cv_qt(cv_image, 480, 480)
 
         # self.setPixmap(qt_image.scaled(
         #     self.frameGeometry().width(),
@@ -97,7 +96,11 @@ class VideoArea(QWidget):
     """Container widget handling all video streams."""
 
     # First entry here will start as the big video
-    CAMERA_TOPICS = ['/front_cam/image_raw', '/manip_cam/image_raw', '/bottom_cam/image_raw']
+    CAMERA_TOPICS = [
+        "/front_cam/image_raw",
+        "/manip_cam/image_raw",
+        "/bottom_cam/image_raw",
+    ]
     CAMERA_COORDS = [(0, 0), (0, 1), (1, 0)]
 
     def __init__(self):
@@ -117,8 +120,9 @@ class VideoArea(QWidget):
             video: VideoWidget = VideoWidget(i, topic)
             self.video_widgets.append(video)
 
-            self.grid_layout.addWidget(video, self.CAMERA_COORDS[i][0],
-                                       self.CAMERA_COORDS[i][1], 1, 3)
+            self.grid_layout.addWidget(
+                video, self.CAMERA_COORDS[i][0], self.CAMERA_COORDS[i][1], 1, 3
+            )
 
             # video.update_big_video_signal.connect(self.set_as_big_video)
 
