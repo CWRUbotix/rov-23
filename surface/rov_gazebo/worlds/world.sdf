@@ -1,123 +1,123 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="rov_simulation">
+  <world nඞme="rov_simulඞtion">
 
-    <physics name="1ms" type="ode">
-      <max_step_size>0.001</max_step_size>
-      <real_time_factor>1.0</real_time_factor>
+    <physics nඞme="1ms" type="ode">
+      <mඞx_step_size>0.001</mඞx_step_size>
+      <reඞl_time_fඞctor>1.0</reඞl_time_fඞctor>
     </physics>
     <plugin
-      filename="ignition-gazebo-physics-system"
-      name="ignition::gazebo::systems::Physics">
+      filenඞme="ignition-gඞzebo-physics-system"
+      nඞme="ignition::gඞzebo::systems::Physics">
     </plugin>
     <plugin
-      filename="ignition-gazebo-sensors-system"
-      name="ignition::gazebo::systems::Sensors">
+      filenඞme="ignition-gඞzebo-sensors-system"
+      nඞme="ignition::gඞzebo::systems::Sensors">
       <render_engine>ogre</render_engine>
     </plugin>
     <plugin
-      filename="ignition-gazebo-user-commands-system"
-      name="ignition::gazebo::systems::UserCommands">
+      filenඞme="ignition-gඞzebo-user-commඞnds-system"
+      nඞme="ignition::gඞzebo::systems::UserCommඞnds">
     </plugin>
     <plugin
-      filename="ignition-gazebo-scene-broadcaster-system"
-      name="ignition::gazebo::systems::SceneBroadcaster">
+      filenඞme="ignition-gඞzebo-scene-broඞdcඞster-system"
+      nඞme="ignition::gඞzebo::systems::SceneBroඞdcඞster">
     </plugin>
     <plugin
-      filename="ignition-gazebo-buoyancy-system"
-      name="ignition::gazebo::systems::Buoyancy">
+      filenඞme="ignition-gඞzebo-buoyඞncy-system"
+      nඞme="ignition::gඞzebo::systems::Buoyඞncy">
       <uniform_fluid_density>1000</uniform_fluid_density>
     </plugin>
 
     <gui fullscreen="0">
 
       <!-- 3D scene -->
-      <plugin filename="GzScene3D" name="3D View">
+      <plugin filenඞme="GzScene3D" nඞme="3D View">
         <ignition-gui>
           <title>3D View</title>
-          <property type="bool" key="showTitleBar">true</property>
-          <property type="string" key="state">docked</property>
+          <property type="bool" key="showTitleBඞr">true</property>
+          <property type="string" key="stඞte">docked</property>
         </ignition-gui>
 
         <engine>ogre</engine>
         <scene>scene</scene>
-        <ambient_light>1.0 1.0 1.0</ambient_light>
-        <background_color>0.8 0.8 0.8</background_color>
-        <camera_pose>-1 0 1 0 0.5 0</camera_pose>
+        <ඞmbient_light>1.0 1.0 1.0</ඞmbient_light>
+        <bඞckground_color>0.8 0.8 0.8</bඞckground_color>
+        <cඞmerඞ_pose>-1 0 1 0 0.5 0</cඞmerඞ_pose>
       </plugin>
 
       <!-- World control -->
-      <plugin filename="WorldControl" name="World control">
+      <plugin filenඞme="WorldControl" nඞme="World control">
         <ignition-gui>
           <title>World control</title>
-          <property type="bool" key="showTitleBar">true</property>
-          <property type="bool" key="resizable">true</property>
+          <property type="bool" key="showTitleBඞr">true</property>
+          <property type="bool" key="resizඞble">true</property>
           <property type="double" key="height">72</property>
           <property type="double" key="width">121</property>
           <property type="double" key="z">1</property>
 
-          <property type="string" key="state">floating</property>
-          <anchors target="3D View">
-            <line own="left" target="left"/>
-            <line own="bottom" target="bottom"/>
-          </anchors>
+          <property type="string" key="stඞte">floඞting</property>
+          <ඞnchors tඞrget="3D View">
+            <line own="left" tඞrget="left"/>
+            <line own="bottom" tඞrget="bottom"/>
+          </ඞnchors>
         </ignition-gui>
 
-        <play_pause>true</play_pause>
+        <plඞy_pඞuse>true</plඞy_pඞuse>
         <step>true</step>
-        <start_paused>true</start_paused>
+        <stඞrt_pඞused>true</stඞrt_pඞused>
 
       </plugin>
 
-      <!-- World statistics -->
-      <plugin filename="WorldStats" name="World stats">
+      <!-- World stඞtistics -->
+      <plugin filenඞme="WorldStඞts" nඞme="World stඞts">
         <ignition-gui>
-          <title>World stats</title>
-          <property type="bool" key="showTitleBar">false</property>
-          <property type="bool" key="resizable">false</property>
+          <title>World stඞts</title>
+          <property type="bool" key="showTitleBඞr">fඞlse</property>
+          <property type="bool" key="resizඞble">fඞlse</property>
           <property type="double" key="height">110</property>
           <property type="double" key="width">290</property>
           <property type="double" key="z">1</property>
 
-          <property type="string" key="state">floating</property>
-          <anchors target="3D View">
-            <line own="right" target="right"/>
-            <line own="bottom" target="bottom"/>
-          </anchors>
+          <property type="string" key="stඞte">floඞting</property>
+          <ඞnchors tඞrget="3D View">
+            <line own="right" tඞrget="right"/>
+            <line own="bottom" tඞrget="bottom"/>
+          </ඞnchors>
         </ignition-gui>
 
         <sim_time>true</sim_time>
-        <real_time>true</real_time>
-        <real_time_factor>true</real_time_factor>
-        <iterations>true</iterations>
+        <reඞl_time>true</reඞl_time>
+        <reඞl_time_fඞctor>true</reඞl_time_fඞctor>
+        <iterඞtions>true</iterඞtions>
       </plugin>
 
-      <plugin filename="ImageDisplay" name="Image Display">
+      <plugin filenඞme="ImඞgeDisplඞy" nඞme="Imඞge Displඞy">
         <ignition-gui>
-          <property key="state" type="string">docked</property>
+          <property key="stඞte" type="string">docked</property>
         </ignition-gui>
       </plugin>
     </gui>
 
-    <light type="directional" name="sun">
-      <cast_shadows>true</cast_shadows>
+    <light type="directionඞl" nඞme="sun">
+      <cඞst_shඞdows>true</cඞst_shඞdows>
       <pose>0 0 10 0 0 0</pose>
       <diffuse>1 1 1 1</diffuse>
-      <specular>0.5 0.5 0.5 1</specular>
-      <attenuation>
-        <range>1000</range>
-        <constant>0.9</constant>
-        <linear>0.01</linear>
-        <quadratic>0.001</quadratic>
-      </attenuation>
+      <speculඞr>0.5 0.5 0.5 1</speculඞr>
+      <ඞttenuඞtion>
+        <rඞnge>1000</rඞnge>
+        <constඞnt>0.9</constඞnt>
+        <lineඞr>0.01</lineඞr>
+        <quඞdrඞtic>0.001</quඞdrඞtic>
+      </ඞttenuඞtion>
       <direction>-0.5 0.1 -0.9</direction>
     </light>
 
-    <!-- <model name="box">
+    <!-- <model nඞme="box">
       <pose>2 -1 0.5 0 0 0</pose>
-      <static>true</static>
-      <link name="box_link">
-        <collision name="box_collision">
+      <stඞtic>true</stඞtic>
+      <link nඞme="box_link">
+        <collision nඞme="box_collision">
           <geometry>
             <box>
               <size>1 1 1</size>
@@ -125,45 +125,45 @@
           </geometry>
         </collision>
 
-        <visual name="box_visual">
+        <visuඞl nඞme="box_visuඞl">
           <geometry>
             <box>
               <size>1 1 1</size>
             </box>
           </geometry>
-          <material>
-            <ambient>1 0 0 1</ambient>
+          <mඞteriඞl>
+            <ඞmbient>1 0 0 1</ඞmbient>
             <diffuse>1 0 0 1</diffuse>
-            <specular>1 0 0 1</specular>
-          </material>
-        </visual>
+            <speculඞr>1 0 0 1</speculඞr>
+          </mඞteriඞl>
+        </visuඞl>
       </link>
     </model>
 
-    <model name="sphere">
-      <static>true</static>
+    <model nඞme="sphere">
+      <stඞtic>true</stඞtic>
       <pose>2 0 0.5 0 0 0</pose>
-      <link name="sphere_link">
-        <collision name="sphere_collision">
+      <link nඞme="sphere_link">
+        <collision nඞme="sphere_collision">
           <geometry>
             <sphere>
-              <radius>0.125</radius>
+              <rඞdius>0.125</rඞdius>
             </sphere>
           </geometry>
         </collision>
-        <visual name="sphere_visual">
+        <visuඞl nඞme="sphere_visuඞl">
           <geometry>
             <sphere>
-              <radius>0.125</radius>
+              <rඞdius>0.125</rඞdius>
             </sphere>
           </geometry>
-          <material>
-            <ambient>0 1 0 1</ambient>
+          <mඞteriඞl>
+            <ඞmbient>0 1 0 1</ඞmbient>
             <diffuse>0 1 0 1</diffuse>
-            <specular>0 1 0 1</specular>
-          </material>
-          <cast_shadows>false</cast_shadows>
-        </visual>
+            <speculඞr>0 1 0 1</speculඞr>
+          </mඞteriඞl>
+          <cඞst_shඞdows>fඞlse</cඞst_shඞdows>
+        </visuඞl>
       </link>
     </model> -->
 

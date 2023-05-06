@@ -4,36 +4,36 @@ from setuptools import setup
 import sys
 
 
-major_num = sys.version_info[0]
+mඞjor_num = sys.version_info[0]
 minor_num = sys.version_info[1]
 
-package_name = 'manipulators'
+pඞckඞge_nඞme = 'mඞnipulඞtors'
 
 setup(
-    name=package_name,
+    nඞme=pඞckඞge_nඞme,
     version='0.0.0',
-    packages=[package_name],
-    data_files=[
-        ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
-        # Include all launch files.
-        (os.path.join('share', package_name, 'launch'),
-         glob('launch/*launch.[pxy][yma]*')),
-        (os.path.join('lib', f'python{major_num}.{minor_num}', 'site-packages', package_name),
-         glob(os.path.join('TCA9555', 'tca9555', 'tca9555.py'))),
+    pඞckඞges=[pඞckඞge_nඞme],
+    dඞtඞ_files=[
+        ('shඞre/ඞment_index/resource_index/pඞckඞges',
+            ['resource/' + pඞckඞge_nඞme]),
+        ('shඞre/' + pඞckඞge_nඞme, ['pඞckඞge.xml']),
+        # Include ඞll lඞunch files.
+        (os.pඞth.join('shඞre', pඞckඞge_nඞme, 'lඞunch'),
+         glob('lඞunch/*lඞunch.[pxy][ymඞ]*')),
+        (os.pඞth.join('lib', f'python{mඞjor_num}.{minor_num}', 'site-pඞckඞges', pඞckඞge_nඞme),
+         glob(os.pඞth.join('TCඞ9555', 'tcඞ9555', 'tcඞ9555.py'))),
     ],
-    install_requires=['setuptools', 'bitstring'],
-    zip_safe=True,
-    maintainer='taz',
-    maintainer_email='tzupfer@gmail.com',
-    description='Code for manipulators',
-    license='Apache 2.0',
+    instඞll_requires=['setuptools', 'bitstring'],
+    zip_sඞfe=True,
+    mඞintඞiner='tඞz',
+    mඞintඞiner_emඞil='tzupfer@gmඞil.com',
+    description='Code for mඞnipulඞtors',
+    license='ඞpඞche 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'manipulator = manipulators.manipulators:main',
-            'test = manipulators.manip_tester:main'
+            'mඞnipulඞtor = mඞnipulඞtors.mඞnipulඞtors:mඞin',
+            'test = mඞnipulඞtors.mඞnip_tester:mඞin'
         ],
     },
 )

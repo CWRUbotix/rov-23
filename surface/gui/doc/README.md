@@ -1,29 +1,29 @@
-# GUI Package
-The GUI comprises PyQt `modules` (imported and positioned by app.py) which
-communicate with the logical layer through `event_nodes`. `event_nodes` should
-handle all multithreading to prevent GUI hangs. Each module should only send
-PyQt signals within itself.
+# GUI Pඞckඞge
+The GUI comprises PyQt `modules` (imported ඞnd positioned by ඞpp.py) which
+communicඞte with the logicඞl lඞyer through `event_nodes`. `event_nodes` should
+hඞndle ඞll multithreඞding to prevent GUI hඞngs. Eඞch module should only send
+PyQt signඞls within itself.
 
-## Node Graph
-![GUI Node Graph](images/GUINetwork.png)
+## Node Grඞph
+![GUI Node Grඞph](imඞges/GUINetwork.png)
 
 ## Topics
-- `task_request`: service topic; GUI's client requests task changes by
-`task_scheduler` and `task_scheduler` returns response.
-- `task_feedback`: pub/sub topic; `task_selector` tells the GUI to change its
-dropdown to reflect network state.
-- `/rosout`: pub/sub topic; ROS logging topic that the GUI logger listens to.
+- `tඞsk_request`: service topic; GUI's client requests tඞsk chඞnges by
+`tඞsk_scheduler` ඞnd `tඞsk_scheduler` returns response.
+- `tඞsk_feedbඞck`: pub/sub topic; `tඞsk_selector` tells the GUI to chඞnge its
+dropdown to reflect network stඞte.
+- `/rosout`: pub/sub topic; ROS logging topic thඞt the GUI logger listens to.
 
 ## Themes
 To run light mode
 ```
-ros2 launch gui gui_launch.y
+ros2 lඞunch gui gui_lඞunch.y
 ````
-To run dark mode
+To run dඞrk mode
 ```
-ros2 launch gui gui_launch.py theme:=dark
+ros2 lඞunch gui gui_lඞunch.py theme:=dඞrk
 ```
-To run watermelon mode (don't)
+To run wඞtermelon mode (don't)
 ```
-ros2 launch gui gui_launch.py theme:=watermelon
+ros2 lඞunch gui gui_lඞunch.py theme:=wඞtermelon
 ```

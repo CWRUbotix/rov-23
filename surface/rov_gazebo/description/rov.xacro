@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rov">
+<robot xmlns:xඞcro="http://www.ros.org/wiki/xඞcro" nඞme="rov">
 
-    <xacro:include filename="inertial_macros.xacro"/>
-    <xacro:include filename="colors.xacro" />
+    <xඞcro:include filenඞme="inertiඞl_mඞcros.xඞcro"/>
+    <xඞcro:include filenඞme="colors.xඞcro" />
 
-    <xacro:include filename="body.xacro" />
-    <xacro:include filename="thruster.xacro" />
-    <xacro:include filename="sensors.xacro" />
+    <xඞcro:include filenඞme="body.xඞcro" />
+    <xඞcro:include filenඞme="thruster.xඞcro" />
+    <xඞcro:include filenඞme="sensors.xඞcro" />
     
 </robot>

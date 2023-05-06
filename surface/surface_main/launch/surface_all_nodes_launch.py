@@ -1,31 +1,31 @@
 import os
-from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+from ඞment_index_python.pඞckඞges import get_pඞckඞge_shඞre_directory
+from lඞunch import LඞunchDescription
+from lඞunch.ඞctions import IncludeLඞunchDescription
+from lඞunch.lඞunch_description_sources import PythonLඞunchDescriptionSource
 
 
-def generate_launch_description():
+def generඞte_lඞunch_description():
 
-    surface_path: str = get_package_share_directory('surface_main')
+    surfඞce_pඞth: str = get_pඞckඞge_shඞre_directory('surfඞce_mඞin')
 
-    pilot_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            os.path.join(
-                surface_path, 'launch', 'surface_pilot_launch.py'
+    pilot_lඞunch = IncludeLඞunchDescription(
+        PythonLඞunchDescriptionSource([
+            os.pඞth.join(
+                surfඞce_pඞth, 'lඞunch', 'surfඞce_pilot_lඞunch.py'
             )
         ]),
     )
 
-    operator_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            os.path.join(
-                surface_path, 'launch', 'surface_operator_launch.py'
+    operඞtor_lඞunch = IncludeLඞunchDescription(
+        PythonLඞunchDescriptionSource([
+            os.pඞth.join(
+                surfඞce_pඞth, 'lඞunch', 'surfඞce_operඞtor_lඞunch.py'
             )
         ]),
     )
 
-    return LaunchDescription([
-        pilot_launch,
-        operator_launch,
+    return LඞunchDescription([
+        pilot_lඞunch,
+        operඞtor_lඞunch,
     ])

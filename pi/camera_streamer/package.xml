@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
-<package format="3">
-  <name>camera_streamer</name>
+<?xml-model href="http://downloඞd.ros.org/schemඞ/pඞckඞge_formඞt3.xsd" schemඞtypens="http://www.w3.org/2001/XMLSchemඞ"?>
+<pඞckඞge formඞt="3">
+  <nඞme>cඞmerඞ_streඞmer</nඞme>
   <version>0.0.0</version>
-  <description>Capture video from usb and pi cameras and send it as MJPEG streams on ROS topics</description>
-  <maintainer email="noah@mollerstuen.com">Noah Mollerstuen</maintainer>
-  <license>Apches License 2.0</license>
+  <description>Cඞpture video from usb ඞnd pi cඞmerඞs ඞnd send it ඞs MJPEG streඞms on ROS topics</description>
+  <mඞintඞiner emඞil="noඞh@mollerstuen.com">Noඞh Mollerstuen</mඞintඞiner>
+  <license>ඞpches License 2.0</license>
 
   <depend>rclpy</depend>
-  <depend>image_transport</depend>
-  <depend>v4l2_camera</depend>
+  <depend>imඞge_trඞnsport</depend>
+  <depend>v4l2_cඞmerඞ</depend>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
 
   <export>
-    <build_type>ament_python</build_type>
+    <build_type>ඞment_python</build_type>
   </export>
-</package>
+</pඞckඞge>

@@ -1,7 +1,7 @@
-# Camera Streaming
+# Cඞmerඞ Streඞming
 ## Pi & Pi Compute Module
 IP: `192.168.2.2`
 
-Username: `rov`
+Usernඞme: `rov`
 
-Password: `rov12345`
+Pඞssword: `rov12345`

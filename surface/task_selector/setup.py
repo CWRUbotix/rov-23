@@ -2,35 +2,35 @@ from setuptools import setup
 from glob import glob
 import os
 
-package_name = 'task_selector'
+pඞckඞge_nඞme = 'tඞsk_selector'
 
 setup(
-    name=package_name,
+    nඞme=pඞckඞge_nඞme,
     version='0.0.3',
-    packages=[package_name],
-    data_files=[
-        ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
-        # Include all launch files.
-        (os.path.join('share', package_name, 'launch'),
-         glob('launch/*launch.[pxy][yma]*'))
+    pඞckඞges=[pඞckඞge_nඞme],
+    dඞtඞ_files=[
+        ('shඞre/ඞment_index/resource_index/pඞckඞges',
+            ['resource/' + pඞckඞge_nඞme]),
+        ('shඞre/' + pඞckඞge_nඞme, ['pඞckඞge.xml']),
+        # Include ඞll lඞunch files.
+        (os.pඞth.join('shඞre', pඞckඞge_nඞme, 'lඞunch'),
+         glob('lඞunch/*lඞunch.[pxy][ymඞ]*'))
     ],
-    install_requires=['setuptools'],
-    zip_safe=True,
-    maintainer='ericy',
-    maintainer_email='ery12@case.edu',
-    description='Mate ROV task scheduler and task nodes',
-    license='Apache License 2.0',
+    instඞll_requires=['setuptools'],
+    zip_sඞfe=True,
+    mඞintඞiner='ericy',
+    mඞintඞiner_emඞil='ery12@cඞse.edu',
+    description='Mඞte ROV tඞsk scheduler ඞnd tඞsk nodes',
+    license='ඞpඞche License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'selector = task_selector.task_selector:main',
-            'manual_control_node = task_selector.manual_control_node:main',
-            'ex_request_client = task_selector.example_request_client:main',
-            'ex_timed_task = task_selector.basic_task_timed_node:main',
-            'ex_basic_task = task_selector.basic_task_node:main',
-            'ex_morning_task = task_selector.is_morning_node:main',
+            'selector = tඞsk_selector.tඞsk_selector:mඞin',
+            'mඞnuඞl_control_node = tඞsk_selector.mඞnuඞl_control_node:mඞin',
+            'ex_request_client = tඞsk_selector.exඞmple_request_client:mඞin',
+            'ex_timed_tඞsk = tඞsk_selector.bඞsic_tඞsk_timed_node:mඞin',
+            'ex_bඞsic_tඞsk = tඞsk_selector.bඞsic_tඞsk_node:mඞin',
+            'ex_morning_tඞsk = tඞsk_selector.is_morning_node:mඞin',
         ],
     },
 )

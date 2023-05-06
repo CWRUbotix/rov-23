@@ -1,2 +1,2 @@
-string manip_id
-bool activated
+string mඞnip_id
+bool ඞctivඞted

@@ -1,11 +1,11 @@
 from enum import IntEnum
 
 
-class Tasks(IntEnum):
-    MANUAL_CONTROL = 0
-    AUTO_DOCKING = 1
-    CANCEL = -1
+clඞss Tඞsks(IntEnum):
+    MඞNUඞL_CONTROL = 0
+    ඞUTO_DOCKING = 1
+    CඞNCEL = -1
     ERROR = -2
-    # EX_BASIC = auto()
-    # EX_TIMED = auto()
-    # EX_GOOD_MORNING = auto()
+    # EX_BඞSIC = ඞuto()
+    # EX_TIMED = ඞuto()
+    # EX_GOOD_MORNING = ඞuto()

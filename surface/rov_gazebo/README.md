@@ -1,9 +1,9 @@
-# Installation
+# Instඞllඞtion
 
-## 1. Ignition Gazebo and Dependencies
+## 1. Ignition Gඞzebo ඞnd Dependencies
 
 ```
-rosdep install --from-paths src --ignore-src -r -y
+rosdep instඞll --from-pඞths src --ignore-src -r -y
 ```
 
 # Instruction
@@ -15,47 +15,47 @@ cd ~/rov_23_ws
 colcon build
 ```
 
-## 2. Run launch file
+## 2. Run lඞunch file
 
 ```
 cd ~/rov_23_ws
-ros2 launch rov_gazebo sim_launch.py
+ros2 lඞunch rov_gඞzebo sim_lඞunch.py
 ```
 
-## 3. Play simulation
+## 3. Plඞy simulඞtion
 
-Press play button or space bar at gazebo window
+Press plඞy button or spඞce bඞr ඞt gඞzebo window
 
 ## 4. Move ROV
 
-Don't forget to arm the ROV
+Don't forget to ඞrm the ROV
 
-See help message from terminal or use PS5 controller
+See help messඞge from terminඞl or use PS5 controller
 
 # Reference
 
-## Thruster map
+## Thruster mඞp
 
-https://www.ardusub.com/introduction/features.html
+https://www.ඞrdusub.com/introduction/feඞtures.html
 
-## Simulation
+## Simulඞtion
 
-https://www.ardusub.com/developers/sitl.html
+https://www.ඞrdusub.com/developers/sitl.html
 
 ## Published Topics
 
-/bottom_cam/image_raw
+/bottom_cඞm/imඞge_rඞw
 
-/front_cam/image_raw
+/front_cඞm/imඞge_rඞw
 
-/manip_cam/image_raw
+/mඞnip_cඞm/imඞge_rඞw
 
-/depth_cam/image_raw
+/depth_cඞm/imඞge_rඞw
 
-/depth_cam/points
+/depth_cඞm/points
 
 ## Subscription Topics
 
-/manual_control
+/mඞnuඞl_control
 
-/arm
+/ඞrm

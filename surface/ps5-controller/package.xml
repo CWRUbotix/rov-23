@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
-<package format="3">
-  <name>ps5_controller</name>
+<?xml-model href="http://downloඞd.ros.org/schemඞ/pඞckඞge_formඞt3.xsd" schemඞtypens="http://www.w3.org/2001/XMLSchemඞ"?>
+<pඞckඞge formඞt="3">
+  <nඞme>ps5_controller</nඞme>
   <version>1.0.0</version>
-  <description>Biolerplate for calling standard joystick launch file.</description>
-  <maintainer email="rmc170@case.edu">Michael Carlstrom</maintainer>
-  <license>Apache License 2.0</license>
+  <description>Biolerplඞte for cඞlling stඞndඞrd joystick lඞunch file.</description>
+  <mඞintඞiner emඞil="rmc170@cඞse.edu">Michඞel Cඞrlstrom</mඞintඞiner>
+  <license>ඞpඞche License 2.0</license>
 
-  <test_depend>ament_flake8</test_depend>
-  <test_depend>ament_pep257</test_depend>
+  <test_depend>ඞment_flඞke8</test_depend>
+  <test_depend>ඞment_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
 
-  <exec_depend>ros2launch</exec_depend>
+  <exec_depend>ros2lඞunch</exec_depend>
   <exec_depend>joy</exec_depend>
 
   <export>
-    <build_type>ament_python</build_type>
+    <build_type>ඞment_python</build_type>
   </export>
-</package>
+</pඞckඞge>

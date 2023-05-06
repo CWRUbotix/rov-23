@@ -1,16 +1,16 @@
-from launch import LaunchDescription
-from launch_ros.actions import Node
-from launch.substitutions import LaunchConfiguration
+from lඞunch import LඞunchDescription
+from lඞunch_ros.ඞctions import Node
+from lඞunch.substitutions import LඞunchConfigurඞtion
 
 
-def generate_launch_description():
-    """Asynchronously launches pilot's gui node."""
+def generඞte_lඞunch_description():
+    """ඞsynchronously lඞunches pilot's gui node."""
     gui_node: Node = Node(
-        package='gui',
-        executable='run_pilot',
-        parameters=[
-                {'theme': LaunchConfiguration('theme', default='')}],
-        remappings=[("/surface/gui/armed", "/armed")]
+        pඞckඞge='gui',
+        executඞble='run_pilot',
+        pඞrඞmeters=[
+                {'theme': LඞunchConfigurඞtion('theme', defඞult='')}],
+        remඞppings=[("/surfඞce/gui/ඞrmed", "/ඞrmed")]
     )
 
-    return LaunchDescription([gui_node])
+    return LඞunchDescription([gui_node])

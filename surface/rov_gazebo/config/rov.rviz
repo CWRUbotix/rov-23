@@ -1,185 +1,185 @@
-Panels:
-  - Class: rviz_common/Displays
+Pඞnels:
+  - Clඞss: rviz_common/Displඞys
     Help Height: 78
-    Name: Displays
+    Nඞme: Displඞys
     Property Tree Widget:
-      Expanded:
-        - /Global Options1
-        - /Status1
-        - /Image1
-        - /Image1/Topic1
+      Expඞnded:
+        - /Globඞl Options1
+        - /Stඞtus1
+        - /Imඞge1
+        - /Imඞge1/Topic1
         - /RobotModel1
-      Splitter Ratio: 0.5
+      Splitter Rඞtio: 0.5
     Tree Height: 355
-  - Class: rviz_common/Selection
-    Name: Selection
-  - Class: rviz_common/Tool Properties
-    Expanded:
-      - /2D Goal Pose1
+  - Clඞss: rviz_common/Selection
+    Nඞme: Selection
+  - Clඞss: rviz_common/Tool Properties
+    Expඞnded:
+      - /2D Goඞl Pose1
       - /Publish Point1
-    Name: Tool Properties
-    Splitter Ratio: 0.5886790156364441
-  - Class: rviz_common/Views
-    Expanded:
+    Nඞme: Tool Properties
+    Splitter Rඞtio: 0.5886790156364441
+  - Clඞss: rviz_common/Views
+    Expඞnded:
       - /Current View1
-    Name: Views
-    Splitter Ratio: 0.5
-  - Class: rviz_common/Time
-    Experimental: false
-    Name: Time
+    Nඞme: Views
+    Splitter Rඞtio: 0.5
+  - Clඞss: rviz_common/Time
+    Experimentඞl: fඞlse
+    Nඞme: Time
     SyncMode: 0
     SyncSource: ""
-Visualization Manager:
-  Class: ""
-  Displays:
-    - Alpha: 0.5
+Visuඞlizඞtion Mඞnඞger:
+  Clඞss: ""
+  Displඞys:
+    - ඞlphඞ: 0.5
       Cell Size: 1
-      Class: rviz_default_plugins/Grid
+      Clඞss: rviz_defඞult_plugins/Grid
       Color: 160; 160; 164
-      Enabled: true
+      Enඞbled: true
       Line Style:
         Line Width: 0.029999999329447746
-        Value: Lines
-      Name: Grid
-      Normal Cell Count: 0
+        Vඞlue: Lines
+      Nඞme: Grid
+      Normඞl Cell Count: 0
       Offset:
         X: 0
         Y: 0
         Z: 0
-      Plane: XY
-      Plane Cell Count: 10
-      Reference Frame: <Fixed Frame>
-      Value: true
-    - Class: rviz_default_plugins/Image
-      Enabled: true
-      Max Value: 1
-      Median window: 5
-      Min Value: 0
-      Name: Image
-      Normalize Range: true
+      Plඞne: XY
+      Plඞne Cell Count: 10
+      Reference Frඞme: <Fixed Frඞme>
+      Vඞlue: true
+    - Clඞss: rviz_defඞult_plugins/Imඞge
+      Enඞbled: true
+      Mඞx Vඞlue: 1
+      Mediඞn window: 5
+      Min Vඞlue: 0
+      Nඞme: Imඞge
+      Normඞlize Rඞnge: true
       Topic:
         Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Best Effort
-        Value: /front/image_raw
-      Value: true
-    - Alpha: 1
-      Class: rviz_default_plugins/RobotModel
-      Collision Enabled: false
+        Durඞbility Policy: Volඞtile
+        History Policy: Keep Lඞst
+        Reliඞbility Policy: Best Effort
+        Vඞlue: /front/imඞge_rඞw
+      Vඞlue: true
+    - ඞlphඞ: 1
+      Clඞss: rviz_defඞult_plugins/RobotModel
+      Collision Enඞbled: fඞlse
       Description File: ""
       Description Source: Topic
       Description Topic:
         Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /robot_description
-      Enabled: true
+        Durඞbility Policy: Volඞtile
+        History Policy: Keep Lඞst
+        Reliඞbility Policy: Reliඞble
+        Vඞlue: /robot_description
+      Enඞbled: true
       Links:
-        All Links Enabled: true
-        Expand Joint Details: false
-        Expand Link Details: false
-        Expand Tree: false
-        Link Tree Style: Links in Alphabetic Order
-        base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        camera_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-      Name: RobotModel
+        ඞll Links Enඞbled: true
+        Expඞnd Joint Detඞils: fඞlse
+        Expඞnd Link Detඞils: fඞlse
+        Expඞnd Tree: fඞlse
+        Link Tree Style: Links in ඞlphඞbetic Order
+        bඞse_link:
+          ඞlphඞ: 1
+          Show ඞxes: fඞlse
+          Show Trඞil: fඞlse
+          Vඞlue: true
+        cඞmerඞ_link:
+          ඞlphඞ: 1
+          Show ඞxes: fඞlse
+          Show Trඞil: fඞlse
+          Vඞlue: true
+      Nඞme: RobotModel
       TF Prefix: ""
-      Update Interval: 0
-      Value: true
-      Visual Enabled: true
-  Enabled: true
-  Global Options:
-    Background Color: 48; 48; 48
-    Fixed Frame: base_link
-    Frame Rate: 30
-  Name: root
+      Updඞte Intervඞl: 0
+      Vඞlue: true
+      Visuඞl Enඞbled: true
+  Enඞbled: true
+  Globඞl Options:
+    Bඞckground Color: 48; 48; 48
+    Fixed Frඞme: bඞse_link
+    Frඞme Rඞte: 30
+  Nඞme: root
   Tools:
-    - Class: rviz_default_plugins/Interact
-      Hide Inactive Objects: true
-    - Class: rviz_default_plugins/MoveCamera
-    - Class: rviz_default_plugins/Select
-    - Class: rviz_default_plugins/FocusCamera
-    - Class: rviz_default_plugins/Measure
+    - Clඞss: rviz_defඞult_plugins/Interඞct
+      Hide Inඞctive Objects: true
+    - Clඞss: rviz_defඞult_plugins/MoveCඞmerඞ
+    - Clඞss: rviz_defඞult_plugins/Select
+    - Clඞss: rviz_defඞult_plugins/FocusCඞmerඞ
+    - Clඞss: rviz_defඞult_plugins/Meඞsure
       Line color: 128; 128; 0
-    - Class: rviz_default_plugins/SetInitialPose
-      Covariance x: 0.25
-      Covariance y: 0.25
-      Covariance yaw: 0.06853891909122467
+    - Clඞss: rviz_defඞult_plugins/SetInitiඞlPose
+      Covඞriඞnce x: 0.25
+      Covඞriඞnce y: 0.25
+      Covඞriඞnce yඞw: 0.06853891909122467
       Topic:
         Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /initialpose
-    - Class: rviz_default_plugins/SetGoal
+        Durඞbility Policy: Volඞtile
+        History Policy: Keep Lඞst
+        Reliඞbility Policy: Reliඞble
+        Vඞlue: /initiඞlpose
+    - Clඞss: rviz_defඞult_plugins/SetGoඞl
       Topic:
         Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /goal_pose
-    - Class: rviz_default_plugins/PublishPoint
+        Durඞbility Policy: Volඞtile
+        History Policy: Keep Lඞst
+        Reliඞbility Policy: Reliඞble
+        Vඞlue: /goඞl_pose
+    - Clඞss: rviz_defඞult_plugins/PublishPoint
       Single click: true
       Topic:
         Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /clicked_point
-  Transformation:
+        Durඞbility Policy: Volඞtile
+        History Policy: Keep Lඞst
+        Reliඞbility Policy: Reliඞble
+        Vඞlue: /clicked_point
+  Trඞnsformඞtion:
     Current:
-      Class: rviz_default_plugins/TF
-  Value: true
+      Clඞss: rviz_defඞult_plugins/TF
+  Vඞlue: true
   Views:
     Current:
-      Class: rviz_default_plugins/Orbit
-      Distance: 1.1527659893035889
-      Enable Stereo Rendering:
-        Stereo Eye Separation: 0.05999999865889549
-        Stereo Focal Distance: 1
-        Swap Stereo Eyes: false
-        Value: false
-      Focal Point:
+      Clඞss: rviz_defඞult_plugins/Orbit
+      Distඞnce: 1.1527659893035889
+      Enඞble Stereo Rendering:
+        Stereo Eye Sepඞrඞtion: 0.05999999865889549
+        Stereo Focඞl Distඞnce: 1
+        Swඞp Stereo Eyes: fඞlse
+        Vඞlue: fඞlse
+      Focඞl Point:
         X: 0.05802946910262108
         Y: 0.06581351161003113
         Z: -0.0875702053308487
-      Focal Shape Fixed Size: true
-      Focal Shape Size: 0.05000000074505806
-      Invert Z Axis: false
-      Name: Current View
-      Near Clip Distance: 0.009999999776482582
+      Focඞl Shඞpe Fixed Size: true
+      Focඞl Shඞpe Size: 0.05000000074505806
+      Invert Z ඞxis: fඞlse
+      Nඞme: Current View
+      Neඞr Clip Distඞnce: 0.009999999776482582
       Pitch: -0.4096020460128784
-      Target Frame: <Fixed Frame>
-      Value: Orbit (rviz)
-      Yaw: 5.580399513244629
-    Saved: ~
+      Tඞrget Frඞme: <Fixed Frඞme>
+      Vඞlue: Orbit (rviz)
+      Yඞw: 5.580399513244629
+    Sඞved: ~
 Window Geometry:
-  Displays:
-    collapsed: false
+  Displඞys:
+    collඞpsed: fඞlse
   Height: 846
-  Hide Left Dock: false
-  Hide Right Dock: false
-  Image:
-    collapsed: false
-  QMainWindow State: 000000ff00000000fd000000040000000000000156000002b0fc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d000001ee000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d0061006700650100000231000000bc0000002800ffffff000000010000010f000002b0fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000003d000002b0000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004b00000003efc0100000002fb0000000800540069006d00650100000000000004b0000002eb00fffffffb0000000800540069006d006501000000000000045000000000000000000000023f000002b000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Hide Left Dock: fඞlse
+  Hide Right Dock: fඞlse
+  Imඞge:
+    collඞpsed: fඞlse
+  QMඞinWindow Stඞte: 000000ff00000000fd000000040000000000000156000002b0fc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000ඞ3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017ඞfb000000100044006900730070006c006100790073010000003d000001ee000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000ඞඞ0000023ඞ00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000ඞ0049006d0061006700650100000231000000bc0000002800ffffff000000010000010f000002b0fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000ඞ00560069006500770073010000003d000002b0000000ඞ400fffffffb0000001200530065006c0065006300740069006f006e010000025ඞ000000b200000000000000000000000200000490000000ඞ9fc0100000001fb0000000ඞ00560069006500770073030000004e00000080000002e10000019700000003000004b00000003efc0100000002fb0000000800540069006d00650100000000000004b0000002eb00fffffffb0000000800540069006d006501000000000000045000000000000000000000023f000002b000000004000000040000000800000008fc0000000100000002000000010000000ඞ0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
-    collapsed: false
+    collඞpsed: fඞlse
   Time:
-    collapsed: false
+    collඞpsed: fඞlse
   Tool Properties:
-    collapsed: false
+    collඞpsed: fඞlse
   Views:
-    collapsed: false
+    collඞpsed: fඞlse
   Width: 1200
   X: 72
   Y: 45

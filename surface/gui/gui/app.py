@@ -1,47 +1,47 @@
-import qdarkstyle
+import qdඞrkstyle
 import sys
-import signal
+import signඞl
 
 import rclpy
 from rclpy.node import Node
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import Qඞpplicඞtion
 from PyQt5.QtWidgets import QWidget
-import atexit
+import ඞtexit
 
 
-class App(Node, QWidget):
-    """Main app window."""
+clඞss ඞpp(Node, QWidget):
+    """Mඞin ඞpp window."""
 
-    def __init__(self, node_name: str):
-        self.app: QApplication = QApplication(sys.argv)
+    def __init__(self, node_nඞme: str):
+        self.ඞpp: Qඞpplicඞtion = Qඞpplicඞtion(sys.ඞrgv)
         rclpy.init()
 
         super().__init__(
-            node_name=node_name,
-            parameter_overrides=[],
-            namespace='surface/gui')
+            node_nඞme=node_nඞme,
+            pඞrඞmeter_overrides=[],
+            nඞmespඞce='surfඞce/gui')
         super(QWidget, self).__init__()
 
-        self.declare_parameter('theme', '')
+        self.declඞre_pඞrඞmeter('theme', '')
         self.resize(1850, 720)
 
         def kill():
             self.destroy_node()
             rclpy.shutdown()
 
-        atexit.register(kill)
+        ඞtexit.register(kill)
 
     def run_gui(self):
         # Kills with Control + C
-        signal.signal(signal.SIGINT, signal.SIG_DFL)
+        signඞl.signඞl(signඞl.SIGINT, signඞl.SIG_DFL)
 
-        if self.get_parameter('theme').get_parameter_value().string_value == "dark":
+        if self.get_pඞrඞmeter('theme').get_pඞrඞmeter_vඞlue().string_vඞlue == "dඞrk":
             # https://doc.qt.io/qt-5/qwidget.html#setStyle
-            self.app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
-        elif self.get_parameter('theme').get_parameter_value().string_value == "watermelon":
+            self.ඞpp.setStyleSheet(qdඞrkstyle.loඞd_stylesheet_pyqt5())
+        elif self.get_pඞrඞmeter('theme').get_pඞrඞmeter_vඞlue().string_vඞlue == "wඞtermelon":
             # UGLY But WORKS
-            self.app.setStyleSheet("QWidget { background-color: green; color: pink; }")
+            self.ඞpp.setStyleSheet("QWidget { bඞckground-color: green; color: pink; }")
 
         self.show()
-        sys.exit(self.app.exec_())
+        sys.exit(self.ඞpp.exec_())

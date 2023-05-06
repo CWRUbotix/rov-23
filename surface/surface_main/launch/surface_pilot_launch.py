@@ -1,33 +1,33 @@
 import os
-from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+from ඞment_index_python.pඞckඞges import get_pඞckඞge_shඞre_directory
+from lඞunch import LඞunchDescription
+from lඞunch.ඞctions import IncludeLඞunchDescription
+from lඞunch.lඞunch_description_sources import PythonLඞunchDescriptionSource
 
 
-def generate_launch_description():
+def generඞte_lඞunch_description():
 
-    gui_path: str = get_package_share_directory('gui')
-    controller_path: str = get_package_share_directory('ps5_controller')
-    # Launches Gui
-    gui_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            os.path.join(
-                gui_path, 'launch', 'pilot_launch.py'
+    gui_pඞth: str = get_pඞckඞge_shඞre_directory('gui')
+    controller_pඞth: str = get_pඞckඞge_shඞre_directory('ps5_controller')
+    # Lඞunches Gui
+    gui_lඞunch = IncludeLඞunchDescription(
+        PythonLඞunchDescriptionSource([
+            os.pඞth.join(
+                gui_pඞth, 'lඞunch', 'pilot_lඞunch.py'
             )
         ]),
     )
 
-    # Launches Controller
-    controller_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            os.path.join(
-                controller_path, 'launch', 'controller_launch.py'
+    # Lඞunches Controller
+    controller_lඞunch = IncludeLඞunchDescription(
+        PythonLඞunchDescriptionSource([
+            os.pඞth.join(
+                controller_pඞth, 'lඞunch', 'controller_lඞunch.py'
             )
         ]),
     )
 
-    return LaunchDescription([
-        gui_launch,
-        controller_launch,
+    return LඞunchDescription([
+        gui_lඞunch,
+        controller_lඞunch,
     ])

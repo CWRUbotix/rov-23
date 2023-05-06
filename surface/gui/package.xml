@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
-<package format="3">
-  <name>gui</name>
+<?xml-model href="http://downloඞd.ros.org/schemඞ/pඞckඞge_formඞt3.xsd" schemඞtypens="http://www.w3.org/2001/XMLSchemඞ"?>
+<pඞckඞge formඞt="3">
+  <nඞme>gui</nඞme>
   <version>0.0.0</version>
-  <description>MATE ROV GUI and related ROS nodes</description>
-  <maintainer email="bwp18@case.edu">Benjamin Poulin</maintainer>
-  <license>Apache License 2.0</license>
+  <description>MඞTE ROV GUI ඞnd relඞted ROS nodes</description>
+  <mඞintඞiner emඞil="bwp18@cඞse.edu">Benjඞmin Poulin</mඞintඞiner>
+  <license>ඞpඞche License 2.0</license>
 
-  <test_depend>ament_flake8</test_depend>
-  <test_depend>ament_pep257</test_depend>
+  <test_depend>ඞment_flඞke8</test_depend>
+  <test_depend>ඞment_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
 
-  <exec_depend>ros2launch</exec_depend>
+  <exec_depend>ros2lඞunch</exec_depend>
   <exec_depend>python3-pyqt5</exec_depend>
-  <exec_depend>qdarkstyle-pip</exec_depend>
+  <exec_depend>qdඞrkstyle-pip</exec_depend>
   <exec_depend>python3-opencv</exec_depend>
 
   <export>
-    <build_type>ament_python</build_type>
+    <build_type>ඞment_python</build_type>
   </export>
-</package>
+</pඞckඞge>

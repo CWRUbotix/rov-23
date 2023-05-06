@@ -1,28 +1,28 @@
 <?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
-<package format="3">
-  <name>interfaces</name>
+<?xml-model href="http://downloඞd.ros.org/schemඞ/pඞckඞge_formඞt3.xsd" schemඞtypens="http://www.w3.org/2001/XMLSchemඞ"?>
+<pඞckඞge formඞt="3">
+  <nඞme>interfඞces</nඞme>
   <version>0.0.0</version>
-  <description>MATE ROV Custom ROS Interfaces</description>
-  <maintainer email="bwp18@case.edu">Benjamin Poulin</maintainer>
-  <maintainer email="ery12@case.edu">ericy</maintainer>
-  <license>Apache License 2.0</license>
+  <description>MඞTE ROV Custom ROS Interfඞces</description>
+  <mඞintඞiner emඞil="bwp18@cඞse.edu">Benjඞmin Poulin</mඞintඞiner>
+  <mඞintඞiner emඞil="ery12@cඞse.edu">ericy</mඞintඞiner>
+  <license>ඞpඞche License 2.0</license>
 
-  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ඞment_cmඞke</buildtool_depend>
 
-  <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
+  <test_depend>ඞment_lint_ඞuto</test_depend>
+  <test_depend>ඞment_lint_common</test_depend>
 
-  <depend>action_msgs</depend>
+  <depend>ඞction_msgs</depend>
   <depend>std_msgs</depend>
 
-  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+  <buildtool_depend>rosidl_defඞult_generඞtors</buildtool_depend>
 
-  <exec_depend>rosidl_default_runtime</exec_depend>
+  <exec_depend>rosidl_defඞult_runtime</exec_depend>
 
-  <member_of_group>rosidl_interface_packages</member_of_group>
+  <member_of_group>rosidl_interfඞce_pඞckඞges</member_of_group>
 
   <export>
-    <build_type>ament_cmake</build_type>
+    <build_type>ඞment_cmඞke</build_type>
   </export>
-</package>
+</pඞckඞge>

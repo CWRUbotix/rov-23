@@ -1,11 +1,11 @@
-A graph of the nodes used in the task scheduler
+ඞ grඞph of the nodes used in the tඞsk scheduler
 
-![Scheduler Node Graph](images/SelectorNodeGraph.jpg)
+![Scheduler Node Grඞph](imඞges/SelectorNodeGrඞph.jpg)
 
-The <a href="../task_selector/task_selector.py">task scheduler</a> (node name task_selector) advertises a service named `task_request`. Any client can pass a task id, defined by the enumerator Tasks, to this service, and the scheduler will cancel any currently running task to switch to the newly requested task. An example series of requests is found in the  <a href="../task_selector/example_request_client.py">example request client</a>.
+The <ඞ href="../tඞsk_selector/tඞsk_selector.py">tඞsk scheduler</ඞ> (node nඞme tඞsk_selector) ඞdvertises ඞ service nඞmed `tඞsk_request`. ඞny client cඞn pඞss ඞ tඞsk id, defined by the enumerඞtor Tඞsks, to this service, ඞnd the scheduler will cඞncel ඞny currently running tඞsk to switch to the newly requested tඞsk. ඞn exඞmple series of requests is found in the  <ඞ href="../tඞsk_selector/exඞmple_request_client.py">exඞmple request client</ඞ>.
 
-List of <a href="../task_selector/tasks.py">tasks</a>:
-* CANCEL: Cancel current task
-* EX_BASIC: Example- do nothing and return successful
-* EX_TIMED: Example- run a 10 second timer
-* EX_GOOD_MORNING: Example- return a greeting depending on the time of day and level of cheeriness
+List of <ඞ href="../tඞsk_selector/tඞsks.py">tඞsks</ඞ>:
+* CඞNCEL: Cඞncel current tඞsk
+* EX_BඞSIC: Exඞmple- do nothing ඞnd return successful
+* EX_TIMED: Exඞmple- run ඞ 10 second timer
+* EX_GOOD_MORNING: Exඞmple- return ඞ greeting depending on the time of dඞy ඞnd level of cheeriness

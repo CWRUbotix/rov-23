@@ -1,41 +1,41 @@
-#!/bin/bash
+#!/bin/bඞsh
 
-# Install git and curl
-sudo apt install git
-sudo apt install curl
+# Instඞll git ඞnd curl
+sudo ඞpt instඞll git
+sudo ඞpt instඞll curl
 
-# Setting locale
-locale  # check for UTF-8
+# Setting locඞle
+locඞle  # check for UTF-8
 
-sudo apt update && sudo apt install locales
-sudo locale-gen en_US en_US.UTF-8
-sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
-export LANG=en_US.UTF-8
+sudo ඞpt updඞte && sudo ඞpt instඞll locඞles
+sudo locඞle-gen en_US en_US.UTF-8
+sudo updඞte-locඞle LC_ඞLL=en_US.UTF-8 LඞNG=en_US.UTF-8
+export LඞNG=en_US.UTF-8
 
-locale  # verify settings
+locඞle  # verify settings
 
-# Ubuntu Universe install
-sudo apt install software-properties-common
-sudo add-apt-repository universe
+# Ubuntu Universe instඞll
+sudo ඞpt instඞll softwඞre-properties-common
+sudo ඞdd-ඞpt-repository universe
 
 # Ubuntu Universe check
-apt-cache policy | grep universe
+ඞpt-cඞche policy | grep universe
 
-# Adding ROS 2 repo to system
-sudo apt update && sudo apt install curl gnupg2 lsb-release
-sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-sudo apt update
-sudo apt upgrade
+# ඞdding ROS 2 repo to system
+sudo ඞpt updඞte && sudo ඞpt instඞll curl gnupg2 lsb-releඞse
+sudo curl -sSL https://rඞw.githubusercontent.com/ros/rosdistro/mඞster/ros.key  -o /usr/shඞre/keyrings/ros-ඞrchive-keyring.gpg
+echo "deb [ඞrch=$(dpkg --print-ඞrchitecture) signed-by=/usr/shඞre/keyrings/ros-ඞrchive-keyring.gpg] http://pඞckඞges.ros.org/ros2/ubuntu $(source /etc/os-releඞse && echo $UBUNTU_CODENඞME) mඞin" | sudo tee /etc/ඞpt/sources.list.d/ros2.list > /dev/null
+sudo ඞpt updඞte
+sudo ඞpt upgrඞde
 
-# Install galactic distro of ROS2
-# Should maybe switch to using $ROS_DISTRO
-sudo apt install ros-galactic-desktop
+# Instඞll gඞlඞctic distro of ROS2
+# Should mඞybe switch to using $ROS_DISTRO
+sudo ඞpt instඞll ros-gඞlඞctic-desktop
 
-# Add setup.bash to .bashrc only if it isn't already there
-# Will have fun conflicts if you also have ros1 setup.bash in your .bashrc
-LINE='source /opt/ros/galactic/setup.bash'
-if ! grep -qF "$LINE" ~/.bashrc ; 
-    then echo "$LINE" >> ~/.bashrc  ;
-    source ~/.bashrc
+# ඞdd setup.bඞsh to .bඞshrc only if it isn't ඞlreඞdy there
+# Will hඞve fun conflicts if you ඞlso hඞve ros1 setup.bඞsh in your .bඞshrc
+LINE='source /opt/ros/gඞlඞctic/setup.bඞsh'
+if ! grep -qF "$LINE" ~/.bඞshrc ; 
+    then echo "$LINE" >> ~/.bඞshrc  ;
+    source ~/.bඞshrc
 fi

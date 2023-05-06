@@ -1,40 +1,40 @@
-from launch_ros.actions import Node
-from launch import LaunchDescription
+from lඞunch_ros.ඞctions import Node
+from lඞunch import LඞunchDescription
 
 
-def generate_launch_description():
+def generඞte_lඞunch_description():
 
-    # Launch the front camera node
-    front_cam_node: Node = Node(
-        package="v4l2_camera",
-        executable="v4l2_camera_node",
-        namespace="front_cam",
-        parameters=[
+    # Lඞunch the front cඞmerඞ node
+    front_cඞm_node: Node = Node(
+        pඞckඞge="v4l2_cඞmerඞ",
+        executඞble="v4l2_cඞmerඞ_node",
+        nඞmespඞce="front_cඞm",
+        pඞrඞmeters=[
             {"video_device": "/dev/video0"}
         ]
     )
 
-    # Launch the front camera node
-    bottom_cam_node: Node = Node(
-        package="v4l2_camera",
-        executable="v4l2_camera_node",
-        namespace="bottom_cam",
-        parameters=[
+    # Lඞunch the front cඞmerඞ node
+    bottom_cඞm_node: Node = Node(
+        pඞckඞge="v4l2_cඞmerඞ",
+        executඞble="v4l2_cඞmerඞ_node",
+        nඞmespඞce="bottom_cඞm",
+        pඞrඞmeters=[
             {"video_device": "/dev/video2"}
         ]
     )
 
-    manip_cam_node: Node = Node(
-        package="v4l2_camera",
-        executable="v4l2_camera_node",
-        namespace="manip_cam",
-        parameters=[
+    mඞnip_cඞm_node: Node = Node(
+        pඞckඞge="v4l2_cඞmerඞ",
+        executඞble="v4l2_cඞmerඞ_node",
+        nඞmespඞce="mඞnip_cඞm",
+        pඞrඞmeters=[
             {"video_device": "/dev/video6"}
         ]
     )
 
-    return LaunchDescription([
-        front_cam_node,
-        bottom_cam_node,
-        manip_cam_node
+    return LඞunchDescription([
+        front_cඞm_node,
+        bottom_cඞm_node,
+        mඞnip_cඞm_node
     ])

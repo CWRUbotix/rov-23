@@ -2,26 +2,26 @@ from setuptools import setup
 from glob import glob
 import os
 
-package_name = 'surface_main'
+pඞckඞge_nඞme = 'surfඞce_mඞin'
 
 setup(
-    name=package_name,
+    nඞme=pඞckඞge_nඞme,
     version='0.0.3',
-    packages=[package_name],
-    data_files=[
-        ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
-        # Include all launch files.
-        (os.path.join('share', package_name, 'launch'),
-         glob('launch/*launch.[pxy][yma]*'))
+    pඞckඞges=[pඞckඞge_nඞme],
+    dඞtඞ_files=[
+        ('shඞre/ඞment_index/resource_index/pඞckඞges',
+            ['resource/' + pඞckඞge_nඞme]),
+        ('shඞre/' + pඞckඞge_nඞme, ['pඞckඞge.xml']),
+        # Include ඞll lඞunch files.
+        (os.pඞth.join('shඞre', pඞckඞge_nඞme, 'lඞunch'),
+         glob('lඞunch/*lඞunch.[pxy][ymඞ]*'))
     ],
-    install_requires=['setuptools'],
-    zip_safe=True,
-    maintainer='Michael Carlstrom',
-    maintainer_email='rmc170@case.edu',
-    description='Mate ROV Main code launcher',
-    license='Apache License 2.0',
+    instඞll_requires=['setuptools'],
+    zip_sඞfe=True,
+    mඞintඞiner='Michඞel Cඞrlstrom',
+    mඞintඞiner_emඞil='rmc170@cඞse.edu',
+    description='Mඞte ROV Mඞin code lඞuncher',
+    license='ඞpඞche License 2.0',
     tests_require=['pytest'],
     entry_points={},
 )

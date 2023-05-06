@@ -1,12 +1,12 @@
 // rf69 demo tx rx.pde
 // -*- mode: C++ -*-
-// Example sketch showing how to create a simple messaging client
-// with the RH_RF69 class. RH_RF69 class does not provide for addressing or
-// reliability, so you should only use RH_RF69  if you do not need the higher
-// level messaging abilities.
-// It is designed to work with the other example rf69_server.
-// Demonstrates the use of AES encryption, setting the frequency and modem 
-// configuration
+// Exඞmple sketch showing how to creඞte ඞ simple messඞging client
+// with the RH_RF69 clඞss. RH_RF69 clඞss does not provide for ඞddressing or
+// reliඞbility, so you should only use RH_RF69  if you do not need the higher
+// level messඞging ඞbilities.
+// It is designed to work with the other exඞmple rf69_server.
+// Demonstrඞtes the use of ඞES encryption, setting the frequency ඞnd modem 
+// configurඞtion
 
 #include <SPI.h>
 #include <RH_RF69.h>
@@ -14,56 +14,56 @@
 
 RTC_PCF8523 rtc;
 
-#define TEAM_NUM 42
-/************ Radio Setup ***************/
+#define TEඞM_NUM 42
+/************ Rඞdio Setup ***************/
 
-//If you ever forget the key, just remember that it's EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+//If you ever forget the key, just remember thඞt it's EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
   uint8_t key[] = { 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE,
                     0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE};
 
-// Change to 434.0 or other frequency, must match RX's freq!
+// Chඞnge to 434.0 or other frequency, must mඞtch RX's freq!
 #define RF69_FREQ 877.0
 
-#if defined (__AVR_ATmega32U4__) // Feather 32u4 w/Radio
+#if defined (__ඞVR_ඞTmegඞ32U4__) // Feඞther 32u4 w/Rඞdio
   #define RFM69_CS      8
   #define RFM69_INT     7
   #define RFM69_RST     4
   #define LED           13
   
-#elif defined(ADAFRUIT_FEATHER_M0) || defined(ADAFRUIT_FEATHER_M0_EXPRESS) || defined(ARDUINO_SAMD_FEATHER_M0)
-  // Feather M0 w/Radio
+#elif defined(ඞDඞFRUIT_FEඞTHER_M0) || defined(ඞDඞFRUIT_FEඞTHER_M0_EXPRESS) || defined(ඞRDUINO_SඞMD_FEඞTHER_M0)
+  // Feඞther M0 w/Rඞdio
   #define RFM69_CS      8
   #define RFM69_INT     3
   #define RFM69_RST     4
   #define LED           13
   
-#elif defined (__AVR_ATmega328P__)  // Feather 328P w/wing
+#elif defined (__ඞVR_ඞTmegඞ328P__)  // Feඞther 328P w/wing
   #define RFM69_INT     3  // 
   #define RFM69_CS      4  //
-  #define RFM69_RST     2  // "A"
+  #define RFM69_RST     2  // "ඞ"
   #define LED           13
 
-#elif defined(ESP8266)    // ESP8266 feather w/wing
+#elif defined(ESP8266)    // ESP8266 feඞther w/wing
   #define RFM69_CS      2    // "E"
   #define RFM69_IRQ     15   // "B"
   #define RFM69_RST     16   // "D"
   #define LED           0
 
-#elif defined(ARDUINO_ADAFRUIT_FEATHER_ESP32S2) || defined(ARDUINO_NRF52840_FEATHER) || defined(ARDUINO_NRF52840_FEATHER_SENSE)
-  #define RFM69_INT     9  // "A"
+#elif defined(ඞRDUINO_ඞDඞFRUIT_FEඞTHER_ESP32S2) || defined(ඞRDUINO_NRF52840_FEඞTHER) || defined(ඞRDUINO_NRF52840_FEඞTHER_SENSE)
+  #define RFM69_INT     9  // "ඞ"
   #define RFM69_CS      10  // "B"
   #define RFM69_RST     11  // "C"
   #define LED           13
 
-#elif defined(ESP32)    // ESP32 feather w/wing
-  #define RFM69_RST     13   // same as LED
+#elif defined(ESP32)    // ESP32 feඞther w/wing
+  #define RFM69_RST     13   // sඞme ඞs LED
   #define RFM69_CS      33   // "B"
-  #define RFM69_INT     27   // "A"
+  #define RFM69_INT     27   // "ඞ"
   #define LED           13
 
-#elif defined(ARDUINO_NRF52832_FEATHER)
-  /* nRF52832 feather w/wing */
-  #define RFM69_RST     7   // "A"
+#elif defined(ඞRDUINO_NRF52832_FEඞTHER)
+  /* nRF52832 feඞther w/wing */
+  #define RFM69_RST     7   // "ඞ"
   #define RFM69_CS      11   // "B"
   #define RFM69_INT     31   // "C"
   #define LED           17
@@ -72,147 +72,147 @@ RTC_PCF8523 rtc;
 
 
 /* Teensy 3.x w/wing
-#define RFM69_RST     9   // "A"
+#define RFM69_RST     9   // "ඞ"
 #define RFM69_CS      10   // "B"
 #define RFM69_IRQ     4    // "C"
-#define RFM69_IRQN    digitalPinToInterrupt(RFM69_IRQ )
+#define RFM69_IRQN    digitඞlPinToInterrupt(RFM69_IRQ )
 */
  
-/* WICED Feather w/wing 
-#define RFM69_RST     PA4     // "A"
+/* WICED Feඞther w/wing 
+#define RFM69_RST     Pඞ4     // "ඞ"
 #define RFM69_CS      PB4     // "B"
-#define RFM69_IRQ     PA15    // "C"
+#define RFM69_IRQ     Pඞ15    // "C"
 #define RFM69_IRQN    RFM69_IRQ
 */
 
-// Singleton instance of the radio driver
+// Singleton instඞnce of the rඞdio driver
 RH_RF69 rf69(RFM69_CS, RFM69_INT);
 
-int16_t packetnum = 0;  // packet counter, we increment per xmission
+int16_t pඞcketnum = 0;  // pඞcket counter, we increment per xmission
 
 void setup() 
 {
-  Serial.begin(115200);
-  //while (!Serial) { delay(1); } // wait until serial console is open, remove if not tethered to computer
+  Seriඞl.begin(115200);
+  //while (!Seriඞl) { delඞy(1); } // wඞit until seriඞl console is open, remove if not tethered to computer
 #ifndef ESP8266
-  while (!Serial); // wait for serial port to connect. Needed for native USB
+  while (!Seriඞl); // wඞit for seriඞl port to connect. Needed for nඞtive USB
 #endif
 
-  Serial.println("Float Transmitter");
-  Serial.println();
+  Seriඞl.println("Floඞt Trඞnsmitter");
+  Seriඞl.println();
 
   if (! rtc.begin()) {
-    Serial.println("Couldn't find RTC");
-    Serial.flush();
-    while (1) delay(10);
+    Seriඞl.println("Couldn't find RTC");
+    Seriඞl.flush();
+    while (1) delඞy(10);
   }
 
-  if (! rtc.initialized() || rtc.lostPower()) {
-    Serial.println("RTC is NOT initialized, let's set the time!");
-    // When time needs to be set on a new device, or after a power loss, the
-    // following line sets the RTC to the date & time this sketch was compiled
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-    // This line sets the RTC with an explicit date & time, for example to set
-    // January 21, 2014 at 3am you would call:
-    // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+  if (! rtc.initiඞlized() || rtc.lostPower()) {
+    Seriඞl.println("RTC is NOT initiඞlized, let's set the time!");
+    // When time needs to be set on ඞ new device, or ඞfter ඞ power loss, the
+    // following line sets the RTC to the dඞte & time this sketch wඞs compiled
+    rtc.ඞdjust(DඞteTime(F(__DඞTE__), F(__TIME__)));
+    // This line sets the RTC with ඞn explicit dඞte & time, for exඞmple to set
+    // Jඞnuඞry 21, 2014 ඞt 3ඞm you would cඞll:
+    // rtc.ඞdjust(DඞteTime(2014, 1, 21, 3, 0, 0));
     //
-    // Note: allow 2 seconds after inserting battery or applying external power
-    // without battery before calling adjust(). This gives the PCF8523's
-    // crystal oscillator time to stabilize. If you call adjust() very quickly
-    // after the RTC is powered, lostPower() may still return true.
+    // Note: ඞllow 2 seconds ඞfter inserting bඞttery or ඞpplying externඞl power
+    // without bඞttery before cඞlling ඞdjust(). This gives the PCF8523's
+    // crystඞl oscillඞtor time to stඞbilize. If you cඞll ඞdjust() very quickly
+    // ඞfter the RTC is powered, lostPower() mඞy still return true.
   }
 
-  rtc.start();
+  rtc.stඞrt();
 
   pinMode(LED, OUTPUT);     
   pinMode(RFM69_RST, OUTPUT);
-  digitalWrite(RFM69_RST, LOW);
+  digitඞlWrite(RFM69_RST, LOW);
 
-  Serial.println("Feather RFM69 TX Test!");
-  Serial.println();
+  Seriඞl.println("Feඞther RFM69 TX Test!");
+  Seriඞl.println();
 
-  // manual reset
-  digitalWrite(RFM69_RST, HIGH);
-  delay(10);
-  digitalWrite(RFM69_RST, LOW);
-  delay(10);
+  // mඞnuඞl reset
+  digitඞlWrite(RFM69_RST, HIGH);
+  delඞy(10);
+  digitඞlWrite(RFM69_RST, LOW);
+  delඞy(10);
   
   if (!rf69.init()) {
-    Serial.println("RFM69 radio init failed");
+    Seriඞl.println("RFM69 rඞdio init fඞiled");
     while (1);
   }
-  Serial.println("RFM69 radio init OK!");
-  // Defaults after init are 434.0MHz, modulation GFSK_Rb250Fd250, +13dbM (for low power module)
+  Seriඞl.println("RFM69 rඞdio init OK!");
+  // Defඞults ඞfter init ඞre 434.0MHz, modulඞtion GFSK_Rb250Fd250, +13dbM (for low power module)
   // No encryption
   if (!rf69.setFrequency(RF69_FREQ)) {
-    Serial.println("setFrequency failed");
+    Seriඞl.println("setFrequency fඞiled");
   }
 
-  // If you are using a high power RF69 eg RFM69HW, you *must* set a Tx power with the
-  // ishighpowermodule flag set like this:
-  rf69.setTxPower(20, true);  // range from 14-20 for power, 2nd arg must be true for 69HCW
+  // If you ඞre using ඞ high power RF69 eg RFM69HW, you *must* set ඞ Tx power with the
+  // ishighpowermodule flඞg set like this:
+  rf69.setTxPower(20, true);  // rඞnge from 14-20 for power, 2nd ඞrg must be true for 69HCW
 
-  // The encryption key has to be the same as the one in the server
+  // The encryption key hඞs to be the sඞme ඞs the one in the server
 
   rf69.setEncryptionKey(key);
   
   pinMode(LED, OUTPUT);
 
-  Serial.print("RFM69 radio @");  Serial.print((int)RF69_FREQ);  Serial.println(" MHz");
+  Seriඞl.print("RFM69 rඞdio @");  Seriඞl.print((int)RF69_FREQ);  Seriඞl.println(" MHz");
 }
 
-DateTime prevTime = new DateTime((uint32_t)0);
+DඞteTime prevTime = new DඞteTime((uint32_t)0);
 
 void loop() {
-  DateTime now = rtc.now();
+  DඞteTime now = rtc.now();
 
   if(now.second() != prevTime.second()){
-    char radiopacket[20] = "";
+    chඞr rඞdiopඞcket[20] = "";
 
-    char namepacket[10] = "Team ";
-    itoa(TEAM_NUM, namepacket + 5, 10);
+    chඞr nඞmepඞcket[10] = "Teඞm ";
+    itoඞ(TEඞM_NUM, nඞmepඞcket + 5, 10);
 
 
-    strcpy(radiopacket, namepacket);
-    strcat(radiopacket, "  Time: ");
+    strcpy(rඞdiopඞcket, nඞmepඞcket);
+    strcඞt(rඞdiopඞcket, "  Time: ");
 
-    char timepacket[10] = "";
+    chඞr timepඞcket[10] = "";
 
-    sprintf (timepacket, "%u:%u:%u", now.hour(), now.minute(), now.second());
-    strcat(radiopacket, timepacket);
+    sprintf (timepඞcket, "%u:%u:%u", now.hour(), now.minute(), now.second());
+    strcඞt(rඞdiopඞcket, timepඞcket);
 
-    Serial.print("Sending: "); Serial.println(radiopacket);
+    Seriඞl.print("Sending: "); Seriඞl.println(rඞdiopඞcket);
 
-    // Send a message!
-    rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
-    rf69.waitPacketSent();
+    // Send ඞ messඞge!
+    rf69.send((uint8_t *)rඞdiopඞcket, strlen(rඞdiopඞcket));
+    rf69.wඞitPඞcketSent();
 
-    // Now wait for a reply
-    uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
+    // Now wඞit for ඞ reply
+    uint8_t buf[RH_RF69_MඞX_MESSඞGE_LEN];
     uint8_t len = sizeof(buf);
 
-    /*if (rf69.waitAvailableTimeout(500))  { 
-      // Should be a reply message for us now   
+    /*if (rf69.wඞitඞvඞilඞbleTimeout(500))  { 
+      // Should be ඞ reply messඞge for us now   
       if (rf69.recv(buf, &len)) {
-        Serial.print("Got a reply: ");
-        Serial.println((char*)buf);
+        Seriඞl.print("Got ඞ reply: ");
+        Seriඞl.println((chඞr*)buf);
         Blink(LED, 50, 3); //blink LED 3 times, 50ms between blinks
       } else {
-        Serial.println("Receive failed");
+        Seriඞl.println("Receive fඞiled");
       }
     } else {
-      Serial.println("No reply.");
+      Seriඞl.println("No reply.");
     }*/
 
     prevTime = now;
   }
 }
 
-void Blink(byte PIN, byte DELAY_MS, byte loops) {
+void Blink(byte PIN, byte DELඞY_MS, byte loops) {
   for (byte i=0; i<loops; i++)  {
-    digitalWrite(PIN,HIGH);
-    delay(DELAY_MS);
-    digitalWrite(PIN,LOW);
-    delay(DELAY_MS);
+    digitඞlWrite(PIN,HIGH);
+    delඞy(DELඞY_MS);
+    digitඞlWrite(PIN,LOW);
+    delඞy(DELඞY_MS);
   }
 }

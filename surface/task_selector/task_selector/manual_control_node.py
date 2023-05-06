@@ -1,172 +1,172 @@
 import rclpy
 from rclpy.node import Node, Subscription, Publisher
-from rclpy.action import ActionServer, CancelResponse
-from rclpy.action.server import ServerGoalHandle
-from rclpy.executors import MultiThreadedExecutor
+from rclpy.ඞction import ඞctionServer, CඞncelResponse
+from rclpy.ඞction.server import ServerGoඞlHඞndle
+from rclpy.executors import MultiThreඞdedExecutor
 
-from interfaces.action import BasicTask
-from interfaces.msg import ROVControl, Manip
+from interfඞces.ඞction import BඞsicTඞsk
+from interfඞces.msg import ROVControl, Mඞnip
 from sensor_msgs.msg import Joy
 
 from typing import Dict, List
 
 
-# Button meanings for PS5 Control might be different for others
-X_BUTTON:        int = 0  # Manipulator 0
-O_BUTTON:        int = 1  # Manipulator 1
-TRI_BUTTON:      int = 2  # Manipulator 2
-SQUARE_BUTTON:   int = 3  # Manipulator 3
+# Button meඞnings for PS5 Control might be different for others
+X_BUTTON:        int = 0  # Mඞnipulඞtor 0
+O_BUTTON:        int = 1  # Mඞnipulඞtor 1
+TRI_BUTTON:      int = 2  # Mඞnipulඞtor 2
+SQUඞRE_BUTTON:   int = 3  # Mඞnipulඞtor 3
 L1:              int = 4
 R1:              int = 5
 L2:              int = 6
 R2:              int = 7
-PAIRING_BUTTON:  int = 8
+PඞIRING_BUTTON:  int = 8
 MENU:            int = 9
 PS_BUTTON:       int = 10
 LJOYPRESS:       int = 11
 RJOYPRESS:       int = 12
 # Joystick Directions 1 is up/left -1 is down/right
-# X is forward/backward Y is left/right
-# L2 and R2 1 is not pressed and -1 is pressed
+# X is forwඞrd/bඞckwඞrd Y is left/right
+# L2 ඞnd R2 1 is not pressed ඞnd -1 is pressed
 LJOYY:           int = 0
 LJOYX:           int = 1
 L2PRESS_PERCENT: int = 2
 RJOYY:           int = 3
 RJOYX:           int = 4
 R2PRESS_PERCENT: int = 5
-DPADHOR:         int = 6
-DPADVERT:        int = 7
+DPඞDHOR:         int = 6
+DPඞDVERT:        int = 7
 
-# Range of values Pixhawk takes
+# Rඞnge of vඞlues Pixhඞwk tඞkes
 # In microseconds
 ZERO_SPEED: int = 1500
-RANGE_SPEED: int = 400
+RඞNGE_SPEED: int = 400
 
 
-class ManualControlNode(Node):
-    _passing: bool = False
+clඞss MඞnuඞlControlNode(Node):
+    _pඞssing: bool = Fඞlse
 
     def __init__(self):
-        super().__init__('manual_control_node',
-                         parameter_overrides=[],
-                         namespace='surface')
-        # TODO would Service make more sense then Actions?
-        self._action_server: ActionServer = ActionServer(
+        super().__init__('mඞnuඞl_control_node',
+                         pඞrඞmeter_overrides=[],
+                         nඞmespඞce='surfඞce')
+        # TODO would Service mඞke more sense then ඞctions?
+        self._ඞction_server: ඞctionServer = ඞctionServer(
             self,
-            BasicTask,
-            'manual_control',
-            self.execute_callback
+            BඞsicTඞsk,
+            'mඞnuඞl_control',
+            self.execute_cඞllbඞck
         )
-        self.controller_pub: Publisher = self.create_publisher(
+        self.controller_pub: Publisher = self.creඞte_publisher(
             ROVControl,
-            'manual_control',
+            'mඞnuඞl_control',
             10
         )
-        self.subscription: Subscription = self.create_subscription(
+        self.subscription: Subscription = self.creඞte_subscription(
             Joy,
             'joy',
-            self.controller_callback,
+            self.controller_cඞllbඞck,
             100
         )
 
-        # Manipulators
-        self.manip_publisher: Publisher = self.create_publisher(
-            Manip,
-            'manipulator_control',
+        # Mඞnipulඞtors
+        self.mඞnip_publisher: Publisher = self.creඞte_publisher(
+            Mඞnip,
+            'mඞnipulඞtor_control',
             10
         )
 
-        self.manip_buttons: Dict[int, ManipButton] = {
-            X_BUTTON: ManipButton("claw0"),
-            O_BUTTON: ManipButton("claw1"),
-            TRI_BUTTON: ManipButton("claw2"),
-            SQUARE_BUTTON: ManipButton("claw3")
+        self.mඞnip_buttons: Dict[int, MඞnipButton] = {
+            X_BUTTON: MඞnipButton("clඞw0"),
+            O_BUTTON: MඞnipButton("clඞw1"),
+            TRI_BUTTON: MඞnipButton("clඞw2"),
+            SQUඞRE_BUTTON: MඞnipButton("clඞw3")
         }
 
-    def controller_callback(self, msg: Joy):
-        if self._passing:
-            self.joystick_to_pixhawk(msg)
-            self.manip_callback(msg)
+    def controller_cඞllbඞck(self, msg: Joy):
+        if self._pඞssing:
+            self.joystick_to_pixhඞwk(msg)
+            self.mඞnip_cඞllbඞck(msg)
 
-    def joystick_to_pixhawk(self, msg: Joy):
-        axes = msg.axes
+    def joystick_to_pixhඞwk(self, msg: Joy):
+        ඞxes = msg.ඞxes
         buttons = msg.buttons
-        # TODO someone else should check to make sure these are correct
-        # as in pitch yaw roll spin the right way
+        # TODO someone else should check to mඞke sure these ඞre correct
+        # ඞs in pitch yඞw roll spin the right wඞy
         rov_msg = ROVControl()
-        rov_msg.header = msg.header
+        rov_msg.heඞder = msg.heඞder
         # Left Joystick XY
-        rov_msg.x = self.joystick_profiles(axes[LJOYX])
-        rov_msg.y = self.joystick_profiles(axes[LJOYY])
+        rov_msg.x = self.joystick_profiles(ඞxes[LJOYX])
+        rov_msg.y = self.joystick_profiles(ඞxes[LJOYY])
         # Right Joystick Z
-        rov_msg.z = self.joystick_profiles(axes[RJOYX])
-        # Not sure if it spins correct way around z
-        rov_msg.yaw = self.joystick_profiles((axes[L2PRESS_PERCENT] -
-                                              axes[R2PRESS_PERCENT])/2)
-        rov_msg.pitch = self.joystick_profiles(axes[DPADVERT])
+        rov_msg.z = self.joystick_profiles(ඞxes[RJOYX])
+        # Not sure if it spins correct wඞy ඞround z
+        rov_msg.yඞw = self.joystick_profiles((ඞxes[L2PRESS_PERCENT] -
+                                              ඞxes[R2PRESS_PERCENT])/2)
+        rov_msg.pitch = self.joystick_profiles(ඞxes[DPඞDVERT])
         rov_msg.roll = self.joystick_profiles(-buttons[L1] + buttons[R1])
-        self.pixhawk_publisher.publish(rov_msg)
+        self.pixhඞwk_publisher.publish(rov_msg)
 
-    # Used to create smoother adjustments
-    def joystick_profiles(self, val: float) -> int:
-        return ZERO_SPEED + int(RANGE_SPEED * val * abs(val))
+    # Used to creඞte smoother ඞdjustments
+    def joystick_profiles(self, vඞl: floඞt) -> int:
+        return ZERO_SPEED + int(RඞNGE_SPEED * vඞl * ඞbs(vඞl))
 
-    def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
-        self.get_logger().info('Starting Manual Control')
+    def execute_cඞllbඞck(self, goඞl_hඞndle: ServerGoඞlHඞndle) -> BඞsicTඞsk.Result:
+        self.get_logger().info('Stඞrting Mඞnuඞl Control')
 
-        if goal_handle.is_cancel_requested:
-            self._passing = False
+        if goඞl_hඞndle.is_cඞncel_requested:
+            self._pඞssing = Fඞlse
 
-            goal_handle.canceled()
-            self.get_logger().info('Ending Manual Control')
-            return BasicTask.Result()
+            goඞl_hඞndle.cඞnceled()
+            self.get_logger().info('Ending Mඞnuඞl Control')
+            return BඞsicTඞsk.Result()
         else:
-            self._passing = True
+            self._pඞssing = True
 
-            feedback_msg = BasicTask.Feedback()
-            feedback_msg.feedback_message = "Task is executing"
-            goal_handle.publish_feedback(feedback_msg)
-            goal_handle.succeed()
-            return BasicTask.Result()
+            feedbඞck_msg = BඞsicTඞsk.Feedbඞck()
+            feedbඞck_msg.feedbඞck_messඞge = "Tඞsk is executing"
+            goඞl_hඞndle.publish_feedbඞck(feedbඞck_msg)
+            goඞl_hඞndle.succeed()
+            return BඞsicTඞsk.Result()
 
-    def cancel_callback(self, goal_handle: ServerGoalHandle):
-        self.get_logger().info('Received cancel request')
-        self._passing = False
-        return CancelResponse.ACCEPT
+    def cඞncel_cඞllbඞck(self, goඞl_hඞndle: ServerGoඞlHඞndle):
+        self.get_logger().info('Received cඞncel request')
+        self._pඞssing = Fඞlse
+        return CඞncelResponse.ඞCCEPT
 
-    def manip_callback(self, msg: Joy):
+    def mඞnip_cඞllbඞck(self, msg: Joy):
         buttons: List[int] = msg.buttons
 
-        for button_id, manip_button in self.manip_buttons.items():
+        for button_id, mඞnip_button in self.mඞnip_buttons.items():
 
-            just_pressed: bool = False
+            just_pressed: bool = Fඞlse
 
             if buttons[button_id] == 1:
                 just_pressed = True
 
-            if manip_button.last_button_state is False and just_pressed:
-                new_manip_state: bool = not manip_button.is_active
-                manip_button.is_active = new_manip_state
+            if mඞnip_button.lඞst_button_stඞte is Fඞlse ඞnd just_pressed:
+                new_mඞnip_stඞte: bool = not mඞnip_button.is_ඞctive
+                mඞnip_button.is_ඞctive = new_mඞnip_stඞte
 
-                log_msg: str = f"manip_id= {manip_button.claw}, manip_active= {new_manip_state}"
+                log_msg: str = f"mඞnip_id= {mඞnip_button.clඞw}, mඞnip_ඞctive= {new_mඞnip_stඞte}"
                 self.get_logger().info(log_msg)
 
-            manip_button.last_button_state = just_pressed
+            mඞnip_button.lඞst_button_stඞte = just_pressed
 
-            manip_msg: Manip = Manip(manip_id=manip_button.claw,
-                                     activated=manip_button.is_active)
-            self.manip_publisher.publish(manip_msg)
-
-
-class ManipButton:
-    def __init__(self, claw: str):
-        self.claw: str = claw
-        self.last_button_state: bool = False
-        self.is_active: bool = False
+            mඞnip_msg: Mඞnip = Mඞnip(mඞnip_id=mඞnip_button.clඞw,
+                                     ඞctivඞted=mඞnip_button.is_ඞctive)
+            self.mඞnip_publisher.publish(mඞnip_msg)
 
 
-def main():
+clඞss MඞnipButton:
+    def __init__(self, clඞw: str):
+        self.clඞw: str = clඞw
+        self.lඞst_button_stඞte: bool = Fඞlse
+        self.is_ඞctive: bool = Fඞlse
+
+
+def mඞin():
     rclpy.init()
-    manual_control = ManualControlNode()
-    executor = MultiThreadedExecutor()
-    rclpy.spin(manual_control, executor=executor)
+    mඞnuඞl_control = MඞnuඞlControlNode()
+    executor = MultiThreඞdedExecutor()
+    rclpy.spin(mඞnuඞl_control, executor=executor)

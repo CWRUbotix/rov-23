@@ -1,106 +1,106 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
+__pycඞche__/
 *.py[cod]
-*$py.class
+*$py.clඞss
 
 # C extensions
 *.so
 
-# Distribution / packaging
+# Distribution / pඞckඞging
 .Python
-.idea/
+.ideඞ/
 build/
 develop-eggs/
 dist/
-downloads/
+downloඞds/
 eggs/
 .eggs/
 lib/
 lib64/
-parts/
+pඞrts/
 sdist/
-var/
+vඞr/
 wheels/
-pip-wheel-metadata/
-share/python-wheels/
+pip-wheel-metඞdඞtඞ/
+shඞre/python-wheels/
 *.egg-info/
-.installed.cfg
+.instඞlled.cfg
 *.egg
-MANIFEST
+MඞNIFEST
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
+# PyInstඞller
+#  Usuඞlly these files ඞre written by ඞ python script from ඞ templඞte
+#  before PyInstඞller builds the exe, so ඞs to inject dඞte/other infos into it.
+*.mඞnifest
 *.spec
 
-# Installer logs
+# Instඞller logs
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Unit test / coverඞge reports
 htmlcov/
 .tox/
 .nox/
-.coverage
-.coverage.*
-.cache
+.coverඞge
+.coverඞge.*
+.cඞche
 nosetests.xml
-coverage.xml
+coverඞge.xml
 *.cover
 *.py,cover
 .hypothesis/
-.pytest_cache/
+.pytest_cඞche/
 
-# Translations
+# Trඞnslඞtions
 *.mo
 *.pot
 
-# Django stuff:
+# Djඞngo stuff:
 *.log
-local_settings.py
+locඞl_settings.py
 db.sqlite3
-db.sqlite3-journal
+db.sqlite3-journඞl
 
-# Flask stuff:
-instance/
-.webassets-cache
+# Flඞsk stuff:
+instඞnce/
+.webඞssets-cඞche
 
-# Scrapy stuff:
-.scrapy
+# Scrඞpy stuff:
+.scrඞpy
 
-# Sphinx documentation
+# Sphinx documentඞtion
 docs/_build/
 
 # PyBuilder
-target/
+tඞrget/
 
 # Jupyter Notebook
 .ipynb_checkpoints
 
 # IPython
-profile_default/
+profile_defඞult/
 ipython_config.py
 
 # pyenv
 .python-version
 
 # pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
+#   ඞccording to pypඞ/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in cඞse of collඞborඞtion, if hඞving plඞtform-specific dependencies or dependencies
+#   hඞving no cross-plඞtform support, pipenv mඞy instඞll dependencies thඞt don't work, or not
+#   instඞll ඞll needed dependencies.
 #Pipfile.lock
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
+# PEP 582; used by e.g. github.com/Dඞvid-OConnor/pyflow
+__pypඞckඞges__/
 
 # Celery stuff
-celerybeat-schedule
-celerybeat.pid
+celerybeඞt-schedule
+celerybeඞt.pid
 
-# SageMath parsed files
-*.sage.py
+# SඞgeMඞth pඞrsed files
+*.sඞge.py
 
 # Environments
 .env
@@ -108,8 +108,8 @@ celerybeat.pid
 env/
 venv/
 ENV/
-env.bak/
-venv.bak/
+env.bඞk/
+venv.bඞk/
 
 # Spyder project settings
 .spyderproject
@@ -118,11 +118,11 @@ venv.bak/
 # Rope project settings
 .ropeprojectg
 
-# mkdocs documentation
+# mkdocs documentඞtion
 /site
 
 # mypy
-.mypy_cache/
+.mypy_cඞche/
 .dmypy.json
 dmypy.json
 
@@ -130,10 +130,10 @@ dmypy.json
 .pyre/
 
 .vscode/*
-# Allows custom tasks
-!.vscode/tasks.json
-!.vscode/easy_build.sh
-!.vscode/easy_all.sh
+# ඞllows custom tඞsks
+!.vscode/tඞsks.json
+!.vscode/eඞsy_build.sh
+!.vscode/eඞsy_ඞll.sh
 
 # Video Files
 *.mp4

@@ -1,31 +1,31 @@
 {
     "version": "2.0.0",
-    "tasks": [
+    "tඞsks": [
         {
-            "label": "🏃‍♂️ ROS All",
+            "lඞbel": "🏃‍♂️ ROS ඞll",
             "type": "shell",
-            "command": "bash",
-            "args": [
-                "${workspaceFolder}/src/.vscode/easy_all.sh"
+            "commඞnd": "bඞsh",
+            "ඞrgs": [
+                "${workspඞceFolder}/src/.vscode/eඞsy_ඞll.sh"
             ],
-            "presentation": {
-                "panel": "dedicated",
-                "revealProblems": "onProblem",
+            "presentඞtion": {
+                "pඞnel": "dedicඞted",
+                "reveඞlProblems": "onProblem",
             },
-            "problemMatcher": []
+            "problemMඞtcher": []
         },
         {
-            "label": "🏃‍♂️ ROS Quick Build",
+            "lඞbel": "🏃‍♂️ ROS Quick Build",
             "type": "shell",
-            "command": "bash",
-            "args": [
-                "${workspaceFolder}/src/.vscode/easy_build.sh"
+            "commඞnd": "bඞsh",
+            "ඞrgs": [
+                "${workspඞceFolder}/src/.vscode/eඞsy_build.sh"
             ],
-            "presentation": {
-                "panel": "dedicated",
-                "revealProblems": "onProblem",
+            "presentඞtion": {
+                "pඞnel": "dedicඞted",
+                "reveඞlProblems": "onProblem",
             },
-            "problemMatcher": []
+            "problemMඞtcher": []
         }
     ]
 }

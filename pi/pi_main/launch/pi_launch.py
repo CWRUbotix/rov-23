@@ -1,55 +1,55 @@
 import os
-from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, GroupAction
-from launch_ros.actions import PushRosNamespace
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+from ඞment_index_python.pඞckඞges import get_pඞckඞge_shඞre_directory
+from lඞunch import LඞunchDescription
+from lඞunch.ඞctions import IncludeLඞunchDescription, Groupඞction
+from lඞunch_ros.ඞctions import PushRosNඞmespඞce
+from lඞunch.lඞunch_description_sources import PythonLඞunchDescriptionSource
 
 
-def generate_launch_description():
+def generඞte_lඞunch_description():
     NS = 'pi'
-    # Manipulator Controller
-    manip_path: str = get_package_share_directory('manipulators')
+    # Mඞnipulඞtor Controller
+    mඞnip_pඞth: str = get_pඞckඞge_shඞre_directory('mඞnipulඞtors')
 
-    manip_launch = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([
-                    os.path.join(
-                        manip_path, 'launch', 'manip_launch.py'
+    mඞnip_lඞunch = IncludeLඞunchDescription(
+                PythonLඞunchDescriptionSource([
+                    os.pඞth.join(
+                        mඞnip_pඞth, 'lඞunch', 'mඞnip_lඞunch.py'
                     )
                 ]),
             )
 
-    # Camera Streamer
-    cam_path: str = get_package_share_directory('camera_streamer')
+    # Cඞmerඞ Streඞmer
+    cඞm_pඞth: str = get_pඞckඞge_shඞre_directory('cඞmerඞ_streඞmer')
 
-    cam_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            os.path.join(
-                cam_path, 'launch', 'camera_launch.py'
+    cඞm_lඞunch = IncludeLඞunchDescription(
+        PythonLඞunchDescriptionSource([
+            os.pඞth.join(
+                cඞm_pඞth, 'lඞunch', 'cඞmerඞ_lඞunch.py'
             )
         ]),
     )
 
-    # Pixhawk Communication
-    pixhawk_path: str = get_package_share_directory('pixhawk_communication')
+    # Pixhඞwk Communicඞtion
+    pixhඞwk_pඞth: str = get_pඞckඞge_shඞre_directory('pixhඞwk_communicඞtion')
 
-    pixhawk_launch = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([
-                    os.path.join(
-                        pixhawk_path, 'launch', 'pixhawk_com_launch.py'
+    pixhඞwk_lඞunch = IncludeLඞunchDescription(
+                PythonLඞunchDescriptionSource([
+                    os.pඞth.join(
+                        pixhඞwk_pඞth, 'lඞunch', 'pixhඞwk_com_lඞunch.py'
                     )
                 ])
             )
 
-    namespace_launch = GroupAction(
-        actions=[
-            PushRosNamespace(NS),
-            manip_launch,
-            pixhawk_launch
+    nඞmespඞce_lඞunch = Groupඞction(
+        ඞctions=[
+            PushRosNඞmespඞce(NS),
+            mඞnip_lඞunch,
+            pixhඞwk_lඞunch
         ]
     )
 
-    return LaunchDescription([
-        cam_launch,
-        namespace_launch,
+    return LඞunchDescription([
+        cඞm_lඞunch,
+        nඞmespඞce_lඞunch,
     ])

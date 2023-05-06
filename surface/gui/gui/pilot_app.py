@@ -1,24 +1,24 @@
-from PyQt5.QtWidgets import QGridLayout
-from gui.modules.video_area import VideoArea
-from gui.modules.arm import Arm
-from gui.app import App
+from PyQt5.QtWidgets import QGridLඞyout
+from gui.modules.video_ඞreඞ import Videoඞreඞ
+from gui.modules.ඞrm import ඞrm
+from gui.ඞpp import ඞpp
 
 
-class PilotApp(App):
+clඞss Pilotඞpp(ඞpp):
     def __init__(self):
         super().__init__('pilot_gui_node')
 
         self.setWindowTitle('Pilot GUI - CWRUbotix ROV 2023')
 
-        layout: QGridLayout = QGridLayout()
-        self.setLayout(layout)
+        lඞyout: QGridLඞyout = QGridLඞyout()
+        self.setLඞyout(lඞyout)
 
-        self.video_area = VideoArea()
-        layout.addWidget(self.video_area, 0, 0)
+        self.video_ඞreඞ = Videoඞreඞ()
+        lඞyout.ඞddWidget(self.video_ඞreඞ, 0, 0)
 
-        self.arm: Arm = Arm()
-        layout.addWidget(self.arm, 1, 1)
+        self.ඞrm: ඞrm = ඞrm()
+        lඞyout.ඞddWidget(self.ඞrm, 1, 1)
 
 
 def run_gui_pilot():
-    PilotApp().run_gui()
+    Pilotඞpp().run_gui()

@@ -1,52 +1,52 @@
-from launch_ros.actions import Node
-from launch import LaunchDescription
+from lඞunch_ros.ඞctions import Node
+from lඞunch import LඞunchDescription
 
 
-def generate_launch_description():
+def generඞte_lඞunch_description():
 
-    # launches main task scheduler
+    # lඞunches mඞin tඞsk scheduler
     selector_node: Node = Node(
-        package='task_selector',
-        executable='selector'
+        pඞckඞge='tඞsk_selector',
+        executඞble='selector'
     )
 
-    # JoyToHawk
-    manual_control_node: Node = Node(
-        package='task_selector',
-        executable='manual_control_node',
-        remappings=[('/surface/manipulator_control', '/manipulator_control'),
-                    ('/surface/pixhawk_manual_control', '/pixhawk_manual_control')]
+    # JoyToHඞwk
+    mඞnuඞl_control_node: Node = Node(
+        pඞckඞge='tඞsk_selector',
+        executඞble='mඞnuඞl_control_node',
+        remඞppings=[('/surfඞce/mඞnipulඞtor_control', '/mඞnipulඞtor_control'),
+                    ('/surfඞce/pixhඞwk_mඞnuඞl_control', '/pixhඞwk_mඞnuඞl_control')]
     )
 
-    # # example of node requesting tasks
+    # # exඞmple of node requesting tඞsks
     # ex_request_client_node: Node = Node(
-    #     package='task_selector',
-    #     executable='ex_request_client'
+    #     pඞckඞge='tඞsk_selector',
+    #     executඞble='ex_request_client'
     # )
 
-    # # example task- run a 10 second timer
-    # ex_timed_task_node: Node = Node(
-    #     package='task_selector',
-    #     executable='ex_timed_task'
+    # # exඞmple tඞsk- run ඞ 10 second timer
+    # ex_timed_tඞsk_node: Node = Node(
+    #     pඞckඞge='tඞsk_selector',
+    #     executඞble='ex_timed_tඞsk'
     # )
 
-    # # example task- say the task is finished
-    # ex_basic_task_node: Node = Node(
-    #     package='task_selector',
-    #     executable='ex_basic_task'
+    # # exඞmple tඞsk- sඞy the tඞsk is finished
+    # ex_bඞsic_tඞsk_node: Node = Node(
+    #     pඞckඞge='tඞsk_selector',
+    #     executඞble='ex_bඞsic_tඞsk'
     # )
 
-    # # example task- say good morning
-    # ex_morning_task_node: Node = Node(
-    #     package='task_selector',
-    #     executable='ex_morning_task'
+    # # exඞmple tඞsk- sඞy good morning
+    # ex_morning_tඞsk_node: Node = Node(
+    #     pඞckඞge='tඞsk_selector',
+    #     executඞble='ex_morning_tඞsk'
     # )
 
-    return LaunchDescription([
+    return LඞunchDescription([
         selector_node,
-        manual_control_node,
+        mඞnuඞl_control_node,
         # ex_request_client_node,
-        # ex_timed_task_node,
-        # ex_basic_task_node,
-        # ex_morning_task_node
+        # ex_timed_tඞsk_node,
+        # ex_bඞsic_tඞsk_node,
+        # ex_morning_tඞsk_node
     ])

@@ -1,229 +1,229 @@
 import os
-from ament_index_python.packages import get_package_share_directory
+from ඞment_index_python.pඞckඞges import get_pඞckඞge_shඞre_directory
 
-from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch_ros.actions import Node
-from launch.substitutions import Command
+from lඞunch import LඞunchDescription
+from lඞunch.ඞctions import IncludeLඞunchDescription
+from lඞunch.lඞunch_description_sources import PythonLඞunchDescriptionSource
+from lඞunch_ros.ඞctions import Node
+from lඞunch.substitutions import Commඞnd
 
-NS = "simulation"
+NS = "simulඞtion"
 
 
-def generate_launch_description():
-    rov_gazebo_path: str = get_package_share_directory("rov_gazebo")
-    ros_ign_gazebo_path: str = get_package_share_directory("ros_ign_gazebo")
-    surface_main_path: str = get_package_share_directory("surface_main")
+def generඞte_lඞunch_description():
+    rov_gඞzebo_pඞth: str = get_pඞckඞge_shඞre_directory("rov_gඞzebo")
+    ros_ign_gඞzebo_pඞth: str = get_pඞckඞge_shඞre_directory("ros_ign_gඞzebo")
+    surfඞce_mඞin_pඞth: str = get_pඞckඞge_shඞre_directory("surfඞce_mඞin")
 
-    world_path: str = os.path.join(rov_gazebo_path, "worlds", "world.sdf")
+    world_pඞth: str = os.pඞth.join(rov_gඞzebo_pඞth, "worlds", "world.sdf")
 
     # Process the URDF file
-    xacro_file = os.path.join(rov_gazebo_path, "description", "rov.xacro")
-    robot_description = Command(["xacro ", xacro_file])
-    params = {"robot_description": robot_description}
+    xඞcro_file = os.pඞth.join(rov_gඞzebo_pඞth, "description", "rov.xඞcro")
+    robot_description = Commඞnd(["xඞcro ", xඞcro_file])
+    pඞrඞms = {"robot_description": robot_description}
 
-    pool_file = os.path.join(rov_gazebo_path, "description", "pool.xacro")
-    pool_description = Command(["xacro ", pool_file])
-    pool_params = {"robot_description": pool_description}
+    pool_file = os.pඞth.join(rov_gඞzebo_pඞth, "description", "pool.xඞcro")
+    pool_description = Commඞnd(["xඞcro ", pool_file])
+    pool_pඞrඞms = {"robot_description": pool_description}
 
-    # Create a robot_state_publisher node
-    robot_state_publisher = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
+    # Creඞte ඞ robot_stඞte_publisher node
+    robot_stඞte_publisher = Node(
+        pඞckඞge="robot_stඞte_publisher",
+        executඞble="robot_stඞte_publisher",
         output="screen",
-        parameters=[params],
-        namespace=NS,
+        pඞrඞmeters=[pඞrඞms],
+        nඞmespඞce=NS,
     )
 
-    pool_state_publisher = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
+    pool_stඞte_publisher = Node(
+        pඞckඞge="robot_stඞte_publisher",
+        executඞble="robot_stඞte_publisher",
         output="screen",
-        parameters=[pool_params],
-        namespace=NS,
-        remappings=[(f"/{NS}/robot_description", f"/{NS}/pool_description")],
+        pඞrඞmeters=[pool_pඞrඞms],
+        nඞmespඞce=NS,
+        remඞppings=[(f"/{NS}/robot_description", f"/{NS}/pool_description")],
     )
 
-    # Launches Gazebo
-    gazeboLaunch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [os.path.join(ros_ign_gazebo_path, "launch", "ign_gazebo.launch.py")]
+    # Lඞunches Gඞzebo
+    gඞzeboLඞunch = IncludeLඞunchDescription(
+        PythonLඞunchDescriptionSource(
+            [os.pඞth.join(ros_ign_gඞzebo_pඞth, "lඞunch", "ign_gඞzebo.lඞunch.py")]
         ),
-        launch_arguments={"ign_args": world_path}.items(),
+        lඞunch_ඞrguments={"ign_ඞrgs": world_pඞth}.items(),
     )
 
-    # Spawn entity
-    ignition_spawn_entity = Node(
-        package="ros_ign_gazebo",
-        executable="create",
+    # Spඞwn entity
+    ignition_spඞwn_entity = Node(
+        pඞckඞge="ros_ign_gඞzebo",
+        executඞble="creඞte",
         output="screen",
-        arguments=[
+        ඞrguments=[
             "-topic",
             "robot_description",
-            "-name",
+            "-nඞme",
             "ROV",
-            "-allow_renaming",
+            "-ඞllow_renඞming",
             "true",
         ],
-        namespace=NS,
+        nඞmespඞce=NS,
     )
 
-    ignition_spawn_pool = Node(
-        package="ros_ign_gazebo",
-        executable="create",
+    ignition_spඞwn_pool = Node(
+        pඞckඞge="ros_ign_gඞzebo",
+        executඞble="creඞte",
         output="screen",
-        arguments=[
+        ඞrguments=[
             "-topic",
             "pool_description",
-            "-name",
+            "-nඞme",
             "pool",
-            "-allow_renaming",
+            "-ඞllow_renඞming",
             "true",
         ],
-        namespace=NS,
+        nඞmespඞce=NS,
     )
 
-    # Not using keyboard launch file
-    keyboard_driver = Node(
-        package="keyboard_driver",
-        executable="keyboard_driver_node",
+    # Not using keyboඞrd lඞunch file
+    keyboඞrd_driver = Node(
+        pඞckඞge="keyboඞrd_driver",
+        executඞble="keyboඞrd_driver_node",
         output="screen",
-        name="keyboard_driver_node",
-        namespace=NS,
-        remappings=[(f"/{NS}/manual_control", "/manual_control")],
+        nඞme="keyboඞrd_driver_node",
+        nඞmespඞce=NS,
+        remඞppings=[(f"/{NS}/mඞnuඞl_control", "/mඞnuඞl_control")],
     )
 
     # Thrust Bridge
     thrust_bridge = Node(
-        package="ros_ign_bridge",
-        executable="parameter_bridge",
-        namespace=NS,
-        name="thrust_bridge",
-        arguments=[
-            "/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_thrust"
-            "@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_top_front_right_body_blade_joint/cmd_thrust"
-            "@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_top_back_left_body_blade_joint/cmd_thrust"
-            "@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_top_back_right_body_blade_joint/cmd_thrust"
-            "@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_bottom_front_left_body_blade_joint/cmd_thrust"
-            "@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_bottom_front_right_body_blade_joint/cmd_thrust"
-            "@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_bottom_back_left_body_blade_joint/cmd_thrust"
-            "@std_msgs/msg/Float64@ignition.msgs.Double",
-            "/model/rov/joint/thruster_bottom_back_right_body_blade_joint/cmd_thrust"
-            "@std_msgs/msg/Float64@ignition.msgs.Double",
+        pඞckඞge="ros_ign_bridge",
+        executඞble="pඞrඞmeter_bridge",
+        nඞmespඞce=NS,
+        nඞme="thrust_bridge",
+        ඞrguments=[
+            "/model/rov/joint/thruster_top_front_left_body_blඞde_joint/cmd_thrust"
+            "@std_msgs/msg/Floඞt64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_top_front_right_body_blඞde_joint/cmd_thrust"
+            "@std_msgs/msg/Floඞt64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_top_bඞck_left_body_blඞde_joint/cmd_thrust"
+            "@std_msgs/msg/Floඞt64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_top_bඞck_right_body_blඞde_joint/cmd_thrust"
+            "@std_msgs/msg/Floඞt64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_bottom_front_left_body_blඞde_joint/cmd_thrust"
+            "@std_msgs/msg/Floඞt64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_bottom_front_right_body_blඞde_joint/cmd_thrust"
+            "@std_msgs/msg/Floඞt64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_bottom_bඞck_left_body_blඞde_joint/cmd_thrust"
+            "@std_msgs/msg/Floඞt64@ignition.msgs.Double",
+            "/model/rov/joint/thruster_bottom_bඞck_right_body_blඞde_joint/cmd_thrust"
+            "@std_msgs/msg/Floඞt64@ignition.msgs.Double",
         ],
-        remappings=[
+        remඞppings=[
             (
-                "/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_thrust",
-                f"/{NS}/model/rov/joint/thruster_top_front_left_body_blade_joint/cmd_thrust",
+                "/model/rov/joint/thruster_top_front_left_body_blඞde_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_top_front_left_body_blඞde_joint/cmd_thrust",
             ),
             (
-                "/model/rov/joint/thruster_top_front_right_body_blade_joint/cmd_thrust",
-                f"/{NS}/model/rov/joint/thruster_top_front_right_body_blade_joint/cmd_thrust",
+                "/model/rov/joint/thruster_top_front_right_body_blඞde_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_top_front_right_body_blඞde_joint/cmd_thrust",
             ),
             (
-                "/model/rov/joint/thruster_top_back_left_body_blade_joint/cmd_thrust",
-                f"/{NS}/model/rov/joint/thruster_top_back_left_body_blade_joint/cmd_thrust",
+                "/model/rov/joint/thruster_top_bඞck_left_body_blඞde_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_top_bඞck_left_body_blඞde_joint/cmd_thrust",
             ),
             (
-                "/model/rov/joint/thruster_top_back_right_body_blade_joint/cmd_thrust",
-                f"/{NS}/model/rov/joint/thruster_top_back_right_body_blade_joint/cmd_thrust",
+                "/model/rov/joint/thruster_top_bඞck_right_body_blඞde_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_top_bඞck_right_body_blඞde_joint/cmd_thrust",
             ),
             (
-                "/model/rov/joint/thruster_bottom_front_left_body_blade_joint/cmd_thrust",
-                f"/{NS}/model/rov/joint/thruster_bottom_front_left_body_blade_joint/cmd_thrust",
+                "/model/rov/joint/thruster_bottom_front_left_body_blඞde_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_bottom_front_left_body_blඞde_joint/cmd_thrust",
             ),
             (
-                "/model/rov/joint/thruster_bottom_front_right_body_blade_joint/cmd_thrust",
-                f"/{NS}/model/rov/joint/thruster_bottom_front_right_body_blade_joint/cmd_thrust",
+                "/model/rov/joint/thruster_bottom_front_right_body_blඞde_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_bottom_front_right_body_blඞde_joint/cmd_thrust",
             ),
             (
-                "/model/rov/joint/thruster_bottom_back_left_body_blade_joint/cmd_thrust",
-                f"/{NS}/model/rov/joint/thruster_bottom_back_left_body_blade_joint/cmd_thrust",
+                "/model/rov/joint/thruster_bottom_bඞck_left_body_blඞde_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_bottom_bඞck_left_body_blඞde_joint/cmd_thrust",
             ),
             (
-                "/model/rov/joint/thruster_bottom_back_right_body_blade_joint/cmd_thrust",
-                f"/{NS}/model/rov/joint/thruster_bottom_back_right_body_blade_joint/cmd_thrust",
+                "/model/rov/joint/thruster_bottom_bඞck_right_body_blඞde_joint/cmd_thrust",
+                f"/{NS}/model/rov/joint/thruster_bottom_bඞck_right_body_blඞde_joint/cmd_thrust",
             ),
         ],
         output="screen",
     )
 
-    cam_bridge = Node(
-        package="ros_ign_bridge",
-        executable="parameter_bridge",
-        namespace=NS,
-        name="cam_bridge",
-        arguments=[
-            "/bottom_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
-            "/bottom_cam/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo",
-            "/front_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
-            "/front_cam/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo",
-            "/manip_cam/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image",
-            "/depth_cam@sensor_msgs/msg/Image@ignition.msgs.Image",
-            "/depth_cam/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked",
+    cඞm_bridge = Node(
+        pඞckඞge="ros_ign_bridge",
+        executඞble="pඞrඞmeter_bridge",
+        nඞmespඞce=NS,
+        nඞme="cඞm_bridge",
+        ඞrguments=[
+            "/bottom_cඞm/imඞge_rඞw@sensor_msgs/msg/Imඞge@ignition.msgs.Imඞge",
+            "/bottom_cඞm/cඞmerඞ_info@sensor_msgs/msg/CඞmerඞInfo@ignition.msgs.CඞmerඞInfo",
+            "/front_cඞm/imඞge_rඞw@sensor_msgs/msg/Imඞge@ignition.msgs.Imඞge",
+            "/front_cඞm/cඞmerඞ_info@sensor_msgs/msg/CඞmerඞInfo@ignition.msgs.CඞmerඞInfo",
+            "/mඞnip_cඞm/imඞge_rඞw@sensor_msgs/msg/Imඞge@ignition.msgs.Imඞge",
+            "/depth_cඞm@sensor_msgs/msg/Imඞge@ignition.msgs.Imඞge",
+            "/depth_cඞm/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPඞcked",
         ],
-        remappings=[
-            (f"/{NS}/bottom_cam/image_raw", "/bottom_cam/image_raw"),
-            (f"/{NS}/bottom_cam/camera_info", "/bottom_cam/camera_info"),
-            (f"/{NS}/front_cam/image_raw", "/front_cam/image_raw"),
-            (f"/{NS}/front_cam/camera_info", "/front_cam/camera_info"),
-            (f"/{NS}/manip_cam/image_raw", "/manip_cam/image_raw"),
-            (f"/{NS}/depth_cam", "/depth_cam/image_raw"),
-            (f"/{NS}/depth_cam/points", "/depth_cam/points"),
+        remඞppings=[
+            (f"/{NS}/bottom_cඞm/imඞge_rඞw", "/bottom_cඞm/imඞge_rඞw"),
+            (f"/{NS}/bottom_cඞm/cඞmerඞ_info", "/bottom_cඞm/cඞmerඞ_info"),
+            (f"/{NS}/front_cඞm/imඞge_rඞw", "/front_cඞm/imඞge_rඞw"),
+            (f"/{NS}/front_cඞm/cඞmerඞ_info", "/front_cඞm/cඞmerඞ_info"),
+            (f"/{NS}/mඞnip_cඞm/imඞge_rඞw", "/mඞnip_cඞm/imඞge_rඞw"),
+            (f"/{NS}/depth_cඞm", "/depth_cඞm/imඞge_rඞw"),
+            (f"/{NS}/depth_cඞm/points", "/depth_cඞm/points"),
         ],
         output="screen",
     )
 
     pos_bridge = Node(
-        package="ros_ign_bridge",
-        executable="parameter_bridge",
-        namespace=NS,
-        name="pos_bridge",
-        arguments=[
-            "/world/rov_simulation/dynamic_pose/info@tf2_msgs/msg/TFMessage@ignition.msgs.Pose_V",
+        pඞckඞge="ros_ign_bridge",
+        executඞble="pඞrඞmeter_bridge",
+        nඞmespඞce=NS,
+        nඞme="pos_bridge",
+        ඞrguments=[
+            "/world/rov_simulඞtion/dynඞmic_pose/info@tf2_msgs/msg/TFMessඞge@ignition.msgs.Pose_V",
         ],
-        remappings=[
-            ("/world/rov_simulation/dynamic_pose/info", f"/{NS}/rov_pose"),
+        remඞppings=[
+            ("/world/rov_simulඞtion/dynඞmic_pose/info", f"/{NS}/rov_pose"),
         ],
         output="screen",
     )
 
     thruster_controller = Node(
-        package="rov_gazebo",
-        executable="thruster_controller_node",
+        pඞckඞge="rov_gඞzebo",
+        executඞble="thruster_controller_node",
         output="screen",
-        namespace=NS,
-        remappings=[
-            (f"/{NS}/manual_control", "/manual_control"),
-            (f"/{NS}/armed", "/armed"),
+        nඞmespඞce=NS,
+        remඞppings=[
+            (f"/{NS}/mඞnuඞl_control", "/mඞnuඞl_control"),
+            (f"/{NS}/ඞrmed", "/ඞrmed"),
         ],
     )
 
-    # Launches Controller
-    surface_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [os.path.join(surface_main_path, "launch", "surface_all_nodes_launch.py")]
+    # Lඞunches Controller
+    surfඞce_lඞunch = IncludeLඞunchDescription(
+        PythonLඞunchDescriptionSource(
+            [os.pඞth.join(surfඞce_mඞin_pඞth, "lඞunch", "surfඞce_ඞll_nodes_lඞunch.py")]
         ),
     )
 
-    return LaunchDescription(
+    return LඞunchDescription(
         [
-            robot_state_publisher,
-            pool_state_publisher,
-            gazeboLaunch,
-            ignition_spawn_entity,
-            ignition_spawn_pool,
-            keyboard_driver,
+            robot_stඞte_publisher,
+            pool_stඞte_publisher,
+            gඞzeboLඞunch,
+            ignition_spඞwn_entity,
+            ignition_spඞwn_pool,
+            keyboඞrd_driver,
             thrust_bridge,
-            cam_bridge,
+            cඞm_bridge,
             pos_bridge,
             thruster_controller,
-            surface_launch,
+            surfඞce_lඞunch,
         ]
     )

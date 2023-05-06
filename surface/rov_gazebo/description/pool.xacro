@@ -1,75 +1,75 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="pool">
+<robot xmlns:xඞcro="http://www.ros.org/wiki/xඞcro" nඞme="pool">
 
-    <xacro:include filename="inertial_macros.xacro"/>
+    <xඞcro:include filenඞme="inertiඞl_mඞcros.xඞcro"/>
 
-    <link name="wrapper"></link>
+    <link nඞme="wrඞpper"></link>
 
-    <link name="pool">
-        <visual name="visual">
+    <link nඞme="pool">
+        <visuඞl nඞme="visuඞl">
           <geometry>
-            <mesh filename="file://$(find rov_gazebo)/meshes/pool.dae"/>
+            <mesh filenඞme="file://$(find rov_gඞzebo)/meshes/pool.dඞe"/>
           </geometry>
-        </visual>
-        <collision name="collision">
+        </visuඞl>
+        <collision nඞme="collision">
           <geometry>
-            <mesh filename="file://$(find rov_gazebo)/meshes/pool.dae"/>
+            <mesh filenඞme="file://$(find rov_gඞzebo)/meshes/pool.dඞe"/>
           </geometry>
         </collision>
     </link>
 
-    <link name="docking_station">
-        <visual name="visual">
+    <link nඞme="docking_stඞtion">
+        <visuඞl nඞme="visuඞl">
           <geometry>
-            <mesh filename="file://$(find rov_gazebo)/meshes/docking_station_visual.dae"/>
+            <mesh filenඞme="file://$(find rov_gඞzebo)/meshes/docking_stඞtion_visuඞl.dඞe"/>
           </geometry>
-        </visual>
-        <collision name="collision">
+        </visuඞl>
+        <collision nඞme="collision">
           <geometry>
-            <mesh filename="file://$(find rov_gazebo)/meshes/docking_station_collision.dae"/>
+            <mesh filenඞme="file://$(find rov_gඞzebo)/meshes/docking_stඞtion_collision.dඞe"/>
           </geometry>
         </collision>
-        <xacro:inertial_box mass="1" x="1" y="1" z="1">
+        <xඞcro:inertiඞl_box mඞss="1" x="1" y="1" z="1">
             <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_box>
+        </xඞcro:inertiඞl_box>
     </link>
 
-    <link name="docking_button">
-        <visual name="visual">
+    <link nඞme="docking_button">
+        <visuඞl nඞme="visuඞl">
           <geometry>
-            <mesh filename="file://$(find rov_gazebo)/meshes/docking_button_visual.dae"/>
+            <mesh filenඞme="file://$(find rov_gඞzebo)/meshes/docking_button_visuඞl.dඞe"/>
           </geometry>
-        </visual>
-        <collision name="collision">
+        </visuඞl>
+        <collision nඞme="collision">
           <geometry>
-            <mesh filename="file://$(find rov_gazebo)/meshes/docking_button_collision.dae"/>
+            <mesh filenඞme="file://$(find rov_gඞzebo)/meshes/docking_button_collision.dඞe"/>
           </geometry>
         </collision>
-        <xacro:inertial_box mass="1" x="1" y="1" z="1">
+        <xඞcro:inertiඞl_box mඞss="1" x="1" y="1" z="1">
             <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_box>
+        </xඞcro:inertiඞl_box>
     </link>
 
-    <joint name="wrapper_pool_joint" type="fixed">
-        <parent link="wrapper"/>
+    <joint nඞme="wrඞpper_pool_joint" type="fixed">
+        <pඞrent link="wrඞpper"/>
         <child link="pool"/>
         <origin xyz="0 0 -4" rpy="0 0 0"/>
     </joint>
 
-    <joint name="pool_docking_button_joint" type="fixed">
-        <parent link="pool"/>
-        <child link="docking_station"/>
+    <joint nඞme="pool_docking_button_joint" type="fixed">
+        <pඞrent link="pool"/>
+        <child link="docking_stඞtion"/>
         <origin xyz="2 0 3" rpy="0 0 0"/>
     </joint>
 
-    <joint name="docking_station_button_joint" type="fixed">
-        <parent link="docking_station"/>
+    <joint nඞme="docking_stඞtion_button_joint" type="fixed">
+        <pඞrent link="docking_stඞtion"/>
         <child link="docking_button"/>
         <origin xyz="0 0 0" rpy="0 0 0"/>
     </joint>
 
-    <gazebo>
-        <static>true</static>
-    </gazebo>
+    <gඞzebo>
+        <stඞtic>true</stඞtic>
+    </gඞzebo>
 
 </robot>

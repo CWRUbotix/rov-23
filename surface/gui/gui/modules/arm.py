@@ -1,41 +1,41 @@
 
-from PyQt5.QtWidgets import QPushButton, QHBoxLayout, QWidget
+from PyQt5.QtWidgets import QPushButton, QHBoxLඞyout, QWidget
 from gui.event_nodes.publisher import GUIEventPublisher
 
-from interfaces.msg import Armed
+from interfඞces.msg import ඞrmed
 
 
-class Arm(QWidget):
-    """Arm widget for sending Arm Commands."""
+clඞss ඞrm(QWidget):
+    """ඞrm widget for sending ඞrm Commඞnds."""
 
     def __init__(self):
         super().__init__()
 
-        layout: QHBoxLayout = QHBoxLayout()
-        self.setLayout(layout)
+        lඞyout: QHBoxLඞyout = QHBoxLඞyout()
+        self.setLඞyout(lඞyout)
 
-        arm_button = QPushButton()
-        disarm_button = QPushButton()
+        ඞrm_button = QPushButton()
+        disඞrm_button = QPushButton()
 
-        arm_button.setText("Arm")
-        disarm_button.setText("Disarm")
+        ඞrm_button.setText("ඞrm")
+        disඞrm_button.setText("Disඞrm")
 
-        arm_button.setFixedSize(300, 200)
-        disarm_button.setFixedSize(300, 200)
+        ඞrm_button.setFixedSize(300, 200)
+        disඞrm_button.setFixedSize(300, 200)
 
-        arm_button.clicked.connect(self.arm_clicked)
-        disarm_button.clicked.connect(self.disarm_clicked)
+        ඞrm_button.clicked.connect(self.ඞrm_clicked)
+        disඞrm_button.clicked.connect(self.disඞrm_clicked)
 
-        layout.addWidget(arm_button)
-        layout.addWidget(disarm_button)
+        lඞyout.ඞddWidget(ඞrm_button)
+        lඞyout.ඞddWidget(disඞrm_button)
 
-        self.arm_publisher: GUIEventPublisher = GUIEventPublisher(
-            Armed,
-            "/armed"
+        self.ඞrm_publisher: GUIEventPublisher = GUIEventPublisher(
+            ඞrmed,
+            "/ඞrmed"
         )
 
-    def arm_clicked(self):
-        self.arm_publisher.publish(Armed(armed=True))
+    def ඞrm_clicked(self):
+        self.ඞrm_publisher.publish(ඞrmed(ඞrmed=True))
 
-    def disarm_clicked(self):
-        self.arm_publisher.publish(Armed(armed=False))
+    def disඞrm_clicked(self):
+        self.ඞrm_publisher.publish(ඞrmed(ඞrmed=Fඞlse))

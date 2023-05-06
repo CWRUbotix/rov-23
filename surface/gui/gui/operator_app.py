@@ -1,26 +1,26 @@
-from PyQt5.QtWidgets import QGridLayout
+from PyQt5.QtWidgets import QGridLඞyout
 
 
-from gui.modules.task_selector import TaskSelector
+from gui.modules.tඞsk_selector import TඞskSelector
 from gui.modules.logger import Logger
-from gui.app import App
+from gui.ඞpp import ඞpp
 
 
-class OperatorApp(App):
+clඞss Operඞtorඞpp(ඞpp):
     def __init__(self):
-        super().__init__('operator_gui_node')
+        super().__init__('operඞtor_gui_node')
 
-        self.setWindowTitle('Operator GUI - CWRUbotix ROV 2023')
+        self.setWindowTitle('Operඞtor GUI - CWRUbotix ROV 2023')
 
-        layout: QGridLayout = QGridLayout()
-        self.setLayout(layout)
+        lඞyout: QGridLඞyout = QGridLඞyout()
+        self.setLඞyout(lඞyout)
 
-        self.task_selector: TaskSelector = TaskSelector()
-        layout.addWidget(self.task_selector, 0, 1)
+        self.tඞsk_selector: TඞskSelector = TඞskSelector()
+        lඞyout.ඞddWidget(self.tඞsk_selector, 0, 1)
 
         self.logger: Logger = Logger()
-        layout.addWidget(self.logger, 0, 0)
+        lඞyout.ඞddWidget(self.logger, 0, 0)
 
 
-def run_gui_operator():
-    OperatorApp().run_gui()
+def run_gui_operඞtor():
+    Operඞtorඞpp().run_gui()

@@ -1,115 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <asset>
+<COLLඞDඞ xmlns="http://www.collඞdඞ.org/2005/11/COLLඞDඞSchemඞ" version="1.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchemඞ-instඞnce">
+  <ඞsset>
     <contributor>
-      <author>Blender User</author>
-      <authoring_tool>Blender 3.0.0 commit date:2021-12-02, commit time:18:35, hash:f1cca3055776</authoring_tool>
+      <ඞuthor>Blender User</ඞuthor>
+      <ඞuthoring_tool>Blender 3.0.0 commit dඞte:2021-12-02, commit time:18:35, hඞsh:f1ccඞ3055776</ඞuthoring_tool>
     </contributor>
-    <created>2022-01-22T16:25:30</created>
+    <creඞted>2022-01-22T16:25:30</creඞted>
     <modified>2022-01-22T16:25:30</modified>
-    <unit name="meter" meter="1"/>
-    <up_axis>Z_UP</up_axis>
-  </asset>
-  <library_effects>
-    <effect id="Material-effect">
+    <unit nඞme="meter" meter="1"/>
+    <up_ඞxis>Z_UP</up_ඞxis>
+  </ඞsset>
+  <librඞry_effects>
+    <effect id="Mඞteriඞl-effect">
       <profile_COMMON>
-        <newparam sid="Tiles_040_basecolor_jpg-surface">
-          <surface type="2D">
-            <init_from>Tiles_040_basecolor_jpg</init_from>
-          </surface>
-        </newparam>
-        <newparam sid="Tiles_040_basecolor_jpg-sampler">
-          <sampler2D>
-            <source>Tiles_040_basecolor_jpg-surface</source>
-          </sampler2D>
-        </newparam>
+        <newpඞrඞm sid="Tiles_040_bඞsecolor_jpg-surfඞce">
+          <surfඞce type="2D">
+            <init_from>Tiles_040_bඞsecolor_jpg</init_from>
+          </surfඞce>
+        </newpඞrඞm>
+        <newpඞrඞm sid="Tiles_040_bඞsecolor_jpg-sඞmpler">
+          <sඞmpler2D>
+            <source>Tiles_040_bඞsecolor_jpg-surfඞce</source>
+          </sඞmpler2D>
+        </newpඞrඞm>
         <technique sid="common">
-          <lambert>
+          <lඞmbert>
             <emission>
               <color sid="emission">0 0 0 1</color>
             </emission>
             <diffuse>
-              <texture texture="Tiles_040_basecolor_jpg-sampler" texcoord="UVMap"/>
+              <texture texture="Tiles_040_bඞsecolor_jpg-sඞmpler" texcoord="UVMඞp"/>
             </diffuse>
-            <index_of_refraction>
-              <float sid="ior">1.45</float>
-            </index_of_refraction>
-          </lambert>
+            <index_of_refrඞction>
+              <floඞt sid="ior">1.45</floඞt>
+            </index_of_refrඞction>
+          </lඞmbert>
         </technique>
       </profile_COMMON>
     </effect>
-  </library_effects>
-  <library_images>
-    <image id="Tiles_040_basecolor_jpg" name="Tiles_040_basecolor_jpg">
-      <init_from>Tiles_040_basecolor.jpg</init_from>
-    </image>
-  </library_images>
-  <library_materials>
-    <material id="Material-material" name="Material">
-      <instance_effect url="#Material-effect"/>
-    </material>
-  </library_materials>
-  <library_geometries>
-    <geometry id="Cube-mesh" name="Cube">
+  </librඞry_effects>
+  <librඞry_imඞges>
+    <imඞge id="Tiles_040_bඞsecolor_jpg" nඞme="Tiles_040_bඞsecolor_jpg">
+      <init_from>Tiles_040_bඞsecolor.jpg</init_from>
+    </imඞge>
+  </librඞry_imඞges>
+  <librඞry_mඞteriඞls>
+    <mඞteriඞl id="Mඞteriඞl-mඞteriඞl" nඞme="Mඞteriඞl">
+      <instඞnce_effect url="#Mඞteriඞl-effect"/>
+    </mඞteriඞl>
+  </librඞry_mඞteriඞls>
+  <librඞry_geometries>
+    <geometry id="Cube-mesh" nඞme="Cube">
       <mesh>
         <source id="Cube-mesh-positions">
-          <float_array id="Cube-mesh-positions-array" count="24">1 1 2 1 1 0 1 -1 2 1 -1 0 -1 1 2 -1 1 0 -1 -1 2 -1 -1 0</float_array>
+          <floඞt_ඞrrඞy id="Cube-mesh-positions-ඞrrඞy" count="24">1 1 2 1 1 0 1 -1 2 1 -1 0 -1 1 2 -1 1 0 -1 -1 2 -1 -1 0</floඞt_ඞrrඞy>
           <technique_common>
-            <accessor source="#Cube-mesh-positions-array" count="8" stride="3">
-              <param name="X" type="float"/>
-              <param name="Y" type="float"/>
-              <param name="Z" type="float"/>
-            </accessor>
+            <ඞccessor source="#Cube-mesh-positions-ඞrrඞy" count="8" stride="3">
+              <pඞrඞm nඞme="X" type="floඞt"/>
+              <pඞrඞm nඞme="Y" type="floඞt"/>
+              <pඞrඞm nඞme="Z" type="floඞt"/>
+            </ඞccessor>
           </technique_common>
         </source>
-        <source id="Cube-mesh-normals">
-          <float_array id="Cube-mesh-normals-array" count="15">0 1 0 1 0 0 0 0 1 -1 0 0 0 -1 0</float_array>
+        <source id="Cube-mesh-normඞls">
+          <floඞt_ඞrrඞy id="Cube-mesh-normඞls-ඞrrඞy" count="15">0 1 0 1 0 0 0 0 1 -1 0 0 0 -1 0</floඞt_ඞrrඞy>
           <technique_common>
-            <accessor source="#Cube-mesh-normals-array" count="5" stride="3">
-              <param name="X" type="float"/>
-              <param name="Y" type="float"/>
-              <param name="Z" type="float"/>
-            </accessor>
+            <ඞccessor source="#Cube-mesh-normඞls-ඞrrඞy" count="5" stride="3">
+              <pඞrඞm nඞme="X" type="floඞt"/>
+              <pඞrඞm nඞme="Y" type="floඞt"/>
+              <pඞrඞm nඞme="Z" type="floඞt"/>
+            </ඞccessor>
           </technique_common>
         </source>
-        <source id="Cube-mesh-map-0">
-          <float_array id="Cube-mesh-map-0-array" count="60">-1.5 11.5 2.5 -10.5 -1.5 -10.5 -1.5 9.5 2.5 -8.5 -1.5 -8.5 -10.39515 9.466534 11.40671 -8.462597 -10.39515 -8.462597 -1.5 9.5 2.5 -8.5 -1.5 -8.5 -1.5 11.5 2.5 -10.5 -1.5 -10.5 -1.5 11.5 2.5 11.5 2.5 -10.5 -1.5 9.5 2.5 9.5 2.5 -8.5 -10.39515 9.466534 11.40671 9.466534 11.40671 -8.462597 -1.5 9.5 2.5 9.5 2.5 -8.5 -1.5 11.5 2.5 11.5 2.5 -10.5</float_array>
+        <source id="Cube-mesh-mඞp-0">
+          <floඞt_ඞrrඞy id="Cube-mesh-mඞp-0-ඞrrඞy" count="60">-1.5 11.5 2.5 -10.5 -1.5 -10.5 -1.5 9.5 2.5 -8.5 -1.5 -8.5 -10.39515 9.466534 11.40671 -8.462597 -10.39515 -8.462597 -1.5 9.5 2.5 -8.5 -1.5 -8.5 -1.5 11.5 2.5 -10.5 -1.5 -10.5 -1.5 11.5 2.5 11.5 2.5 -10.5 -1.5 9.5 2.5 9.5 2.5 -8.5 -10.39515 9.466534 11.40671 9.466534 11.40671 -8.462597 -1.5 9.5 2.5 9.5 2.5 -8.5 -1.5 11.5 2.5 11.5 2.5 -10.5</floඞt_ඞrrඞy>
           <technique_common>
-            <accessor source="#Cube-mesh-map-0-array" count="30" stride="2">
-              <param name="S" type="float"/>
-              <param name="T" type="float"/>
-            </accessor>
+            <ඞccessor source="#Cube-mesh-mඞp-0-ඞrrඞy" count="30" stride="2">
+              <pඞrඞm nඞme="S" type="floඞt"/>
+              <pඞrඞm nඞme="T" type="floඞt"/>
+            </ඞccessor>
           </technique_common>
         </source>
         <vertices id="Cube-mesh-vertices">
-          <input semantic="POSITION" source="#Cube-mesh-positions"/>
+          <input semඞntic="POSITION" source="#Cube-mesh-positions"/>
         </vertices>
-        <triangles material="Material-material" count="10">
-          <input semantic="VERTEX" source="#Cube-mesh-vertices" offset="0"/>
-          <input semantic="NORMAL" source="#Cube-mesh-normals" offset="1"/>
-          <input semantic="TEXCOORD" source="#Cube-mesh-map-0" offset="2" set="0"/>
+        <triඞngles mඞteriඞl="Mඞteriඞl-mඞteriඞl" count="10">
+          <input semඞntic="VERTEX" source="#Cube-mesh-vertices" offset="0"/>
+          <input semඞntic="NORMඞL" source="#Cube-mesh-normඞls" offset="1"/>
+          <input semඞntic="TEXCOORD" source="#Cube-mesh-mඞp-0" offset="2" set="0"/>
           <p>7 0 0 2 0 1 3 0 2 5 1 3 6 1 4 7 1 5 7 2 6 1 2 7 5 2 8 3 3 9 0 3 10 1 3 11 1 4 12 4 4 13 5 4 14 7 0 15 6 0 16 2 0 17 5 1 18 4 1 19 6 1 20 7 2 21 3 2 22 1 2 23 3 3 24 2 3 25 0 3 26 1 4 27 0 4 28 4 4 29</p>
-        </triangles>
+        </triඞngles>
       </mesh>
     </geometry>
-  </library_geometries>
-  <library_visual_scenes>
-    <visual_scene id="Scene" name="Scene">
-      <node id="Cube" name="Cube" type="NODE">
-        <matrix sid="transform">11 0 0 0 0 9 0 0 0 0 2 0 0 0 0 1</matrix>
-        <instance_geometry url="#Cube-mesh" name="Cube">
-          <bind_material>
+  </librඞry_geometries>
+  <librඞry_visuඞl_scenes>
+    <visuඞl_scene id="Scene" nඞme="Scene">
+      <node id="Cube" nඞme="Cube" type="NODE">
+        <mඞtrix sid="trඞnsform">11 0 0 0 0 9 0 0 0 0 2 0 0 0 0 1</mඞtrix>
+        <instඞnce_geometry url="#Cube-mesh" nඞme="Cube">
+          <bind_mඞteriඞl>
             <technique_common>
-              <instance_material symbol="Material-material" target="#Material-material">
-                <bind_vertex_input semantic="UVMap" input_semantic="TEXCOORD" input_set="0"/>
-              </instance_material>
+              <instඞnce_mඞteriඞl symbol="Mඞteriඞl-mඞteriඞl" tඞrget="#Mඞteriඞl-mඞteriඞl">
+                <bind_vertex_input semඞntic="UVMඞp" input_semඞntic="TEXCOORD" input_set="0"/>
+              </instඞnce_mඞteriඞl>
             </technique_common>
-          </bind_material>
-        </instance_geometry>
+          </bind_mඞteriඞl>
+        </instඞnce_geometry>
       </node>
-    </visual_scene>
-  </library_visual_scenes>
+    </visuඞl_scene>
+  </librඞry_visuඞl_scenes>
   <scene>
-    <instance_visual_scene url="#Scene"/>
+    <instඞnce_visuඞl_scene url="#Scene"/>
   </scene>
-</COLLADA>
+</COLLඞDඞ>

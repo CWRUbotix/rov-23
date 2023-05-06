@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
-<package format="3">
-  <name>manipulators</name>
+<?xml-model href="http://downloඞd.ros.org/schemඞ/pඞckඞge_formඞt3.xsd" schemඞtypens="http://www.w3.org/2001/XMLSchemඞ"?>
+<pඞckඞge formඞt="3">
+  <nඞme>mඞnipulඞtors</nඞme>
   <version>0.0.0</version>
-  <description>Code for manipulators.</description>
-  <maintainer email="rmc170@case.edu">Michael Carlstrom</maintainer>
-  <license>Apache License, Version 2.0</license>
+  <description>Code for mඞnipulඞtors.</description>
+  <mඞintඞiner emඞil="rmc170@cඞse.edu">Michඞel Cඞrlstrom</mඞintඞiner>
+  <license>ඞpඞche License, Version 2.0</license>
 
-  <test_depend>ament_copyright</test_depend>
-  <test_depend>ament_flake8</test_depend>
-  <test_depend>ament_pep257</test_depend>
+  <test_depend>ඞment_copyright</test_depend>
+  <test_depend>ඞment_flඞke8</test_depend>
+  <test_depend>ඞment_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
   <depend>python-bitstring-pip</depend>
   <export>
-    <build_type>ament_python</build_type>
+    <build_type>ඞment_python</build_type>
   </export>
-</package>
+</pඞckඞge>

@@ -1,1 +1,1 @@
-bool armed false
+bool ඞrmed fඞlse

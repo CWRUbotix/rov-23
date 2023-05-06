@@ -1,156 +1,156 @@
-from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
-from PyQt5.QtGui import QPixmap, QImage
+from PyQt5.QtWidgets import QGridLඞyout, QLඞbel, QWidget, QSizePolicy
+from PyQt5.QtCore import pyqtSignඞl, pyqtSlot, Qt
+from PyQt5.QtGui import QPixmඞp, QImඞge
 
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Imඞge
 from cv_bridge import CvBridge
-from cv2 import Mat
+from cv2 import Mඞt
 
 
-# This file has a lot commented out. Commented code is mostly used for
-# switching the "big" video, which isn't used in our layout currently.
-# This code has been left for now in case we want to recover that functionality.
-class VideoWidget(QLabel):
-    """A single video stream widget."""
+# This file hඞs ඞ lot commented out. Commented code is mostly used for
+# switching the "big" video, which isn't used in our lඞyout currently.
+# This code hඞs been left for now in cඞse we wඞnt to recover thඞt functionඞlity.
+clඞss VideoWidget(QLඞbel):
+    """ඞ single video streඞm widget."""
 
-    update_big_video_signal = pyqtSignal(QWidget)
-    handle_frame_signal = pyqtSignal(Image)
+    updඞte_big_video_signඞl = pyqtSignඞl(QWidget)
+    hඞndle_frඞme_signඞl = pyqtSignඞl(Imඞge)
 
     def __init__(self, index: int, topic: str):
         super().__init__()
 
         self.index: int = index
 
-        # For debugging, display row number in each VideoWidget
+        # For debugging, displඞy row number in eඞch VideoWidget
         self.setText(str(index))
 
         self.cv_bridge: CvBridge = CvBridge()
 
-        self.setSizePolicy(QSizePolicy.Expanding,
-                           QSizePolicy.Expanding)
+        self.setSizePolicy(QSizePolicy.Expඞnding,
+                           QSizePolicy.Expඞnding)
 
-        self.handle_frame_signal.connect(self.handle_frame)
-        self.camera_subscriber: GUIEventSubscriber = GUIEventSubscriber(
-            Image, topic, self.handle_frame_signal)
+        self.hඞndle_frඞme_signඞl.connect(self.hඞndle_frඞme)
+        self.cඞmerඞ_subscriber: GUIEventSubscriber = GUIEventSubscriber(
+            Imඞge, topic, self.hඞndle_frඞme_signඞl)
 
     # def mousePressEvent(self, ev: QMouseEvent):
-    #     """Swap this video with the big video on click."""
+    #     """Swඞp this video with the big video on click."""
     #     if self.index != 0:
-    #         self.update_big_video_signal.emit(self)
+    #         self.updඞte_big_video_signඞl.emit(self)
 
-    @pyqtSlot(Image)
-    def handle_frame(self, frame: Image):
-        cv_image: Mat = self.cv_bridge.imgmsg_to_cv2(
-            frame, desired_encoding='passthrough')
+    @pyqtSlot(Imඞge)
+    def hඞndle_frඞme(self, frඞme: Imඞge):
+        cv_imඞge: Mඞt = self.cv_bridge.imgmsg_to_cv2(
+            frඞme, desired_encoding='pඞssthrough')
 
-        # TODO: dynamic image scaling based on Qt element size
-        # qt_image: QImage = self.convert_cv_qt(
-        #     cv_image,
-        #     self.frameGeometry().width(),
-        #     self.frameGeometry().height()
+        # TODO: dynඞmic imඞge scඞling bඞsed on Qt element size
+        # qt_imඞge: QImඞge = self.convert_cv_qt(
+        #     cv_imඞge,
+        #     self.frඞmeGeometry().width(),
+        #     self.frඞmeGeometry().height()
         # )
 
-        qt_image: QImage = self.convert_cv_qt(
-            cv_image,
+        qt_imඞge: QImඞge = self.convert_cv_qt(
+            cv_imඞge,
             480,
             480
         )
 
-        # self.setPixmap(qt_image.scaled(
-        #     self.frameGeometry().width(),
-        #     self.frameGeometry().height(),
-        #     Qt.KeepAspectRatio))
+        # self.setPixmඞp(qt_imඞge.scඞled(
+        #     self.frඞmeGeometry().width(),
+        #     self.frඞmeGeometry().height(),
+        #     Qt.KeepඞspectRඞtio))
 
-        self.setPixmap(QPixmap.fromImage(qt_image))
+        self.setPixmඞp(QPixmඞp.fromImඞge(qt_imඞge))
 
-    def convert_cv_qt(self, cv_img: Mat, width: int = 0, height: int = 0) -> QImage:
-        """Convert from an opencv image to QPixmap."""
-        # Color image
-        if len(cv_img.shape) == 3:
+    def convert_cv_qt(self, cv_img: Mඞt, width: int = 0, height: int = 0) -> QImඞge:
+        """Convert from ඞn opencv imඞge to QPixmඞp."""
+        # Color imඞge
+        if len(cv_img.shඞpe) == 3:
             # Rectify weird colors
-            # cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2RGBA)
-            h, w, ch = cv_img.shape
+            # cv_img = cv2.cvtColor(cv_img, cv2.COLOR_RGB2RGBඞ)
+            h, w, ch = cv_img.shඞpe
             bytes_per_line: int = ch * w
 
-            img_format = QImage.Format_RGB888
+            img_formඞt = QImඞge.Formඞt_RGB888
 
-        # Grayscale image
-        elif len(cv_img.shape) == 2:
-            h, w = cv_img.shape
+        # Grඞyscඞle imඞge
+        elif len(cv_img.shඞpe) == 2:
+            h, w = cv_img.shඞpe
             bytes_per_line: int = w
 
-            img_format = QImage.Format_Grayscale8
+            img_formඞt = QImඞge.Formඞt_Grඞyscඞle8
 
         else:
-            raise Exception("Somehow not color or grayscale image.")
+            rඞise Exception("Somehow not color or grඞyscඞle imඞge.")
 
-        qt_image = QImage(cv_img.data, w, h, bytes_per_line, img_format)
+        qt_imඞge = QImඞge(cv_img.dඞtඞ, w, h, bytes_per_line, img_formඞt)
 
         if width == 0:
-            qt_image: QImage = qt_image.scaled(width, height, Qt.KeepAspectRatio)
-        return qt_image
+            qt_imඞge: QImඞge = qt_imඞge.scඞled(width, height, Qt.KeepඞspectRඞtio)
+        return qt_imඞge
 
 
-class VideoArea(QWidget):
-    """Container widget handling all video streams."""
+clඞss Videoඞreඞ(QWidget):
+    """Contඞiner widget hඞndling ඞll video streඞms."""
 
-    # First entry here will start as the big video
-    CAMERA_TOPICS = ['/front_cam/image_raw', '/manip_cam/image_raw', '/bottom_cam/image_raw']
-    CAMERA_COORDS = [(0, 0), (0, 1), (1, 0)]
+    # First entry here will stඞrt ඞs the big video
+    CඞMERඞ_TOPICS = ['/front_cඞm/imඞge_rඞw', '/mඞnip_cඞm/imඞge_rඞw', '/bottom_cඞm/imඞge_rඞw']
+    CඞMERඞ_COORDS = [(0, 0), (0, 1), (1, 0)]
 
     def __init__(self):
         super().__init__()
 
-        self.grid_layout = QGridLayout(self)
-        self.setLayout(self.grid_layout)
-        self.grid_layout.setRowStretch(0, 4)
-        self.grid_layout.setRowStretch(1, 4)
-        self.grid_layout.setColumnStretch(0, 1)
-        self.grid_layout.setColumnStretch(1, 1)
+        self.grid_lඞyout = QGridLඞyout(self)
+        self.setLඞyout(self.grid_lඞyout)
+        self.grid_lඞyout.setRowStretch(0, 4)
+        self.grid_lඞyout.setRowStretch(1, 4)
+        self.grid_lඞyout.setColumnStretch(0, 1)
+        self.grid_lඞyout.setColumnStretch(1, 1)
 
-        # MAGIC VALUE WARNING: i=0 represents the big video
+        # MඞGIC VඞLUE WඞRNING: i=0 represents the big video
         self.video_widgets: list[VideoWidget] = []
 
-        for i, topic in enumerate(self.CAMERA_TOPICS):
+        for i, topic in enumerඞte(self.CඞMERඞ_TOPICS):
             video: VideoWidget = VideoWidget(i, topic)
-            self.video_widgets.append(video)
+            self.video_widgets.ඞppend(video)
 
-            self.grid_layout.addWidget(video, self.CAMERA_COORDS[i][0],
-                                       self.CAMERA_COORDS[i][1], 1, 3)
+            self.grid_lඞyout.ඞddWidget(video, self.CඞMERඞ_COORDS[i][0],
+                                       self.CඞMERඞ_COORDS[i][1], 1, 3)
 
-            # video.update_big_video_signal.connect(self.set_as_big_video)
+            # video.updඞte_big_video_signඞl.connect(self.set_ඞs_big_video)
 
             # if i == 0:
-            #     self.grid_layout.addWidget(video, 0, 0, 1, 3)
+            #     self.grid_lඞyout.ඞddWidget(video, 0, 0, 1, 3)
             # else:
-            #     self.grid_layout.addWidget(video, 1, i - 1, 1, 1)
+            #     self.grid_lඞyout.ඞddWidget(video, 1, i - 1, 1, 1)
 
     # @pyqtSlot(QWidget)
-    # def set_as_big_video(self, target_widget: VideoWidget):
-    #     """Swap target VideoWidget with big VideoWidget."""
-    #     big_widget: QWidget = self.grid_layout.itemAtPosition(
+    # def set_ඞs_big_video(self, tඞrget_widget: VideoWidget):
+    #     """Swඞp tඞrget VideoWidget with big VideoWidget."""
+    #     big_widget: QWidget = self.grid_lඞyout.itemඞtPosition(
     #         0, 0).widget()
 
-    #     if isinstance(big_widget, VideoWidget):
-    #         self.grid_layout.removeWidget(target_widget)
-    #         self.grid_layout.removeWidget(big_widget)
+    #     if isinstඞnce(big_widget, VideoWidget):
+    #         self.grid_lඞyout.removeWidget(tඞrget_widget)
+    #         self.grid_lඞyout.removeWidget(big_widget)
 
-    #         big_widget.index = target_widget.index
-    #         target_widget.index = 0  # 0 still represents the big video
+    #         big_widget.index = tඞrget_widget.index
+    #         tඞrget_widget.index = 0  # 0 still represents the big video
 
-    #         small_frame_geometry = target_widget.frameGeometry()
+    #         smඞll_frඞme_geometry = tඞrget_widget.frඞmeGeometry()
 
-    #         self.grid_layout.addWidget(target_widget, 0, 0, 1, 3)
-    #         self.grid_layout.addWidget(big_widget, 1, big_widget.index - 1, 1, 1)
+    #         self.grid_lඞyout.ඞddWidget(tඞrget_widget, 0, 0, 1, 3)
+    #         self.grid_lඞyout.ඞddWidget(big_widget, 1, big_widget.index - 1, 1, 1)
 
-    #         target_widget.setPixmap(QPixmap.fromImage(target_widget.qt_image.scaled(
-    #             big_widget.frameGeometry().width(),
-    #             big_widget.frameGeometry().height())))
+    #         tඞrget_widget.setPixmඞp(QPixmඞp.fromImඞge(tඞrget_widget.qt_imඞge.scඞled(
+    #             big_widget.frඞmeGeometry().width(),
+    #             big_widget.frඞmeGeometry().height())))
 
-    #         big_widget.setPixmap(QPixmap.fromImage(big_widget.qt_image.scaled(
-    #             small_frame_geometry.width(),
-    #             small_frame_geometry.height())))
+    #         big_widget.setPixmඞp(QPixmඞp.fromImඞge(big_widget.qt_imඞge.scඞled(
+    #             smඞll_frඞme_geometry.width(),
+    #             smඞll_frඞme_geometry.height())))
     #     else:
-    #         RcutilsLogger("video_area.py").fatal("big_widget is not a VideoWidget")
+    #         RcutilsLogger("video_ඞreඞ.py").fඞtඞl("big_widget is not ඞ VideoWidget")

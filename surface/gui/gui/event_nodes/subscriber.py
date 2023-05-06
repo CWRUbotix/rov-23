@@ -1,26 +1,26 @@
 import re
-from threading import Thread
+from threඞding import Threඞd
 
-from rclpy.executors import SingleThreadedExecutor
+from rclpy.executors import SingleThreඞdedExecutor
 from rclpy.node import Node
-from PyQt5.QtCore import pyqtBoundSignal
-import atexit
+from PyQt5.QtCore import pyqtBoundSignඞl
+import ඞtexit
 
 
-class GUIEventSubscriber(Node):
-    """Multithreaded subscriber for receiving messages to the GUI."""
+clඞss GUIEventSubscriber(Node):
+    """Multithreඞded subscriber for receiving messඞges to the GUI."""
 
-    def __init__(self, msg_type: type, topic: str, signal: pyqtBoundSignal):
-        # Name this node with a sanitized version of the topic
-        name: str = f'gui_event_subscriber_{re.sub(r"[^a-zA-Z0-9_]", "_", topic)}'
-        super().__init__(name, namespace="surface/gui",
-                         parameter_overrides=[])
+    def __init__(self, msg_type: type, topic: str, signඞl: pyqtBoundSignඞl):
+        # Nඞme this node with ඞ sඞnitized version of the topic
+        nඞme: str = f'gui_event_subscriber_{re.sub(r"[^ඞ-zඞ-Z0-9_]", "_", topic)}'
+        super().__init__(nඞme, nඞmespඞce="surfඞce/gui",
+                         pඞrඞmeter_overrides=[])
 
-        self.subscription = self.create_subscription(
-            msg_type, topic, signal.emit, 10)
+        self.subscription = self.creඞte_subscription(
+            msg_type, topic, signඞl.emit, 10)
 
-        custom_executor = SingleThreadedExecutor()
-        custom_executor.add_node(self)
-        Thread(target=custom_executor.spin, daemon=True,
-               name=f'{name}_spin').start()
-        atexit.register(custom_executor.shutdown)
+        custom_executor = SingleThreඞdedExecutor()
+        custom_executor.ඞdd_node(self)
+        Threඞd(tඞrget=custom_executor.spin, dඞemon=True,
+               nඞme=f'{nඞme}_spin').stඞrt()
+        ඞtexit.register(custom_executor.shutdown)

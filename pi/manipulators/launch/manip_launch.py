@@ -1,15 +1,15 @@
-from launch import LaunchDescription
-from launch_ros.actions import Node
+from lඞunch import LඞunchDescription
+from lඞunch_ros.ඞctions import Node
 
 
-def generate_launch_description():
+def generඞte_lඞunch_description():
 
-    manip_node = Node(
-        package="manipulators",
-        executable="manipulator",
-        remappings=[("/pi/manipulator_control", "/manipulator_control")]
+    mඞnip_node = Node(
+        pඞckඞge="mඞnipulඞtors",
+        executඞble="mඞnipulඞtor",
+        remඞppings=[("/pi/mඞnipulඞtor_control", "/mඞnipulඞtor_control")]
     )
 
-    return LaunchDescription([
-        manip_node
+    return LඞunchDescription([
+        mඞnip_node
     ])

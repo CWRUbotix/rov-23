@@ -1,24 +1,24 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="colors">
+<robot xmlns:xඞcro="http://www.ros.org/wiki/xඞcro" nඞme="colors">
 
-    <material name="white">
-        <color rgba="1 1 1 1" />
-    </material>
+    <mඞteriඞl nඞme="white">
+        <color rgbඞ="1 1 1 1" />
+    </mඞteriඞl>
 
-    <material name="red">
-        <color rgba="1 0 0 1"/>
-    </material>
+    <mඞteriඞl nඞme="red">
+        <color rgbඞ="1 0 0 1"/>
+    </mඞteriඞl>
 
-    <material name="orange">
-        <color rgba="1 0.3 0.1 1"/>
-    </material>
+    <mඞteriඞl nඞme="orඞnge">
+        <color rgbඞ="1 0.3 0.1 1"/>
+    </mඞteriඞl>
 
-    <material name="blue">
-        <color rgba="0.2 0.2 1 1"/>
-    </material>
+    <mඞteriඞl nඞme="blue">
+        <color rgbඞ="0.2 0.2 1 1"/>
+    </mඞteriඞl>
 
-    <material name="black">
-        <color rgba="0 0 0 1"/>
-    </material>
+    <mඞteriඞl nඞme="blඞck">
+        <color rgbඞ="0 0 0 1"/>
+    </mඞteriඞl>
     
 </robot>

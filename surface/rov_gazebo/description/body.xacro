@@ -1,146 +1,146 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="body">
+<robot xmlns:xඞcro="http://www.ros.org/wiki/xඞcro" nඞme="body">
 
-    <link name="body">
-        <visual>
+    <link nඞme="body">
+        <visuඞl>
             <origin xyz="0 0 0" rpy="0 0 1.6" />
             <geometry>
                 <!-- <box size="0.3 0.3 0.15"/> -->
-                <mesh filename="file://$(find rov_gazebo)/meshes/rov.stl"/>
+                <mesh filenඞme="file://$(find rov_gඞzebo)/meshes/rov.stl"/>
             </geometry>
-        </visual>
+        </visuඞl>
         <collision>
             <origin xyz="0 0 0.05"/>
             <geometry>
                 <box size="0.3 0.3 0.15"/>
             </geometry>
         </collision>
-        <xacro:inertial_box mass="6" x="0.3" y="0.3" z="0.15">
+        <xඞcro:inertiඞl_box mඞss="6" x="0.3" y="0.3" z="0.15">
             <origin xyz="0 0 0.05" rpy="0 0 0"/>
-        </xacro:inertial_box>
+        </xඞcro:inertiඞl_box>
     </link>
 
-    <joint name="body_front_cam_link_joint" type="fixed">
-        <parent link="body"/>
-        <child link="front_cam_link"/>
+    <joint nඞme="body_front_cඞm_link_joint" type="fixed">
+        <pඞrent link="body"/>
+        <child link="front_cඞm_link"/>
         <origin xyz="0.215 0 0.075" rpy="0 0 0"/>
     </joint>
 
-    <link name="front_cam_link">
-        <visual>
+    <link nඞme="front_cඞm_link">
+        <visuඞl>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
                 <box size="0.01 0.01 0.01"/>
             </geometry>
-            <material name="red"/>
-        </visual>
+            <mඞteriඞl nඞme="red"/>
+        </visuඞl>
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
                 <box size="0.01 0.01 0.01"/>
             </geometry>
         </collision>
-        <xacro:inertial_box mass="0.0001" x="0.01" y="0.01" z="0.01">
+        <xඞcro:inertiඞl_box mඞss="0.0001" x="0.01" y="0.01" z="0.01">
             <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_box>
+        </xඞcro:inertiඞl_box>
     </link>
 
-    <joint name="body_bottom_cam_link_joint" type="fixed">
-        <parent link="body"/>
-        <child link="bottom_cam_link"/>
+    <joint nඞme="body_bottom_cඞm_link_joint" type="fixed">
+        <pඞrent link="body"/>
+        <child link="bottom_cඞm_link"/>
         <origin xyz="0 0 -0.048" rpy="0 1.57 0"/>
     </joint>
 
-    <link name="bottom_cam_link">
-        <visual>
+    <link nඞme="bottom_cඞm_link">
+        <visuඞl>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
                 <box size="0.01 0.01 0.01"/>
             </geometry>
-            <material name="red"/>
-        </visual>
+            <mඞteriඞl nඞme="red"/>
+        </visuඞl>
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
                 <box size="0.01 0.01 0.01"/>
             </geometry>
         </collision>
-        <xacro:inertial_box mass="0.0001" x="0.01" y="0.01" z="0.01">
+        <xඞcro:inertiඞl_box mඞss="0.0001" x="0.01" y="0.01" z="0.01">
             <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_box>
+        </xඞcro:inertiඞl_box>
     </link>
 
-    <joint name="body_manip_cam_link_joint" type="fixed">
-        <parent link="body"/>
-        <child link="manip_cam_link"/>
+    <joint nඞme="body_mඞnip_cඞm_link_joint" type="fixed">
+        <pඞrent link="body"/>
+        <child link="mඞnip_cඞm_link"/>
         <origin xyz="0.095 0 -0.007" rpy="0 0 0"/>
     </joint>
 
-    <link name="manip_cam_link">
-        <visual>
+    <link nඞme="mඞnip_cඞm_link">
+        <visuඞl>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
                 <box size="0.01 0.01 0.01"/>
             </geometry>
-            <material name="red"/>
-        </visual>
+            <mඞteriඞl nඞme="red"/>
+        </visuඞl>
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
                 <box size="0.01 0.01 0.01"/>
             </geometry>
         </collision>
-        <xacro:inertial_box mass="0.0001" x="0.01" y="0.01" z="0.01">
+        <xඞcro:inertiඞl_box mඞss="0.0001" x="0.01" y="0.01" z="0.01">
             <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_box>
+        </xඞcro:inertiඞl_box>
     </link>
 
-    <joint name="body_depth_cam_link_joint" type="fixed">
-        <parent link="body"/>
-        <child link="depth_cam_link"/>
+    <joint nඞme="body_depth_cඞm_link_joint" type="fixed">
+        <pඞrent link="body"/>
+        <child link="depth_cඞm_link"/>
         <origin xyz="-0.19 0 0.067" rpy="0 0.785 3.14"/>
     </joint>
 
-    <link name="depth_cam_link">
-        <visual>
+    <link nඞme="depth_cඞm_link">
+        <visuඞl>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
                 <box size="0.01 0.01 0.01"/>
             </geometry>
-            <material name="red"/>
-        </visual>
+            <mඞteriඞl nඞme="red"/>
+        </visuඞl>
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
                 <box size="0.01 0.01 0.01"/>
             </geometry>
         </collision>
-        <xacro:inertial_box mass="0.0001" x="0.01" y="0.01" z="0.01">
+        <xඞcro:inertiඞl_box mඞss="0.0001" x="0.01" y="0.01" z="0.01">
             <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_box>
+        </xඞcro:inertiඞl_box>
     </link>
 
-    <gazebo>
+    <gඞzebo>
         <plugin
-            filename="ignition-gazebo-hydrodynamics-system"
-            name="ignition::gazebo::systems::Hydrodynamics">
-            <link_name>body</link_name>
-            <water_density>1000</water_density>
-            <!-- Added mass -->
+            filenඞme="ignition-gඞzebo-hydrodynඞmics-system"
+            nඞme="ignition::gඞzebo::systems::Hydrodynඞmics">
+            <link_nඞme>body</link_nඞme>
+            <wඞter_density>1000</wඞter_density>
+            <!-- ඞdded mඞss -->
             <xDotU>0</xDotU>
             <yDotV>0</yDotV>
             <zDotW>0</zDotW>
             <kDotP>0</kDotP>
             <mDotQ>0</mDotQ>
             <nDotR>0</nDotR>
-            <!-- First order stability derivative -->
+            <!-- First order stඞbility derivඞtive -->
             <xU>0</xU>
             <yV>0</yV>
             <zW>0</zW>
             <kP>0</kP>
             <mQ>0</mQ>
             <nR>0</nR>
-            <!-- Second order stability derivative -->
+            <!-- Second order stඞbility derivඞtive -->
             <xUU>-33.800000000000004</xUU>
             <yVV>-54.26875</yVV>
             <zWW>-73.37135</zWW>
@@ -148,6 +148,6 @@
             <mQQ>-4.0</mQQ>
             <nRR>-4.0</nRR>
         </plugin>
-    </gazebo>
+    </gඞzebo>
     
 </robot>
