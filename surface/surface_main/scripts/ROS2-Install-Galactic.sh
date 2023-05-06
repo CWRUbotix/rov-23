@@ -1,8 +1,16 @@
 #!/bin/bash
 
-# Install git and curl
+# Install git, curl, pip, colcon, and rosdep
 sudo apt install git
 sudo apt install curl
+sudo apt install python3-pip
+sudo apt install python3-colcon-common-extensions
+sudo apt install python3-rosdep2
+
+# Install python packages that rosdep can't install
+pip install opencv-python
+pip install pyserial
+pip install wiringpi
 
 # Setting locale
 locale  # check for UTF-8
