@@ -152,7 +152,6 @@ class SeagrassGrid(QWidget):
                  set_other_button: Optional[Callable] = None):
         super().__init__()
 
-        self.update_result_text: Callable = update_result_text
         self.set_other_button: Callable = set_other_button
 
         self.setMaximumWidth(200)
@@ -174,6 +173,7 @@ class SeagrassGrid(QWidget):
         for row in range(N):
             for col in range(N):
                 seagrass_button: SeagrassButton = SeagrassButton(button_id, 50,
+                                                                 update_result_text,
                                                                  self.set_other_button)
                 self.all_buttons.append(seagrass_button)
 
@@ -184,11 +184,6 @@ class SeagrassGrid(QWidget):
     def reset_grid(self, recovered: bool) -> None:
         for button in self.all_buttons:
             button.set_color(recovered)
-
-            if self.set_other_button:
-                self.set_other_button(button.button_id, button.recovered)
-
-        self.update_result_text()
 
     def get_num_recovered(self) -> int:
         num_recovered: int = 0
@@ -201,7 +196,7 @@ class SeagrassGrid(QWidget):
 
     def update_connected_grid(self) -> None:
         if self.set_other_button is None:
-            return
+            raise ValueError("self.set_other_button has been called on after grid")
 
         for button in self.all_buttons:
             self.set_other_button(button.button_id, button.recovered)
@@ -210,11 +205,10 @@ class SeagrassGrid(QWidget):
         button = self.all_buttons[button_id]
         button.set_color(recovered)
 
-        self.update_result_text()
-
 
 class SeagrassButton(QPushButton):
-    def __init__(self, button_id: int, size: int, set_other_button: Optional[Callable] = None):
+    def __init__(self, button_id: int, size: int, update_text: Callable,
+                 set_other_button: Optional[Callable] = None):
         super(SeagrassButton, self).__init__()
 
         self.button_id: int = button_id
@@ -223,6 +217,7 @@ class SeagrassButton(QPushButton):
         self.recovered = True
         self.setStyleSheet("border: 1px solid gray; background-color : green")
 
+        self.update_text = update_text
         self.set_other_button = set_other_button
 
         self.clicked.connect(self.toggle_button_color)
@@ -240,11 +235,13 @@ class SeagrassButton(QPushButton):
         else:
             color = "white"
 
-        self.setStyleSheet("border: 1px solid gray; background-color :" + color)
+        self.setStyleSheet(f"border: 1px solid gray; background-color :{color}")
 
         # Update other button
         if self.set_other_button is not None:
             self.set_other_button(self.button_id, self.recovered)
+
+        self.update_text()
 
 
 if __name__ == "__main__":
