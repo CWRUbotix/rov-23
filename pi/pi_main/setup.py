@@ -41,8 +41,6 @@ for dir in dirs:
 if ws is None:
     raise ValueError("No workspace found")
 
-print(os.listdir(ws))
-
 # Robot Upstart wants *.launch.py so this copies around that
 src = os.path.join('~', ws, 'src', 'pi', package_name, 'launch', 'pi_launch.py')
 src_home = os.path.expanduser(src)
