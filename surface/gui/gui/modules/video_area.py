@@ -6,7 +6,10 @@ from gui.event_nodes.subscriber import GUIEventSubscriber
 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
+from cv2 import Mat
 import cv2
+
+from typing import List, Tuple
 
 from dataclasses import dataclass
 
@@ -41,14 +44,14 @@ class VideoWidget(QLabel):
 
     @pyqtSlot(Image)
     def handle_frame(self, frame: Image):
-        cv_image: cv2.Mat = self.cv_bridge.imgmsg_to_cv2(
+        cv_image: Mat = self.cv_bridge.imgmsg_to_cv2(
             frame, desired_encoding='passthrough')
 
         qt_image: QImage = self.convert_cv_qt(cv_image, self.widget_width, self.widget_height)
 
         self.setPixmap(QPixmap.fromImage(qt_image))
 
-    def convert_cv_qt(self, cv_img: cv2.Mat, width: int = 0, height: int = 0) -> QImage:
+    def convert_cv_qt(self, cv_img: Mat, width: int = 0, height: int = 0) -> QImage:
         """Convert from an opencv image to QPixmap."""
         # Color image
         if len(cv_img.shape) == 3:
@@ -81,14 +84,14 @@ class VideoWidget(QLabel):
 class LabeledVideo:
     label: str
     topic: str
-    coords: 'list[int]'
+    coords: Tuple[int]
     debug_index: int
 
 
 class VideoArea(QWidget):
     """Container widget handling all video streams."""
 
-    VIDEOS: 'list[LabeledVideo]' = [
+    VIDEOS: List[LabeledVideo] = [
         LabeledVideo('Front Cam', '/front_cam/image_raw', (0, 0), 0),
         LabeledVideo('Bottom Cam', '/bottom_cam/image_raw', (0, 1), 1)
     ]
@@ -111,11 +114,8 @@ class VideoArea(QWidget):
             labeled_video_layout = QVBoxLayout()
             labeled_video.setLayout(labeled_video_layout)
 
-            label = QLabel(video.label)
-            label.setAlignment(Qt.AlignCenter)
-            label.setStyleSheet('QLabel { font-size: 20px; }')
-            labeled_video_layout.addWidget(label)
+            labeled_video_layout.addWidget(QLabel(video.label))
             labeled_video_layout.addWidget(
                 VideoWidget(video.debug_index, video.topic, self.VIDEO_WIDTH, self.VIDEO_HEIGHT))
 
-            self.grid_layout.addWidget(labeled_video, video.coords[0], video.coords[1])
+            self.grid_layout.addWidget(labeled_video, video.coords[0], video.coords[1], 1, 3)
