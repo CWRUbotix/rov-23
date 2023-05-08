@@ -12,15 +12,14 @@ class LabeledVideo:
     label: str
     topic: str
     coords: Tuple[int, int]
-    debug_index: int
 
 
 class VideoGrid(QWidget):
     """Container widget handling all video streams."""
 
     VIDEOS: List[LabeledVideo] = [
-        LabeledVideo('Front Cam', '/front_cam/image_raw', (0, 0), 0),
-        LabeledVideo('Bottom Cam', '/bottom_cam/image_raw', (0, 1), 1)
+        LabeledVideo('Front Cam', '/front_cam/image_raw', (0, 0)),
+        LabeledVideo('Bottom Cam', '/bottom_cam/image_raw', (0, 1))
     ]
 
     VIDEO_WIDTH:  int = 900
@@ -37,7 +36,7 @@ class VideoGrid(QWidget):
         self.grid_layout.setColumnStretch(1, 1)
 
         for video in self.VIDEOS:
-            video_widget = VideoWidget(video.debug_index, video.topic,
-                                       self.VIDEO_WIDTH, self.VIDEO_HEIGHT, video.label)
+            video_widget = VideoWidget(video.topic, self.VIDEO_WIDTH,
+                                       self.VIDEO_HEIGHT, video.label)
 
             self.grid_layout.addWidget(video_widget, video.coords[0], video.coords[1])

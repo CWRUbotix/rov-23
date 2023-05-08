@@ -17,7 +17,7 @@ class VideoWidget(QWidget):
     update_big_video_signal = pyqtSignal(QWidget)
     handle_frame_signal = pyqtSignal(Image)
 
-    def __init__(self, index: int, topic: str, widget_width: int = 640,
+    def __init__(self, topic: str, widget_width: int = 640,
                  widget_height: int = 480, label_text: Optional[str] = None,
                  swap_rb_channels: bool = False):
         super().__init__()
@@ -25,7 +25,6 @@ class VideoWidget(QWidget):
         self.widget_width: int = widget_width
         self.widget_height: int = widget_height
         self.swap_rb_channels: bool = swap_rb_channels
-        self.index: int = index
 
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
@@ -37,7 +36,7 @@ class VideoWidget(QWidget):
             self.layout.addWidget(self.label)
 
         self.video_frame_label = QLabel()
-        self.video_frame_label.setText(str(index))
+        self.video_frame_label.setText(f'This topic had no frame: {topic}')
         self.layout.addWidget(self.video_frame_label)
 
         self.cv_bridge: CvBridge = CvBridge()
@@ -90,8 +89,11 @@ class VideoWidget(QWidget):
 class PausableVideoWidget(VideoWidget):
     """A single video stream widget that can be paused and played."""
 
-    def __init__(self, cam_topic: str):
-        super().__init__(0, cam_topic)
+    def __init__(self, cam_topic: str, widget_width: int = 640,
+                 widget_height: int = 480, label_text: Optional[str] = None,
+                 swap_rb_channels: bool = False):
+        super().__init__(cam_topic, widget_width, widget_height,
+                         label_text, swap_rb_channels)
 
         self.is_paused = False
 
@@ -99,12 +101,6 @@ class PausableVideoWidget(VideoWidget):
     def handle_frame(self, frame: Image):
         if not self.is_paused:
             super().handle_frame(frame)
-
-    def pause(self):
-        self.is_paused = False
-
-    def play(self):
-        self.is_paused = True
 
     def toggle(self):
         """Toggle whether this widget is paused or playing."""
