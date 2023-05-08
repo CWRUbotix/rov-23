@@ -8,29 +8,38 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import cv2
 
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from dataclasses import dataclass
 
 
-class VideoWidget(QLabel):
+class VideoWidget(QWidget):
     """A single video stream widget."""
 
     update_big_video_signal = pyqtSignal(QWidget)
     handle_frame_signal = pyqtSignal(Image)
 
     def __init__(self, index: int, topic: str, widget_width: int = 640,
-                 widget_height: int = 480, swap_rb_channels: bool = False):
+                 widget_height: int = 480, label_text: Optional[str] = None, swap_rb_channels: bool = False):
         super().__init__()
 
         self.widget_width: int = widget_width
         self.widget_height: int = widget_height
         self.swap_rb_channels: bool = swap_rb_channels
-
         self.index: int = index
 
-        # For debugging, display row number in each VideoWidget
-        self.setText(str(index))
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+
+        if label_text is not None:
+            self.label = QLabel(label_text)
+            self.label.setAlignment(Qt.AlignCenter)
+            self.label.setStyleSheet('QLabel { font-size: 20px; }')
+            self.layout.addWidget(self.label)
+
+        self.video_frame_label = QLabel()
+        self.video_frame_label.setText(str(index))
+        self.layout.addWidget(self.video_frame_label)
 
         self.cv_bridge: CvBridge = CvBridge()
 
@@ -48,7 +57,7 @@ class VideoWidget(QLabel):
 
         qt_image: QImage = self.convert_cv_qt(cv_image, self.widget_width, self.widget_height)
 
-        self.setPixmap(QPixmap.fromImage(qt_image))
+        self.video_frame_label.setPixmap(QPixmap.fromImage(qt_image))
 
     def convert_cv_qt(self, cv_img: cv2.Mat, width: int = 0, height: int = 0) -> QImage:
         """Convert from an opencv image to QPixmap."""
@@ -109,12 +118,7 @@ class VideoArea(QWidget):
         self.grid_layout.setColumnStretch(1, 1)
 
         for video in self.VIDEOS:
-            labeled_video = QWidget()
-            labeled_video_layout = QVBoxLayout()
-            labeled_video.setLayout(labeled_video_layout)
+            video_widget = VideoWidget(video.debug_index, video.topic,
+                                       self.VIDEO_WIDTH, self.VIDEO_HEIGHT, video.label)
 
-            labeled_video_layout.addWidget(QLabel(video.label))
-            labeled_video_layout.addWidget(
-                VideoWidget(video.debug_index, video.topic, self.VIDEO_WIDTH, self.VIDEO_HEIGHT))
-
-            self.grid_layout.addWidget(labeled_video, video.coords[0], video.coords[1], 1, 3)
+            self.grid_layout.addWidget(video_widget, video.coords[0], video.coords[1])
