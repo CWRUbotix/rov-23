@@ -138,3 +138,5 @@ dmypy.json
 # Video Files
 *.mp4
 
+# Mac Files
+*.DS_Store
