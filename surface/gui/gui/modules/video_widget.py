@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy, QVBoxLayout
+from PyQt5.QtWidgets import QLabel, QWidget, QSizePolicy, QVBoxLayout
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtGui import QPixmap, QImage
 
@@ -8,9 +8,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import cv2
 
-from typing import List, Tuple, Optional
-
-from dataclasses import dataclass
+from typing import Optional
 
 
 class VideoWidget(QWidget):
@@ -20,7 +18,8 @@ class VideoWidget(QWidget):
     handle_frame_signal = pyqtSignal(Image)
 
     def __init__(self, index: int, topic: str, widget_width: int = 640,
-                 widget_height: int = 480, label_text: Optional[str] = None, swap_rb_channels: bool = False):
+                 widget_height: int = 480, label_text: Optional[str] = None,
+                 swap_rb_channels: bool = False):
         super().__init__()
 
         self.widget_width: int = widget_width
@@ -88,37 +87,25 @@ class VideoWidget(QWidget):
         return qt_image
 
 
-@dataclass
-class LabeledVideo:
-    label: str
-    topic: str
-    coords: Tuple[int, int]
-    debug_index: int
+class PausableVideoWidget(VideoWidget):
+    """A single video stream widget that can be paused and played."""
 
+    def __init__(self, cam_topic: str):
+        super().__init__(0, cam_topic)
 
-class VideoArea(QWidget):
-    """Container widget handling all video streams."""
+        self.is_paused = False
 
-    VIDEOS: List[LabeledVideo] = [
-        LabeledVideo('Front Cam', '/front_cam/image_raw', (0, 0), 0),
-        LabeledVideo('Bottom Cam', '/bottom_cam/image_raw', (0, 1), 1)
-    ]
+    @pyqtSlot(Image)
+    def handle_frame(self, frame: Image):
+        if not self.is_paused:
+            super().handle_frame(frame)
 
-    VIDEO_WIDTH:  int = 900
-    VIDEO_HEIGHT: int = 675
+    def pause(self):
+        self.is_paused = False
 
-    def __init__(self):
-        super().__init__()
+    def play(self):
+        self.is_paused = True
 
-        self.grid_layout = QGridLayout(self)
-        self.setLayout(self.grid_layout)
-        self.grid_layout.setRowStretch(0, 4)
-        self.grid_layout.setRowStretch(1, 4)
-        self.grid_layout.setColumnStretch(0, 1)
-        self.grid_layout.setColumnStretch(1, 1)
-
-        for video in self.VIDEOS:
-            video_widget = VideoWidget(video.debug_index, video.topic,
-                                       self.VIDEO_WIDTH, self.VIDEO_HEIGHT, video.label)
-
-            self.grid_layout.addWidget(video_widget, video.coords[0], video.coords[1])
+    def toggle(self):
+        """Toggle whether this widget is paused or playing."""
+        self.is_paused = not self.is_paused

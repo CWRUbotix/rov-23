@@ -1,35 +1,10 @@
-import sys
-
 from typing import List, Optional, Callable
-from cv2 import Mat
 
-from PyQt5.QtCore import Qt, pyqtSlot
-from PyQt5.QtWidgets import (QWidget, QPushButton, QGridLayout, QApplication,
-                             QHBoxLayout, QVBoxLayout, QLabel, QFrame)
-from PyQt5.QtGui import QPixmap, QImage
+from PyQt5.QtWidgets import (QWidget, QPushButton, QGridLayout, QHBoxLayout,
+                             QVBoxLayout, QLabel, QFrame)
+from PyQt5.QtCore import Qt
 
-from gui.modules.video_area import VideoWidget
-from sensor_msgs.msg import Image
-
-
-class PausableVideoWidget(VideoWidget):
-
-    def __init__(self, cam_topic: str):
-        super().__init__(0, cam_topic)
-
-        self.is_paused = False
-
-    @pyqtSlot(Image)
-    def handle_frame(self, frame: Image):
-
-        if not self.is_paused:
-
-            cv_image: Mat = self.cv_bridge.imgmsg_to_cv2(
-                frame, desired_encoding='passthrough')
-
-            qt_image: QImage = self.convert_cv_qt(cv_image, 480, 480)
-
-            self.setPixmap(QPixmap.fromImage(qt_image))
+from gui.modules.video_widget import PausableVideoWidget
 
 
 class SeagrassWidget(QWidget):
@@ -121,10 +96,10 @@ class SeagrassWidget(QWidget):
         self.show()
 
     def toggle_pause(self) -> None:
-        self.bottom_cam.is_paused = not self.bottom_cam.is_paused
+        self.bottom_cam.toggle()
 
         if self.bottom_cam.is_paused:
-            self.toggle_pause_bttn.setText("Unpause")
+            self.toggle_pause_bttn.setText("Play")
         else:
             self.toggle_pause_bttn.setText("Pause")
 
@@ -242,10 +217,3 @@ class SeagrassButton(QPushButton):
             self.set_other_button(self.button_id, self.recovered)
 
         self.update_text()
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-
-    seagrass = SeagrassWidget()
-    sys.exit(app.exec_())
