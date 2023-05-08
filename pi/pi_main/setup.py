@@ -43,16 +43,11 @@ if ws is None:
 
 dir_list_of_src = os.listdir(os.path.expanduser(os.path.join('~', ws, 'src')))
 
-
+# CI as rov-23
 src_val = 'src'
 if len(dir_list_of_src) == 1:
     src_val = os.path.join(src_val, 'rov-23')
 
-# print(os.listdir(os.path.expanduser(os.path.join('~', ws, 'src', 'pi'))))
-
-# print(os.listdir(os.path.expanduser(os.path.join('~', ws, 'src', 'pi', package_name,))))
-
-# raise ValueError(os.listdir(os.path.expanduser(os.path.join('~', ws, 'src'))))
 # Robot Upstart wants *.launch.py so this copies around that
 src = os.path.join('~', ws, src_val, 'pi', package_name, 'launch', 'pi_launch.py')
 src_home = os.path.expanduser(src)
