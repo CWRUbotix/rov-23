@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import QGridLayout, QPushButton, QWidget
-from cv2 import Mat
 import cv2
 import os, threading
 
