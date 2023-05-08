@@ -13,7 +13,7 @@ class OperatorApp(App):
         super().__init__("operator_gui_node")
 
         self.setWindowTitle("Operator GUI - CWRUbotix ROV 2023")
-        
+
         tabs = QTabWidget()
 
         # Main tab
