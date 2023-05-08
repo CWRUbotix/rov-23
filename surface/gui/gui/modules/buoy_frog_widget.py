@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QPushButton, QWidget
+from PyQt5.QtWidgets import QGridLayout, QPushButton, QWidget
 from cv2 import Mat
 import cv2
 import os
@@ -14,15 +14,12 @@ class BuoyFrogWidget(QWidget):
         self.mode = "buoy"
         self.is_recording = False
 
-        layout: QVBoxLayout = QVBoxLayout()
+        layout: QGridLayout = QGridLayout()
         self.setLayout(layout)
 
         self.video1: VideoWidget = VideoWidget(0, self.CAMERA_TOPICS[0])
         self.video2: VideoWidget = VideoWidget(1, self.CAMERA_TOPICS[1])
-
-        self.videos = QHBoxLayout()
-        self.videos.addWidget(self.video1)
-        self.videos.addWidget(self.video2)
+        self.video1.setStyleSheet("border: 5px solid green;")
 
         self.mode_button = QPushButton()
         self.mode_button.setText("Toggle Mode\nCurrent: Buoy")
@@ -34,21 +31,23 @@ class BuoyFrogWidget(QWidget):
         self.record_button.clicked.connect(self.record)
         self.record_button.setFixedSize(200, 100)
 
-        self.buttons = QHBoxLayout()
-        self.buttons.addWidget(self.mode_button)
-        self.buttons.addWidget(self.record_button)
-
-        layout.addLayout(self.videos)
-        layout.addLayout(self.buttons)
+        layout.addWidget(self.video1, 0, 0)
+        layout.addWidget(self.video2, 0, 1)
+        layout.addWidget(self.mode_button, 1, 0)
+        layout.addWidget(self.record_button, 1, 1)
 
     def toggle_mode(self):
         # toggle video widget between video1 and video2 at first item of the layout
         if self.mode == "buoy":
             self.mode = "frog"
             self.mode_button.setText("Toggle Mode\nCurrent: Frog")
+            self.video1.setStyleSheet("border: none;")
+            self.video2.setStyleSheet("border: 5px solid green;")
         else:
             self.mode = "buoy"
             self.mode_button.setText("Toggle Mode\nCurrent: Buoy")
+            self.video1.setStyleSheet("border: 5px solid green;")
+            self.video2.setStyleSheet("border: none;")
 
     def record(self):
         self.record_button.setText("Press ESC at a new window\nto stop recording.")
