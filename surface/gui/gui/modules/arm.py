@@ -8,6 +8,9 @@ from interfaces.msg import Armed
 class Arm(QWidget):
     """Arm widget for sending Arm Commands."""
 
+    BUTTON_HEIGHT = 100
+    BUTTON_STYLESHEET = 'QPushButton { font-size: 20px; }'
+
     def __init__(self):
         super().__init__()
 
@@ -20,8 +23,11 @@ class Arm(QWidget):
         arm_button.setText("Arm")
         disarm_button.setText("Disarm")
 
-        arm_button.setFixedSize(300, 200)
-        disarm_button.setFixedSize(300, 200)
+        arm_button.setMinimumHeight(self.BUTTON_HEIGHT)
+        disarm_button.setMinimumHeight(self.BUTTON_HEIGHT)
+
+        arm_button.setStyleSheet(self.BUTTON_STYLESHEET)
+        disarm_button.setStyleSheet(self.BUTTON_STYLESHEET)
 
         arm_button.clicked.connect(self.arm_clicked)
         disarm_button.clicked.connect(self.disarm_clicked)

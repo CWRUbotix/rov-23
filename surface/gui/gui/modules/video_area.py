@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy
+from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget, QSizePolicy, QVBoxLayout
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtGui import QPixmap, QImage
 
@@ -9,9 +9,7 @@ from cv_bridge import CvBridge
 from cv2 import Mat
 import cv2
 
-
-PILOT_VIDEO_WIDTH: int = 900
-PILOT_VIDEO_HEIGHT: int = 675
+from dataclasses import dataclass
 
 
 class VideoWidget(QLabel):
@@ -80,11 +78,24 @@ class VideoWidget(QLabel):
         return qt_image
 
 
+@dataclass
+class LabeledVideo:
+    label: str
+    topic: str
+    coords: 'list[int]'
+    debug_index: int
+
+
 class VideoArea(QWidget):
     """Container widget handling all video streams."""
 
-    CAMERA_TOPICS = ['/front_cam/image_raw', '/bottom_cam/image_raw']
-    CAMERA_COORDS = [(0, 0), (0, 1)]
+    VIDEOS: 'list[LabeledVideo]' = [
+        LabeledVideo('Front Cam', '/front_cam/image_raw', (0, 0), 0),
+        LabeledVideo('Bottom Cam', '/bottom_cam/image_raw', (0, 1), 1)
+    ]
+
+    VIDEO_WIDTH:  int = 900
+    VIDEO_HEIGHT: int = 675
 
     def __init__(self):
         super().__init__()
@@ -96,11 +107,16 @@ class VideoArea(QWidget):
         self.grid_layout.setColumnStretch(0, 1)
         self.grid_layout.setColumnStretch(1, 1)
 
-        self.video_widgets: list[VideoWidget] = []
+        for video in self.VIDEOS:
+            labeled_video = QWidget()
+            labeled_video_layout = QVBoxLayout()
+            labeled_video.setLayout(labeled_video_layout)
 
-        for i, topic in enumerate(self.CAMERA_TOPICS):
-            video: VideoWidget = VideoWidget(i, topic, PILOT_VIDEO_WIDTH, PILOT_VIDEO_HEIGHT)
-            self.video_widgets.append(video)
+            label = QLabel(video.label)
+            label.setAlignment(Qt.AlignCenter)
+            label.setStyleSheet('QLabel { font-size: 20px; }')
+            labeled_video_layout.addWidget(label)
+            labeled_video_layout.addWidget(
+                VideoWidget(video.debug_index, video.topic, self.VIDEO_WIDTH, self.VIDEO_HEIGHT))
 
-            self.grid_layout.addWidget(video, self.CAMERA_COORDS[i][0],
-                                       self.CAMERA_COORDS[i][1], 1, 3)
+            self.grid_layout.addWidget(labeled_video, video.coords[0], video.coords[1])
