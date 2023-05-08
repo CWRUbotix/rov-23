@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QGridLayout, QPushButton, QWidget
 import cv2
-import os, threading
+import os
+import threading
 
 from gui.modules.video_area import VideoWidget
 
