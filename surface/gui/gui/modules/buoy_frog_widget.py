@@ -13,6 +13,8 @@ class BuoyFrogWidget(QWidget):
         super().__init__()
         self.mode = "buoy"
         self.is_recording = False
+        self.buoy_count = 1
+        self.frog_count = 1
 
         layout: QGridLayout = QGridLayout()
         self.setLayout(layout)
@@ -68,8 +70,15 @@ class BuoyFrogWidget(QWidget):
         self.size = self.video1.cur_image.shape
         fps = 3600 if self.size[1] == 320 else 30
 
+        if self.mode == "buoy":
+            count = self.buoy_count
+            self.buoy_count += 1
+        else:
+            count = self.frog_count
+            self.frog_count += 1
+
         video_writer = cv2.VideoWriter(
-            f"{dir_path}/{self.mode}.mp4",
+            f"{dir_path}/{self.mode}{count}.mp4",
             cv2.VideoWriter_fourcc(*"mp4v"),
             fps,
             (self.size[1], self.size[0]),
