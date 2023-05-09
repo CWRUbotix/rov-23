@@ -95,17 +95,14 @@ class PausableVideoWidget(VideoWidget):
 
     def __init__(self, cam_topic: str, label_text: Optional[str] = None,
                  widget_width: int = 640, widget_height: int = 480,
-                 swap_rb_channels: bool = False, show_button: bool = True):
+                 swap_rb_channels: bool = False):
         super().__init__(cam_topic, label_text, widget_width,
                          widget_height, swap_rb_channels)
 
-        self.show_button = show_button
-
-        if self.show_button:
-            self.button: QPushButton = QPushButton(self.PLAYING_TEXT)
-            self.button.setMaximumWidth(self.BUTTON_WIDTH)
-            self.button.clicked.connect(self.toggle)
-            self.layout.addWidget(self.button, alignment=Qt.AlignHCenter)
+        self.button: QPushButton = QPushButton(self.PLAYING_TEXT)
+        self.button.setMaximumWidth(self.BUTTON_WIDTH)
+        self.button.clicked.connect(self.toggle)
+        self.layout.addWidget(self.button, alignment=Qt.AlignHCenter)
 
         self.is_paused = False
 
@@ -118,8 +115,4 @@ class PausableVideoWidget(VideoWidget):
         """Toggle whether this widget is paused or playing."""
         self.is_paused = not self.is_paused
 
-        if self.show_button:
-            if self.is_paused:
-                self.button.setText(self.PAUSED_TEXT)
-            else:
-                self.button.setText(self.PLAYING_TEXT)
+        self.button.setText(self.PAUSED_TEXT if self.is_paused else self.PLAYING_TEXT)
