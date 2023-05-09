@@ -60,4 +60,4 @@ try:
     os.makedirs(dst_home)
 except FileExistsError:
     pass
-shutil.copy2(src_home, dst_home)
+shutil.copy2(src_home, dst)
