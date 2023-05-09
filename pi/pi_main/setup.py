@@ -26,38 +26,42 @@ setup(
     description='Mate ROV Main code launcher',
     license='Apache License 2.0',
     tests_require=['pytest'],
-    entry_points={},
+    entry_points={
+        'console_scripts': [
+            'install = pi_main.install_on_boot:main',
+        ],
+    },
 )
 
-dirs = os.listdir(os.path.expanduser("~"))
+# dirs = os.listdir(os.path.expanduser("~"))
 
-ws = None
-for dir in dirs:
-    if "ws" in dir:
-        if ws is not None:
-            raise KeyError("Multiple Workspaces detected in home cannot pick")
-        ws = dir
+# ws = None
+# for dir in dirs:
+#     if "ws" in dir:
+#         if ws is not None:
+#             raise KeyError("Multiple Workspaces detected in home cannot pick")
+#         ws = dir
 
-if ws is None:
-    raise ValueError("No workspace found")
+# if ws is None:
+#     raise ValueError("No workspace found")
 
-dir_list_of_src = os.listdir(os.path.expanduser(os.path.join('~', ws, 'src')))
+# dir_list_of_src = os.listdir(os.path.expanduser(os.path.join('~', ws, 'src')))
 
-# CI as rov-23
-src_val = 'src'
-if len(dir_list_of_src) == 1:
-    src_val = os.path.join(src_val, 'rov-23')
+# # CI as rov-23
+# src_val = 'src'
+# if len(dir_list_of_src) == 1:
+#     src_val = os.path.join(src_val, 'rov-23')
 
-# Robot Upstart wants *.launch.py so this copies around that
-src = os.path.join('~', ws, src_val, 'pi', package_name, 'launch', 'pi_launch.py')
-src_home = os.path.expanduser(src)
-dst_path = os.path.join('~', ws, 'install',
-                        package_name, 'share', package_name, 'launch')
-dst_home = os.path.expanduser(dst_path)
-dst = os.path.join(dst_home, 'pi.launch.py')
+# # Robot Upstart wants *.launch.py so this copies around that
+# src = os.path.join('~', ws, src_val, 'pi', package_name, 'launch', 'pi_launch.py')
+# src_home = os.path.expanduser(src)
+# dst_path = os.path.join('~', ws, 'install',
+#                         package_name, 'share', package_name, 'launch')
+# dst_home = os.path.expanduser(dst_path)
+# dst = os.path.join(dst_home, 'pi.launch.py')
 
-try:
-    os.makedirs(dst_home)
-except FileExistsError:
-    pass
-shutil.copy2(src_home, dst)
+# try:
+#     os.makedirs(dst_home)
+# except FileExistsError:
+#     pass
+# shutil.copy2(src_home, dst)
