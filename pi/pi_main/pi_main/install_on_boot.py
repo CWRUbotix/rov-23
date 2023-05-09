@@ -17,9 +17,9 @@ def main():
 
     os.symlink(src, dst)
 
-    cwrubotox_job = Job(name='cwrubotix_pi')
-                        # rmw='rmw_cyclonedds_cpp')
-    cwrubotox_job.symlink = True
-    cwrubotox_job.uninstall()
-    cwrubotox_job.add(package='pi_main', filename='launch/pi.launch.py')
-    cwrubotox_job.install()
+    cwrubotix_job = Job(name='cwrubotix_pi',
+                        rmw='rmw_cyclonedds_cpp')
+    cwrubotix_job.symlink = True
+    cwrubotix_job.uninstall()
+    cwrubotix_job.add(package='pi_main', filename='launch/pi.launch.py')
+    cwrubotix_job.install()
