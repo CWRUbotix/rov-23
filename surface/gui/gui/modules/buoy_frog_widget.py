@@ -129,23 +129,3 @@ class BuoyFrogWidget(QWidget):
                 video_writer.write(self.video2.cur_image)
 
         video_writer.release()
-
-    def blink_label(self):
-        # Make the label of the selected video blink
-        while self.is_recording:
-            if self.mode == "buoy":
-                self.video1.label.setStyleSheet(self.RECORDING_STYLESHEET)
-            else:
-                self.video2.label.setStyleSheet(self.RECORDING_STYLESHEET)
-        # cv2.waitKey(500)
-
-        # if self.mode == "buoy":
-        #     self.video1.label.setStyleSheet(self.UNSELECTED_STYLESHEET)
-        # else:
-        #     self.video2.label.setStyleSheet(self.UNSELECTED_STYLESHEET)
-        # cv2.waitKey(500)
-
-        # if self.mode == "buoy":
-        #     self.video1.label.setStyleSheet(self.SELECTED_STYLESHEET)
-        # else:
-        #     self.video2.label.setStyleSheet(self.SELECTED_STYLESHEET)
