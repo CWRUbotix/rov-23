@@ -22,6 +22,7 @@ class VideoWidget(QWidget):
                  swap_rb_channels: bool = False):
         super().__init__()
 
+        self.cur_image: cv2.Mat = None
         self.widget_width: int = widget_width
         self.widget_height: int = widget_height
         self.swap_rb_channels: bool = swap_rb_channels
@@ -52,6 +53,7 @@ class VideoWidget(QWidget):
     def handle_frame(self, frame: Image):
         cv_image: cv2.Mat = self.cv_bridge.imgmsg_to_cv2(
             frame, desired_encoding='passthrough')
+        self.cur_image = cv_image
 
         qt_image: QImage = self.convert_cv_qt(cv_image, self.widget_width, self.widget_height)
 
