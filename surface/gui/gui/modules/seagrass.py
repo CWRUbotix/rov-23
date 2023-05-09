@@ -42,21 +42,10 @@ class SeagrassWidget(QWidget):
         before_layout.addStretch()
 
         # Bottom cam
-        cam_layout: QVBoxLayout = QVBoxLayout()
-
-        self.bottom_cam: PausableVideoWidget = PausableVideoWidget("/bottom_cam/image_raw")
-
-        self.toggle_pause_bttn: QPushButton = QPushButton("Pause")
-        self.toggle_pause_bttn.setMaximumWidth(self.BUTTON_WIDTH)
-        self.toggle_pause_bttn.clicked.connect(self.toggle_pause)
-
-        cam_layout.addWidget(QLabel("Bottom Camera"), alignment=Qt.AlignHCenter)
-        cam_layout.addWidget(self.toggle_pause_bttn, alignment=Qt.AlignHCenter)
-        cam_layout.addWidget(self.bottom_cam, alignment=Qt.AlignHCenter)
+        self.bottom_cam: PausableVideoWidget = PausableVideoWidget("/bottom_cam/image_raw", "Bottom Cam")
 
         # After layout
         after_layout: QVBoxLayout = QVBoxLayout()
-
         after_bttn_layout: QHBoxLayout = QHBoxLayout()
 
         match_before: QPushButton = QPushButton("Match Before")
@@ -87,21 +76,13 @@ class SeagrassWidget(QWidget):
 
         # Add all sections to main layout
         root_layout.addLayout(before_layout, 1)
-        root_layout.addLayout(cam_layout, 3)
+        root_layout.addWidget(self.bottom_cam, 3)
         root_layout.addLayout(after_layout, 1)
         root_layout.addWidget(result_widget, 2)
 
         result_layout.addStretch()
 
         self.show()
-
-    def toggle_pause(self) -> None:
-        self.bottom_cam.toggle()
-
-        if self.bottom_cam.is_paused:
-            self.toggle_pause_bttn.setText("Play")
-        else:
-            self.toggle_pause_bttn.setText("Pause")
 
     def update_result_text(self) -> None:
         before_num: int = self.before_grid.get_num_recovered()

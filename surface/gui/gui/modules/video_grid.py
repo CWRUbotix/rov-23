@@ -36,7 +36,7 @@ class VideoGrid(QWidget):
         self.grid_layout.setColumnStretch(1, 1)
 
         for video in self.VIDEOS:
-            video_widget = VideoWidget(video.topic, self.VIDEO_WIDTH,
-                                       self.VIDEO_HEIGHT, video.label)
+            video_widget = VideoWidget(video.topic, video.label,
+                                       self.VIDEO_WIDTH, self.VIDEO_HEIGHT)
 
             self.grid_layout.addWidget(video_widget, video.coords[0], video.coords[1])
