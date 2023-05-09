@@ -18,10 +18,6 @@ def main():
     os.symlink(src, dst)
 
     cwrubotox_job = Job(name='cwrubotix_pi')
-                        # rmw='rmw_cyclonedds_cpp',
-                        # rmw_config='/etc/cyclonedds_rpi.xml',)
-    # workspace_setup='/opt/ros/galactic/setup.bash',
-
     cwrubotox_job.symlink = True
     cwrubotox_job.add(package='pi_main', filename='launch/pi.launch.py')
     cwrubotox_job.install()

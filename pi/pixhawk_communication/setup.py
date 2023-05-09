@@ -16,7 +16,7 @@ setup(
         (os.path.join('share', package_name, 'launch'),
          glob('launch/*launch.[pxy][yma]*'))
     ],
-    install_requires=['setuptools'],
+    install_requires=['setuptools', 'pymavlink'],
     zip_safe=True,
     maintainer='Michael Carlstrom',
     maintainer_email='rmc@carlstrom.com',

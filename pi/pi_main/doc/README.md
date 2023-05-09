@@ -4,9 +4,9 @@ Commands to be run to get launch file running on pi on boot.
 
 Should be in run src folder after a colcon build in the ws folder.
 
-<!-- ```bash
-ros2 run robot_upstart install pi_main/launch/pi.launch.py --job my_robot_ros --symlink
-``` -->
+Warning need to install python packages with sudo.
+
+
 ```bash
 ros2 run pi_main install 
 ```
