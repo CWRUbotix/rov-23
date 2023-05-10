@@ -15,6 +15,9 @@ ros2 run pi_main install
 sudo systemctl daemon-reload
 ```
 
+### Adding udev Rules
+Copy all the .rules files from `udev_rules` in this package to the `/etc/udev/rules.d` directory to use USB devices properly.
+
 ### For Testing without Rebooting
 Runs in foreground for testing
 ```bash
