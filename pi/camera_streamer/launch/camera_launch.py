@@ -17,7 +17,9 @@ def generate_launch_description():
              "/dev/v4l/by-id/usb-3.0_USB_Camera_3.0_USB_Camera-video-index0"},
             {"image_size": [640, 480]}
         ],
-        remappings=[("/pi/front_cam/image_raw", "/front_cam/image_raw")]
+        remappings=[("/pi/front_cam/image_raw", "/front_cam/image_raw"),
+                    ("/pi/front_cam/image_raw/compressed", "/front_cam/image_raw/compressed"),
+                    ("/pi/front_cam/image_raw/compressedDepth", "/front_cam/compressedDepth")]
     )
 
     # h264 (fisheye)
@@ -30,7 +32,9 @@ def generate_launch_description():
              "/dev/v4l/by-id/usb-H264_USB_Camera_H264_USB_Camera_2020032801-video-index0"},
             {"image_size": [640, 480]}
         ],
-        remappings=[("/pi/bottom_cam/image_raw", "/bottom_cam/image_raw")]
+        remappings=[("/pi/bottom_cam/image_raw", "/bottom_cam/image_raw"),
+                    ("/pi/bottom_cam/image_raw/compressed", "/bottom_cam/image_raw/compressed"),
+                    ("/pi/bottom_cam/image_raw/compressedDepth", "/bottom_cam/compressedDepth")]
     )
 
     return LaunchDescription([
