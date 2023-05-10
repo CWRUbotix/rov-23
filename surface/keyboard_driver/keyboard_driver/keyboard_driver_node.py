@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional, Union
 import rclpy
 
 from rclpy.node import Node
@@ -55,7 +55,7 @@ ZERO_SPEED: int = 1500
 RANGE_SPEED: int = 400
 
 
-class keyboardListenerNode(Node):
+class KeyboardListenerNode(Node):
     def __init__(self):
         super().__init__("keyboard_listener_node", parameter_overrides=[])
 
@@ -82,11 +82,11 @@ class keyboardListenerNode(Node):
     def logger(self):
         return self.get_logger()
 
-    def on_press(self, key: Union[Key, KeyCode, None]):
+    def on_press(self, key: Optional[Union[Key, KeyCode]]):
         try:
-            if isinstance(key, keyboard.KeyCode):
+            if isinstance(key, KeyCode):
                 key = key.char
-            elif isinstance(key, keyboard.Key):
+            elif isinstance(key, Key):
                 key = key.name
 
             if key == FORWARD:
@@ -120,13 +120,13 @@ class keyboardListenerNode(Node):
 
         except Exception as e:
             self.logger.error(str(e))
-            raise
+            raise e
 
-    def on_release(self, key: Union[Key, KeyCode, None]):
+    def on_release(self, key: Optional[Union[Key, KeyCode]]):
         try:
-            if isinstance(key, keyboard.KeyCode):
+            if isinstance(key, KeyCode):
                 key = key.char
-            elif isinstance(key, keyboard.Key):
+            elif isinstance(key, Key):
                 key = key.name
 
             if key == FORWARD:
@@ -158,7 +158,7 @@ class keyboardListenerNode(Node):
 
         except Exception as e:
             self.logger.error(str(e))
-            raise
+            raise e
 
     def pub_rov_control(self):
         msg = ROVControl()
@@ -183,7 +183,7 @@ class keyboardListenerNode(Node):
 
 def main():
     rclpy.init()
-    keyboardListenerNode().spin()
+    KeyboardListenerNode().spin()
 
 
 if __name__ == "__main__":

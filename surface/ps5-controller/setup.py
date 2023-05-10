@@ -2,9 +2,7 @@ from setuptools import setup
 from glob import glob
 import os
 
-
-package_name = 'pi_main'
-
+package_name = 'ps5_controller'
 
 setup(
     name=package_name,
@@ -22,12 +20,8 @@ setup(
     zip_safe=True,
     maintainer='Michael Carlstrom',
     maintainer_email='rmc170@case.edu',
-    description='Mate ROV Main code launcher',
+    description='Biolerplate for calling standard joystick launch file.',
     license='Apache License 2.0',
     tests_require=['pytest'],
-    entry_points={
-        'console_scripts': [
-            'install = pi_main.install_on_boot:main',
-        ],
-    },
+    entry_points={},
 )
