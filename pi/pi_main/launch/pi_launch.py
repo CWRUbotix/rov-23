@@ -41,11 +41,23 @@ def generate_launch_description():
         ])
     )
 
+    # Flood Communication
+    flood_path: str = get_package_share_directory('flood_warning')
+
+    flood_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(
+                flood_path, 'launch', 'flood_warning_launch.py'
+            )
+        ])
+    )
+
     namespace_launch = GroupAction(
         actions=[
             PushRosNamespace(NS),
             manip_launch,
             pixhawk_launch,
+            flood_launch,
             cam_launch
         ]
     )
