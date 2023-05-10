@@ -23,6 +23,9 @@ class FloodWarning(Node):
         GPIO.setup(PIN, GPIO.OUT)
         self.check_input()
 
+
+    # https://www.ics.com/blog/control-raspberry-pi-gpio-pins-python
+    # Investigate adding callback for when in is pulled high maybe?
     def check_input(self):
         while True:
             self.pub.publish(Bool(GPIO.input(PIN)))
