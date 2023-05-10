@@ -16,11 +16,13 @@ sudo systemctl daemon-reload
 ```
 
 ### For Testing without Rebooting
-Runs in forground for testing
+Runs in foreground for testing
 ```bash
 sudo cwrubotix_pi-start
 ```
 
+
+Runs in background
 ```bash
 sudo systemctl start cwrubotix_pi.service
 ```

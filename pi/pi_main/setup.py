@@ -1,7 +1,6 @@
 from setuptools import setup
 from glob import glob
 import os
-import shutil
 
 
 package_name = 'pi_main'
