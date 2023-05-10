@@ -19,7 +19,8 @@ def generate_launch_description():
         ],
         remappings=[("/pi/front_cam/image_raw", "/front_cam/image_raw"),
                     ("/pi/front_cam/image_raw/compressed", "/front_cam/image_raw/compressed"),
-                    ("/pi/front_cam/image_raw/compressedDepth", "/front_cam/compressedDepth")]
+                    ("/pi/front_cam/image_raw/compressedDepth", "/front_cam/image_raw/compressedDepth"),
+                    ("/pi/front_cam/image_raw/theora", "/front_cam/image_raw/theora")]
     )
 
     # h264 (fisheye)
@@ -34,7 +35,8 @@ def generate_launch_description():
         ],
         remappings=[("/pi/bottom_cam/image_raw", "/bottom_cam/image_raw"),
                     ("/pi/bottom_cam/image_raw/compressed", "/bottom_cam/image_raw/compressed"),
-                    ("/pi/bottom_cam/image_raw/compressedDepth", "/bottom_cam/compressedDepth")]
+                    ("/pi/bottom_cam/image_raw/compressedDepth", "/bottom_cam/image_raw/compressedDepth"),
+                    ("/pi/bottom_cam/image_raw/theora", "/bottom_cam/image_raw/theora")]
     )
 
     return LaunchDescription([
