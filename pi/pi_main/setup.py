@@ -16,7 +16,11 @@ setup(
         ('share/' + package_name, ['package.xml']),
         # Include all launch files.
         (os.path.join('share', package_name, 'launch'),
-         glob('launch/*launch.[pxy][yma]*'))
+         glob('launch/*launch.[pxy][yma]*')),
+        (os.path.join('share', package_name, 'udev_rules'),
+         glob('udev_rules/*')),
+        (os.path.join('share', package_name, 'udev_copy'),
+         glob('pi_main/udev_copy.py'))
     ],
     install_requires=['setuptools'],
     zip_safe=True,
