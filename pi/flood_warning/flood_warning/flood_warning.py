@@ -8,7 +8,7 @@ import RPi.GPIO as GPIO
 PIN = 26
 
 
-class Flood_Warning(Node):
+class FloodWarning(Node):
 
     def __init__(self):
         super().__init__('flood_warning',
@@ -19,6 +19,9 @@ class Flood_Warning(Node):
             '/flood_status',
             100
         )
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(PIN, GPIO.OUT)
+        self.check_input()
 
     def check_input(self):
         while True:
@@ -29,17 +32,7 @@ class Flood_Warning(Node):
 
 
 def main():
-    rclpy.init()
-
-    pub = Flood_Warning()
-
-    rclpy.spin(pub)
-
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    pub.destroy_node()
-    rclpy.shutdown()
+    FloodWarning()
 
 
 if __name__ == '__main__':
