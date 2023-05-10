@@ -2,7 +2,9 @@ from setuptools import setup
 from glob import glob
 import os
 
+
 package_name = 'pi_main'
+
 
 setup(
     name=package_name,
@@ -23,5 +25,9 @@ setup(
     description='Mate ROV Main code launcher',
     license='Apache License 2.0',
     tests_require=['pytest'],
-    entry_points={},
+    entry_points={
+        'console_scripts': [
+            'install = pi_main.install_on_boot:main',
+        ],
+    },
 )
