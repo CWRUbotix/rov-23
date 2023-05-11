@@ -105,7 +105,7 @@ class ManualControlNode(Node):
                                               axes[R2PRESS_PERCENT])/2)
         rov_msg.pitch = self.joystick_profiles(axes[DPADVERT])
         rov_msg.roll = self.joystick_profiles(-buttons[L1] + buttons[R1])
-        self.pixhawk_publisher.publish(rov_msg)
+        self.controller_pub.publish(rov_msg)
 
     # Used to create smoother adjustments
     def joystick_profiles(self, val: float) -> int:
@@ -151,11 +151,11 @@ class ManualControlNode(Node):
                 log_msg: str = f"manip_id= {manip_button.claw}, manip_active= {new_manip_state}"
                 self.get_logger().info(log_msg)
 
-            manip_button.last_button_state = just_pressed
+                manip_msg: Manip = Manip(manip_id=manip_button.claw,
+                                         activated=manip_button.is_active)
+                self.manip_publisher.publish(manip_msg)
 
-            manip_msg: Manip = Manip(manip_id=manip_button.claw,
-                                     activated=manip_button.is_active)
-            self.manip_publisher.publish(manip_msg)
+            manip_button.last_button_state = just_pressed
 
 
 class ManipButton:
