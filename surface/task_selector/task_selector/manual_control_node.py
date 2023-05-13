@@ -79,8 +79,8 @@ class ManualControlNode(Node):
         self.manip_buttons: Dict[int, ManipButton] = {
             X_BUTTON: ManipButton("claw0"),
             O_BUTTON: ManipButton("claw1"),
-            TRI_BUTTON: ManipButton("claw2"),
-            SQUARE_BUTTON: ManipButton("claw3")
+            TRI_BUTTON: ManipButton("claw0"),
+            SQUARE_BUTTON: ManipButton("claw1")
         }
 
     def controller_callback(self, msg: Joy):
