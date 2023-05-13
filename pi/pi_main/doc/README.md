@@ -30,3 +30,7 @@ sudo systemctl start cwrubotix_pi.service
 ```bash
 sudo systemctl stop cwrubotix_pi.service
 ```
+### Unistall cwrubotix_pi
+```bash
+ros2 run robot_upstart uninstall cwrubotix_pi
+```
