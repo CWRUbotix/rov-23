@@ -13,7 +13,9 @@ def generate_launch_description():
     # JoyToHawk
     manual_control_node: Node = Node(
         package='task_selector',
-        executable='manual_control_node'
+        executable='manual_control_node',
+        remappings=[('/surface/manipulator_control', '/manipulator_control'),
+                    ('/surface/manual_control', '/manual_control')]
     )
 
     # # example of node requesting tasks

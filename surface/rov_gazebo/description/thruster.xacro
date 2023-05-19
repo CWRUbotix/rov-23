@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="thruster">
+
+  <xacro:arg name="params_path" default="$(find rov_gazebo)/description/rov_description_params.yaml"/> 
+  <!-- Need argument to get from launch file -->
+  <xacro:property name="params_path" value="$(arg params_path)"/> 
+  <!-- Need seperate property for xacro inorder processing -->
+  <xacro:property name="params" value="${load_yaml(params_path)}"/> 
+  <!-- Read in the yaml dict as mp (short for model parameters) -->
+
+  <xacro:property name="rov_description" value="${params['rov_description']}"/>
+  <xacro:property name="motor_properties" value="${rov_description['motor']}"/>
+
+  <xacro:macro name="thruster" params="name motor reflectx reflecty">
+
+    <xacro:property name="thruster_name" value="thruster_${motor}_${name}"/>
+    <xacro:property name="motor_object" value="${motor_properties[motor]}"/>
+
+    <xacro:property name="width_from_center" value="${motor_object['width_from_center']}"/>
+    <xacro:property name="length_from_center" value="${motor_object['length_from_center']}"/>
+    <xacro:property name="height_from_center" value="${motor_object['height_from_center']}"/>
+    
+    <xacro:property name="roll" value="${motor_object['roll']}"/>
+    <xacro:property name="pitch" value="${motor_object['pitch']}"/>
+    <xacro:property name="yaw" value="${motor_object['yaw']}"/>
+  
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+
+    <joint name="body_${thruster_name}_joint" type="fixed">
+      <parent link="body"/>
+      <child link="${thruster_name}_body"/>
+      <origin xyz="${width_from_center*reflectx} ${length_from_center*reflecty} ${height_from_center}" rpy= "${roll} ${pitch} ${reflecty*reflectx*yaw}"/>
+    </joint>
+
+    <link name='${thruster_name}_body'>
+      <xacro:inertial_cylinder mass="0.5" length="0.05" radius="0.01">
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      </xacro:inertial_cylinder>
+
+      <visual>
+        <geometry>
+          <cylinder length="0.05" radius="0.01"/>
+        </geometry>
+        <material name="orange"/>
+      </visual>
+
+      <collision>
+        <geometry>
+          <cylinder length="0.05" radius="0.01"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name='${thruster_name}_blade'>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertial>
+        <mass value="0.46"/>
+        <inertia ixx="0.4" ixy="0" ixz="0" iyy="0.4" iyz="0" izz="0.8"/>
+      </inertial>
+
+      <visual>
+        <origin rpy="0.7853981633974483 0 0" xyz="0.03 0 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+        <material name="orange"/>
+      </visual>
+      <collision>
+        <origin rpy="0.7853981633974483 0 0" xyz="0.03 0 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin rpy="0.7853981633974483 0 1.5707963267948966" xyz="0 0.03 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="0.7853981633974483 0 1.5707963267948966" xyz="0 0.03 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin rpy="-0.7853981633974483 0 0" xyz="-0.03 0 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="-0.7853981633974483 0 0" xyz="-0.03 0 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin rpy="-0.7853981633974483 0 1.5707963267948966" xyz="0 -0.03 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="-0.7853981633974483 0 1.5707963267948966" xyz="0 -0.03 0"/>
+        <geometry>
+          <box size="0.04 0.02 0.005"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name='${thruster_name}_body_blade_joint' type='revolute'>
+      <parent link="${thruster_name}_body"/>
+      <child link="${thruster_name}_blade"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-1e+12" upper="1e+12" effort="-1" velocity="-1"/>
+    </joint>
+
+    <gazebo>
+      <plugin
+          filename="ignition-gazebo-thruster-system"
+          name="ignition::gazebo::systems::Thruster">
+          <namespace>rov</namespace>
+          <joint_name>${thruster_name}_body_blade_joint</joint_name>
+          <thrust_coefficient>0.004422</thrust_coefficient>
+          <fluid_density>1000</fluid_density>
+          <propeller_diameter>0.2</propeller_diameter>
+        </plugin>
+    </gazebo>
+    
+  </xacro:macro>  
+
+  <xacro:thruster name="front_left" motor="top" reflectx="1" reflecty="1"/>
+  <xacro:thruster name="front_right" motor="top" reflectx="1" reflecty="-1"/>
+  <xacro:thruster name="back_left" motor="top" reflectx="-1" reflecty="1"/>
+  <xacro:thruster name="back_right" motor="top" reflectx="-1" reflecty="-1"/>
+
+  <xacro:thruster name="front_left" motor="bottom" reflectx="1" reflecty="1"/>
+  <xacro:thruster name="front_right" motor="bottom" reflectx="1" reflecty="-1"/>
+  <xacro:thruster name="back_left" motor="bottom" reflectx="-1" reflecty="1"/>
+  <xacro:thruster name="back_right" motor="bottom" reflectx="-1" reflecty="-1"/>
+   
+</robot>

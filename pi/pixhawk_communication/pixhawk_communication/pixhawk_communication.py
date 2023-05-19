@@ -30,7 +30,7 @@ class PixhawkCommunication(Node):
         )
         self.rov_control_sub: Subscription = self.create_subscription(
             ROVControl,
-            'pixhawk_manual_control',
+            'manual_control',
             self.rov_control_callback,
             100
         )
