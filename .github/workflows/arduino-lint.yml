@@ -1,0 +1,13 @@
+# Linter for Float Code
+# https://github.com/marketplace/actions/arduino-arduino-lint-action
+name: Float Linter
+
+on: push
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: arduino/arduino-lint-action@v1
+        with:
+          recursive: true

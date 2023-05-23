@@ -1,0 +1,31 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "🏃‍♂️ ROS All",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "${workspaceFolder}/src/.vscode/easy_all.sh"
+            ],
+            "presentation": {
+                "panel": "dedicated",
+                "revealProblems": "onProblem",
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "🏃‍♂️ ROS Quick Build",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "${workspaceFolder}/src/.vscode/easy_build.sh"
+            ],
+            "presentation": {
+                "panel": "dedicated",
+                "revealProblems": "onProblem",
+            },
+            "problemMatcher": []
+        }
+    ]
+}

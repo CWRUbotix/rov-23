@@ -3,7 +3,7 @@ from typing import Dict
 from rcl_interfaces.msg import Log
 from rclpy.logging import LoggingSeverity
 
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QCheckBox, QTextEdit
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QCheckBox, QTextEdit, QWidget
 from PyQt5.QtGui import QFont, QTextCursor, QColor
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
@@ -67,6 +67,3 @@ class Logger(QWidget):
         self.textbox.setCurrentFont(self.terminal_font)
         self.textbox.setTextColor(SEVERITY_LEVELS_DICT[severity_key])
         self.textbox.insertPlainText(f'[{severity_key.name}]\t{message.msg}\n')
-
-    def kill_all_executors(self):
-        self.subscriber.kill_executor()
