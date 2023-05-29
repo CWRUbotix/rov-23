@@ -11,14 +11,6 @@
 #include <SPI.h>
 #include <RH_RF69.h>
 
-// Digital input pin where the input source(physical switch or GUI) will be coonnected.
-// High = submerge, Low = float
-// You might change pin number
-#define SYRINGE_INPUT   9
-
-// True = submerge, False = float
-bool syringeCtrl = false;
-
 /************ Radio Setup ***************/
 
 //yes, the key is EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE. best key ever.
@@ -27,7 +19,7 @@ uint8_t key[] = {
                   0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE
                 };
 
-// Change to 434.0 or other frequency, must match RX's freq!
+// Change to 434.0 or other frequency, must match float's freq!
 #define RF69_FREQ 877.0
 
 #if defined (__AVR_ATmega32U4__) // Feather 32u4 w/Radio
@@ -97,22 +89,19 @@ uint8_t key[] = {
 // Singleton instance of the radio driver
 RH_RF69 rf69(RFM69_CS, RFM69_INT);
 
-int16_t packetnum = 0;  // packet counter, we increment per xmission
-
-void setup()
-{
+void setup() {
   Serial.begin(115200);
-  //while (!Serial) { delay(1); } // wait until serial console is open, remove if not tethered to computer
+  // Wait until serial console is open; remove if not tethered to computer
+  // while (!Serial) { delay(1); }
 
-  Serial.println("Float Reciever");
-  pinMode(LED, OUTPUT);
+  Serial.println("Surface Transceiver");
   pinMode(RFM69_RST, OUTPUT);
   digitalWrite(RFM69_RST, LOW);
 
   Serial.println("Feather RFM69 RX Test!");
   Serial.println();
 
-  // manual reset
+  // Manually reset radio module
   digitalWrite(RFM69_RST, HIGH);
   delay(10);
   digitalWrite(RFM69_RST, LOW);
@@ -124,39 +113,42 @@ void setup()
   }
   Serial.println("RFM69 radio init OK!");
 
-  // Defaults after init are 434.0MHz, modulation GFSK_Rb250Fd250, +13dbM (for low power module)
-  // No encryption
+  // Defaults after init are: 434.0MHz, modulation GFSK_Rb250Fd250
+  // +13dbM (for low power module), no encryption
+  // But we override frequency
   if (!rf69.setFrequency(RF69_FREQ)) {
     Serial.println("setFrequency failed");
   }
 
-  // If you are using a high power RF69 eg RFM69HW, you *must* set a Tx power with the
-  // ishighpowermodule flag set like this:
+  // If you are using a high power RF69 eg RFM69HW, you *must* set a Tx power
+  // with the ishighpowermodule flag set like this:
   rf69.setTxPower(20, true);  // range from 14-20 for power, 2nd arg must be true for 69HCW
 
-  // The encryption key has to be the same as the one in the server
+  // The encryption key has to be the same as the one on the float
   rf69.setEncryptionKey(key);
 
-  pinMode(LED, OUTPUT);
-  pinMode(SYRINGE_INPUT, INPUT);
-
-  Serial.print("RFM69 radio @");  Serial.print((int)RF69_FREQ);  Serial.println(" MHz");
+  Serial.print("RFM69 radio @");
+  Serial.print((int) RF69_FREQ);
+  Serial.println(" MHz");
 }
 
 
 void loop() {
   receiveData();
-  // Check if serial signal recieved
+
   if (Serial.available() == 1) {
     String command;
     command = Serial.readString();
     if (command == "submerge") {
       sendControlSignal("submerge");
-    } else if (command == "extend") {
+    }
+    else if (command == "extend") {
       sendControlSignal("extend");
-    } else if (command == "retract") {
+    }
+    else if (command == "retract") {
       sendControlSignal("retract");
-    } else {
+    }
+    else {
       Serial.println("Invalid command");
     }
   }
@@ -164,7 +156,6 @@ void loop() {
 
 void receiveData() {
   if (rf69.available()) {
-    // Should be a message for us now
     uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
     uint8_t len = sizeof(buf);
     if (rf69.recv(buf, &len)) {
@@ -173,28 +164,19 @@ void receiveData() {
       Serial.print("Received [");
       Serial.print(len);
       Serial.print("]: ");
-      Serial.println((char*)buf);
-      //Serial.print("RSSI: ");
-      //Serial.println(rf69.lastRssi(), DEC);
-    } else {
+      Serial.println((char*) buf);
+      // Serial.print("RSSI: ");
+      // Serial.println(rf69.lastRssi(), DEC);
+    }
+    else {
       Serial.println("Receive failed");
     }
   }
 }
 
 void sendControlSignal(char* message) {
-  // Send a message to rf69_server
   rf69.send(message, sizeof(message));
   rf69.waitPacketSent();
-  Serial.print(message); Serial.println(" signal sent!");
-}
-
-
-void blink(byte PIN, byte DELAY_MS, byte loops) {
-  for (byte i = 0; i < loops; i++)  {
-    digitalWrite(PIN, HIGH);
-    delay(DELAY_MS);
-    digitalWrite(PIN, LOW);
-    delay(DELAY_MS);
-  }
+  Serial.print(message);
+  Serial.println(" signal sent!");
 }

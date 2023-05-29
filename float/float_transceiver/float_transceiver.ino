@@ -99,27 +99,24 @@ uint8_t key[] = {
 // Singleton instance of the radio driver
 RH_RF69 rf69(RFM69_CS, RFM69_INT);
 
-int16_t packetnum = 0;  // packet counter, we increment per xmission
-
-void setup()
-{
+void setup() {
   Serial.begin(115200);
-  //while (!Serial) { delay(1); } // wait until serial console is open, remove if not tethered to computer
-#ifndef ESP8266
-  while (!Serial); // wait for serial port to connect. Needed for native USB
-#endif
+  // while (!Serial) { delay(1); }  // wait until serial console is open, remove if not tethered to computer
+  #ifndef ESP8266
+    while (!Serial); // wait for serial port to connect. Needed for native USB
+  #endif
 
-  Serial.println("Float Transmitter");
+  Serial.println("Float Transceiver");
   Serial.println();
 
-  if (! rtc.begin()) {
+  if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");
     Serial.flush();
     while (1) delay(10);
   }
 
-  //set rtc if power lost
-  if (! rtc.initialized() || rtc.lostPower()) {
+  // Set rtc if power lost
+  if (!rtc.initialized() || rtc.lostPower()) {
     Serial.println("RTC is NOT initialized, let's set the time!");
 
     Serial.println("Assume year is 2023");
@@ -166,7 +163,7 @@ void setup()
   Serial.println("Feather RFM69 TX Test!");
   Serial.println();
 
-  // manual reset
+  // Manually reset radio module
   digitalWrite(RFM69_RST, HIGH);
   delay(10);
   digitalWrite(RFM69_RST, LOW);
@@ -177,30 +174,31 @@ void setup()
     while (1);
   }
   Serial.println("RFM69 radio init OK!");
-  // Defaults after init are 434.0MHz, modulation GFSK_Rb250Fd250, +13dbM (for low power module)
-  // No encryption
+
+  // Defaults after init are: 434.0MHz, modulation GFSK_Rb250Fd250
+  // +13dbM (for low power module), no encryption
+  // But we override frequency
   if (!rf69.setFrequency(RF69_FREQ)) {
     Serial.println("setFrequency failed");
   }
 
-  // If you are using a high power RF69 eg RFM69HW, you *must* set a Tx power with the
-  // ishighpowermodule flag set like this:
+  // If you are using a high power RF69 eg RFM69HW, you *must* set a Tx power
+  // with the ishighpowermodule flag set like this:
   rf69.setTxPower(20, true);  // range from 14-20 for power, 2nd arg must be true for 69HCW
 
   // The encryption key has to be the same as the one in the server
-
   rf69.setEncryptionKey(key);
 
   pinMode(LED, OUTPUT);
   pinMode(SYRINGE_OUTPUT, OUTPUT);
 
   Serial.print("RFM69 radio @");  
-  Serial.print((int)RF69_FREQ);  
+  Serial.print((int) RF69_FREQ);  
   Serial.println(" MHz");
 }
 
 
-DateTime prevTime((uint32_t)0);
+DateTime prevTime((uint32_t) 0);
 
 
 void loop() {
@@ -217,37 +215,20 @@ void sendData() {
     char namepacket[10] = "Team ";
     itoa(TEAM_NUM, namepacket + 5, 10);
 
-
     strcpy(radiopacket, namepacket);
     strcat(radiopacket, "  Time: ");
 
     char timepacket[10] = "";
 
-    sprintf (timepacket, "%u:%u:%u", now.hour(), now.minute(), now.second());
+    sprintf(timepacket, "%u:%u:%u", now.hour(), now.minute(), now.second());
     strcat(radiopacket, timepacket);
 
-    Serial.print("Sending: "); Serial.println(radiopacket);
+    Serial.print("Sending: ");
+    Serial.println(radiopacket);
 
     // Send a message!
-    rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
+    rf69.send((uint8_t *) radiopacket, strlen(radiopacket));
     rf69.waitPacketSent();
-
-    // Now wait for a reply
-    uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
-    uint8_t len = sizeof(buf);
-
-    /*if (rf69.waitAvailableTimeout(500))  {
-      // Should be a reply message for us now
-      if (rf69.recv(buf, &len)) {
-        Serial.print("Got a reply: ");
-        Serial.println((char*)buf);
-        Blink(LED, 50, 3); //blink LED 3 times, 50ms between blinks
-      } else {
-        Serial.println("Receive failed");
-      }
-      } else {
-        Serial.println("No reply.");
-      }*/
 
     prevTime = now;
   }
@@ -255,7 +236,6 @@ void sendData() {
 
 void receiveSubmergeSignal() {
   if (rf69.available()) {
-    // Should be a message for us now
     uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
     uint8_t len = sizeof(buf);
     if (rf69.recv(buf, &len)) {
@@ -264,21 +244,25 @@ void receiveSubmergeSignal() {
       Serial.print("Received [");
       Serial.print(len);
       Serial.print("]: '");
-      Serial.print((char*)buf);
+      Serial.print((char*) buf);
       Serial.println("'");
       Serial.print("RSSI: ");
       Serial.println(rf69.lastRssi(), DEC);
 
-      if (strcmp((char*)buf, "su") == 0) {
+      if (strcmp((char*) buf, "su") == 0) {
         submerge();
-      } else if (strcmp((char*)buf, "ex") == 0) {
+      }
+      else if (strcmp((char*) buf, "ex") == 0) {
         extend();
-      } else if (strcmp((char*)buf, "re") == 0) {
+      }
+      else if (strcmp((char*) buf, "re") == 0) {
         retract();
-      } else {
+      }
+      else {
         Serial.println("Invalid command");
       }
-    } else {
+    }
+    else {
       Serial.println("Receive failed");
     }
   }
@@ -290,7 +274,7 @@ void submerge() {
   Serial.println(radiopacket);
 
   // Send a message!
-  rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
+  rf69.send((uint8_t *) radiopacket, strlen(radiopacket));
   rf69.waitPacketSent();
   digitalWrite(SYRINGE_OUTPUT, HIGH);
   delay(1000);
@@ -304,7 +288,7 @@ void extend() {
   Serial.println(radiopacket);
 
   // Send a message!
-  rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
+  rf69.send((uint8_t *) radiopacket, strlen(radiopacket));
   rf69.waitPacketSent();
 }
 
@@ -317,13 +301,4 @@ void retract() {
   rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
   rf69.waitPacketSent();
   //retract code here
-}
-
-void Blink(byte PIN, byte DELAY_MS, byte loops) {
-  for (byte i = 0; i < loops; i++)  {
-    digitalWrite(PIN, HIGH);
-    delay(DELAY_MS);
-    digitalWrite(PIN, LOW);
-    delay(DELAY_MS);
-  }
 }
