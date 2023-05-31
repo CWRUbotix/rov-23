@@ -129,4 +129,14 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-.vscode/
+.vscode/*
+# Allows custom tasks
+!.vscode/tasks.json
+!.vscode/easy_build.sh
+!.vscode/easy_all.sh
+
+# Video Files
+*.mp4
+
+# Mac Files
+*.DS_Store

@@ -25,7 +25,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'requestor = task_selector.task_requestor:main',
+            'selector = task_selector.task_selector:main',
             'manual_control_node = task_selector.manual_control_node:main',
             'ex_request_client = task_selector.example_request_client:main',
             'ex_timed_task = task_selector.basic_task_timed_node:main',

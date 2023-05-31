@@ -1,0 +1,1 @@
+ACTION=="add", KERNEL=="i2c-[0-1]*", MODE="0666"

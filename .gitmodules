@@ -1,3 +1,6 @@
-[submodule "surface/slam/isaac_ros_nvblox"]
-	path = surface/slam/isaac_ros_nvblox
-	url = https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_nvblox
+[submodule "pi/manipulators/TCA9555"]
+	path = pi/manipulators/TCA9555
+	url = git@github.com:leloup314/TCA9555.git
+[submodule "surface/ros2_video_streamer"]
+	path = surface/ros2_video_streamer
+	url = git@github.com:cwruRobotics/ros2_video_streamer.git

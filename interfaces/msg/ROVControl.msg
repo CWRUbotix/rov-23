@@ -1,8 +1,10 @@
 # Header Copied from Joy Msg
 std_msgs/Header header
-float32 x
-float32 y
-float32 z
-float32 yaw
-float32 pitch
-float32 roll
+# Values should be in NED?
+# range is [1100, 1900]
+int16 x 1500
+int16 y 1500
+int16 z 1500
+int16 yaw 1500
+int16 pitch 1500
+int16 roll 1500
