@@ -37,7 +37,7 @@ CHARGE_RATE = 0.5
 # --------------------------------------------------------------------------------------------
 
 
-class AutonomousDockingControlNode(Node):
+class AutonomousDockingNode(Node):
 
     def __init__(self):
         super().__init__('autonomous_docking_node',
@@ -71,7 +71,7 @@ class AutonomousDockingControlNode(Node):
         # Pixhawk Publisher - Broadcasts directional commands
         self.pixhawk_publisher: Publisher = self.create_publisher(
             ROVControl,
-            'pixhawk_autonomous_control',
+            'autonomous_docking',
             10
         )
 
@@ -81,38 +81,29 @@ class AutonomousDockingControlNode(Node):
         horizontal_direction, vertical_direction = move_direction(self, cv_image)
 
         rov_msg = ROVControl()
+        # Yaw and Pitch should be at equilibrium
+        # TODO: Put the ROV at equilibrium?
+        rov_msg.roll = ZERO_SPEED
+        rov_msg.yaw = ZERO_SPEED
+        rov_msg.pitch = ZERO_SPEED
 
         if horizontal_direction != 0 and vertical_direction != 0:
             # TODO: Should I made a header? If so, to what?
             # rov_msg.header = header
             # Directional commands for the ROV
-            # TODO: Double check x y axes are right
+            # TODO: Double check x y z axes are right
             rov_msg.x = horizontal_direction * RANGE_SPEED * CRAWL_RATE
             rov_msg.z = horizontal_direction * RANGE_SPEED * CRAWL_RATE
-            # Rotational directions for the ROV
-            # Yaw and Pitch should be at equilibrium
-            # TODO: Put the ROV at equilibrium?
-            rov_msg.roll = ZERO_SPEED
-            rov_msg.yaw = ZERO_SPEED
-            rov_msg.pitch = ZERO_SPEED
-            self.pixhawk_publisher.publish(rov_msg)
         elif self.stopped:
             rov_msg.y = RANGE_SPEED * CHARGE_RATE
             rov_msg.x = ZERO_SPEED
             rov_msg.z = ZERO_SPEED
-            rov_msg.yaw = ZERO_SPEED
-            rov_msg.pitch = ZERO_SPEED
-            rov_msg.roll = ZERO_SPEED
-            self.pixhawk_publisher.publish(rov_msg)
         else:
             rov_msg.x = ZERO_SPEED
             rov_msg.z = ZERO_SPEED
-            rov_msg.yaw = ZERO_SPEED
-            rov_msg.pitch = ZERO_SPEED
-            rov_msg.roll = ZERO_SPEED
-            self.pixhawk_publisher.publish(rov_msg)
+            # Currently no delay
             self.stopped = True
-
+        self.pixhawk_publisher.publish(rov_msg)
 
 # Takes a OpenCV image as input and returns a contour surrounding the button
 def get_button_contour(cv_img):
@@ -227,7 +218,7 @@ def cancel_callback(self, goal_handle: ServerGoalHandle):
 
 def main():
     rclpy.init()
-    docking_control = AutonomousDockingControlNode()
+    autonomous_docking = AutonomousDockingNode()
     executor = MultiThreadedExecutor()
     # Do I need to spin this node?
-    rclpy.spin(docking_control, executor=executor)
+    rclpy.spin(autonomous_docking, executor=executor)

@@ -34,9 +34,9 @@ class PixhawkCommunication(Node):
             self.rov_control_callback,
             100
         )
-        self.rov_autonomous_control_sub: Subscription = self.create_subscription(
+        self.rov_autonomous_docking_sub: Subscription = self.create_subscription(
             ROVControl,
-            'pixhawk_autonomous_control',
+            'autonomous_docking',
             self.rov_control_callback,
             100
         )
