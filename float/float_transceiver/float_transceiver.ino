@@ -1,39 +1,17 @@
-// rf69 demo tx rx.pde
-// -*- mode: C++ -*-
-// Example sketch showing how to create a simple messageing client
-// with the RH_RF69 class. RH_RF69 class does not provide for addressing or
-// reliability, so you should only use RH_RF69  if you do not need the higher
-// level messaging abilities.
-// It is designed to work with the other example rf69_server.
-// Demonstrates the use of AES encryption, setting the frequency and modem
-// configuration
+// FLOAT TRANSCEIVER sketch originally built from:
+//  rf69 demo tx rx.pde
+//  -*- mode: C++ -*-
+//  Example sketch showing how to create a simple messageing client
+//  with the RH_RF69 class. RH_RF69 class does not provide for addressing or
+//  reliability, so you should only use RH_RF69  if you do not need the higher
+//  level messaging abilities.
+//  It is designed to work with the other example rf69_server.
+//  Demonstrates the use of AES encryption, setting the frequency and modem
+//  configuration
 
 #include <SPI.h>
 #include <RH_RF69.h>
 #include "RTClib.h"
-
-RTC_PCF8523 rtc;
-
-#define TEAM_NUM 42
-
-// Digital output pin where the syringe will be connected.
-// High = submerge, Low = float
-// You might change pin number
-#define SYRINGE_OUTPUT   9
-
-// True = submerge, False = float
-bool syringeCtrl = false;
-
-/************ Radio Setup ***************/
-
-//If you ever forget the key, just remember that it's EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-uint8_t key[] = { 
-                  0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE,
-                  0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE
-                };
-
-// Change to 434.0 or other frequency, must match RX's freq!
-#define RF69_FREQ 877.0
 
 #if defined (__AVR_ATmega32U4__) // Feather 32u4 w/Radio
 #define RFM69_CS      8
@@ -96,12 +74,83 @@ uint8_t key[] = {
   #define RFM69_IRQN    RFM69_IRQ
 */
 
+// H-bridge direction control pins
+#define SYRINGE_SUCK 9  // Set high to suck water into the syringe
+#define SYRINGE_PUMP 10 // Set high to blow water out of the syringe
+
+// Limit switch pins
+#define LIMIT_FULL  11  // Low when syringe is full
+#define LIMIT_EMPTY 12  // Low when syringe is empty
+
+#define TEAM_NUM 42
+
+// Change to 434.0 or other frequency, must match RX's freq!
+#define RF69_FREQ 877.0
+
+// All delays in ms
+#define RELEASE_MAX   60000
+#define SUCK_MAX      30000
+#define DESCEND_TIME  30000
+#define PUMP_MAX      30000
+#define ASCEND_TIME   30000
+#define TX_MAX        60000
+#define ONE_HOUR      3600000
+
+#define WAIT 0
+#define SUCK 1
+#define PUMP 2
+#define STOP 3
+
+unsigned long SCHEDULE[][] = {
+  // Wait for max <time> or until surface signal
+  {WAIT, RELEASE_MAX },
+
+  // Profile 1
+  {SUCK, SUCK_MAX    },
+  {WAIT, DESCEND_TIME},
+  {PUMP, PUMP_MAX    },
+  {WAIT, ASCEND_TIME },
+
+  {WAIT, TX_MAX      },
+
+  // Profile 2
+  {SUCK, SUCK_MAX    },
+  {WAIT, DESCEND_TIME},
+  {PUMP, PUMP_MAX    },
+  {WAIT, ASCEND_TIME },
+
+  {WAIT, ONE_HOUR    },
+};
+
+uint8_t SCHEDULE_LENGTH = 11;
+
+uint8_t stage = 0;
+
+unsigned long previous_time;
+
+
+/************ Radio Setup ***************/
+
+// If you ever forget the key, just remember that it's EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+uint8_t key[] = {
+                  0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE,
+                  0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE
+                };
+
+RTC_PCF8523 rtc;
+
 // Singleton instance of the radio driver
 RH_RF69 rf69(RFM69_CS, RFM69_INT);
 
+DateTime prevTime((uint32_t) 0);
+
+
 void setup() {
   Serial.begin(115200);
-  // while (!Serial) { delay(1); }  // wait until serial console is open, remove if not tethered to computer
+
+  // Wait until serial console is open; remove if not tethered to computer
+  // while (!Serial) { delay(1); }
+
   #ifndef ESP8266
     while (!Serial); // wait for serial port to connect. Needed for native USB
   #endif
@@ -109,6 +158,114 @@ void setup() {
   Serial.println("Float Transceiver");
   Serial.println();
 
+  previous_time = millis();
+
+  pinMode(LIMIT_EMPTY, INPUT_PULLUP);
+  pinMode(LIMIT_FULL,  INPUT_PULLUP);
+
+  pinMode(SYRINGE_SUCK, OUTPUT);
+  pinMode(SYRINGE_PUMP, OUTPUT);
+
+  digitalWrite(SYRINGE_SUCK, LOW);
+  digitalWrite(SYRINGE_PUMP, LOW);
+
+  initRTC();
+  initRadio();
+}
+
+
+void loop() {
+  sendTime();
+
+  // Move to next stage if necessary
+  if (
+    millis() >= previous_time + SCHEDULE[stage][1]   ||
+    (SCHEDULE[stage][0] == WAIT && signalReceived()) ||
+    (SCHEDULE[stage][0] == SUCK && digitalRead(LIMIT_FULL)  == LOW) ||
+    (SCHEDULE[stage][0] == PUMP && digitalRead(LIMIT_EMPTY) == LOW)
+  ) {
+    stage++;
+    digitalWrite(SYRINGE_SUCK, LOW);
+    digitalWrite(SYRINGE_PUMP, LOW);
+
+    // If we signal a third profile
+    if (stage >= SCHEDULE_LENGTH) {
+      stage = 1;
+    }
+
+    if (SCHEDULE[stage][0] == SUCK) {
+      digitalWrite(SYRINGE_SUCK, HIGH);
+    }
+    else if (SCHEDULE[stage][0] == PUMP) {
+      digitalWrite(SYRINGE_PUMP, HIGH);
+    }
+
+    previous_time = millis();
+  }
+}
+
+void sendTime() {
+  DateTime now = rtc.now();
+
+  if (now.second() != prevTime.second()) {
+    char radiopacket[20] = "";
+
+    char namepacket[10] = "Team ";
+    itoa(TEAM_NUM, namepacket + 5, 10);
+
+    strcpy(radiopacket, namepacket);
+    strcat(radiopacket, "  Time: ");
+
+    char timepacket[10] = "";
+
+    sprintf(timepacket, "%u:%u:%u", now.hour(), now.minute(), now.second());
+    strcat(radiopacket, timepacket);
+
+    Serial.print("Sending: ");
+    Serial.println(radiopacket);
+
+    // Send a message!
+    rf69.send((uint8_t *) radiopacket, strlen(radiopacket));
+    rf69.waitPacketSent();
+
+    prevTime = now;
+  }
+}
+
+bool signalReceived() {
+  if (rf69.available()) {
+    uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
+    uint8_t len = sizeof(buf);
+    if (rf69.recv(buf, &len)) {
+      if (!len) return;
+      buf[len] = 0;
+      Serial.print("Received [");
+      Serial.print(len);
+      Serial.print("]: '");
+      Serial.print((char*) buf);
+      Serial.println("'");
+      Serial.print("RSSI: ");
+      Serial.println(rf69.lastRssi(), DEC);
+
+      if (strcmp((char*) buf, "su") == 0) {
+        return true;
+      }
+      else {
+        Serial.println("Invalid command");
+      }
+    }
+    else {
+      Serial.println("Receive failed");
+    }
+  }
+
+  return false;
+}
+
+
+/******* Setup Methods (down here cause they're lorge) *******/
+
+void initRTC() {
   if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");
     Serial.flush();
@@ -143,7 +300,7 @@ void setup() {
 
     rtc.adjust(DateTime(2023, month, day, hour, minute, second));
     
-    //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     // This line sets the RTC with an explicit date & time, for example to set
     // January 21, 2014 at 3am you would call:
     // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
@@ -155,8 +312,9 @@ void setup() {
   }
 
   rtc.start();
+}
 
-  pinMode(LED, OUTPUT);
+void initRadio() {
   pinMode(RFM69_RST, OUTPUT);
   digitalWrite(RFM69_RST, LOW);
 
@@ -189,116 +347,7 @@ void setup() {
   // The encryption key has to be the same as the one in the server
   rf69.setEncryptionKey(key);
 
-  pinMode(LED, OUTPUT);
-  pinMode(SYRINGE_OUTPUT, OUTPUT);
-
   Serial.print("RFM69 radio @");  
   Serial.print((int) RF69_FREQ);  
   Serial.println(" MHz");
-}
-
-
-DateTime prevTime((uint32_t) 0);
-
-
-void loop() {
-  sendData();
-  receiveSubmergeSignal();
-}
-
-void sendData() {
-  DateTime now = rtc.now();
-
-  if (now.second() != prevTime.second()) {
-    char radiopacket[20] = "";
-
-    char namepacket[10] = "Team ";
-    itoa(TEAM_NUM, namepacket + 5, 10);
-
-    strcpy(radiopacket, namepacket);
-    strcat(radiopacket, "  Time: ");
-
-    char timepacket[10] = "";
-
-    sprintf(timepacket, "%u:%u:%u", now.hour(), now.minute(), now.second());
-    strcat(radiopacket, timepacket);
-
-    Serial.print("Sending: ");
-    Serial.println(radiopacket);
-
-    // Send a message!
-    rf69.send((uint8_t *) radiopacket, strlen(radiopacket));
-    rf69.waitPacketSent();
-
-    prevTime = now;
-  }
-}
-
-void receiveSubmergeSignal() {
-  if (rf69.available()) {
-    uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
-    uint8_t len = sizeof(buf);
-    if (rf69.recv(buf, &len)) {
-      if (!len) return;
-      buf[len] = 0;
-      Serial.print("Received [");
-      Serial.print(len);
-      Serial.print("]: '");
-      Serial.print((char*) buf);
-      Serial.println("'");
-      Serial.print("RSSI: ");
-      Serial.println(rf69.lastRssi(), DEC);
-
-      if (strcmp((char*) buf, "su") == 0) {
-        submerge();
-      }
-      else if (strcmp((char*) buf, "ex") == 0) {
-        extend();
-      }
-      else if (strcmp((char*) buf, "re") == 0) {
-        retract();
-      }
-      else {
-        Serial.println("Invalid command");
-      }
-    }
-    else {
-      Serial.println("Receive failed");
-    }
-  }
-}
-
-void submerge() {
-  char radiopacket[20] = "Submerging!";
-  Serial.print("Sending: "); 
-  Serial.println(radiopacket);
-
-  // Send a message!
-  rf69.send((uint8_t *) radiopacket, strlen(radiopacket));
-  rf69.waitPacketSent();
-  digitalWrite(SYRINGE_OUTPUT, HIGH);
-  delay(1000);
-  digitalWrite(SYRINGE_OUTPUT, LOW);
-}
-
-void extend() {
-  //extend code here
-  char radiopacket[20] = "Extending!";
-  Serial.print("Sending: "); 
-  Serial.println(radiopacket);
-
-  // Send a message!
-  rf69.send((uint8_t *) radiopacket, strlen(radiopacket));
-  rf69.waitPacketSent();
-}
-
-void retract() {
-  char radiopacket[20] = "Retracting!";
-  Serial.print("Sending: "); 
-  Serial.println(radiopacket);
-
-  // Send a message!
-  rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
-  rf69.waitPacketSent();
-  //retract code here
 }

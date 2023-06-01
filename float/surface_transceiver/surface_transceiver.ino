@@ -1,26 +1,16 @@
-// rf69 demo tx rx.pde
-// -*- mode: C++ -*-
-// Example sketch showing how to create a simple messageing client
-// with the RH_RF69 class. RH_RF69 class does not provide for addressing or
-// reliability, so you should only use RH_RF69  if you do not need the higher
-// level messaging abilities.
-// It is designed to work with the other example rf69_server.
-// Demonstrates the use of AES encryption, setting the frequency and modem
-// configuration
+// SURFACE TRANSCEIVER sketch originally built from:
+//  rf69 demo tx rx.pde
+//  -*- mode: C++ -*-
+//  Example sketch showing how to create a simple messageing client
+//  with the RH_RF69 class. RH_RF69 class does not provide for addressing or
+//  reliability, so you should only use RH_RF69  if you do not need the higher
+//  level messaging abilities.
+//  It is designed to work with the other example rf69_server.
+//  Demonstrates the use of AES encryption, setting the frequency and modem
+//  configuration
 
 #include <SPI.h>
 #include <RH_RF69.h>
-
-/************ Radio Setup ***************/
-
-//yes, the key is EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE. best key ever.
-uint8_t key[] = { 
-                  0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE,
-                  0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE
-                };
-
-// Change to 434.0 or other frequency, must match float's freq!
-#define RF69_FREQ 877.0
 
 #if defined (__AVR_ATmega32U4__) // Feather 32u4 w/Radio
 #define RFM69_CS      8
@@ -86,6 +76,17 @@ uint8_t key[] = {
   #define RFM69_IRQN    RFM69_IRQ
 */
 
+/************ Radio Setup ***************/
+
+// yes, the key is EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE. best key ever.
+uint8_t key[] = { 
+                  0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE,
+                  0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE
+                };
+
+// Change to 434.0 or other frequency, must match float's freq!
+#define RF69_FREQ 877.0
+
 // Singleton instance of the radio driver
 RH_RF69 rf69(RFM69_CS, RFM69_INT);
 
@@ -134,7 +135,7 @@ void setup() {
 
 
 void loop() {
-  receiveData();
+  receiveTime();
 
   if (Serial.available() == 1) {
     String command;
@@ -142,19 +143,19 @@ void loop() {
     if (command == "submerge") {
       sendControlSignal("submerge");
     }
-    else if (command == "extend") {
-      sendControlSignal("extend");
-    }
-    else if (command == "retract") {
-      sendControlSignal("retract");
-    }
+    // else if (command == "extend") {
+    //   sendControlSignal("extend");
+    // }
+    // else if (command == "retract") {
+    //   sendControlSignal("retract");
+    // }
     else {
       Serial.println("Invalid command");
     }
   }
 }
 
-void receiveData() {
+void receiveTime() {
   if (rf69.available()) {
     uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
     uint8_t len = sizeof(buf);
