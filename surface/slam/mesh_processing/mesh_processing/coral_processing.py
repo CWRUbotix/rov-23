@@ -1,5 +1,6 @@
 import copy
 from threading import Thread
+import os
 
 import numpy
 import numpy as np
@@ -13,6 +14,12 @@ import sensor_msgs.msg as sensor_msgs
 from convert_pointcloud import get_pointcloud
 
 WHITE_SQUARE_BRIGHTNESS_CUTOFF = 0.6
+
+# find the surface/slam directory
+parent = os.path.dirname
+output_file_path = os.path.join(parent(parent(parent(os.path.realpath(__file__)))),
+                                "coral_viewer", "Build", "coral_viewer_Data", "StreamingAssets", "coral_output.obj")
+print(output_file_path)
 
 
 def postprocess_mesh(mesh: o3d.geometry.TriangleMesh):
@@ -32,6 +39,7 @@ def measure_white_area(mesh: o3d.geometry.TriangleMesh) -> float:
     # return masked_mesh.get_surface_area()
     print(masked_mesh.get_surface_area())
     return masked_mesh
+
 
 class PCDListener(Node):
 
@@ -73,13 +81,22 @@ class PCDListener(Node):
         self.vis.clear_geometries()
         self.vis.add_geometry(self.mesh)
         self.vis.add_geometry(o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.25))
-        measure_white_area(self.mesh)
 
-        # self.vis.add_geometry(measure_white_area(self.mesh))
+        # export mesh
+        o3d.io.write_triangle_mesh(output_file_path, self.mesh,
+                                   write_triangle_uvs=False,
+                                   write_vertex_colors=True)
+
+        #  Give the obj file a txt extension so it can be parsed manually in unity
+        #  This is necessary because the obj standard doesn't include colors, so the open3d output isn't a proper obj
+        try:
+            os.remove(output_file_path + ".txt")
+        except FileNotFoundError:
+            pass
+        os.rename(output_file_path, output_file_path + ".txt")
 
 
 def main(args=None):
-    # Boilerplate code.
     rclpy.init(args=args)
     pcd_listener = PCDListener()
     custom_executor = SingleThreadedExecutor()
