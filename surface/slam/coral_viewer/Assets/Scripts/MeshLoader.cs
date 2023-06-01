@@ -46,7 +46,7 @@ public class MeshLoader : MonoBehaviour
                         break;
 
                     case 1:
-                        if(line[1] == ' ')
+                        if (line[1] == ' ')
                         {
                             // Line specifies a vertex and its color
                             Match m = vertexRegex.Match(line);
@@ -77,8 +77,8 @@ public class MeshLoader : MonoBehaviour
             mesh.SetTriangles(triangles, 0);
 
             GetComponent<MeshFilter>().mesh = mesh;
+            GetComponent<MeshCollider>().sharedMesh = mesh;
         }
-
 
     }
 }
