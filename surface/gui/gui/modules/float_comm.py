@@ -18,8 +18,6 @@ class FloatComm(QWidget):
         self.setLayout(layout)
 
         submerge_button = QPushButton()
-        extend_button = QPushButton()
-        retract_button = QPushButton()
 
         submerge_button.setText("Submerge")
         submerge_button.setFixedSize(300, 200)
