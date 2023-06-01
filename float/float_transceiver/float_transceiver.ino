@@ -82,7 +82,7 @@
 #define LIMIT_FULL  11  // Low when syringe is full
 #define LIMIT_EMPTY 12  // Low when syringe is empty
 
-#define TEAM_NUM 42
+#define TEAM_NUM 11
 
 // Change to 434.0 or other frequency, must match RX's freq!
 #define RF69_FREQ 877.0
@@ -208,10 +208,10 @@ void sendTime() {
   DateTime now = rtc.now();
 
   if (now.second() != prevTime.second()) {
-    char radiopacket[20] = "";
+    char radiopacket[22] = "";
 
-    char namepacket[10] = "Team ";
-    itoa(TEAM_NUM, namepacket + 5, 10);
+    char namepacket[12] = "Team EX";
+    itoa(TEAM_NUM, namepacket + 7, 10);
 
     strcpy(radiopacket, namepacket);
     strcat(radiopacket, "  Time: ");
