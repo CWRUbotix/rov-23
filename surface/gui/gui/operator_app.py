@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QGridLayout, QTabWidget, QWidget
 
-
 from gui.modules.task_selector import TaskSelector
 from gui.modules.logger import Logger
 from gui.modules.seagrass import SeagrassWidget
+from gui.modules.coral import CoralWidget
 from gui.modules.timer import Timer
 from gui.app import App
 
@@ -36,6 +36,7 @@ class OperatorApp(App):
 
         tabs.addTab(main_tab, "Main")
         tabs.addTab(SeagrassWidget(), "Seagrass")
+        tabs.addTab(CoralWidget(), "Coral")
 
         root_layout.addWidget(tabs)
 
