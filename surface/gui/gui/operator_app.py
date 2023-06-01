@@ -28,6 +28,9 @@ class OperatorApp(App):
         self.task_selector: TaskSelector = TaskSelector()
         main_layout.addWidget(self.task_selector, 1, 1)
 
+        self.float_comm: FloatComm = FloatComm()
+        main_layout.addWidget(self.float_comm, 0, 0)
+
         self.logger: Logger = Logger()
         main_layout.addWidget(self.logger, 1, 0)
 
@@ -36,7 +39,6 @@ class OperatorApp(App):
         self.setLayout(root_layout)
 
         tabs.addTab(main_tab, "Main")
-        tabs.addTab(FloatComm(), "Float")
         tabs.addTab(SeagrassWidget(), "Seagrass")
 
         root_layout.addWidget(tabs)

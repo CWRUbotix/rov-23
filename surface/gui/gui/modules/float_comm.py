@@ -22,20 +22,9 @@ class FloatComm(QWidget):
         retract_button = QPushButton()
 
         submerge_button.setText("Submerge")
-        extend_button.setText("Extend")
-        retract_button.setText("Retract")
-
         submerge_button.setFixedSize(300, 200)
-        extend_button.setFixedSize(300, 200)
-        retract_button.setFixedSize(300, 200)
-
         submerge_button.clicked.connect(self.submerge_clicked)
-        extend_button.clicked.connect(self.extend_clicked)
-        retract_button.clicked.connect(self.retract_clicked)
-
         layout.addWidget(submerge_button)
-        layout.addWidget(extend_button)
-        layout.addWidget(retract_button)
 
         self.handle_scheduler_response_signal.connect(self.handle_text)
 
@@ -60,9 +49,3 @@ class FloatComm(QWidget):
 
     def submerge_clicked(self):
         self.transceiver_publisher.publish(FloatCommand(command="submerge"))
-
-    def extend_clicked(self):
-        self.transceiver_publisher.publish(FloatCommand(command="extend"))
-
-    def retract_clicked(self):
-        self.transceiver_publisher.publish(FloatCommand(command="retract"))
