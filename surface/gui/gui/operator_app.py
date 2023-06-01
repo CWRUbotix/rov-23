@@ -1,9 +1,11 @@
-from PyQt5.QtWidgets import QGridLayout
+from PyQt5.QtWidgets import QGridLayout, QTabWidget, QWidget
 
 
 from gui.modules.task_selector import TaskSelector
 from gui.modules.logger import Logger
 from gui.modules.float_comm import FloatComm
+from gui.modules.seagrass import SeagrassWidget
+from gui.modules.timer import Timer
 from gui.app import App
 
 
@@ -13,17 +15,31 @@ class OperatorApp(App):
 
         self.setWindowTitle('Operator GUI - CWRUbotix ROV 2023')
 
-        layout: QGridLayout = QGridLayout()
-        self.setLayout(layout)
+        tabs = QTabWidget()
+
+        # Main tab
+        main_tab = QWidget()
+        main_layout: QGridLayout = QGridLayout()
+        main_tab.setLayout(main_layout)
+
+        self.timer: Timer = Timer()
+        main_layout.addWidget(self.timer, 0, 1)
 
         self.task_selector: TaskSelector = TaskSelector()
-        layout.addWidget(self.task_selector, 0, 1)
+        main_layout.addWidget(self.task_selector, 1, 1)
 
         self.logger: Logger = Logger()
-        layout.addWidget(self.logger, 0, 2)
+        main_layout.addWidget(self.logger, 1, 0)
 
-        self.float_comm: FloatComm = FloatComm()
-        layout.addWidget(self.float_comm, 0, 0)
+        # Add tabs to root
+        root_layout: QGridLayout = QGridLayout()
+        self.setLayout(root_layout)
+
+        tabs.addTab(main_tab, "Main")
+        tabs.addTab(FloatComm(), "Float")
+        tabs.addTab(SeagrassWidget(), "Seagrass")
+
+        root_layout.addWidget(tabs)
 
 
 def run_gui_operator():

@@ -13,7 +13,7 @@ def generate_launch_description():
         executable='pixhawk_com',
         parameters=[{'communication': LaunchConfiguration('communication', default=PORT)}],
         remappings=[("/pi/armed", "/armed"),
-                    ("/pi/pixhawk_manual_control", "/pixhawk_manual_control")]
+                    ("/pi/manual_control", "/manual_control")]
     )
 
     return LaunchDescription([pixhawk_com_node])

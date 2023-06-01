@@ -12,12 +12,12 @@ def generate_launch_description():
     manip_path: str = get_package_share_directory('manipulators')
 
     manip_launch = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([
-                    os.path.join(
-                        manip_path, 'launch', 'manip_launch.py'
-                    )
-                ]),
+        PythonLaunchDescriptionSource([
+            os.path.join(
+                manip_path, 'launch', 'manip_launch.py'
             )
+        ])
+    )
 
     # Camera Streamer
     cam_path: str = get_package_share_directory('camera_streamer')
@@ -27,29 +27,29 @@ def generate_launch_description():
             os.path.join(
                 cam_path, 'launch', 'camera_launch.py'
             )
-        ]),
+        ])
     )
 
     # Pixhawk Communication
     pixhawk_path: str = get_package_share_directory('pixhawk_communication')
 
     pixhawk_launch = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([
-                    os.path.join(
-                        pixhawk_path, 'launch', 'pixhawk_com_launch.py'
-                    )
-                ])
+        PythonLaunchDescriptionSource([
+            os.path.join(
+                pixhawk_path, 'launch', 'pixhawk_com_launch.py'
             )
+        ])
+    )
 
     namespace_launch = GroupAction(
         actions=[
             PushRosNamespace(NS),
             manip_launch,
-            pixhawk_launch
+            pixhawk_launch,
+            cam_launch
         ]
     )
 
     return LaunchDescription([
-        cam_launch,
         namespace_launch,
     ])
