@@ -49,9 +49,10 @@ class AutonomousDockingNode(Node):
             self.execute_callback
         )
 
+        # Remove PyQt image retrieval
         # Object to bridge ROV Images and CV2 Images
         self.cv_bridge: CvBridge = CvBridge()
-        self.handle_frame_signal.connect(self.handle_frame)
+        # self.handle_frame_signal.connect(self.handle_frame)
         # Initial Image dimensions given no images have been received
         self.image_dims = [-1, -1]
         # Represents if the ROV is at a standstill
@@ -63,6 +64,7 @@ class AutonomousDockingNode(Node):
             Image,
             # Unsure what the topic name should be, i.e which camera
             'front_cam/image_raw',
+            # May not need to interface with camera using PyQt GUI module
             self.handle_frame,
             10
         )
