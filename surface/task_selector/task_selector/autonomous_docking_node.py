@@ -62,7 +62,7 @@ class AutonomousDockingNode(Node):
         self.camera_subscriber: Subscription = self.create_subscription(
             Image,
             # Unsure what the topic name should be, i.e which camera
-            # self.image_topic_name,
+            'front_cam/image_raw',
             self.handle_frame,
             10
         )
