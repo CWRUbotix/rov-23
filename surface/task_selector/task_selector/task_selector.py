@@ -64,7 +64,7 @@ class TaskSelector(Node):
         #     self.send_basic_goal(self.timed_task_client)
         # elif request.task_id == Tasks.EX_BASIC.value:
         #     self.send_basic_goal(self.basic_task_client)
-        elif request.task_id == Tasks.AUTONOMOUS_DOCKING.value:
+        elif request.task_id == Tasks.AUTO_DOCKING.value:
             self.active = True
             self.send_basic_goal(self.autonomous_docking_client)
         elif request.task_id == Tasks.CANCEL.value:

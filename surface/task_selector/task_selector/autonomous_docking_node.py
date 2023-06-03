@@ -108,7 +108,7 @@ class AutonomousDockingNode(Node):
         self.auto_docking_pub.publish(rov_msg)
 
     # Takes a OpenCV image as input and returns a contour surrounding the button
-    def get_button_contour(cv_img):
+    def get_button_contour(self, cv_img):
         # Constant value to offset CV binary threshhold
         c = 0
 
@@ -175,21 +175,21 @@ class AutonomousDockingNode(Node):
             (button_x, button_y), radius = cv2.minEnclosingCircle(contour)
             self.image_dims[0], self.image_dims[1] = image.shape
 
-        # Takes the dimensions of the image
-        # And then determines if the button is close to the center
-        if (self.image_dims[0] / 2 + BOUND * self.image_dims[1]) < button_x:
-            horizontal_move = LEFT
-        elif (self.image_dims[0] / 2 - BOUND * self.image_dims[1]) > button_x:
-            horizontal_move = RIGHT
-        else:
-            horizontal_move = NONE
+            # Takes the dimensions of the image
+            # And then determines if the button is close to the center
+            if (self.image_dims[0] / 2 + BOUND * self.image_dims[1]) < button_x:
+                horizontal_move = LEFT
+            elif (self.image_dims[0] / 2 - BOUND * self.image_dims[1]) > button_x:
+                horizontal_move = RIGHT
+            else:
+                horizontal_move = NONE
 
-        if (self.image_dims[1] / 2 + BOUND * self.image_dims[1]) < button_y:
-            vertical_move = DOWN
-        elif (self.image_dims[1] / 2 - BOUND * self.image_dims[1]) > button_y:
-            vertical_move = UP
-        else:
-            vertical_move = NONE
+            if (self.image_dims[1] / 2 + BOUND * self.image_dims[1]) < button_y:
+                vertical_move = DOWN
+            elif (self.image_dims[1] / 2 - BOUND * self.image_dims[1]) > button_y:
+                vertical_move = UP
+            else:
+                vertical_move = NONE
 
         return horizontal_move, vertical_move
 
