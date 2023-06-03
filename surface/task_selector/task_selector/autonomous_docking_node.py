@@ -79,8 +79,8 @@ class AutonomousDockingNode(Node):
 
     def handle_frame(self, frame: Image):
         # Converts image msg to BGR w/ alpha channel
-        cv_image = self.cv_bridge.imgmsg_to_cv2(frame, desired_encoding='CV_8UC4')
-        horizontal_direction, vertical_direction = move_direction(self, cv_image)
+        cv_image = self.cv_bridge.imgmsg_to_cv2(frame, desired_encoding='passthrough')
+        horizontal_direction, vertical_direction = self.move_direction(cv_image)
 
         rov_msg = ROVControl()
         # Yaw and Pitch should be at equilibrium
@@ -107,114 +107,114 @@ class AutonomousDockingNode(Node):
             self.stopped = True
         self.auto_docking_pub.publish(rov_msg)
 
-# Takes a OpenCV image as input and returns a contour surrounding the button
-def get_button_contour(cv_img):
-    # Constant value to offset CV binary threshhold
-    c = 0
+    # Takes a OpenCV image as input and returns a contour surrounding the button
+    def get_button_contour(cv_img):
+        # Constant value to offset CV binary threshhold
+        c = 0
 
-    # Use LAB colorspace to segment/enhance red in the original image
-    Lab = cv2.cvtColor(cv_img, cv2.COLOR_BGR2LAB)
-    L, A, B = cv2.split(Lab)
+        # Use LAB colorspace to segment/enhance red in the original image
+        Lab = cv2.cvtColor(cv_img, cv2.COLOR_BGR2LAB)
+        L, A, B = cv2.split(Lab)
 
-    # Takes the A-channel, grayscale representing the red and green in the image
-    gray = cv2.GaussianBlur(A, (7, 7), 0)    # Blurs the image to smooth the edges
-    img_h, img_w = gray.shape                   # Calling this on the BGR will get (x, y, 3)
+        # Takes the A-channel, grayscale representing the red and green in the image
+        gray = cv2.GaussianBlur(A, (7, 7), 0)    # Blurs the image to smooth the edges
+        img_h, img_w = gray.shape                   # Calling this on the BGR will get (x, y, 3)
 
-    # Threshold it, getting a bitmap
-    gaussian = cv2.adaptiveThreshold(
-        gray,
-        255,
-        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-        cv2.THRESH_BINARY,
-        21,
-        c
-    )
+        # Threshold it, getting a bitmap
+        gaussian = cv2.adaptiveThreshold(
+            gray,
+            255,
+            cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+            cv2.THRESH_BINARY,
+            21,
+            c
+        )
 
-    # The HSV colormap of the original image, but with the gaussian threshold mask applied
-    gausMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian), cv2.COLOR_BGR2HSV)
+        # The HSV colormap of the original image, but with the gaussian threshold mask applied
+        gausMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian), cv2.COLOR_BGR2HSV)
 
-    # Lower mask (0-10 red range of color)
-    lower_red = np.array([0, 50, 50])
-    upper_red = np.array([10, 255, 255])
-    mask0 = cv2.inRange(gausMaskedHSV, lower_red, upper_red)
+        # Lower mask (0-10 red range of color)
+        lower_red = np.array([0, 50, 50])
+        upper_red = np.array([10, 255, 255])
+        mask0 = cv2.inRange(gausMaskedHSV, lower_red, upper_red)
 
-    # upper mask (170-180 red range of color)
-    lower_red = np.array([170, 50, 50])
-    upper_red = np.array([180, 255, 255])
-    mask1 = cv2.inRange(gausMaskedHSV, lower_red, upper_red)
-    # The final mask of the lower red and upper red combined
-    finalMasked2 = mask0 + mask1
+        # upper mask (170-180 red range of color)
+        lower_red = np.array([170, 50, 50])
+        upper_red = np.array([180, 255, 255])
+        mask1 = cv2.inRange(gausMaskedHSV, lower_red, upper_red)
+        # The final mask of the lower red and upper red combined
+        finalMasked2 = mask0 + mask1
 
-    # TODO: Add morphological CLOSE and OPEN?
+        # TODO: Add morphological CLOSE and OPEN?
 
-    # Find the largest contour
-    gaussContours, _ = cv2.findContours(finalMasked2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    currentArea = 0
-    gauss_contour = None
-    for contour in gaussContours:
-        x, y, w, h = cv2.boundingRect(contour)
-        if w < img_w and h < img_h and w * h > currentArea:
-            currentArea = w * h
-            gauss_contour = contour
+        # Find the largest contour
+        gaussContours, _ = cv2.findContours(finalMasked2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        currentArea = 0
+        gauss_contour = None
+        for contour in gaussContours:
+            x, y, w, h = cv2.boundingRect(contour)
+            if w < img_w and h < img_h and w * h > currentArea:
+                currentArea = w * h
+                gauss_contour = contour
 
-    # Find the center of the circle enclosing the button
+        # Find the center of the circle enclosing the button
 
-    return gauss_contour, currentArea
+        return gauss_contour, currentArea
 
 
-# Does position processing regarding the button
-def move_direction(self, image):
-    contour, area = get_button_contour(image)
-    # Indicators for what directions we should be moving
-    horizontal_move = NONE
-    vertical_move = NONE
-
-    # Gets the coordinates for the button's position and image dimensions
-    # Once a contour has been found
-    if area > 0:
-        (button_x, button_y), radius = cv2.minEnclosingCircle(contour)
-        self.image_dims[0], self.image_dims[1] = image.shape
-
-    # Takes the dimensions of the image
-    # And then determines if the button is close to the center
-    if (self.image_dims[0] / 2 + BOUND * self.image_dims[1]) < button_x:
-        horizontal_move = LEFT
-    elif (self.image_dims[0] / 2 - BOUND * self.image_dims[1]) > button_x:
-        horizontal_move = RIGHT
-    else:
+    # Does position processing regarding the button
+    def move_direction(self, image):
+        contour, area = self.get_button_contour(image)
+        # Indicators for what directions we should be moving
         horizontal_move = NONE
-
-    if (self.image_dims[1] / 2 + BOUND * self.image_dims[1]) < button_y:
-        vertical_move = DOWN
-    elif (self.image_dims[1] / 2 - BOUND * self.image_dims[1]) > button_y:
-        vertical_move = UP
-    else:
         vertical_move = NONE
 
-    return horizontal_move, vertical_move
+        # Gets the coordinates for the button's position and image dimensions
+        # Once a contour has been found
+        if area > 0:
+            (button_x, button_y), radius = cv2.minEnclosingCircle(contour)
+            self.image_dims[0], self.image_dims[1] = image.shape
+
+        # Takes the dimensions of the image
+        # And then determines if the button is close to the center
+        if (self.image_dims[0] / 2 + BOUND * self.image_dims[1]) < button_x:
+            horizontal_move = LEFT
+        elif (self.image_dims[0] / 2 - BOUND * self.image_dims[1]) > button_x:
+            horizontal_move = RIGHT
+        else:
+            horizontal_move = NONE
+
+        if (self.image_dims[1] / 2 + BOUND * self.image_dims[1]) < button_y:
+            vertical_move = DOWN
+        elif (self.image_dims[1] / 2 - BOUND * self.image_dims[1]) > button_y:
+            vertical_move = UP
+        else:
+            vertical_move = NONE
+
+        return horizontal_move, vertical_move
 
 
-def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
-    self.get_logger().info('Starting Autonomous Docking...')
+    def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
+        self.get_logger().info('Starting Autonomous Docking...')
 
-    if goal_handle.is_cancel_requested:
-        goal_handle.canceled()
-        self.get_logger().info('Docking canceled')
-        return BasicTask.Result()
-    else:
-        feedback_msg = BasicTask.Feedback()
-        feedback_msg.feedback_message = "Task is executing"
+        if goal_handle.is_cancel_requested:
+            goal_handle.canceled()
+            self.get_logger().info('Docking canceled')
+            return BasicTask.Result()
+        else:
+            feedback_msg = BasicTask.Feedback()
+            feedback_msg.feedback_message = "Task is executing"
 
-        self.get_logger().info('Feedback: ' + feedback_msg.feedback_message)
+            self.get_logger().info('Feedback: ' + feedback_msg.feedback_message)
 
-        goal_handle.publish_feedback(feedback_msg)
-        goal_handle.succeed()
-        return BasicTask.Result()
+            goal_handle.publish_feedback(feedback_msg)
+            goal_handle.succeed()
+            return BasicTask.Result()
 
 
-def cancel_callback(self, goal_handle: ServerGoalHandle):
-    self.get_logger().info('Received cancel request')
-    return CancelResponse.ACCEPT
+    def cancel_callback(self, goal_handle: ServerGoalHandle):
+        self.get_logger().info('Received cancel request')
+        return CancelResponse.ACCEPT
 
 
 def main():
