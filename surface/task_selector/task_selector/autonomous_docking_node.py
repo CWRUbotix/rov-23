@@ -71,7 +71,7 @@ class AutonomousDockingNode(Node):
 
         # TODO: Create/Refine ROV Control system for movement regarding the Pixhawk
         # Pixhawk Publisher - Broadcasts directional commands
-        self.pixhawk_publisher: Publisher = self.create_publisher(
+        self.auto_docking_pub: Publisher = self.create_publisher(
             ROVControl,
             'autonomous_docking',
             10
@@ -94,10 +94,10 @@ class AutonomousDockingNode(Node):
             # rov_msg.header = header
             # Directional commands for the ROV
             # TODO: Double check x y z axes are right
-            rov_msg.x = horizontal_direction * RANGE_SPEED * CRAWL_RATE
-            rov_msg.z = horizontal_direction * RANGE_SPEED * CRAWL_RATE
+            rov_msg.x = ZERO_SPEED + horizontal_direction * RANGE_SPEED * CRAWL_RATE
+            rov_msg.z = ZERO_SPEED + horizontal_direction * RANGE_SPEED * CRAWL_RATE
         elif self.stopped:
-            rov_msg.y = RANGE_SPEED * CHARGE_RATE
+            rov_msg.y = ZERO_SPEED + RANGE_SPEED * CHARGE_RATE
             rov_msg.x = ZERO_SPEED
             rov_msg.z = ZERO_SPEED
         else:
@@ -105,7 +105,7 @@ class AutonomousDockingNode(Node):
             rov_msg.z = ZERO_SPEED
             # Currently no delay
             self.stopped = True
-        self.pixhawk_publisher.publish(rov_msg)
+        self.auto_docking_pub.publish(rov_msg)
 
 # Takes a OpenCV image as input and returns a contour surrounding the button
 def get_button_contour(cv_img):
