@@ -94,14 +94,16 @@ class AutonomousDockingNode(Node):
             # rov_msg.header = header
             # Directional commands for the ROV
             # TODO: Double check x y z axes are right
-            rov_msg.x = ZERO_SPEED + horizontal_direction * RANGE_SPEED * CRAWL_RATE
-            rov_msg.z = ZERO_SPEED + horizontal_direction * RANGE_SPEED * CRAWL_RATE
+            rov_msg.x = ZERO_SPEED + horizontal_direction * int(RANGE_SPEED * CRAWL_RATE)
+            rov_msg.z = ZERO_SPEED + horizontal_direction * int(RANGE_SPEED * CRAWL_RATE)
+
         elif self.stopped:
-            rov_msg.y = ZERO_SPEED + RANGE_SPEED * CHARGE_RATE
             rov_msg.x = ZERO_SPEED
+            rov_msg.y = ZERO_SPEED + int(RANGE_SPEED * CHARGE_RATE)
             rov_msg.z = ZERO_SPEED
         else:
             rov_msg.x = ZERO_SPEED
+            rov_msg.y = ZERO_SPEED
             rov_msg.z = ZERO_SPEED
             # Currently no delay
             self.stopped = True
