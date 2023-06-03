@@ -116,8 +116,8 @@ def get_button_contour(cv_img):
     Lab = cv2.cvtColor(cv_img, cv2.COLOR_BGR2LAB)
     L, A, B = cv2.split(Lab)
 
-    gray = A    # Takes the A-channel, grayscale representing the red and green in the image
-    gray = cv2.GaussianBlur(gray, (7, 7), 0)    # Blurs the image to smooth the edges
+    # Takes the A-channel, grayscale representing the red and green in the image
+    gray = cv2.GaussianBlur(A, (7, 7), 0)    # Blurs the image to smooth the edges
     img_h, img_w = gray.shape                   # Calling this on the BGR will get (x, y, 3)
 
     # Threshold it, getting a bitmap
@@ -212,7 +212,6 @@ def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
         return BasicTask.Result()
 
 
-# Can I remove goal_handle as a parameter?
 def cancel_callback(self, goal_handle: ServerGoalHandle):
     self.get_logger().info('Received cancel request')
     return CancelResponse.ACCEPT
@@ -222,5 +221,4 @@ def main():
     rclpy.init()
     autonomous_docking = AutonomousDockingNode()
     executor = MultiThreadedExecutor()
-    # Do I need to spin this node?
     rclpy.spin(autonomous_docking, executor=executor)

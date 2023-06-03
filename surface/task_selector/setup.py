@@ -27,6 +27,7 @@ setup(
         'console_scripts': [
             'selector = task_selector.task_selector:main',
             'manual_control_node = task_selector.manual_control_node:main',
+            'autonomous_docking_node = task_selector.autonomous_docking_node:main',
             'ex_request_client = task_selector.example_request_client:main',
             'ex_timed_task = task_selector.basic_task_timed_node:main',
             'ex_basic_task = task_selector.basic_task_node:main',
