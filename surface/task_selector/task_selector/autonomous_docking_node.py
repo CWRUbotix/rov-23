@@ -57,7 +57,7 @@ class AutonomousDockingNode(Node):
         self.image_dims = [-1, -1]
         # Represents if the ROV is at a standstill
         self.stopped = False
-
+        self.button_found = False
         # Camera Subscription
         # Subscription or GUIEventSubscriber
         self.camera_subscriber: Subscription = self.create_subscription(
@@ -89,19 +89,19 @@ class AutonomousDockingNode(Node):
         rov_msg.yaw = ZERO_SPEED
         rov_msg.pitch = ZERO_SPEED
 
-        if horizontal_direction != 0 and vertical_direction != 0:
+        if horizontal_direction != 0 or vertical_direction != 0:
             # TODO: Should I made a header? If so, to what?
             # rov_msg.header = header
             # Directional commands for the ROV
             # TODO: Double check x y z axes are right
             rov_msg.x = ZERO_SPEED + horizontal_direction * int(RANGE_SPEED * CRAWL_RATE)
-            rov_msg.z = ZERO_SPEED + horizontal_direction * int(RANGE_SPEED * CRAWL_RATE)
+            rov_msg.z = ZERO_SPEED + vertical_direction * int(RANGE_SPEED * CRAWL_RATE)
 
         elif self.stopped:
             rov_msg.x = ZERO_SPEED
             rov_msg.y = ZERO_SPEED + int(RANGE_SPEED * CHARGE_RATE)
             rov_msg.z = ZERO_SPEED
-        else:
+        elif self.button_found:
             rov_msg.x = ZERO_SPEED
             rov_msg.y = ZERO_SPEED
             rov_msg.z = ZERO_SPEED
@@ -164,7 +164,6 @@ class AutonomousDockingNode(Node):
         return gauss_contour, currentArea
 
 
-    # Does position processing regarding the button
     def move_direction(self, image):
         contour, area = self.get_button_contour(image)
         # Indicators for what directions we should be moving
@@ -174,26 +173,27 @@ class AutonomousDockingNode(Node):
         # Gets the coordinates for the button's position and image dimensions
         # Once a contour has been found
         if area > 0:
+            self.button_found = True
             (button_x, button_y), radius = cv2.minEnclosingCircle(contour)
-            self.image_dims[0], self.image_dims[1] = image.shape
+            self.image_dims = image.shape # (y, x)
 
             # Takes the dimensions of the image
             # And then determines if the button is close to the center
-            if (self.image_dims[0] / 2 + BOUND * self.image_dims[1]) < button_x:
-                horizontal_move = LEFT
-            elif (self.image_dims[0] / 2 - BOUND * self.image_dims[1]) > button_x:
+            if (self.image_dims[1] / 2 + BOUND * self.image_dims[1]) < button_x:
                 horizontal_move = RIGHT
+            elif (self.image_dims[1] / 2 - BOUND * self.image_dims[1]) > button_x:
+                horizontal_move = LEFT
             else:
                 horizontal_move = NONE
 
-            if (self.image_dims[1] / 2 + BOUND * self.image_dims[1]) < button_y:
+            if (self.image_dims[0] / 2 + BOUND * self.image_dims[0]) < button_y:
                 vertical_move = DOWN
-            elif (self.image_dims[1] / 2 - BOUND * self.image_dims[1]) > button_y:
+            elif (self.image_dims[0] / 2 - BOUND * self.image_dims[0]) > button_y:
                 vertical_move = UP
             else:
                 vertical_move = NONE
 
-        return horizontal_move, vertical_move
+        return horizontal_move, vertical_move, contour
 
 
     def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
