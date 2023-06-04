@@ -55,7 +55,7 @@ class AutonomousDockingNode(Node):
         self.cv_bridge: CvBridge = CvBridge()
         # self.handle_frame_signal.connect(self.handle_frame)
         # Initial Image dimensions given no images have been received
-        self.image_dims = [-1, -1]
+        self.image_dims = (-1, -1)
         # Represents if the ROV is at a standstill
         self.stopped = False
         self.button_found = False
@@ -64,7 +64,7 @@ class AutonomousDockingNode(Node):
         self.camera_subscriber: Subscription = self.create_subscription(
             Image,
             # Unsure what the topic name should be, i.e which camera
-            'front_cam/image_raw',
+            '/front_cam/image_raw',
             # May not need to interface with camera using PyQt GUI module
             self.handle_frame,
             10
@@ -91,6 +91,7 @@ class AutonomousDockingNode(Node):
         rov_msg.pitch = ZERO_SPEED
 
         if horizontal_direction != 0 or vertical_direction != 0:
+            self.get_logger().info('Moving')
             # TODO: Should I made a header? If so, to what?
             # rov_msg.header = header
             # Directional commands for the ROV
@@ -99,10 +100,12 @@ class AutonomousDockingNode(Node):
             rov_msg.z = ZERO_SPEED + vertical_direction * int(RANGE_SPEED * CRAWL_RATE)
 
         elif self.stopped:
+            self.get_logger().info('Charging')
             rov_msg.x = ZERO_SPEED
             rov_msg.y = ZERO_SPEED + int(RANGE_SPEED * CHARGE_RATE)
             rov_msg.z = ZERO_SPEED
         elif self.button_found:
+            self.get_logger().info('Stopping')
             rov_msg.x = ZERO_SPEED
             rov_msg.y = ZERO_SPEED
             rov_msg.z = ZERO_SPEED
@@ -116,7 +119,7 @@ class AutonomousDockingNode(Node):
         c = 0
 
         # Use LAB colorspace to segment/enhance red in the original image
-        Lab = cv2.cvtColor(cv_img, cv2.COLOR_BGR2LAB)
+        Lab = cv2.cvtColor(cv_img, cv2.COLOR_RGB2LAB)
         L, A, B = cv2.split(Lab)
 
         # Takes the A-channel, grayscale representing the red and green in the image
@@ -134,7 +137,7 @@ class AutonomousDockingNode(Node):
         )
 
         # The HSV colormap of the original image, but with the gaussian threshold mask applied
-        gausMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian), cv2.COLOR_BGR2HSV)
+        gausMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian), cv2.COLOR_RGB2HSV)
 
         # Lower mask (0-10 red range of color)
         lower_red = np.array([0, 50, 50])
@@ -174,6 +177,8 @@ class AutonomousDockingNode(Node):
         # Gets the coordinates for the button's position and image dimensions
         # Once a contour has been found
         if area > 0:
+            if not self.button_found:
+                self.get_logger().info('Found button')
             self.button_found = True
             (button_x, button_y), radius = cv2.minEnclosingCircle(contour)
             self.image_dims = image.shape # (y, x)
@@ -194,7 +199,7 @@ class AutonomousDockingNode(Node):
             else:
                 vertical_move = NONE
 
-        return horizontal_move, vertical_move, contour
+        return horizontal_move, vertical_move
 
 
     def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
