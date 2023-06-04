@@ -200,6 +200,7 @@ def generate_launch_description():
         output="screen",
         namespace=NS,
         remappings=[
+            (f"/{NS}/autonomous_docking", "/autonomous_docking"),
             (f"/{NS}/manual_control", "/manual_control"),
             (f"/{NS}/armed", "/armed"),
         ],
