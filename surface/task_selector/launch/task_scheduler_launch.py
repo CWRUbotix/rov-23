@@ -20,8 +20,8 @@ def generate_launch_description():
 
     autonomous_docking_node: Node = Node(
         package='task_selector',
-        executable='autonomous_docking_node'
-        # TODO: Remappings shouldn't be necessary?
+        executable='autonomous_docking_node',
+        remappings=[('/surface/autonomous_docking', '/autonomous_docking')]
     )
 
     # # example of node requesting tasks
