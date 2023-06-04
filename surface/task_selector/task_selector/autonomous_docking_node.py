@@ -94,7 +94,7 @@ class AutonomousDockingNode(Node):
             # Continues slight adjustments as ROV moves forward
             rov_msg.y = ZERO_SPEED + horizontal_direction * int(RANGE_SPEED * CRAWL_RATE)
             rov_msg.z = ZERO_SPEED + vertical_direction * int(RANGE_SPEED * CRAWL_RATE)
-        
+
         elif horizontal_direction != 0 or vertical_direction != 0:
             if self.logging == 0:
                 self.get_logger().info('Aligning ROV')
@@ -105,7 +105,7 @@ class AutonomousDockingNode(Node):
             # TODO: Double check x y z axes are right
             rov_msg.y = ZERO_SPEED + horizontal_direction * int(RANGE_SPEED * CRAWL_RATE)
             rov_msg.z = ZERO_SPEED + vertical_direction * int(RANGE_SPEED * CRAWL_RATE)
-            
+
         elif self.button_found:
             if self.logging == 1:
                 self.get_logger().info('Stopping ROV')
@@ -138,7 +138,7 @@ class AutonomousDockingNode(Node):
         )
 
         # The HSV colormap of the original image, but with the gaussian threshold mask applied
-        gausMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian), 
+        gausMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian),
                                      cv2.COLOR_RGB2HSV)
 
         # Lower mask (0-10 red range of color)
