@@ -15,8 +15,8 @@ from interfaces.msg import ROVControl
 # TODO: Ask what this means: Chop dual cam frame in half
 # --------------------------------------------------------------------------------------------
 # Direction robot should move while steering
-RIGHT = 1
-LEFT = -1
+RIGHT = -1
+LEFT = 1
 UP = 1
 DOWN = -1
 NONE = 0
@@ -26,7 +26,7 @@ START_WIDTH_FRACTION = 0.035
 START_HEIGHT_FRACTION = 0.035
 # ---------------------------------------------------------------------------------------------
 # Represents size of the square the button should be in relative to height of the image
-BOUND = 0.1
+BOUND = 0.05
 # Range of values Pixhawk takes in microseconds
 ZERO_SPEED: int = 1500
 RANGE_SPEED: int = 400
@@ -38,7 +38,7 @@ CHARGE_RATE = 0.5
 
 
 class AutonomousDockingNode(Node):
-
+    # Ideally the ROV should be level the the ground, but it should be fine either way
     def __init__(self):
         super().__init__('autonomous_docking_node',
                          parameter_overrides=[],
@@ -59,6 +59,7 @@ class AutonomousDockingNode(Node):
         # Represents if the ROV is at a standstill
         self.stopped = False
         self.button_found = False
+        self.logging = 0
         # Camera Subscription
         # Subscription or GUIEventSubscriber
         self.camera_subscriber: Subscription = self.create_subscription(
@@ -84,31 +85,31 @@ class AutonomousDockingNode(Node):
         horizontal_direction, vertical_direction = self.move_direction(cv_image)
 
         rov_msg = ROVControl()
-        # Yaw and Pitch should be at equilibrium
-        # TODO: Put the ROV at equilibrium?
-        rov_msg.roll = ZERO_SPEED
-        rov_msg.yaw = ZERO_SPEED
-        rov_msg.pitch = ZERO_SPEED
 
-        if horizontal_direction != 0 or vertical_direction != 0:
-            self.get_logger().info('Moving')
+        if self.stopped:
+            if self.logging == 2:
+                self.get_logger().info('Charging Towards Button')
+                self.logging += 1
+            rov_msg.x = ZERO_SPEED + int(RANGE_SPEED * CHARGE_RATE)
+            # Continues slight adjustments as ROV moves forward
+            rov_msg.y = ZERO_SPEED + horizontal_direction * int(RANGE_SPEED * CRAWL_RATE)
+            rov_msg.z = ZERO_SPEED + vertical_direction * int(RANGE_SPEED * CRAWL_RATE)
+        
+        elif horizontal_direction != 0 or vertical_direction != 0:
+            if self.logging == 0:
+                self.get_logger().info('Aligning ROV')
+                self.logging += 1
             # TODO: Should I made a header? If so, to what?
             # rov_msg.header = header
             # Directional commands for the ROV
             # TODO: Double check x y z axes are right
-            rov_msg.x = ZERO_SPEED + horizontal_direction * int(RANGE_SPEED * CRAWL_RATE)
+            rov_msg.y = ZERO_SPEED + horizontal_direction * int(RANGE_SPEED * CRAWL_RATE)
             rov_msg.z = ZERO_SPEED + vertical_direction * int(RANGE_SPEED * CRAWL_RATE)
-
-        elif self.stopped:
-            self.get_logger().info('Charging')
-            rov_msg.x = ZERO_SPEED
-            rov_msg.y = ZERO_SPEED + int(RANGE_SPEED * CHARGE_RATE)
-            rov_msg.z = ZERO_SPEED
+            
         elif self.button_found:
-            self.get_logger().info('Stopping')
-            rov_msg.x = ZERO_SPEED
-            rov_msg.y = ZERO_SPEED
-            rov_msg.z = ZERO_SPEED
+            if self.logging == 1:
+                self.get_logger().info('Stopping ROV')
+                self.logging += 1
             # Currently no delay
             self.stopped = True
         self.auto_docking_pub.publish(rov_msg)
