@@ -138,7 +138,8 @@ class AutonomousDockingNode(Node):
         )
 
         # The HSV colormap of the original image, but with the gaussian threshold mask applied
-        gausMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian), cv2.COLOR_RGB2HSV)
+        gausMaskedHSV = cv2.cvtColor(cv2.bitwise_and(cv_img, cv_img, mask=gaussian), 
+                                     cv2.COLOR_RGB2HSV)
 
         # Lower mask (0-10 red range of color)
         lower_red = np.array([0, 50, 50])
@@ -168,7 +169,6 @@ class AutonomousDockingNode(Node):
 
         return gauss_contour, currentArea
 
-
     def move_direction(self, image):
         contour, area = self.get_button_contour(image)
         # Indicators for what directions we should be moving
@@ -182,7 +182,7 @@ class AutonomousDockingNode(Node):
                 self.get_logger().info('Found button')
             self.button_found = True
             (button_x, button_y), radius = cv2.minEnclosingCircle(contour)
-            self.image_dims = image.shape # (y, x)
+            self.image_dims = image.shape  # (y, x)
 
             # Takes the dimensions of the image
             # And then determines if the button is close to the center
@@ -202,7 +202,6 @@ class AutonomousDockingNode(Node):
 
         return horizontal_move, vertical_move
 
-
     def execute_callback(self, goal_handle: ServerGoalHandle) -> BasicTask.Result:
         self.get_logger().info('Starting Autonomous Docking...')
 
@@ -219,7 +218,6 @@ class AutonomousDockingNode(Node):
             goal_handle.publish_feedback(feedback_msg)
             goal_handle.succeed()
             return BasicTask.Result()
-
 
     def cancel_callback(self, goal_handle: ServerGoalHandle):
         self.get_logger().info('Received cancel request')

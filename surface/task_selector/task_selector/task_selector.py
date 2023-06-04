@@ -42,8 +42,8 @@ class TaskSelector(Node):
                                                   BasicTask,
                                                   'manual_control')
         self.autonomous_docking_client = ActionClient(self,
-                                                  BasicTask,
-                                                  'autonomous_docking')
+                                                      BasicTask,
+                                                      'autonomous_docking')
         self.active = False
         self._goal_handle = None
 
