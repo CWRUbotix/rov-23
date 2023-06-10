@@ -8,7 +8,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import cv2
 
-from typing import Optional
+from typing import Optional, List
 
 
 class VideoWidget(QWidget):
@@ -84,6 +84,49 @@ class VideoWidget(QWidget):
         qt_image: QImage = qt_image.scaled(width, height, Qt.KeepAspectRatio)
 
         return qt_image
+
+class SwitchableVideoWidget(VideoWidget):
+    """A single video stream widget that can be paused and played."""
+
+    BUTTON_WIDTH = 120
+    BUTTON_HEIGHT = 100
+
+    def __init__(self, cam_topics: List[str], button_names: List[str],
+                 default_cam_num: Optional[int] = 0,
+                 label_text: Optional[str] = None,
+                 widget_width: int = 640, widget_height: int = 480,
+                 swap_rb_channels: bool = False):
+        
+        self.cam_num = default_cam_num
+        self.cam_topics = cam_topics
+        self.button_names = button_names
+
+        super().__init__(cam_topics[self.cam_num], label_text, widget_width,
+                         widget_height, swap_rb_channels)
+
+        self.num_of_cams = len(cam_topics)
+
+        if self.num_of_cams != len(button_names):
+            self.camera_subscriber.get_logger().error("Number of cam topics != num of cam names")
+            raise ValueError("Number of cam topics != num of cam names")
+        
+
+        self.button: QPushButton = QPushButton(button_names[self.cam_num])
+        self.button.setMaximumWidth(self.BUTTON_WIDTH)
+        self.button.setMaximumHeight(self.BUTTON_HEIGHT)
+        self.button.clicked.connect(self.switch)
+        self.layout.addWidget(self.button, alignment=Qt.AlignHCenter)
+
+    def switch(self):
+        """Toggle whether this widget is paused or playing."""
+        self.cam_num = (self.cam_num + 1) % self.num_of_cams
+
+        # Could maybe only destroyer subscriber and update name?
+        self.camera_subscriber.destroy_node()
+        self.camera_subscriber = GUIEventSubscriber(
+            Image, self.cam_topics[self.cam_num], self.handle_frame_signal)
+
+        self.button.setText(self.button_names[self.cam_num])
 
 
 class PausableVideoWidget(VideoWidget):

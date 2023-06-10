@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QGridLayout
-from gui.modules.video_grid import VideoGrid
+from gui.modules.video_widget import SwitchableVideoWidget
 from gui.modules.arm import Arm
 from gui.app import App
 
@@ -13,7 +13,12 @@ class PilotApp(App):
         layout: QGridLayout = QGridLayout()
         self.setLayout(layout)
 
-        self.video_area = VideoGrid()
+        self.video_area = SwitchableVideoWidget(["/front_cam/image_raw", 
+                                                 "/bottom_cam/image_raw", 
+                                                 "/depth_cam/image_raw"],
+                                                 ["Front Camera",
+                                                  "Bottom Camera",
+                                                  "Depth Camera"])
         layout.addWidget(self.video_area, 0, 0, 1, 2)
 
         self.arm: Arm = Arm()
