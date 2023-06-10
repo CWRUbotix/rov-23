@@ -23,7 +23,7 @@ def main():
 
     major_num = sys.version_info[0]
     minor_num = sys.version_info[1]
-    udev_script = os.path.join(os.path.dirname(os.path.abspath(pi_main_share)), 'lib', f'python{major_num}.{minor_num}',
+    udev_script = os.path.join(os.path.dirname(os.path.abspath(pi_main_share)),'../', 'lib', f'python{major_num}.{minor_num}',
                                'site-packages', 'pi_main', 'udev_copy.py')
     subprocess.call(['/usr/bin/sudo', 'python3', udev_script, pi_main_share])
 

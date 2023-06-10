@@ -24,12 +24,16 @@ Runs in foreground for testing
 sudo cwrubotix_pi-start
 ```
 
-
 Runs in background
 ```bash
 sudo systemctl start cwrubotix_pi.service
 ```
-
+Kills in background
 ```bash
 sudo systemctl stop cwrubotix_pi.service
+```
+
+### Remove Start on Boot
+```bash
+ros2 run robot_upstart uninstall cwrubotix_pi
 ```
