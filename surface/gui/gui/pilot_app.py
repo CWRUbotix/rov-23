@@ -1,4 +1,6 @@
-from PyQt5.QtWidgets import QGridLayout
+from PyQt5.QtWidgets import QVBoxLayout
+from PyQt5.QtCore import Qt
+
 from gui.modules.video_widget import SwitchableVideoWidget
 from gui.modules.arm import Arm
 from gui.app import App
@@ -10,7 +12,7 @@ class PilotApp(App):
 
         self.setWindowTitle('Pilot GUI - CWRUbotix ROV 2023')
 
-        layout: QGridLayout = QGridLayout()
+        layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(layout)
 
         self.video_area = SwitchableVideoWidget(["/front_cam/image_raw",
@@ -20,10 +22,10 @@ class PilotApp(App):
                                                  "Bottom Camera",
                                                  "Depth Camera"],
                                                 "camera_switch")
-        layout.addWidget(self.video_area, 1, 1, 1, 2)
+        layout.addWidget(self.video_area, alignment=Qt.AlignCenter)
 
         self.arm: Arm = Arm()
-        layout.addWidget(self.arm, 3, 3)
+        layout.addWidget(self.arm, alignment=Qt.AlignRight)
 
 
 def run_gui_pilot():

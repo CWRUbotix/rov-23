@@ -119,7 +119,7 @@ class SwitchableVideoWidget(VideoWidget):
         self.button.setMaximumWidth(self.BUTTON_WIDTH)
         self.button.setMaximumHeight(self.BUTTON_HEIGHT)
         self.button.clicked.connect(self.switch)
-        self.layout.addWidget(self.button, alignment=Qt.AlignHCenter)
+        self.layout.addWidget(self.button)
 
         if controller_button_topic is not None:
             self.controller_signal.connect(self.controller_switch)
