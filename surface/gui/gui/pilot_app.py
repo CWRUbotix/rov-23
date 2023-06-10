@@ -20,10 +20,10 @@ class PilotApp(App):
                                                   "Bottom Camera",
                                                   "Depth Camera"],
                                                   "camera_switch")
-        layout.addWidget(self.video_area, 0, 1, 1, 2)
+        layout.addWidget(self.video_area, 1, 1, 1, 2)
 
         self.arm: Arm = Arm()
-        layout.addWidget(self.arm, 1, 1)
+        layout.addWidget(self.arm, 3, 3)
 
 
 def run_gui_pilot():

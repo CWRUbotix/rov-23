@@ -7,6 +7,7 @@ from rclpy.executors import MultiThreadedExecutor
 from interfaces.action import BasicTask
 from interfaces.msg import ROVControl, Manip
 from sensor_msgs.msg import Joy
+from std_msgs.msg import Bool
 
 from typing import Dict, List
 
@@ -76,6 +77,13 @@ class ManualControlNode(Node):
             10
         )
 
+        # Cameras
+        self.camera_toggle_publisher = self.create_publisher(
+            Bool,
+            "camera_switch",
+            10
+        )
+
         self.manip_buttons: Dict[int, ManipButton] = {
             X_BUTTON: ManipButton("claw0"),
             O_BUTTON: ManipButton("claw1"),
@@ -83,10 +91,14 @@ class ManualControlNode(Node):
             SQUARE_BUTTON: ManipButton("claw1")
         }
 
+        self.seen_left_cam = False
+        self.seen_right_cam = False
+
     def controller_callback(self, msg: Joy):
         if self._passing:
             self.joystick_to_pixhawk(msg)
             self.manip_callback(msg)
+            self.camera_toggle(msg)
 
     def joystick_to_pixhawk(self, msg: Joy):
         axes = msg.axes
@@ -157,6 +169,20 @@ class ManualControlNode(Node):
 
             manip_button.last_button_state = just_pressed
 
+    def camera_toggle(self, msg: Joy):
+        buttons: List[int] = msg.buttons
+
+        if buttons[MENU] == 1:
+            self.seen_right_cam = True
+        elif buttons[PAIRING_BUTTON] == 1:
+            self.seen_left_cam = True
+        elif buttons[MENU] == 0 and self.seen_right_cam:
+            self.seen_right_cam = False
+            self.camera_toggle_publisher.publish(Bool(data=True))
+        elif buttons[PAIRING_BUTTON] == 0 and self.seen_left_cam:
+            self.seen_left_cam = False
+            self.camera_toggle_publisher.publish(Bool(data=False))
+        
 
 class ManipButton:
     def __init__(self, claw: str):

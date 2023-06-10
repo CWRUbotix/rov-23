@@ -130,7 +130,7 @@ class SwitchableVideoWidget(VideoWidget):
 
     @pyqtSlot(Bool)
     def controller_switch(self, toggle_right: Bool):
-        if toggle_right:
+        if toggle_right.data:
             self.cam_num = (self.cam_num + 1) % self.num_of_cams
         else:
             self.cam_num = (self.cam_num - 1) % self.num_of_cams
