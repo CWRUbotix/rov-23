@@ -97,16 +97,16 @@ class SwitchableVideoWidget(VideoWidget):
 
     def __init__(self, cam_topics: List[str], button_names: List[str],
                  controller_button_topic: Optional[str] = None,
-                 default_cam_num: Optional[int] = 0,
+                 default_cam_num: int = 0,
                  label_text: Optional[str] = None,
                  widget_width: int = 640, widget_height: int = 480,
                  swap_rb_channels: bool = False):
 
-        self.cam_num = default_cam_num
+        self.active_cam = default_cam_num
         self.cam_topics = cam_topics
         self.button_names = button_names
 
-        super().__init__(cam_topics[self.cam_num], label_text, widget_width,
+        super().__init__(cam_topics[self.active_cam], label_text, widget_width,
                          widget_height, swap_rb_channels)
 
         self.num_of_cams = len(cam_topics)
@@ -115,7 +115,7 @@ class SwitchableVideoWidget(VideoWidget):
             self.camera_subscriber.get_logger().error("Number of cam topics != num of cam names")
             raise ValueError("Number of cam topics != num of cam names")
 
-        self.button: QPushButton = QPushButton(button_names[self.cam_num])
+        self.button: QPushButton = QPushButton(button_names[self.active_cam])
         self.button.setMaximumWidth(self.BUTTON_WIDTH)
         self.button.setMaximumHeight(self.BUTTON_HEIGHT)
         self.button.clicked.connect(self.switch)
@@ -130,23 +130,22 @@ class SwitchableVideoWidget(VideoWidget):
     @pyqtSlot(Bool)
     def controller_switch(self, toggle_right: Bool):
         if toggle_right.data:
-            self.cam_num = (self.cam_num + 1) % self.num_of_cams
+            self.active_cam = (self.active_cam + 1) % self.num_of_cams
         else:
-            self.cam_num = (self.cam_num - 1) % self.num_of_cams
+            self.active_cam = (self.active_cam - 1) % self.num_of_cams
         self.update_camera_feed()
 
     def switch(self):
         """Toggle whether this widget is paused or playing."""
-        self.cam_num = (self.cam_num + 1) % self.num_of_cams
+        self.active_cam = (self.active_cam + 1) % self.num_of_cams
         self.update_camera_feed()
 
     def update_camera_feed(self):
-        # Could maybe only destroyer subscriber and update name?
         self.camera_subscriber.destroy_node()
         self.camera_subscriber = GUIEventSubscriber(
-            Image, self.cam_topics[self.cam_num], self.handle_frame_signal)
+            Image, self.cam_topics[self.active_cam], self.handle_frame_signal)
 
-        self.button.setText(self.button_names[self.cam_num])
+        self.button.setText(self.button_names[self.active_cam])
 
 
 class PausableVideoWidget(VideoWidget):

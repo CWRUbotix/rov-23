@@ -170,6 +170,7 @@ class ManualControlNode(Node):
             manip_button.last_button_state = just_pressed
 
     def camera_toggle(self, msg: Joy):
+        """Cycles through connected cameras on pilot GUI using menu and pairing buttons."""
         buttons: List[int] = msg.buttons
 
         if buttons[MENU] == 1:
