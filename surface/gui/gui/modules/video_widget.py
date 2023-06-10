@@ -5,6 +5,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
 from sensor_msgs.msg import Image
+from std_msgs.msg import Bool
 from cv_bridge import CvBridge
 import cv2
 
@@ -85,13 +86,17 @@ class VideoWidget(QWidget):
 
         return qt_image
 
+
 class SwitchableVideoWidget(VideoWidget):
     """A single video stream widget that can be paused and played."""
 
     BUTTON_WIDTH = 120
     BUTTON_HEIGHT = 100
 
+    controller_signal = pyqtSignal(Bool)
+
     def __init__(self, cam_topics: List[str], button_names: List[str],
+                 controller_button_topic: Optional[str] = None,
                  default_cam_num: Optional[int] = 0,
                  label_text: Optional[str] = None,
                  widget_width: int = 640, widget_height: int = 480,
@@ -117,10 +122,26 @@ class SwitchableVideoWidget(VideoWidget):
         self.button.clicked.connect(self.switch)
         self.layout.addWidget(self.button, alignment=Qt.AlignHCenter)
 
+        if controller_button_topic is not None:
+            self.controller_signal.connect(self.controller_switch)
+            self.controller_subscriber = GUIEventSubscriber(Bool, 
+                                                            controller_button_topic,
+                                                            self.controller_signal)
+
+    @pyqtSlot(Bool)
+    def controller_switch(self, toggle_right: Bool):
+        if toggle_right:
+            self.cam_num = (self.cam_num + 1) % self.num_of_cams
+        else:
+            self.cam_num = (self.cam_num - 1) % self.num_of_cams
+        self.update_camera_feed()
+
     def switch(self):
         """Toggle whether this widget is paused or playing."""
         self.cam_num = (self.cam_num + 1) % self.num_of_cams
-
+        self.update_camera_feed()
+        
+    def update_camera_feed(self):
         # Could maybe only destroyer subscriber and update name?
         self.camera_subscriber.destroy_node()
         self.camera_subscriber = GUIEventSubscriber(

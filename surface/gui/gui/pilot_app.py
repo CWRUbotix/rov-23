@@ -18,8 +18,9 @@ class PilotApp(App):
                                                  "/depth_cam/image_raw"],
                                                  ["Front Camera",
                                                   "Bottom Camera",
-                                                  "Depth Camera"])
-        layout.addWidget(self.video_area, 0, 0, 1, 2)
+                                                  "Depth Camera"],
+                                                  "camera_switch")
+        layout.addWidget(self.video_area, 0, 1, 1, 2)
 
         self.arm: Arm = Arm()
         layout.addWidget(self.arm, 1, 1)
