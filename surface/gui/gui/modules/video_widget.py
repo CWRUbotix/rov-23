@@ -101,7 +101,7 @@ class SwitchableVideoWidget(VideoWidget):
                  label_text: Optional[str] = None,
                  widget_width: int = 640, widget_height: int = 480,
                  swap_rb_channels: bool = False):
-        
+
         self.cam_num = default_cam_num
         self.cam_topics = cam_topics
         self.button_names = button_names
@@ -114,7 +114,6 @@ class SwitchableVideoWidget(VideoWidget):
         if self.num_of_cams != len(button_names):
             self.camera_subscriber.get_logger().error("Number of cam topics != num of cam names")
             raise ValueError("Number of cam topics != num of cam names")
-        
 
         self.button: QPushButton = QPushButton(button_names[self.cam_num])
         self.button.setMaximumWidth(self.BUTTON_WIDTH)
@@ -124,7 +123,7 @@ class SwitchableVideoWidget(VideoWidget):
 
         if controller_button_topic is not None:
             self.controller_signal.connect(self.controller_switch)
-            self.controller_subscriber = GUIEventSubscriber(Bool, 
+            self.controller_subscriber = GUIEventSubscriber(Bool,
                                                             controller_button_topic,
                                                             self.controller_signal)
 
@@ -140,7 +139,7 @@ class SwitchableVideoWidget(VideoWidget):
         """Toggle whether this widget is paused or playing."""
         self.cam_num = (self.cam_num + 1) % self.num_of_cams
         self.update_camera_feed()
-        
+
     def update_camera_feed(self):
         # Could maybe only destroyer subscriber and update name?
         self.camera_subscriber.destroy_node()

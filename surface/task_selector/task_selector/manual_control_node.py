@@ -182,7 +182,7 @@ class ManualControlNode(Node):
         elif buttons[PAIRING_BUTTON] == 0 and self.seen_left_cam:
             self.seen_left_cam = False
             self.camera_toggle_publisher.publish(Bool(data=False))
-        
+
 
 class ManipButton:
     def __init__(self, claw: str):

@@ -13,13 +13,13 @@ class PilotApp(App):
         layout: QGridLayout = QGridLayout()
         self.setLayout(layout)
 
-        self.video_area = SwitchableVideoWidget(["/front_cam/image_raw", 
-                                                 "/bottom_cam/image_raw", 
+        self.video_area = SwitchableVideoWidget(["/front_cam/image_raw",
+                                                 "/bottom_cam/image_raw",
                                                  "/depth_cam/image_raw"],
-                                                 ["Front Camera",
-                                                  "Bottom Camera",
-                                                  "Depth Camera"],
-                                                  "camera_switch")
+                                                ["Front Camera",
+                                                 "Bottom Camera",
+                                                 "Depth Camera"],
+                                                "camera_switch")
         layout.addWidget(self.video_area, 1, 1, 1, 2)
 
         self.arm: Arm = Arm()
