@@ -5,9 +5,8 @@ from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
 
 from interfaces.action import BasicTask
-from interfaces.msg import ROVControl, Manip
+from interfaces.msg import ROVControl, Manip, CameraControllerSwitch
 from sensor_msgs.msg import Joy
-from std_msgs.msg import Bool
 
 from typing import Dict, List
 
@@ -79,7 +78,7 @@ class ManualControlNode(Node):
 
         # Cameras
         self.camera_toggle_publisher = self.create_publisher(
-            Bool,
+            CameraControllerSwitch,
             "camera_switch",
             10
         )
@@ -179,10 +178,10 @@ class ManualControlNode(Node):
             self.seen_left_cam = True
         elif buttons[MENU] == 0 and self.seen_right_cam:
             self.seen_right_cam = False
-            self.camera_toggle_publisher.publish(Bool(data=True))
+            self.camera_toggle_publisher.publish(CameraControllerSwitch(toggle_right=True))
         elif buttons[PAIRING_BUTTON] == 0 and self.seen_left_cam:
             self.seen_left_cam = False
-            self.camera_toggle_publisher.publish(Bool(data=False))
+            self.camera_toggle_publisher.publish(CameraControllerSwitch(toggle_left=True))
 
 
 class ManipButton:

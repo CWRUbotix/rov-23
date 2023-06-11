@@ -5,7 +5,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
 from sensor_msgs.msg import Image
-from std_msgs.msg import Bool
+from interfaces.msg import CameraControllerSwitch
 from cv_bridge import CvBridge
 import cv2
 
@@ -93,7 +93,7 @@ class SwitchableVideoWidget(VideoWidget):
     BUTTON_WIDTH = 120
     BUTTON_HEIGHT = 100
 
-    controller_signal = pyqtSignal(Bool)
+    controller_signal = pyqtSignal(CameraControllerSwitch)
 
     def __init__(self, cam_topics: List[str], button_names: List[str],
                  controller_button_topic: Optional[str] = None,
@@ -118,33 +118,33 @@ class SwitchableVideoWidget(VideoWidget):
         self.button: QPushButton = QPushButton(button_names[self.active_cam])
         self.button.setMaximumWidth(self.BUTTON_WIDTH)
         self.button.setMaximumHeight(self.BUTTON_HEIGHT)
-        self.button.clicked.connect(self.switch)
+        self.button.clicked.connect(lambda: self.camera_switch(True))
         self.layout.addWidget(self.button, Qt.AlignCenter)
 
         if controller_button_topic is not None:
-            self.controller_signal.connect(self.controller_switch)
-            self.controller_subscriber = GUIEventSubscriber(Bool,
+            self.controller_signal.connect(self.controller_camera_switch)
+            self.controller_subscriber = GUIEventSubscriber(CameraControllerSwitch,
                                                             controller_button_topic,
                                                             self.controller_signal)
 
-    @pyqtSlot(Bool)
-    def controller_switch(self, toggle_right: Bool):
-        if toggle_right.data:
+    @pyqtSlot(CameraControllerSwitch)
+    def controller_camera_switch(self, switch: CameraControllerSwitch):
+        if switch.toggle_left:
+            self.camera_switch(False)
+        elif switch.toggle_right:
+            self.camera_switch(True)
+        else:
+            self.controller_subscriber.get_logger().warn("CameraControllerSwitch msg sent Empty")
+
+    def camera_switch(self, toggle_right: bool):
+        if toggle_right:
             self.active_cam = (self.active_cam + 1) % self.num_of_cams
         else:
             self.active_cam = (self.active_cam - 1) % self.num_of_cams
-        self.update_camera_feed()
 
-    def switch(self):
-        """Toggle whether this widget is paused or playing."""
-        self.active_cam = (self.active_cam + 1) % self.num_of_cams
-        self.update_camera_feed()
-
-    def update_camera_feed(self):
         self.camera_subscriber.destroy_node()
         self.camera_subscriber = GUIEventSubscriber(
             Image, self.cam_topics[self.active_cam], self.handle_frame_signal)
-
         self.button.setText(self.button_names[self.active_cam])
 
 

@@ -1,0 +1,2 @@
+bool toggle_left
+bool toggle_right
