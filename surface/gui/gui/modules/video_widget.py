@@ -129,12 +129,8 @@ class SwitchableVideoWidget(VideoWidget):
 
     @pyqtSlot(CameraControllerSwitch)
     def controller_camera_switch(self, switch: CameraControllerSwitch):
-        if switch.toggle_left:
-            self.camera_switch(False)
-        elif switch.toggle_right:
-            self.camera_switch(True)
-        else:
-            self.controller_subscriber.get_logger().warn("CameraControllerSwitch msg sent Empty")
+        self.camera_switch(switch.toggle_right)
+        
 
     def camera_switch(self, toggle_right: bool):
         if toggle_right:

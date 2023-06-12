@@ -181,7 +181,7 @@ class ManualControlNode(Node):
             self.camera_toggle_publisher.publish(CameraControllerSwitch(toggle_right=True))
         elif buttons[PAIRING_BUTTON] == 0 and self.seen_left_cam:
             self.seen_left_cam = False
-            self.camera_toggle_publisher.publish(CameraControllerSwitch(toggle_left=True))
+            self.camera_toggle_publisher.publish(CameraControllerSwitch(toggle_right=False))
 
 
 class ManipButton:
