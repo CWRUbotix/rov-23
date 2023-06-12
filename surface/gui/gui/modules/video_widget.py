@@ -130,7 +130,6 @@ class SwitchableVideoWidget(VideoWidget):
     @pyqtSlot(CameraControllerSwitch)
     def controller_camera_switch(self, switch: CameraControllerSwitch):
         self.camera_switch(switch.toggle_right)
-        
 
     def camera_switch(self, toggle_right: bool):
         if toggle_right:
