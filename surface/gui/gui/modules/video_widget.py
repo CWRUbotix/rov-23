@@ -5,10 +5,11 @@ from PyQt5.QtGui import QPixmap, QImage
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
 from sensor_msgs.msg import Image
+from interfaces.msg import CameraControllerSwitch
 from cv_bridge import CvBridge
 import cv2
 
-from typing import Optional
+from typing import Optional, List
 
 
 class VideoWidget(QWidget):
@@ -84,6 +85,62 @@ class VideoWidget(QWidget):
         qt_image: QImage = qt_image.scaled(width, height, Qt.KeepAspectRatio)
 
         return qt_image
+
+
+class SwitchableVideoWidget(VideoWidget):
+    """A single video stream widget that can be paused and played."""
+
+    BUTTON_WIDTH = 120
+    BUTTON_HEIGHT = 100
+
+    controller_signal = pyqtSignal(CameraControllerSwitch)
+
+    def __init__(self, cam_topics: List[str], button_names: List[str],
+                 controller_button_topic: Optional[str] = None,
+                 default_cam_num: int = 0,
+                 label_text: Optional[str] = None,
+                 widget_width: int = 640, widget_height: int = 480,
+                 swap_rb_channels: bool = False):
+
+        self.active_cam = default_cam_num
+        self.cam_topics = cam_topics
+        self.button_names = button_names
+
+        super().__init__(cam_topics[self.active_cam], label_text, widget_width,
+                         widget_height, swap_rb_channels)
+
+        self.num_of_cams = len(cam_topics)
+
+        if self.num_of_cams != len(button_names):
+            self.camera_subscriber.get_logger().error("Number of cam topics != num of cam names")
+            raise ValueError("Number of cam topics != num of cam names")
+
+        self.button: QPushButton = QPushButton(button_names[self.active_cam])
+        self.button.setMaximumWidth(self.BUTTON_WIDTH)
+        self.button.setMaximumHeight(self.BUTTON_HEIGHT)
+        self.button.clicked.connect(lambda: self.camera_switch(True))
+        self.layout.addWidget(self.button, Qt.AlignCenter)
+
+        if controller_button_topic is not None:
+            self.controller_signal.connect(self.controller_camera_switch)
+            self.controller_subscriber = GUIEventSubscriber(CameraControllerSwitch,
+                                                            controller_button_topic,
+                                                            self.controller_signal)
+
+    @pyqtSlot(CameraControllerSwitch)
+    def controller_camera_switch(self, switch: CameraControllerSwitch):
+        self.camera_switch(switch.toggle_right)
+
+    def camera_switch(self, toggle_right: bool):
+        if toggle_right:
+            self.active_cam = (self.active_cam + 1) % self.num_of_cams
+        else:
+            self.active_cam = (self.active_cam - 1) % self.num_of_cams
+
+        self.camera_subscriber.destroy_node()
+        self.camera_subscriber = GUIEventSubscriber(
+            Image, self.cam_topics[self.active_cam], self.handle_frame_signal)
+        self.button.setText(self.button_names[self.active_cam])
 
 
 class PausableVideoWidget(VideoWidget):
