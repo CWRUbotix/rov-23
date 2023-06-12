@@ -86,8 +86,7 @@ class ManualControlNode(Node):
         self.manip_buttons: Dict[int, ManipButton] = {
             X_BUTTON: ManipButton("claw0"),
             O_BUTTON: ManipButton("claw1"),
-            TRI_BUTTON: ManipButton("claw0"),
-            SQUARE_BUTTON: ManipButton("claw1")
+            TRI_BUTTON: ManipButton("light")
         }
 
         self.seen_left_cam = False
