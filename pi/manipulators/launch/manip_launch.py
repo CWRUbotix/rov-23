@@ -10,8 +10,7 @@ def generate_launch_description():
         parameters=[
             {"claw0": 0},
             {"claw1": 1},
-            {"claw2": 2},
-            {"claw3": 3}
+            {"light": 2},
         ],
         remappings=[("/pi/manipulator_control", "/manipulator_control")]
     )
