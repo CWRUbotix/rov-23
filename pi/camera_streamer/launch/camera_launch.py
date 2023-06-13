@@ -18,7 +18,7 @@ def generate_launch_description():
             {"video_device":
              "/dev/v4l/by-id/usb-3.0_USB_Camera_3.0_USB_Camera-video-index0"},
             {"image_size": [640, 480]},
-            {"time_per_frame": [1, 30]}
+            {"time_per_frame": [1, 60]}
         ],
         remappings=[("/pi/front_cam/image_raw", "/front_cam/image_raw")]
     )
@@ -33,7 +33,7 @@ def generate_launch_description():
             {"video_device":
              "/dev/v4l/by-id/usb-3.0_USB_Camera_3.0_USB_Camera_2020042501-video-index0"},
             {"image_size": [640, 480]},
-            {"time_per_frame": [1, 30]}
+            {"time_per_frame": [1, 60]}
         ],
         remappings=[("/pi/bottom_cam/image_raw", "/bottom_cam/image_raw")]
     )
