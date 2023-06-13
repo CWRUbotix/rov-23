@@ -11,6 +11,8 @@ import cv2
 
 from typing import Optional, List
 
+WIDTH = 1280
+HEIGHT = 720
 
 class VideoWidget(QWidget):
     """A single video stream widget."""
@@ -19,7 +21,7 @@ class VideoWidget(QWidget):
     handle_frame_signal = pyqtSignal(Image)
 
     def __init__(self, topic: str, label_text: Optional[str] = None,
-                 widget_width: int = 1280, widget_height: int = 720,
+                 widget_width: int = WIDTH, widget_height: int = HEIGHT,
                  swap_rb_channels: bool = False):
         super().__init__()
 
@@ -95,7 +97,7 @@ class SwitchableVideoWidget(VideoWidget):
                  controller_button_topic: Optional[str] = None,
                  default_cam_num: int = 0,
                  label_text: Optional[str] = None,
-                 widget_width: int = 1280, widget_height: int = 720,
+                 widget_width: int = WIDTH, widget_height: int = HEIGHT,
                  swap_rb_channels: bool = False):
 
         self.active_cam = default_cam_num
@@ -146,7 +148,7 @@ class PausableVideoWidget(VideoWidget):
     PLAYING_TEXT = 'Pause'
 
     def __init__(self, cam_topic: str, label_text: Optional[str] = None,
-                 widget_width: int = 640, widget_height: int = 360,
+                 widget_width: int = WIDTH, widget_height: int = HEIGHT,
                  swap_rb_channels: bool = False):
         super().__init__(cam_topic, label_text, widget_width,
                          widget_height, swap_rb_channels)
