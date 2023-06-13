@@ -76,7 +76,7 @@ class SeagrassWidget(QWidget):
 
         # Add all sections to main layout
         root_layout.addLayout(before_layout, 1)
-        root_layout.addWidget(self.bottom_cam, 3)
+        root_layout.addWidget(self.bottom_cam, 1, alignment=Qt.AlignTop)
         root_layout.addLayout(after_layout, 1)
         root_layout.addWidget(result_widget, 2)
 

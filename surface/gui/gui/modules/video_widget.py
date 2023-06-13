@@ -19,7 +19,7 @@ class VideoWidget(QWidget):
     handle_frame_signal = pyqtSignal(Image)
 
     def __init__(self, topic: str, label_text: Optional[str] = None,
-                 widget_width: int = 640, widget_height: int = 480,
+                 widget_width: int = 1280, widget_height: int = 720,
                  swap_rb_channels: bool = False):
         super().__init__()
 
@@ -27,23 +27,20 @@ class VideoWidget(QWidget):
         self.widget_height: int = widget_height
         self.swap_rb_channels: bool = swap_rb_channels
 
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
+        layout = QVBoxLayout()
+        self.setLayout(layout)
 
         if label_text is not None:
             self.label = QLabel(label_text)
-            self.label.setAlignment(Qt.AlignCenter)
-            self.label.setStyleSheet('QLabel { font-size: 20px; }')
-            self.layout.addWidget(self.label)
+            self.label.setAlignment(Qt.AlignHCenter)
+            self.label.setStyleSheet('QLabel { font-size: 35px; }')
+            layout.addWidget(self.label, Qt.AlignHCenter)
 
         self.video_frame_label = QLabel()
         self.video_frame_label.setText(f'This topic had no frame: {topic}')
-        self.layout.addWidget(self.video_frame_label)
+        layout.addWidget(self.video_frame_label)
 
         self.cv_bridge: CvBridge = CvBridge()
-
-        self.setSizePolicy(QSizePolicy.Expanding,
-                           QSizePolicy.Expanding)
 
         self.handle_frame_signal.connect(self.handle_frame)
         self.camera_subscriber: GUIEventSubscriber = GUIEventSubscriber(
@@ -91,7 +88,6 @@ class SwitchableVideoWidget(VideoWidget):
     """A single video stream widget that can be paused and played."""
 
     BUTTON_WIDTH = 120
-    BUTTON_HEIGHT = 100
 
     controller_signal = pyqtSignal(CameraControllerSwitch)
 
@@ -99,7 +95,7 @@ class SwitchableVideoWidget(VideoWidget):
                  controller_button_topic: Optional[str] = None,
                  default_cam_num: int = 0,
                  label_text: Optional[str] = None,
-                 widget_width: int = 640, widget_height: int = 480,
+                 widget_width: int = 1280, widget_height: int = 720,
                  swap_rb_channels: bool = False):
 
         self.active_cam = default_cam_num
@@ -117,9 +113,8 @@ class SwitchableVideoWidget(VideoWidget):
 
         self.button: QPushButton = QPushButton(button_names[self.active_cam])
         self.button.setMaximumWidth(self.BUTTON_WIDTH)
-        self.button.setMaximumHeight(self.BUTTON_HEIGHT)
         self.button.clicked.connect(lambda: self.camera_switch(True))
-        self.layout.addWidget(self.button, Qt.AlignCenter)
+        self.layout().addWidget(self.button, alignment=Qt.AlignCenter)
 
         if controller_button_topic is not None:
             self.controller_signal.connect(self.controller_camera_switch)
@@ -151,7 +146,7 @@ class PausableVideoWidget(VideoWidget):
     PLAYING_TEXT = 'Pause'
 
     def __init__(self, cam_topic: str, label_text: Optional[str] = None,
-                 widget_width: int = 640, widget_height: int = 480,
+                 widget_width: int = 640, widget_height: int = 360,
                  swap_rb_channels: bool = False):
         super().__init__(cam_topic, label_text, widget_width,
                          widget_height, swap_rb_channels)
@@ -159,8 +154,7 @@ class PausableVideoWidget(VideoWidget):
         self.button: QPushButton = QPushButton(self.PLAYING_TEXT)
         self.button.setMaximumWidth(self.BUTTON_WIDTH)
         self.button.clicked.connect(self.toggle)
-        self.layout.addWidget(self.button, alignment=Qt.AlignHCenter)
-
+        self.layout().addWidget(self.button, alignment=Qt.AlignCenter)
         self.is_paused = False
 
     @pyqtSlot(Image)
@@ -171,5 +165,4 @@ class PausableVideoWidget(VideoWidget):
     def toggle(self):
         """Toggle whether this widget is paused or playing."""
         self.is_paused = not self.is_paused
-
         self.button.setText(self.PAUSED_TEXT if self.is_paused else self.PLAYING_TEXT)
