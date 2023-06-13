@@ -101,20 +101,21 @@ class ManualControlNode(Node):
     def joystick_to_pixhawk(self, msg: Joy):
         axes = msg.axes
         buttons = msg.buttons
-        # TODO someone else should check to make sure these are correct
-        # as in pitch yaw roll spin the right way
         rov_msg = ROVControl()
         rov_msg.header = msg.header
-        # Left Joystick XY
-        rov_msg.x = self.joystick_profiles(axes[LJOYX])
-        rov_msg.y = self.joystick_profiles(axes[LJOYY])
+
+        # DPad Pitch
+        rov_msg.pitch = self.joystick_profiles(axes[DPADVERT])
+        # L1/R1 Buttons for Roll
+        rov_msg.roll = self.joystick_profiles(buttons[L1] - buttons[R1])
         # Right Joystick Z
         rov_msg.z = self.joystick_profiles(axes[RJOYX])
-        # Not sure if it spins correct way around z
-        rov_msg.yaw = self.joystick_profiles((axes[L2PRESS_PERCENT] -
-                                              axes[R2PRESS_PERCENT])/2)
-        rov_msg.pitch = self.joystick_profiles(axes[DPADVERT])
-        rov_msg.roll = self.joystick_profiles(-buttons[L1] + buttons[R1])
+        # Left Joystick XY
+        rov_msg.x = self.joystick_profiles(axes[LJOYX])
+        rov_msg.y = self.joystick_profiles(-axes[LJOYY])
+        # L2/R2 Buttons for Yaw
+        rov_msg.yaw = self.joystick_profiles((axes[R2PRESS_PERCENT] -
+                                              axes[L2PRESS_PERCENT])/2)
         self.controller_pub.publish(rov_msg)
 
     # Used to create smoother adjustments
