@@ -12,9 +12,9 @@ MIN_CHANNEL: int = 1
 PITCH_CHANNEL:    int = 1
 ROLL_CHANNEL:     int = 2
 THROTTLE_CHANNEL: int = 3
-YAW_CHANNEL:      int = 4
+LATERAL_CHANNEL:  int = 4
 FORWARD_CHANNEL:  int = 5
-LATERAL_CHANNEL:  int = 6
+YAW_CHANNEL:      int = 6
 
 
 class PixhawkCommunication(Node):
