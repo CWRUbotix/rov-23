@@ -59,7 +59,7 @@ class ThrusterControllerNode(Node):
         self.pose = PoseStamped()
 
         # for PID control [x, y, z, roll, pitch, yaw]
-        self.integral = [0, 0, 0, 0, 0, 0]
+        self.integral = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
     def arm_callback(self, msg: Armed):
         self.is_armed = msg.armed
@@ -112,7 +112,7 @@ class ThrusterControllerNode(Node):
         thrust_list = self.stablize(msg, thrust_list)
         self.publish_thrust(thrust_list)
 
-    def x_control(self, speed: float, thrust_list: List[float]):
+    def x_control(self, speed: float, thrust_list: List[float]) -> List[float]:
         thrust = speed * self.multiplier
         thrust_list[0] += thrust
         thrust_list[1] -= thrust
@@ -120,7 +120,7 @@ class ThrusterControllerNode(Node):
         thrust_list[3] += thrust
         return thrust_list
 
-    def y_control(self, speed: float, thrust_list: List[float]):
+    def y_control(self, speed: float, thrust_list: List[float]) -> List[float]:
         thrust = speed * self.multiplier
         thrust_list[0] -= thrust
         thrust_list[1] -= thrust
@@ -128,7 +128,7 @@ class ThrusterControllerNode(Node):
         thrust_list[3] -= thrust
         return thrust_list
 
-    def z_control(self, speed: float, thrust_list: List[float]):
+    def z_control(self, speed: float, thrust_list: List[float]) -> List[float]:
         thrust = speed * self.multiplier
         thrust_list[4] += thrust
         thrust_list[5] += thrust
@@ -136,31 +136,31 @@ class ThrusterControllerNode(Node):
         thrust_list[7] += thrust
         return thrust_list
 
-    def roll_control(self, speed: float, thrust_list: List[float]):
+    def roll_control(self, speed: float, thrust_list: List[float]) -> List[float]:
         thrust = speed * self.multiplier
-        thrust_list[4] -= thrust
-        thrust_list[5] += thrust
-        thrust_list[6] -= thrust
-        thrust_list[7] += thrust
-        return thrust_list
-
-    def pitch_control(self, speed: float, thrust_list: List[float]):
-        thrust = speed * self.multiplier
-        thrust_list[4] -= thrust
+        thrust_list[4] += thrust
         thrust_list[5] -= thrust
         thrust_list[6] += thrust
-        thrust_list[7] += thrust
+        thrust_list[7] -= thrust
         return thrust_list
 
-    def yaw_control(self, speed: float, thrust_list: List[float]):
+    def pitch_control(self, speed: float, thrust_list: List[float]) -> List[float]:
         thrust = speed * self.multiplier
-        thrust_list[0] -= thrust
-        thrust_list[1] -= thrust
-        thrust_list[2] += thrust
-        thrust_list[3] += thrust
+        thrust_list[4] += thrust
+        thrust_list[5] += thrust
+        thrust_list[6] -= thrust
+        thrust_list[7] -= thrust
         return thrust_list
 
-    def stablize(self, control_msg: Twist, thrust_list: List[float]):
+    def yaw_control(self, speed: float, thrust_list: List[float]) -> List[float]:
+        thrust = speed * self.multiplier
+        thrust_list[0] += thrust
+        thrust_list[1] += thrust
+        thrust_list[2] -= thrust
+        thrust_list[3] -= thrust
+        return thrust_list
+
+    def stablize(self, control_msg: Twist, thrust_list: List[float]) -> List[float]:
         coeff = 30
         pid = self.get_pid(control_msg, self.pose, self.prev_pose)
         if control_msg.linear.x == 0.0 and control_msg.linear.y == 0.0:
@@ -181,7 +181,7 @@ class ThrusterControllerNode(Node):
 
         return thrust_list
 
-    def get_pid(self, control_msg, cur_pose: PoseStamped, prev_pose: PoseStamped):
+    def get_pid(self, control_msg: Twist, cur_pose: PoseStamped, prev_pose: PoseStamped) -> List[float]:
         cur_time = cur_pose.header.stamp.sec + cur_pose.header.stamp.nanosec / 1e9
         prev_time = prev_pose.header.stamp.sec + prev_pose.header.stamp.nanosec / 1e9
         dt = cur_time - prev_time
@@ -210,7 +210,7 @@ class ThrusterControllerNode(Node):
             prev_pose.pose.orientation.y,
             prev_pose.pose.orientation.z,
         ]
-        pid_val_list = [0, 0, 0, 0, 0, 0]
+        pid_val_list = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
         for i in [0, 1, 2, 5]:
             if control_list[i] != 0.0:
