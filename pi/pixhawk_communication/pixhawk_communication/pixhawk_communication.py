@@ -9,12 +9,12 @@ from interfaces.msg import Armed, ROVControl
 MAX_CHANNEL: int = 8
 MIN_CHANNEL: int = 1
 
-PITCH_CHANNEL:    int = 1
-ROLL_CHANNEL:     int = 2
-THROTTLE_CHANNEL: int = 3
-YAW_CHANNEL:      int = 4
-FORWARD_CHANNEL:  int = 5
-LATERAL_CHANNEL:  int = 6
+PITCH_CHANNEL:    int = 0  # Pitch
+ROLL_CHANNEL:     int = 1  # Roll
+THROTTLE_CHANNEL: int = 2  # Z
+LATERAL_CHANNEL:  int = 3  # Y
+FORWARD_CHANNEL:  int = 4  # X
+YAW_CHANNEL:      int = 5  # Yaw
 
 
 class PixhawkCommunication(Node):
@@ -60,12 +60,12 @@ class PixhawkCommunication(Node):
     def rov_control_callback(self, msg: ROVControl):
         """Send RC to the Pixhawk in a callback."""
         rc_channel_values = [65535 for _ in range(MAX_CHANNEL)]
-        rc_channel_values[ROLL_CHANNEL - 1] = msg.roll
-        rc_channel_values[PITCH_CHANNEL - 1] = msg.pitch
-        rc_channel_values[THROTTLE_CHANNEL - 1] = msg.z
-        rc_channel_values[YAW_CHANNEL - 1] = msg.yaw
-        rc_channel_values[FORWARD_CHANNEL - 1] = msg.x
-        rc_channel_values[LATERAL_CHANNEL - 1] = msg.y
+        rc_channel_values[PITCH_CHANNEL] = msg.pitch
+        rc_channel_values[ROLL_CHANNEL] = msg.roll
+        rc_channel_values[THROTTLE_CHANNEL] = msg.z
+        rc_channel_values[LATERAL_CHANNEL] = msg.y
+        rc_channel_values[FORWARD_CHANNEL] = msg.x
+        rc_channel_values[YAW_CHANNEL] = msg.yaw
 
         self.pixhawk.mav.rc_channels_override_send(
             self.pixhawk.target_system,

@@ -42,7 +42,8 @@ class SeagrassWidget(QWidget):
         before_layout.addStretch()
 
         # Bottom cam
-        self.bottom_cam = PausableVideoWidget("/bottom_cam/image_raw", "Bottom Cam")
+        self.bottom_cam = PausableVideoWidget("/bottom_cam/image_raw", "Bottom Cam",
+                                              widget_width=640, widget_height=360)
 
         # After layout
         after_layout: QVBoxLayout = QVBoxLayout()
@@ -76,7 +77,7 @@ class SeagrassWidget(QWidget):
 
         # Add all sections to main layout
         root_layout.addLayout(before_layout, 1)
-        root_layout.addWidget(self.bottom_cam, 3)
+        root_layout.addWidget(self.bottom_cam, 1, alignment=Qt.AlignTop)
         root_layout.addLayout(after_layout, 1)
         root_layout.addWidget(result_widget, 2)
 
