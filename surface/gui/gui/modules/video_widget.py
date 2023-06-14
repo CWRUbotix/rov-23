@@ -14,6 +14,7 @@ from typing import Optional, List
 WIDTH = 1280
 HEIGHT = 720
 
+
 class VideoWidget(QWidget):
     """A single video stream widget."""
 
