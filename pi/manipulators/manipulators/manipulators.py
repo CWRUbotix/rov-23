@@ -22,8 +22,7 @@ class Manipulator(Node):
             parameters=[
                 ("claw0", rclpy.Parameter.Type.INTEGER),
                 ("claw1", rclpy.Parameter.Type.INTEGER),
-                ("claw2", rclpy.Parameter.Type.INTEGER),
-                ("claw3", rclpy.Parameter.Type.INTEGER),
+                ("light", rclpy.Parameter.Type.INTEGER),
             ])
 
         # Initialize with standard I2C-bus address of TCA9555 a.k.a 0x20

@@ -34,6 +34,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/ROVControl.msg"
   "msg/Armed.msg"
   "msg/Manip.msg"
+  "msg/CameraControllerSwitch.msg"
   DEPENDENCIES std_msgs
 )
 

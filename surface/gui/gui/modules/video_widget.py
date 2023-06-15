@@ -1,14 +1,18 @@
-from PyQt5.QtWidgets import QLabel, QWidget, QSizePolicy, QVBoxLayout, QPushButton
+from PyQt5.QtWidgets import QLabel, QWidget, QVBoxLayout, QPushButton
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt5.QtGui import QPixmap, QImage
 
 from gui.event_nodes.subscriber import GUIEventSubscriber
 
 from sensor_msgs.msg import Image
+from interfaces.msg import CameraControllerSwitch
 from cv_bridge import CvBridge
 import cv2
 
-from typing import Optional
+from typing import Optional, List
+
+WIDTH = 1280
+HEIGHT = 720
 
 
 class VideoWidget(QWidget):
@@ -18,7 +22,7 @@ class VideoWidget(QWidget):
     handle_frame_signal = pyqtSignal(Image)
 
     def __init__(self, topic: str, label_text: Optional[str] = None,
-                 widget_width: int = 640, widget_height: int = 480,
+                 widget_width: int = WIDTH, widget_height: int = HEIGHT,
                  swap_rb_channels: bool = False):
         super().__init__()
 
@@ -26,23 +30,20 @@ class VideoWidget(QWidget):
         self.widget_height: int = widget_height
         self.swap_rb_channels: bool = swap_rb_channels
 
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
+        layout = QVBoxLayout()
+        self.setLayout(layout)
 
         if label_text is not None:
             self.label = QLabel(label_text)
-            self.label.setAlignment(Qt.AlignCenter)
-            self.label.setStyleSheet('QLabel { font-size: 20px; }')
-            self.layout.addWidget(self.label)
+            self.label.setAlignment(Qt.AlignHCenter)
+            self.label.setStyleSheet('QLabel { font-size: 35px; }')
+            layout.addWidget(self.label, Qt.AlignHCenter)
 
         self.video_frame_label = QLabel()
         self.video_frame_label.setText(f'This topic had no frame: {topic}')
-        self.layout.addWidget(self.video_frame_label)
+        layout.addWidget(self.video_frame_label)
 
         self.cv_bridge: CvBridge = CvBridge()
-
-        self.setSizePolicy(QSizePolicy.Expanding,
-                           QSizePolicy.Expanding)
 
         self.handle_frame_signal.connect(self.handle_frame)
         self.camera_subscriber: GUIEventSubscriber = GUIEventSubscriber(
@@ -86,6 +87,60 @@ class VideoWidget(QWidget):
         return qt_image
 
 
+class SwitchableVideoWidget(VideoWidget):
+    """A single video stream widget that can be paused and played."""
+
+    BUTTON_WIDTH = 120
+
+    controller_signal = pyqtSignal(CameraControllerSwitch)
+
+    def __init__(self, cam_topics: List[str], button_names: List[str],
+                 controller_button_topic: Optional[str] = None,
+                 default_cam_num: int = 0,
+                 label_text: Optional[str] = None,
+                 widget_width: int = WIDTH, widget_height: int = HEIGHT,
+                 swap_rb_channels: bool = False):
+
+        self.active_cam = default_cam_num
+        self.cam_topics = cam_topics
+        self.button_names = button_names
+
+        super().__init__(cam_topics[self.active_cam], label_text, widget_width,
+                         widget_height, swap_rb_channels)
+
+        self.num_of_cams = len(cam_topics)
+
+        if self.num_of_cams != len(button_names):
+            self.camera_subscriber.get_logger().error("Number of cam topics != num of cam names")
+            raise ValueError("Number of cam topics != num of cam names")
+
+        self.button: QPushButton = QPushButton(button_names[self.active_cam])
+        self.button.setMaximumWidth(self.BUTTON_WIDTH)
+        self.button.clicked.connect(lambda: self.camera_switch(True))
+        self.layout().addWidget(self.button, alignment=Qt.AlignCenter)
+
+        if controller_button_topic is not None:
+            self.controller_signal.connect(self.controller_camera_switch)
+            self.controller_subscriber = GUIEventSubscriber(CameraControllerSwitch,
+                                                            controller_button_topic,
+                                                            self.controller_signal)
+
+    @pyqtSlot(CameraControllerSwitch)
+    def controller_camera_switch(self, switch: CameraControllerSwitch):
+        self.camera_switch(switch.toggle_right)
+
+    def camera_switch(self, toggle_right: bool):
+        if toggle_right:
+            self.active_cam = (self.active_cam + 1) % self.num_of_cams
+        else:
+            self.active_cam = (self.active_cam - 1) % self.num_of_cams
+
+        self.camera_subscriber.destroy_node()
+        self.camera_subscriber = GUIEventSubscriber(
+            Image, self.cam_topics[self.active_cam], self.handle_frame_signal)
+        self.button.setText(self.button_names[self.active_cam])
+
+
 class PausableVideoWidget(VideoWidget):
     """A single video stream widget that can be paused and played."""
 
@@ -94,7 +149,7 @@ class PausableVideoWidget(VideoWidget):
     PLAYING_TEXT = 'Pause'
 
     def __init__(self, cam_topic: str, label_text: Optional[str] = None,
-                 widget_width: int = 640, widget_height: int = 480,
+                 widget_width: int = WIDTH, widget_height: int = HEIGHT,
                  swap_rb_channels: bool = False):
         super().__init__(cam_topic, label_text, widget_width,
                          widget_height, swap_rb_channels)
@@ -102,8 +157,7 @@ class PausableVideoWidget(VideoWidget):
         self.button: QPushButton = QPushButton(self.PLAYING_TEXT)
         self.button.setMaximumWidth(self.BUTTON_WIDTH)
         self.button.clicked.connect(self.toggle)
-        self.layout.addWidget(self.button, alignment=Qt.AlignHCenter)
-
+        self.layout().addWidget(self.button, alignment=Qt.AlignCenter)
         self.is_paused = False
 
     @pyqtSlot(Image)
@@ -114,5 +168,4 @@ class PausableVideoWidget(VideoWidget):
     def toggle(self):
         """Toggle whether this widget is paused or playing."""
         self.is_paused = not self.is_paused
-
         self.button.setText(self.PAUSED_TEXT if self.is_paused else self.PLAYING_TEXT)
