@@ -181,7 +181,9 @@ class ThrusterControllerNode(Node):
 
         return thrust_list
 
-    def get_pid(self, control_msg: Twist, cur_pose: PoseStamped, prev_pose: PoseStamped) -> List[float]:
+    def get_pid(self, control_msg: Twist,
+                cur_pose: PoseStamped,
+                prev_pose: PoseStamped) -> List[float]:
         cur_time = cur_pose.header.stamp.sec + cur_pose.header.stamp.nanosec / 1e9
         prev_time = prev_pose.header.stamp.sec + prev_pose.header.stamp.nanosec / 1e9
         dt = cur_time - prev_time
