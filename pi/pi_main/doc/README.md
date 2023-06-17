@@ -15,18 +15,24 @@ ros2 run pi_main install
 sudo systemctl daemon-reload
 ```
 
+### Adding udev Rules
+This should automatically be done by the prior command `ros2 run pi_main install`. If not copy all the .rules files from `udev_rules` in this package to the `/etc/udev/rules.d` directory to use USB devices properly.
+
 ### For Testing without Rebooting
 Runs in foreground for testing
 ```bash
 sudo cwrubotix_pi-start
 ```
 
-
 Runs in background
 ```bash
 sudo systemctl start cwrubotix_pi.service
 ```
-
+Kills in background
 ```bash
 sudo systemctl stop cwrubotix_pi.service
+```
+### Unistall cwrubotix_pi
+```bash
+ros2 run robot_upstart uninstall cwrubotix_pi
 ```

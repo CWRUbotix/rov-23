@@ -10,7 +10,8 @@ def generate_launch_description():
         executable='run_pilot',
         parameters=[
                 {'theme': LaunchConfiguration('theme', default='')}],
-        remappings=[("/surface/gui/armed", "/armed")]
+        remappings=[("/surface/gui/armed", "/armed"),
+                    ("/surface/gui/camera_switch", "/surface/camera_switch")]
     )
 
     return LaunchDescription([gui_node])
