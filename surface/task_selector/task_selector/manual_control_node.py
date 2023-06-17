@@ -37,10 +37,14 @@ R2PRESS_PERCENT: int = 5
 DPADHOR:         int = 6
 DPADVERT:        int = 7
 
+# Brown out protection
+SPEED_THROTTLE: float = 0.95
+
 # Range of values Pixhawk takes
 # In microseconds
 ZERO_SPEED: int = 1500
-RANGE_SPEED: int = 400
+MAX_RANGE_SPEED: int = 400
+RANGE_SPEED: float = MAX_RANGE_SPEED*SPEED_THROTTLE
 
 
 class ManualControlNode(Node):
