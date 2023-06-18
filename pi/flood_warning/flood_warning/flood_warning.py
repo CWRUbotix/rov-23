@@ -1,3 +1,4 @@
+import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Bool
 import RPi.GPIO as GPIO
@@ -18,7 +19,9 @@ class FloodWarning(Node):
             '/flood_status',
             100
         )
-        GPIO.setmode(GPIO.BOARD)
+
+        # GPIO.BCM because we use a Compute Module
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(PIN, GPIO.OUT)
         self.check_input()
 
@@ -33,7 +36,12 @@ class FloodWarning(Node):
 
 
 def main():
-    FloodWarning()
+    rclpy.init()
+    node = FloodWarning()
+    rclpy.spin(node)
+    GPIO.cleanup()
+    node.destroy_node()
+    rclpy.shutdown()
 
 
 if __name__ == '__main__':
