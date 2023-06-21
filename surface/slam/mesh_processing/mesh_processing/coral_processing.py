@@ -17,9 +17,9 @@ WHITE_SQUARE_BRIGHTNESS_CUTOFF = 0.6
 
 # find the surface/slam directory
 parent = os.path.dirname
-output_file_path = os.path.join(parent(parent(parent(os.path.realpath(__file__)))),
-                                "coral_viewer", "Build", "coral_viewer_Data", "StreamingAssets", "coral_output.obj")
-print(output_file_path)
+output_file_path = os.path.join(str(os.path.realpath(__file__)).split("slam")[0],
+                                "slam", "coral_viewer", "Build", "coral_viewer_Data", "StreamingAssets",
+                                "coral_output.obj")
 
 
 def postprocess_mesh(mesh: o3d.geometry.TriangleMesh):
