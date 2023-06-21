@@ -5,7 +5,7 @@ handle all multithreading to prevent GUI hangs. Each module should only send
 PyQt signals within itself.
 
 ## Node Graph
-![GUI Node Graph](images/GUINetwork.png)
+![GUI Node Graph](/doc/images/GUINetwork.png)
 
 ## Topics
 - `task_request`: service topic; GUI's client requests task changes by
