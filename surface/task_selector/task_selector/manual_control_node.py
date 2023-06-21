@@ -5,7 +5,7 @@ from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
 
 from interfaces.action import BasicTask
-from interfaces.msg import ROVControl, Manip
+from interfaces.msg import ROVControl, Manip, CameraControllerSwitch
 from sensor_msgs.msg import Joy
 
 from typing import Dict, List
@@ -37,10 +37,14 @@ R2PRESS_PERCENT: int = 5
 DPADHOR:         int = 6
 DPADVERT:        int = 7
 
+# Brown out protection
+SPEED_THROTTLE: float = 0.95
+
 # Range of values Pixhawk takes
 # In microseconds
 ZERO_SPEED: int = 1500
-RANGE_SPEED: int = 400
+MAX_RANGE_SPEED: int = 400
+RANGE_SPEED: float = MAX_RANGE_SPEED*SPEED_THROTTLE
 
 
 class ManualControlNode(Node):
@@ -76,35 +80,46 @@ class ManualControlNode(Node):
             10
         )
 
+        # Cameras
+        self.camera_toggle_publisher = self.create_publisher(
+            CameraControllerSwitch,
+            "camera_switch",
+            10
+        )
+
         self.manip_buttons: Dict[int, ManipButton] = {
             X_BUTTON: ManipButton("claw0"),
             O_BUTTON: ManipButton("claw1"),
-            TRI_BUTTON: ManipButton("claw0"),
-            SQUARE_BUTTON: ManipButton("claw1")
+            TRI_BUTTON: ManipButton("light")
         }
+
+        self.seen_left_cam = False
+        self.seen_right_cam = False
 
     def controller_callback(self, msg: Joy):
         if self._passing:
             self.joystick_to_pixhawk(msg)
             self.manip_callback(msg)
+            self.camera_toggle(msg)
 
     def joystick_to_pixhawk(self, msg: Joy):
         axes = msg.axes
         buttons = msg.buttons
-        # TODO someone else should check to make sure these are correct
-        # as in pitch yaw roll spin the right way
         rov_msg = ROVControl()
         rov_msg.header = msg.header
-        # Left Joystick XY
-        rov_msg.x = self.joystick_profiles(axes[LJOYX])
-        rov_msg.y = self.joystick_profiles(axes[LJOYY])
+
+        # DPad Pitch
+        rov_msg.pitch = self.joystick_profiles(axes[DPADVERT])
+        # L1/R1 Buttons for Roll
+        rov_msg.roll = self.joystick_profiles(buttons[L1] - buttons[R1])
         # Right Joystick Z
         rov_msg.z = self.joystick_profiles(axes[RJOYX])
-        # Not sure if it spins correct way around z
-        rov_msg.yaw = self.joystick_profiles((axes[L2PRESS_PERCENT] -
-                                              axes[R2PRESS_PERCENT])/2)
-        rov_msg.pitch = self.joystick_profiles(axes[DPADVERT])
-        rov_msg.roll = self.joystick_profiles(-buttons[L1] + buttons[R1])
+        # Left Joystick XY
+        rov_msg.x = self.joystick_profiles(axes[LJOYX])
+        rov_msg.y = self.joystick_profiles(-axes[LJOYY])
+        # L2/R2 Buttons for Yaw
+        rov_msg.yaw = self.joystick_profiles((axes[R2PRESS_PERCENT] -
+                                              axes[L2PRESS_PERCENT])/2)
         self.controller_pub.publish(rov_msg)
 
     # Used to create smoother adjustments
@@ -156,6 +171,21 @@ class ManualControlNode(Node):
                 self.manip_publisher.publish(manip_msg)
 
             manip_button.last_button_state = just_pressed
+
+    def camera_toggle(self, msg: Joy):
+        """Cycles through connected cameras on pilot GUI using menu and pairing buttons."""
+        buttons: List[int] = msg.buttons
+
+        if buttons[MENU] == 1:
+            self.seen_right_cam = True
+        elif buttons[PAIRING_BUTTON] == 1:
+            self.seen_left_cam = True
+        elif buttons[MENU] == 0 and self.seen_right_cam:
+            self.seen_right_cam = False
+            self.camera_toggle_publisher.publish(CameraControllerSwitch(toggle_right=True))
+        elif buttons[PAIRING_BUTTON] == 0 and self.seen_left_cam:
+            self.seen_left_cam = False
+            self.camera_toggle_publisher.publish(CameraControllerSwitch(toggle_right=False))
 
 
 class ManipButton:
