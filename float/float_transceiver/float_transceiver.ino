@@ -88,7 +88,7 @@
 #define RF69_FREQ 877.0
 
 // All delays in ms
-#define RELEASE_MAX   60000
+#define RELEASE_MAX   120000
 #define SUCK_MAX      30000
 #define DESCEND_TIME  30000
 #define PUMP_MAX      30000
@@ -101,11 +101,11 @@
 #define PUMP 2
 #define STOP 3
 
-unsigned long SCHEDULE[][] = {
+unsigned long SCHEDULE[][2] = {
   // Wait for max <time> or until surface signal
   {WAIT, RELEASE_MAX },
 
-  // Profile 1
+  // Profile 12
   {SUCK, SUCK_MAX    },
   {WAIT, DESCEND_TIME},
   {PUMP, PUMP_MAX    },

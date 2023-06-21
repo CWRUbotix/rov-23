@@ -105,6 +105,7 @@ void setup() {
   // Manually reset radio module
   digitalWrite(RFM69_RST, HIGH);
   delay(10);
+  
   digitalWrite(RFM69_RST, LOW);
   delay(10);
 
@@ -140,6 +141,7 @@ void loop() {
   if (Serial.available() == 1) {
     String command;
     command = Serial.readString();
+    Serial.println(command);
     if (command == "submerge") {
       sendControlSignal("submerge");
     }
