@@ -3,7 +3,6 @@ from rclpy.node import Node
 from std_msgs.msg import Bool
 import RPi.GPIO as GPIO
 
-
 # GPIO PIN #
 PIN = 26
 

@@ -1,20 +1,23 @@
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 
-import lg
+import lgpio as GPIO
 
 # GPIO PIN #
 PIN = 26
 
+h = GPIO.gpiochip_open(0)
+GPIO.gpio_claim_input(h, PIN)
+
 def main():
     # GPIO.BCM because we use a Compute Module
     PIN = 26
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(PIN, GPIO.OUT)
+    # GPIO.setmode(GPIO.BCM)
+    # GPIO.setup(PIN, GPIO.OUT)
 
     while True:
-        print(GPIO.input(PIN))
+        print(GPIO.gpio_read(h, PIN))
 
-        if GPIO.input(PIN) == GPIO.HIGH:
+        if GPIO.gpio_read(h, PIN):
             print("Flooding detected")
             print(PIN)
             raise
