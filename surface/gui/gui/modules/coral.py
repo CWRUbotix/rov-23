@@ -14,19 +14,20 @@ class CoralWidget(QWidget):
 
         self.root_layout: QHBoxLayout = QHBoxLayout(self)
 
-        self.depth_cam_stream = VideoWidget("/bottom_cam/image_raw", "Depth Cam")  # TODO update stream topic
+        self.depth_cam_stream = VideoWidget("/depth_cam/image_raw", "Depth Cam")
 
         self.button_layout = QVBoxLayout()
 
-        # self.rtabmap_button = ProcessLaunchButton("RTAB-Map")
+        self.rtabmap_button = ProcessLaunchButton("RTAB-Map",
+                                                  "ros2 launch slam_main slam_launch.py".split())
         self.open3d_button = ProcessLaunchButton("Point Mesher",
-                                                 ["ros2", "run", "mesh_processing", "coral_processing_node"])
+                                                 "ros2 run mesh_processing coral_processing_node".split())
         self.viewer_button = ProcessLaunchButton("Mesh Viewer", [
             os.path.join(get_package_share_directory("coral_viewer"),
                          "coral_viewer_unity", "Build", "coral_viewer.x86_64")
         ])
 
-        # self.button_layout.addWidget(self.rtabmap_button, alignment=Qt.AlignRight)
+        self.button_layout.addWidget(self.rtabmap_button, alignment=Qt.AlignRight)
         self.button_layout.addWidget(self.open3d_button, alignment=Qt.AlignRight)
         self.button_layout.addWidget(self.viewer_button, alignment=Qt.AlignRight)
 
