@@ -17,6 +17,7 @@ def generate_launch_description():
                 realsense_path, 'launch', 'rs_launch.py'
             )
         ]),
+        launch_arguments={'depth_module.profile': '640x480x15'}.items()
     )
 
     realsense_action = GroupAction(
