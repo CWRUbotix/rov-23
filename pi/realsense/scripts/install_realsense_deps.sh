@@ -13,16 +13,3 @@ sudo apt-get upgrade
 source ~/.bashrc
 
 sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
-# cd ~/rov_23_ws/src/pi
-
-# git clone https://github.com/IntelRealSense/realsense-ros.git -b ros2-development
-# cd ~/rov_23_ws
-
-# sudo apt-get install python3-rosdep -y
-# sudo rosdep init # "sudo rosdep init --include-eol-distros" for Eloquent and earlier
-# rosdep update # "sudo rosdep update --include-eol-distros" for Eloquent and earlier
-# rosdep install -i --from-path src --rosdistro $ROS_DISTRO --skip-keys=librealsense2 -y
-
-# # Build from source2
-# colcon build
-# source ~/.bashrc
