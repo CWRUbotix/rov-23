@@ -24,7 +24,8 @@ def generate_launch_description():
         actions=[
             SetRemap(src='/pi/camera/color/image_raw', dst='/depth_cam/image_raw'),
             SetRemap(src='/pi/camera/color/camera_info', dst='/depth_cam/camera_info'),
-            SetRemap(src='/pi/camera/aligned_depth_to_color/image_raw', dst='/depth_cam/depth_to_color'),
+            SetRemap(src='/pi/camera/aligned_depth_to_color/image_raw',
+                     dst='/depth_cam/depth_to_color'),
             realsense_launch
         ]
     )
