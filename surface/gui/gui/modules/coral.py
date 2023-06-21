@@ -1,6 +1,9 @@
+import os.path
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton
 import subprocess
+from ament_index_python.packages import get_package_share_directory
 
 from gui.modules.video_widget import VideoWidget
 
@@ -15,11 +18,15 @@ class CoralWidget(QWidget):
 
         self.button_layout = QVBoxLayout()
 
-        self.rtabmap_button = ProcessLaunchButton("RTAB-Map")
-        self.open3d_button = ProcessLaunchButton("Point Mesher")
-        self.viewer_button = ProcessLaunchButton("Mesh Viewer")
+        # self.rtabmap_button = ProcessLaunchButton("RTAB-Map")
+        self.open3d_button = ProcessLaunchButton("Point Mesher",
+                                                 ["ros2", "run", "mesh_processing", "coral_processing_node"])
+        self.viewer_button = ProcessLaunchButton("Mesh Viewer", [
+            os.path.join(get_package_share_directory("coral_viewer"),
+                         "coral_viewer_unity", "Build", "coral_viewer.x86_64")
+        ])
 
-        self.button_layout.addWidget(self.rtabmap_button, alignment=Qt.AlignRight)
+        # self.button_layout.addWidget(self.rtabmap_button, alignment=Qt.AlignRight)
         self.button_layout.addWidget(self.open3d_button, alignment=Qt.AlignRight)
         self.button_layout.addWidget(self.viewer_button, alignment=Qt.AlignRight)
 
@@ -56,5 +63,5 @@ class ProcessLaunchButton(QPushButton):
             self.setText(f"Stop {self.process_label}")
         else:
             if self.process is not None:
-                self.process.kill()
+                self.process.terminate()
                 self.setText(f"Start {self.process_label}")
