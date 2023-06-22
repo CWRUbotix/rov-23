@@ -42,15 +42,15 @@ def generate_launch_description():
     )
 
     # Flood Communication
-    flood_path: str = get_package_share_directory('flood_warning')
+    # flood_path: str = get_package_share_directory('flood_warning')
 
-    flood_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            os.path.join(
-                flood_path, 'launch', 'flood_warning_launch.py'
-            )
-        ])
-    )
+    # flood_launch = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource([
+    #         os.path.join(
+    #             flood_path, 'launch', 'flood_warning_launch.py'
+    #         )
+    #     ])
+    # )
 
     # realsense_path: str = get_package_share_directory('realsense')
 
@@ -69,7 +69,7 @@ def generate_launch_description():
             PushRosNamespace(NS),
             manip_launch,
             pixhawk_launch,
-            flood_launch,
+            # flood_launch,
             cam_launch,
             # realsense_launch
         ]
