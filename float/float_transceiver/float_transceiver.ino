@@ -75,26 +75,30 @@
 */
 
 // H-bridge direction control pins
-#define SYRINGE_SUCK 9  // Set high to suck water into the syringe
-#define SYRINGE_PUMP 10 // Set high to blow water out of the syringe
+#define MOTOR_PWM 9   // Leave 100% cycle for top speed
+#define MOTOR_DIR 10  // Set high for pump (CW when facing down), low for suck (CCW when facing down)
+
 
 // Limit switch pins
-#define LIMIT_FULL  11  // Low when syringe is full
-#define LIMIT_EMPTY 12  // Low when syringe is empty
+#define LIMIT_FULL  5  // Low when syringe is full
+#define LIMIT_EMPTY 6  // Low when syringe is empty
 
 #define TEAM_NUM 11
 
 // Change to 434.0 or other frequency, must match RX's freq!
 #define RF69_FREQ 877.0
 
+#define SECOND 250
+
 // All delays in ms
-#define RELEASE_MAX   120000
-#define SUCK_MAX      30000
-#define DESCEND_TIME  30000
-#define PUMP_MAX      30000
-#define ASCEND_TIME   30000
-#define TX_MAX        60000
-#define ONE_HOUR      3600000
+#define RELEASE_MAX   120 * SECOND
+#define SUCK_MAX      30  * SECOND
+#define DESCEND_TIME  30  * SECOND
+#define PUMP_MAX      30  * SECOND
+#define ASCEND_TIME   30  * SECOND
+#define TX_MAX        60  * SECOND
+#define ONE_HOUR      360 * SECOND
+
 
 #define WAIT 0
 #define SUCK 1
@@ -105,7 +109,7 @@ unsigned long SCHEDULE[][2] = {
   // Wait for max <time> or until surface signal
   {WAIT, RELEASE_MAX },
 
-  // Profile 12
+  // Profile 1
   {SUCK, SUCK_MAX    },
   {WAIT, DESCEND_TIME},
   {PUMP, PUMP_MAX    },
@@ -163,11 +167,11 @@ void setup() {
   pinMode(LIMIT_EMPTY, INPUT_PULLUP);
   pinMode(LIMIT_FULL,  INPUT_PULLUP);
 
-  pinMode(SYRINGE_SUCK, OUTPUT);
-  pinMode(SYRINGE_PUMP, OUTPUT);
+  pinMode(MOTOR_PWM, OUTPUT);
+  pinMode(MOTOR_DIR, OUTPUT);
 
-  digitalWrite(SYRINGE_SUCK, LOW);
-  digitalWrite(SYRINGE_PUMP, LOW);
+  digitalWrite(MOTOR_PWM, LOW);
+  digitalWrite(MOTOR_DIR, LOW);
 
   initRTC();
   initRadio();
@@ -185,8 +189,8 @@ void loop() {
     (SCHEDULE[stage][0] == PUMP && digitalRead(LIMIT_EMPTY) == LOW)
   ) {
     stage++;
-    digitalWrite(SYRINGE_SUCK, LOW);
-    digitalWrite(SYRINGE_PUMP, LOW);
+    digitalWrite(MOTOR_PWM, LOW);
+    digitalWrite(MOTOR_DIR, LOW);
 
     // If we signal a third profile
     if (stage >= SCHEDULE_LENGTH) {
@@ -194,11 +198,15 @@ void loop() {
     }
 
     if (SCHEDULE[stage][0] == SUCK) {
-      digitalWrite(SYRINGE_SUCK, HIGH);
+      digitalWrite(MOTOR_PWM, HIGH);
+      digitalWrite(MOTOR_DIR, LOW);
     }
     else if (SCHEDULE[stage][0] == PUMP) {
-      digitalWrite(SYRINGE_PUMP, HIGH);
+      digitalWrite(MOTOR_PWM, HIGH);
+      digitalWrite(MOTOR_DIR, HIGH);
     }
+
+    Serial.println(stage);
 
     previous_time = millis();
   }

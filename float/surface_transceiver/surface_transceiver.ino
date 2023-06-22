@@ -142,7 +142,7 @@ void loop() {
     String command;
     command = Serial.readString();
     Serial.println(command);
-    if (command == "submerge") {
+    if (command == "submerge" || command == "submerge\n") {
       sendControlSignal("submerge");
     }
     // else if (command == "extend") {
