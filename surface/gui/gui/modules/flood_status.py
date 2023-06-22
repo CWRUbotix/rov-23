@@ -11,7 +11,7 @@ class FloodStatus(QWidget):
     BUTTON_WIDTH = 120
     BUTTON_HEIGHT = 60
 
-    flood_signl = pyqtSignal(Bool)
+    flood_signal = pyqtSignal(Bool)
 
     def __init__(self):
         super().__init__()
@@ -28,7 +28,7 @@ class FloodStatus(QWidget):
 
         layout.addWidget(self.flood_text)
 
-        self.flood_signl.connect(self.update_text)
+        self.flood_signal.connect(self.update_text)
 
         self.arm_publisher: GUIEventSubscriber = GUIEventSubscriber(
             Bool,
