@@ -1,0 +1,1 @@
+SUBSYSTEM=="gpiomem", GROUP="dialout", MODE="6666"

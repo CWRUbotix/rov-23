@@ -1,18 +1,19 @@
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
-import lgpio as GPIO
+# import lgpio as GPIO
+# from lgpio import gpiochip_open
 
 # GPIO PIN #
 PIN = 26
 
-h = GPIO.gpiochip_open(0)
-GPIO.gpio_claim_input(h, PIN)
+# h = gpiochip_open(0)
+# GPIO.gpio_claim_input(h, PIN)
 
 def main():
     # GPIO.BCM because we use a Compute Module
     PIN = 26
-    # GPIO.setmode(GPIO.BCM)
-    # GPIO.setup(PIN, GPIO.OUT)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(PIN, GPIO.OUT)
 
     while True:
         print(GPIO.gpio_read(h, PIN))
