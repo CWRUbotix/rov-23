@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 
 from gui.modules.video_widget import SwitchableVideoWidget
 from gui.modules.arm import Arm
+from gui.modules.flood_status import FloodStatus
 from gui.app import App
 
 
@@ -23,6 +24,9 @@ class PilotApp(App):
                                                 #  "Depth Camera"],
                                                 "camera_switch")
         layout.addWidget(self.video_area, alignment=Qt.AlignCenter)
+
+        self.flood = FloodStatus()
+        layout.addWidget(self.flood, alignment=Qt.AlignRight)
 
         self.arm: Arm = Arm()
         layout.addWidget(self.arm, alignment=Qt.AlignRight | Qt.AlignBottom)

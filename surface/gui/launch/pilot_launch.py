@@ -11,7 +11,8 @@ def generate_launch_description():
         parameters=[
                 {'theme': LaunchConfiguration('theme', default='')}],
         remappings=[("/surface/gui/armed", "/armed"),
-                    ("/surface/gui/camera_switch", "/surface/camera_switch")]
+                    ("/surface/gui/camera_switch", "/surface/camera_switch"),
+                    ("/surface/gui/flood_status", "/flood_status")]
     )
 
     return LaunchDescription([gui_node])
