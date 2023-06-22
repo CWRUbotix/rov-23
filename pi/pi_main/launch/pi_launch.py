@@ -52,13 +52,26 @@ def generate_launch_description():
         ])
     )
 
+    realsense_path: str = get_package_share_directory('realsense')
+
+    # Launches Realsense
+    realsense_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(
+                realsense_path, 'launch', 'realsense_launch.py'
+            )
+        ]),
+        launch_arguments={'align_depth.enable': 'true'}.items()
+    )
+
     namespace_launch = GroupAction(
         actions=[
             PushRosNamespace(NS),
             manip_launch,
             pixhawk_launch,
             flood_launch,
-            cam_launch
+            cam_launch,
+            realsense_launch
         ]
     )
 
