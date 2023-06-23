@@ -25,7 +25,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-          'image_publisher = camera_streamer.image_publisher:main'
+          'camera_switch = camera_streamer.camera_switch:main'
         ],
     },
 )
