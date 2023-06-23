@@ -16,11 +16,11 @@ class PilotApp(App):
         self.setLayout(layout)
 
         self.video_area = SwitchableVideoWidget(["/front_cam/image_raw",
-                                                 "/bottom_cam/image_raw"],
-                                                #  "/depth_cam/image_raw"],
+                                                 "/bottom_cam/image_raw",
+                                                 "/depth_cam/image_raw"],
                                                 ["Front Camera",
-                                                 "Bottom Camera"],
-                                                #  "Depth Camera"],
+                                                 "Bottom Camera",
+                                                 "Depth Camera"],
                                                 "camera_switch")
         layout.addWidget(self.video_area, alignment=Qt.AlignCenter)
 
