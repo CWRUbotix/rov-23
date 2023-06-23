@@ -144,6 +144,10 @@ void loop() {
     Serial.println(command);
     if (command == "submerge" || command == "submerge\n") {
       sendControlSignal("submerge");
+    } else if (command.startsWith("set_time")) {
+      char command_arr[command.length() + 1];
+      command.toCharArray(command_arr, command.length() + 1);
+      sendControlSignal(command_arr);
     }
     // else if (command == "extend") {
     //   sendControlSignal("extend");

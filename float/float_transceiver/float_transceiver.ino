@@ -80,24 +80,24 @@
 
 
 // Limit switch pins
-#define LIMIT_FULL  5  // Low when syringe is full
-#define LIMIT_EMPTY 6  // Low when syringe is empty
+#define LIMIT_FULL  6  // Low when syringe is full
+#define LIMIT_EMPTY 5  // Low when syringe is empty
 
 #define TEAM_NUM 11
 
 // Change to 434.0 or other frequency, must match RX's freq!
 #define RF69_FREQ 877.0
 
-#define SECOND 250
+#define SECOND 1000
 
 // All delays in ms
 #define RELEASE_MAX   120 * SECOND
-#define SUCK_MAX      30  * SECOND
+#define SUCK_MAX      45  * SECOND
 #define DESCEND_TIME  30  * SECOND
-#define PUMP_MAX      30  * SECOND
+#define PUMP_MAX      45  * SECOND
 #define ASCEND_TIME   30  * SECOND
 #define TX_MAX        60  * SECOND
-#define ONE_HOUR      360 * SECOND
+#define ONE_HOUR      3600 * SECOND
 
 
 #define WAIT 0
@@ -185,8 +185,8 @@ void loop() {
   if (
     millis() >= previous_time + SCHEDULE[stage][1]   ||
     (SCHEDULE[stage][0] == WAIT && signalReceived()) ||
-    (SCHEDULE[stage][0] == SUCK && digitalRead(LIMIT_FULL)  == LOW) ||
-    (SCHEDULE[stage][0] == PUMP && digitalRead(LIMIT_EMPTY) == LOW)
+    (SCHEDULE[stage][0] == SUCK && !digitalRead(LIMIT_FULL)) ||
+    (SCHEDULE[stage][0] == PUMP && !digitalRead(LIMIT_EMPTY))
   ) {
     stage++;
     digitalWrite(MOTOR_PWM, LOW);
@@ -199,11 +199,11 @@ void loop() {
 
     if (SCHEDULE[stage][0] == SUCK) {
       digitalWrite(MOTOR_PWM, HIGH);
-      digitalWrite(MOTOR_DIR, LOW);
+      digitalWrite(MOTOR_DIR, HIGH);
     }
     else if (SCHEDULE[stage][0] == PUMP) {
       digitalWrite(MOTOR_PWM, HIGH);
-      digitalWrite(MOTOR_DIR, HIGH);
+      digitalWrite(MOTOR_DIR, LOW);
     }
 
     Serial.println(stage);
@@ -257,6 +257,9 @@ bool signalReceived() {
 
       if (strcmp((char*) buf, "su") == 0) {
         return true;
+      } else if (strcmp((char*) buf, "set_time") == 0) {
+        rtc.adjust(DateTime(2023, 6, 23, (buf[9]-48) * 10 + (buf[10]-48), (buf[12]-48) * 10 + (buf[13]-48), (buf[15]-48) * 10 + (buf[16]-48)));
+        return false;
       }
       else {
         Serial.println("Invalid command");
@@ -282,31 +285,31 @@ void initRTC() {
 
   // Set rtc if power lost
   if (!rtc.initialized() || rtc.lostPower()) {
-    Serial.println("RTC is NOT initialized, let's set the time!");
+    Serial.println("Warning: RTC is NOT initialized");
 
-    Serial.println("Assume year is 2023");
-    Serial.println("Enter month [number format]");
-    while (Serial.available() == 0);
-    int month = Serial.parseInt();
-    Serial.println(month);
-    Serial.println("Enter day");
-    while (Serial.available() == 0);
-    int day = Serial.parseInt();
-    Serial.println(day);
-    Serial.println("Enter hour");
-    while (Serial.available() == 0);
-    int hour = Serial.parseInt();
-    Serial.println(hour);
-    Serial.println("Enter minute [make sure you have enough time to enter seconds!]");
-    while (Serial.available() == 0);
-    int minute = Serial.parseInt();
-    Serial.println(minute);
-    Serial.println("Enter second");
-    while (Serial.available() == 0);
-    int second = Serial.parseInt();
-    Serial.println(second);
+    // Serial.println("Assume year is 2023");
+    // Serial.println("Enter month [number format]");
+    // while (Serial.available() == 0);
+    // int month = Serial.parseInt();
+    // Serial.println(month);
+    // Serial.println("Enter day");
+    // while (Serial.available() == 0);
+    // int day = Serial.parseInt();
+    // Serial.println(day);
+    // Serial.println("Enter hour");
+    // while (Serial.available() == 0);
+    // int hour = Serial.parseInt();
+    // Serial.println(hour);
+    // Serial.println("Enter minute [make sure you have enough time to enter seconds!]");
+    // while (Serial.available() == 0);
+    // int minute = Serial.parseInt();
+    // Serial.println(minute);
+    // Serial.println("Enter second");
+    // while (Serial.available() == 0);
+    // int second = Serial.parseInt();
+    // Serial.println(second);
 
-    rtc.adjust(DateTime(2023, month, day, hour, minute, second));
+    // rtc.adjust(DateTime(2023, month, day, hour, minute, second));
     
     // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     // This line sets the RTC with an explicit date & time, for example to set

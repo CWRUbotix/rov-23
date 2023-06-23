@@ -1,4 +1,4 @@
-
+from datetime import datetime, timezone
 from PyQt5.QtWidgets import QPushButton, QHBoxLayout, QLabel, QWidget
 from gui.event_nodes.publisher import GUIEventPublisher
 from gui.event_nodes.subscriber import GUIEventSubscriber
@@ -24,6 +24,16 @@ class FloatComm(QWidget):
         submerge_button.clicked.connect(self.submerge_clicked)
         layout.addWidget(submerge_button)
 
+        layout: QHBoxLayout = QHBoxLayout()
+        self.setLayout(layout)
+
+        set_time_button = QPushButton()
+
+        set_time_button.setText("Submerge")
+        set_time_button.setFixedSize(300, 200)
+        set_time_button.clicked.connect(self.set_time_clicked)
+        layout.addWidget(set_time_button)
+
         self.handle_scheduler_response_signal.connect(self.handle_text)
 
         self.label: QLabel = QLabel()
@@ -47,3 +57,8 @@ class FloatComm(QWidget):
 
     def submerge_clicked(self):
         self.transceiver_publisher.publish(FloatCommand(command="submerge"))
+
+    def set_time_clicked(self):
+        utc = datetime.now(timezone.utc)
+        self.transceiver_publisher.publish(FloatCommand(
+            command=f"set_time {utc.hour:02d} {utc.minute:02d} {utc.second:02d}"))
