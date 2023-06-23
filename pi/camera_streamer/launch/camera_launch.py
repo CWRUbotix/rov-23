@@ -38,7 +38,15 @@ def generate_launch_description():
         remappings=[("/pi/bottom_cam/image_raw", "/bottom_cam/image_raw")]
     )
 
+    camera_switch_node: Node = Node(
+        exec_name="camera_switch",
+        package="camera_streamer",
+        executable="camera_switch",
+        remappings=[("/pi/camera_switch", "/surface/camera_switch")]
+    )
+
     return LaunchDescription([
-        front_cam_node,
-        bottom_cam_node
+        # front_cam_node,
+        # bottom_cam_node
+        camera_switch_node
     ])
