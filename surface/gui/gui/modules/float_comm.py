@@ -18,18 +18,13 @@ class FloatComm(QWidget):
         self.setLayout(layout)
 
         submerge_button = QPushButton()
-
         submerge_button.setText("Submerge")
         submerge_button.setFixedSize(300, 200)
         submerge_button.clicked.connect(self.submerge_clicked)
         layout.addWidget(submerge_button)
 
-        layout: QHBoxLayout = QHBoxLayout()
-        self.setLayout(layout)
-
         set_time_button = QPushButton()
-
-        set_time_button.setText("Submerge")
+        set_time_button.setText("Set time")
         set_time_button.setFixedSize(300, 200)
         set_time_button.clicked.connect(self.set_time_clicked)
         layout.addWidget(set_time_button)
