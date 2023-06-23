@@ -17,7 +17,7 @@ class PilotApp(App):
 
         self.video_area = SwitchableVideoWidget(["/front_cam/image_raw",
                                                  "/bottom_cam/image_raw",
-                                                 "/depth_cam/image_raw"],
+                                                 "/camera/color/image_raw"],
                                                 ["Front Camera",
                                                  "Bottom Camera",
                                                  "Depth Camera"],

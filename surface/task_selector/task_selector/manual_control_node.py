@@ -38,7 +38,7 @@ DPADHOR:         int = 6
 DPADVERT:        int = 7
 
 # Brown out protection
-SPEED_THROTTLE: float = 0.95
+SPEED_THROTTLE: float = 0.85
 
 # Range of values Pixhawk takes
 # In microseconds
@@ -111,9 +111,13 @@ class ManualControlNode(Node):
         # DPad Pitch
         rov_msg.pitch = self.joystick_profiles(axes[DPADVERT])
         # L1/R1 Buttons for Roll
-        rov_msg.roll = self.joystick_profiles(buttons[L1] - buttons[R1])
+        rov_msg.roll = self.joystick_profiles(buttons[R1] - buttons[L1])
         # Right Joystick Z
-        rov_msg.z = self.joystick_profiles(axes[RJOYX])
+
+        if axes[RJOYX] > 0:
+            rov_msg.z = 1900
+        elif axes[RJOYX] < 0:
+            rov_msg.z = 1100
         # Left Joystick XY
         rov_msg.x = self.joystick_profiles(axes[LJOYX])
         rov_msg.y = self.joystick_profiles(-axes[LJOYY])
