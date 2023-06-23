@@ -29,6 +29,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/TaskRequest.srv"
   "action/Example.action"
   "action/BasicTask.action"
+  "msg/FloatCommand.msg"
   "msg/TaskFeedback.msg"
   "msg/ROVControl.msg"
   "msg/Armed.msg"
