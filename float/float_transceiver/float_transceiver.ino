@@ -91,14 +91,13 @@
 #define SECOND 1000
 
 // All delays in ms
-#define RELEASE_MAX   120 * SECOND
-#define SUCK_MAX      45  * SECOND
-#define DESCEND_TIME  30  * SECOND
-#define PUMP_MAX      45  * SECOND
-#define ASCEND_TIME   30  * SECOND
-#define TX_MAX        60  * SECOND
-#define ONE_HOUR      3600 * SECOND
-
+#define RELEASE_MAX   1200000
+#define SUCK_MAX      45000
+#define DESCEND_TIME  5000
+#define PUMP_MAX      45000
+#define ASCEND_TIME   5000
+#define TX_MAX        60000
+#define ONE_HOUR      360000
 
 #define WAIT 0
 #define SUCK 1
@@ -151,18 +150,13 @@ DateTime prevTime((uint32_t) 0);
 
 void setup() {
   Serial.begin(115200);
-
-  // Wait until serial console is open; remove if not tethered to computer
-  // while (!Serial) { delay(1); }
-
-  #ifndef ESP8266
-    while (!Serial); // wait for serial port to connect. Needed for native USB
-  #endif
-
+  
   Serial.println("Float Transceiver");
   Serial.println();
 
   previous_time = millis();
+
+  pinMode(LED_BUILTIN, OUTPUT);
 
   pinMode(LIMIT_EMPTY, INPUT_PULLUP);
   pinMode(LIMIT_FULL,  INPUT_PULLUP);
@@ -182,12 +176,28 @@ void loop() {
   sendTime();
 
   // Move to next stage if necessary
+  bool signal = signalReceived();
+
   if (
     millis() >= previous_time + SCHEDULE[stage][1]   ||
-    (SCHEDULE[stage][0] == WAIT && signalReceived()) ||
+    (SCHEDULE[stage][0] == WAIT && signal) ||
     (SCHEDULE[stage][0] == SUCK && !digitalRead(LIMIT_FULL)) ||
     (SCHEDULE[stage][0] == PUMP && !digitalRead(LIMIT_EMPTY))
   ) {
+    Serial.print(stage);
+    Serial.print(" ");
+    Serial.print(SCHEDULE[stage][0]);
+    Serial.print(" ");
+    Serial.print(previous_time);
+    Serial.print(" ");
+    Serial.print(SCHEDULE[stage][1]);
+    Serial.print(" ");
+    Serial.print(millis());
+    Serial.print(" ");
+    Serial.print(millis() >= previous_time + SCHEDULE[stage][1]);
+    Serial.println();
+
+    previous_time = millis();
     stage++;
     digitalWrite(MOTOR_PWM, LOW);
     digitalWrite(MOTOR_DIR, LOW);
@@ -208,7 +218,7 @@ void loop() {
 
     Serial.println(stage);
 
-    previous_time = millis();
+    
   }
 }
 
@@ -240,12 +250,17 @@ void sendTime() {
   }
 }
 
+uint8_t hours = 1;
+uint8_t minutes = 1;
+uint8_t seconds = 1;
+
 bool signalReceived() {
   if (rf69.available()) {
     uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
     uint8_t len = sizeof(buf);
+    Serial.println(len);
     if (rf69.recv(buf, &len)) {
-      if (!len) return;
+      if (!len) return false;
       buf[len] = 0;
       Serial.print("Received [");
       Serial.print(len);
@@ -255,10 +270,37 @@ bool signalReceived() {
       Serial.print("RSSI: ");
       Serial.println(rf69.lastRssi(), DEC);
 
+      Serial.print(buf[0]);
+      Serial.print(", ");
+      Serial.println(buf[1]);
+
       if (strcmp((char*) buf, "su") == 0) {
+        uint8_t test_packet[] = {50, 60};
+        rf69.send(test_packet, strlen(test_packet));
+        rf69.waitPacketSent();
+
+        // Jiggle motor
+        // digitalWrite(MOTOR_PWM, HIGH);
+        // digitalWrite(MOTOR_DIR, HIGH);
+        // delay(2000);
+        // delay(100);
+        // digitalWrite(MOTOR_PWM, LOW);
+        // delay(500);
         return true;
-      } else if (strcmp((char*) buf, "set_time") == 0) {
-        rtc.adjust(DateTime(2023, 6, 23, (buf[9]-48) * 10 + (buf[10]-48), (buf[12]-48) * 10 + (buf[13]-48), (buf[15]-48) * 10 + (buf[16]-48)));
+      } else if (buf[0] == 104) { // hours
+        Serial.println("Setting hours");
+        hours = buf[1] - 50;
+        rtc.adjust(DateTime(2023, 6, 23, hours, minutes, seconds));
+        return false;
+      } else if (buf[0] == 109) { // minutes
+        Serial.println("Setting minutes");
+        minutes = buf[1] - 50;
+        rtc.adjust(DateTime(2023, 6, 23, hours, minutes, seconds));
+        return false;
+      } else if (buf[0] == 115) { // seconds
+        Serial.println("Setting seconds");
+        seconds = buf[1] - 50;
+        rtc.adjust(DateTime(2023, 6, 23, hours, minutes, seconds));
         return false;
       }
       else {

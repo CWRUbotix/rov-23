@@ -144,7 +144,7 @@ void loop() {
     Serial.println(command);
     if (command == "submerge" || command == "submerge\n") {
       sendControlSignal("submerge");
-    } else if (command.startsWith("set_time")) {
+    } else {
       char command_arr[command.length() + 1];
       command.toCharArray(command_arr, command.length() + 1);
       sendControlSignal(command_arr);
@@ -155,9 +155,7 @@ void loop() {
     // else if (command == "retract") {
     //   sendControlSignal("retract");
     // }
-    else {
-      Serial.println("Invalid command");
-    }
+
   }
 }
 
