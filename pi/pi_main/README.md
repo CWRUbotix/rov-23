@@ -1,3 +1,21 @@
+## Setup Pi SSH access over Ethernet
+- Using mouse and keyboard, connect to the pi and edit `/etc/netplan/50-cloud-init.yaml`. It should look like this:
+```
+network:
+    ethernets:
+        eth0:
+            dhcp4: no
+            addresses: [192.168.2.1/24]
+            gateway4: 192.168.2.2
+            optional: true
+    version: 2
+```
+- On windows, setup your ethernet settings by following [this tutorial](https://www.trendnet.com/press/resource-library/how-to-set-static-ip-address). You should set your static ip address to 192.168.2.1
+- Connct the pi to your PC with an ethernet cable
+- SSH to rov@192.168.2.1
+
+
+## Run launch file on boot
 [Tutorial followed](https://roboticsbackend.com/make-ros-launch-start-on-boot-with-robot_upstart/)
 
 Commands to be run to get launch file running on pi on boot.
