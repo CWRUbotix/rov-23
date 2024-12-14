@@ -9,6 +9,8 @@ def generate_launch_description():
 
     gui_path: str = get_package_share_directory('gui')
     task_selector_path: str = get_package_share_directory('task_selector')
+    transceiver_path: str = get_package_share_directory('transceiver')
+
     # Launches Gui
     gui_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -26,8 +28,17 @@ def generate_launch_description():
             )
         ]),
     )
+    # Launches Transceiver
+    transceiver_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(
+                transceiver_path, 'launch', 'serial_reader_launch.py'
+            )
+        ]),
+    )
 
     return LaunchDescription([
         gui_launch,
         task_selector_launch,
+        transceiver_launch,
     ])
