@@ -41,6 +41,9 @@ class TaskSelector(Node):
         self.manual_control_client = ActionClient(self,
                                                   BasicTask,
                                                   'manual_control')
+        self.autonomous_docking_client = ActionClient(self,
+                                                      BasicTask,
+                                                      'autonomous_docking')
         self.active = False
         self._goal_handle = None
 
@@ -62,7 +65,8 @@ class TaskSelector(Node):
         # elif request.task_id == Tasks.EX_BASIC.value:
         #     self.send_basic_goal(self.basic_task_client)
         elif request.task_id == Tasks.AUTO_DOCKING.value:
-            pass
+            self.active = True
+            self.send_basic_goal(self.autonomous_docking_client)
         elif request.task_id == Tasks.CANCEL.value:
             response.response = "Canceled"
         else:

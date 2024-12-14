@@ -44,6 +44,9 @@ class ThrusterControllerNode(Node):
                 self.create_publisher(Float64, topic, qos_profile=10)
             )
 
+        self.sub_auto_docking = self.create_subscription(
+            ROVControl, "/autonomous_docking", self.control_callback, qos_profile=10
+        )
         self.sub_keyboard = self.create_subscription(
             ROVControl, "/manual_control", self.control_callback, qos_profile=10
         )
